@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.planner.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.planner.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.planner.oauth.service.CustomOAuth2UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomOAuth2UserService oAuth2UserService;
+    private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
@@ -43,7 +45,12 @@ public class SecurityConfig {
                   .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                   .anyRequest().authenticated()
           )
-          .oauth2Login((configure -> configure.userInfoEndpoint(c -> c.userService(oAuth2UserService))))
+          .oauth2Login(configure ->
+          configure.authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))
+                  .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
+                  .successHandler(oAuth2AuthenticationSuccessHandler)
+                  .failureHandler(oAuth2AuthenticationFailureHandler)
+  )
 				.logout((logout)->logout							//사용자 정의
 							.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")) // 로그아웃 URL 과
 							.logoutSuccessUrl("/question/list")		// 성공시 리다이렉트 URL 설정
