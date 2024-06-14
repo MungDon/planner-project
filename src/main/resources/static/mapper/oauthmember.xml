@@ -4,10 +4,33 @@
 	<insert id="createMember" parameterType="ReqOAuth2MemberAdd">
 		INSERT INTO member(
 			member_id,
+			member_userid,
+			member_birth,
+			member_phone,
+			member_gender,
+			member_email,
 			member_password,
 			member_name,
 			oauth_id,
-			member_status
+			member_status,
+			member_reg
+		)	VALUES	(
+			member_seq.NEXTVAL,
+			'123',
+			'2000-12-01',
+			'010-1111-1111',
+			'm',
+			#{member_email},
+			#{member_password},
+			#{member_name},
+			#{oauth_id},
+			#{member_status},
+			sysdate
 		)
 	</insert>
+	<select id="findByEmail" resultType="ResOAuth2MemberLogin">
+		SELECT *
+		FROM member
+		WHERE member_email = #{email}
+	</select>
 </mapper>

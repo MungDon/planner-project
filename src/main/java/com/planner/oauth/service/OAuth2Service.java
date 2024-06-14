@@ -23,7 +23,8 @@ public class OAuth2Service {
 														.member_email(principal.getName())
 														.member_password(principal.getPassword())
 														.member_name(principal.getName())
-														.member_status(MemberStatus.NOT_DONE.getStatus())
+														.member_status(MemberStatus.NOT_DONE.getCode())
+														.oauth_id(principal.getOAuthId())
 														.build();
 																					
 		memberMapper.createMember(req);

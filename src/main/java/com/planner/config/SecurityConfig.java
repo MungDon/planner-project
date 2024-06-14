@@ -40,6 +40,7 @@ public class SecurityConfig {
 	      http.csrf(AbstractHttpConfigurer::disable)
           .formLogin(AbstractHttpConfigurer::disable)
           .httpBasic(AbstractHttpConfigurer::disable)
+          
           .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB
           .authorizeHttpRequests((requests) -> requests
                   .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
