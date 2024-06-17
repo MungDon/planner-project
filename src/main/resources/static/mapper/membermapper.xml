@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.planner.mapper.MemberMapper">
+	
 	<insert id="createMember" parameterType="ReqOAuth2MemberAdd">
 		INSERT INTO member(
 			member_id,
@@ -17,7 +18,7 @@
 		)	VALUES	(
 			member_seq.NEXTVAL,
 			'none',
-			sysdate,
+			'2020-02-01',
 			'none',
 			'none',
 			#{member_email},
@@ -39,9 +40,9 @@
 			member_id = #{member_id}
 	</update>
 	
-	<select id="findByEmail" resultType="ResOAuth2MemberLogin">
+	<select id="findByOAuthID" resultType="ResOAuth2MemberLogin">
 		SELECT *
 		FROM member
-		WHERE member_email = #{email}
+		WHERE oauth_id = #{oauthId}
 	</select>
 </mapper>

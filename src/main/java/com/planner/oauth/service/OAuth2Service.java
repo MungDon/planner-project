@@ -22,18 +22,23 @@ public class OAuth2Service {
 	public void createMember(OAuth2UserPrincipal principal) {
 		
 		ReqOAuth2MemberAdd req = ReqOAuth2MemberAdd.builder()
-														.member_email(principal.getUsername())
-														.member_password(principal.getPassword())
-														.member_name(principal.getName())
-														.member_status(MemberStatus.NOT_DONE.getCode())
-														.oauth_id(principal.getOAuthId())
-														.build();
-		memberMapper.createMember(req);
+				.member_email(principal.getUsername())
+				.member_password(principal.getPassword())
+				.member_name(principal.getName())
+				.member_status(MemberStatus.NOT_DONE.getCode())
+				.oauth_id(principal.getOAuthId())
+				.build();
+		System.out.println(principal.getUsername());
+		System.out.println(principal.getPassword());
+		System.out.println(principal.getName());
+		System.out.println(principal.getOAuthId());
+ 		memberMapper.createMember(req);
 	}
 	
 	/*소셜회원정보 가져오기*/
-	public ResOAuth2MemberLogin findByOAuthId(String OAuthId) {
-		return memberMapper.findByEmail(OAuthId);
+	public ResOAuth2MemberLogin findByOAuthId(String oauthId) {
+		System.out.println(oauthId);
+		return memberMapper.findByOAuthID(oauthId);
 	}
 	
 	/*소셜로 받아오지못한 회원정보 저장*/
