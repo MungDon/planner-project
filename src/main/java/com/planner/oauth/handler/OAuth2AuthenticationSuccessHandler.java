@@ -62,14 +62,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .queryParam("error", "로그인 인증 정보를 찾을 수 없습니다.")
                     .build().toUriString();
         }
-
 		if ("login".equalsIgnoreCase(mode)) {
-			ResOAuth2MemberLogin member = null;
-			member = oAuth2Service.findByEmail(principal.getName());
+			ResOAuth2MemberLogin member  = oAuth2Service.findByOAuthId(principal.getOAuthId());
 
 			if (member == null) {
 				oAuth2Service.createMember(principal);
-				member = oAuth2Service.findByEmail(principal.getName());
+				member = oAuth2Service.findByOAuthId(principal.getOAuthId());
 			}
 			request.getSession().invalidate();
 			HttpSession session = request.getSession();

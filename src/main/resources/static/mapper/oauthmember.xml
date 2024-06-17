@@ -16,10 +16,10 @@
 			member_reg
 		)	VALUES	(
 			member_seq.NEXTVAL,
-			'123',
-			'2000-12-01',
-			'010-1111-1111',
-			'm',
+			'none',
+			sysdate,
+			'none',
+			'none',
 			#{member_email},
 			#{member_password},
 			#{member_name},
@@ -28,6 +28,17 @@
 			sysdate
 		)
 	</insert>
+	<update id="fetchAdditionalUserInfo" parameterType="ReqOAuth2Signup">
+		UPDATE member
+		SET	
+			member_userid = #{member_userid},
+			member_birth = #{member_birth},
+			member_phone = #{member_phone},
+			member_gender= #{member_gender}	
+		WHERE
+			member_id = #{member_id}
+	</update>
+	
 	<select id="findByEmail" resultType="ResOAuth2MemberLogin">
 		SELECT *
 		FROM member

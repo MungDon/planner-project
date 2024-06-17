@@ -1,4 +1,4 @@
-package com.planner.config;
+package com.planner.oauth.handler;
 
 import static com.planner.oauth.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 

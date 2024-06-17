@@ -10,7 +10,7 @@ public class OAuth2UserInfoFactory {
 		if(OAuth2Provider.GOOGLE.getRegistrationId().equals(registrationId)) {
 			return new GoogleOAuth2UserInfo(accessToken,attribute);
 		}else {
-			throw new OAuth2AuthenticationException(""); //TODO - 커스텀 예정
+			throw new OAuth2AuthenticationException(""); 
 		}
 		// TODO - 추후 카카오 추가
 	}

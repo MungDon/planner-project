@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.planner.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.planner.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.planner.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.planner.oauth.service.CustomOAuth2UserService;
 
