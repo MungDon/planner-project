@@ -1,5 +1,8 @@
 package com.planner.oauth.service;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -40,7 +43,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService{
 		
 		//TODO - Security Context 추가해야함
 		
-		
+		 Authentication authentication = new UsernamePasswordAuthenticationToken(oAuth2UserInfo, null, oAuth2User.getAuthorities());
+	     SecurityContextHolder.getContext().setAuthentication(authentication);
+
 		
 		// OAuth2User 인터페이스의 사용자 정의 구현체 클래스 리턴.
 		return new OAuth2UserPrincipal(oAuth2UserInfo);
