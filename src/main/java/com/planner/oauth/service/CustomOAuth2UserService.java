@@ -28,7 +28,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService{
 	}
 	
 	private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest,OAuth2User oAuth2User) {
-		
 		// resistrationId 가져오기
 		String registrationId = oAuth2UserRequest.getClientRegistration().getRegistrationId();
 
@@ -37,6 +36,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService{
 		
 		// 각각 OAuth 제공자 별로 주어지는 데이터를 공통의 UserInfo 객체로 변환처리
 		OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId,accessToken,oAuth2User.getAttributes());
+		
+		
+		//TODO - Security Context 추가해야함
+		
+		
 		
 		// OAuth2User 인터페이스의 사용자 정의 구현체 클래스 리턴.
 		return new OAuth2UserPrincipal(oAuth2UserInfo);

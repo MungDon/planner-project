@@ -28,16 +28,11 @@ public class OAuth2Service {
 				.member_status(MemberStatus.NOT_DONE.getCode())
 				.oauth_id(principal.getOAuthId())
 				.build();
-		System.out.println(principal.getUsername());
-		System.out.println(principal.getPassword());
-		System.out.println(principal.getName());
-		System.out.println(principal.getOAuthId());
  		memberMapper.createMember(req);
 	}
 	
 	/*소셜회원정보 가져오기*/
 	public ResOAuth2MemberLogin findByOAuthId(String oauthId) {
-		System.out.println(oauthId);
 		return memberMapper.findByOAuthID(oauthId);
 	}
 	
