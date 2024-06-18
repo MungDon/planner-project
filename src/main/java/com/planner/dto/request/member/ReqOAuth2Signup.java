@@ -8,6 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReqOAuth2Signup {
+	
+	private String oauth_id;
 
 	private	String member_userid;		// 유저 id
 	
@@ -16,4 +18,6 @@ public class ReqOAuth2Signup {
 	private	String member_phone;		// 유저 폰번호
 	
 	private	String member_gender;	// 유저 성별
+	
+	private String member_status;
 }

@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -52,11 +53,7 @@ public class SecurityConfig {
                   .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
                   .successHandler(oAuth2AuthenticationSuccessHandler)
                   .failureHandler(oAuth2AuthenticationFailureHandler)
-  )
-				.logout((logout)->logout							//사용자 정의
-							.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")) // 로그아웃 URL 과
-							.logoutSuccessUrl("/question/list")		// 성공시 리다이렉트 URL 설정
-							.invalidateHttpSession(true))		;		// 세션 삭제
+  );
 		return http.build();
 	}
 }

@@ -2,7 +2,9 @@ package com.planner.oauth.handler;
 
 import java.io.IOException;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,10 +71,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 				oAuth2Service.createMember(principal);
 				member = oAuth2Service.findByOAuthId(principal.getOAuthId());
 			}
-			request.getSession().invalidate();
-			HttpSession session = request.getSession();
-			session.setAttribute("member_id", member.getMember_id());
-
+			
 			return UriComponentsBuilder.fromUriString(TokenRedirect.LOGIN_SUCCESS_URL.getUrlText()).build()
 					.toUriString();
 		} else if ("unlink".equalsIgnoreCase(mode)) {
@@ -99,8 +98,5 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		return null;
 	}
 	
-	protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-		super.clearAuthenticationAttributes(request);
-		httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request,response);
-	}
+	protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) { }
 }

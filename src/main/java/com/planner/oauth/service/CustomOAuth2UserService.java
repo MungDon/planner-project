@@ -41,17 +41,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService{
 		OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId,accessToken,oAuth2User.getAttributes());
 		
 		
-		//TODO - Security Context 추가해야함
+		OAuth2UserPrincipal oAuth2UserPrincipal = new OAuth2UserPrincipal(oAuth2UserInfo);
 		
-<<<<<<< HEAD
-=======
-		 Authentication authentication = new UsernamePasswordAuthenticationToken(oAuth2UserInfo, null, oAuth2User.getAuthorities());
+		 Authentication authentication = new UsernamePasswordAuthenticationToken(oAuth2UserPrincipal, null, oAuth2UserPrincipal.getAuthorities());
 	     SecurityContextHolder.getContext().setAuthentication(authentication);
-
->>>>>>> 432ac9b7521bd6ac504d9037f3b38d71db5e9bf1
-		
+	     
+	     
 		// OAuth2User 인터페이스의 사용자 정의 구현체 클래스 리턴.
-		return new OAuth2UserPrincipal(oAuth2UserInfo);
+		return oAuth2UserPrincipal;
 		
 	}
 }

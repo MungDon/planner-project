@@ -37,7 +37,9 @@ public class OAuth2Service {
 	}
 	
 	/*소셜로 받아오지못한 회원정보 저장*/
-	public void fetchAdditionalUserInfo(ReqOAuth2Signup req) {
+	public void fetchAdditionalUserInfo(ReqOAuth2Signup req,OAuth2UserPrincipal principal) {
+		req.setOauth_id(principal.getOAuthId());
+		req.setMember_status(MemberStatus.BASIC.getCode());
 		memberMapper.fetchAdditionalUserInfo(req);
 	}
 }

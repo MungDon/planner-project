@@ -35,9 +35,10 @@
 			member_userid = #{member_userid},
 			member_birth = #{member_birth},
 			member_phone = #{member_phone},
-			member_gender= #{member_gender}	
+			member_gender = #{member_gender},
+			member_status = #{member_status}	
 		WHERE
-			member_id = #{member_id}
+			oauth_id = #{oauth_id}
 	</update>
 	
 	<select id="findByOAuthID" resultType="ResOAuth2MemberLogin">
