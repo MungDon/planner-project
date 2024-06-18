@@ -41,7 +41,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService{
 		//TODO - Security Context 추가해야함
 		
 		
-		
 		// OAuth2User 인터페이스의 사용자 정의 구현체 클래스 리턴.
 		return new OAuth2UserPrincipal(oAuth2UserInfo);
 		
