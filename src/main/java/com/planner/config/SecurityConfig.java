@@ -53,7 +53,12 @@ public class SecurityConfig {
                   .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
                   .successHandler(oAuth2AuthenticationSuccessHandler)
                   .failureHandler(oAuth2AuthenticationFailureHandler)
-  );
+  )	
+			.logout((logout)->logout							//사용자 정의
+						.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout")) // 로그아웃 URL 과
+						.logoutSuccessUrl("/planner/main")		// 성공시 리다이렉트 URL 설정
+						.invalidateHttpSession(true))	;			// 세션 삭제
+			
 		return http.build();
 	}
 }

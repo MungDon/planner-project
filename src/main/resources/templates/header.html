@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<header th:fragment="header">
+		<table>
+			<tr>
+				<td>
+					<a href="/member/login">로그인</a>
+				</td>
+				<td>
+					<a href="/member/signout">로그아웃</a>
+				</td>
+			</tr>
+		</table>
+	</header>
+</body>
+</html>
