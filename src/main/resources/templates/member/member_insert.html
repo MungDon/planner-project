@@ -1,8 +1,9 @@
-c<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
+<link rel="stylesheet" type="text/css" href="/css/header.css">
 </head>
 <body>
 	<header th:replace="~{header :: header}"></header>
@@ -11,10 +12,10 @@ c<!DOCTYPE html>
 			<table style="border: 1px solid; width: 800px; text-align: center;">
 				<tr>
 					<td>
-						<label for="id">아이디</label>
+						<label for="email">이메일(아이디)</label>
 					</td>
 					<td>
-						<input type="text" name="member_userid" id="id" required="required"	/>
+						<input type="email" name="member_email" id="email" required="required"	/>
 					</td>
 				</tr>
 				<tr>
@@ -39,14 +40,6 @@ c<!DOCTYPE html>
 					</td>
 					<td>
 						<input type="date" name="member_birth" id="birth" required="required"	/>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="email">이메일</label>
-					</td>
-					<td>
-						<input type="email" name="member_email" id="email" required="required"	/>
 					</td>
 				</tr>
 				<tr>

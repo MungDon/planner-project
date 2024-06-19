@@ -5,6 +5,7 @@ import java.security.Principal;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -84,6 +85,14 @@ public class MemberController {
 	@PutMapping("update")
 	public String memberUpdate(ReqMemberUpdate req) {
 		memberService.memberUpdate(req);
+		//TODO - 회원 정보 이메일 수정시에 이메일 인증 추가
 		return "redirect:/member/info";
+	}
+	
+	/*회원 탈퇴*/
+	@PreAuthorize("isAuthenticated()")
+	@DeleteMapping("delete")
+	public void memberDelete() {
+		
 	}
 }

@@ -2,6 +2,7 @@ package com.planner.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.planner.dto.request.member.MemberDTO;
 import com.planner.dto.request.member.ReqMemberUpdate;
@@ -19,6 +20,7 @@ public class MemberService {
 
 
 	//	회원가입
+	@Transactional
 	public int memberInsert(MemberDTO memberDTO) {
 		memberDTO.setMember_password(passwordEncoder.encode(memberDTO.getMember_password()));
 
@@ -26,12 +28,14 @@ public class MemberService {
 	}
 	
 	/* 내 정보 */
+	@Transactional(readOnly = true)
 	public ResMemberDetail memberDetail(String member_email) {
 		ResMemberDetail detail =  memberMapper.findByEmail(member_email);
 		return detail;
 	}
 	
 	/*회원 정보 수정*/
+	@Transactional
 	public void memberUpdate(ReqMemberUpdate req) {
 		memberMapper.memberUpdate(req);
 	}

@@ -32,11 +32,13 @@ public class OAuth2Service {
 	}
 	
 	/*소셜회원정보 가져오기*/
+	@Transactional(readOnly = true)
 	public ResOAuth2MemberLogin findByOAuthId(String oauthId) {
 		return memberMapper.findByOAuthID(oauthId);
 	}
 	
 	/*소셜로 받아오지못한 회원정보 저장*/
+	@Transactional
 	public void fetchAdditionalUserInfo(ReqOAuth2Signup req,OAuth2UserPrincipal principal) {
 		req.setOauth_id(principal.getOAuthId());
 		req.setMember_status(MemberStatus.BASIC.getCode());
