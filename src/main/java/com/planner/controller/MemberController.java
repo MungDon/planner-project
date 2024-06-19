@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.planner.dto.request.member.MemberDTO;
 import com.planner.dto.request.member.ReqMemberUpdate;
+import com.planner.dto.request.member.ReqPasswordChk;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.Gender;
 import com.planner.oauth.CookieUtils;
@@ -71,6 +73,20 @@ public class MemberController {
 		return "/member/member_info"; 
 	}
 	
+	/*비밀번호 확인 폼*/
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("chk")
+	public String passwordChkForm(@RequestParam(value = "url")String url,Model model) {
+		model.addAttribute("url", url);
+		return"/member/passwordChk";
+	}
+	
+	/*비밀번호 확인*/
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping("chk")
+	public String passwordChk(ReqPasswordChk req) {
+		return String.format("redirect:/member/%s", req.getUrl());
+	}
 	/*회원정보 수정 폼*/
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("update")

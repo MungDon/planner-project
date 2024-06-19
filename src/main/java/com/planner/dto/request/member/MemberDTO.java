@@ -21,8 +21,5 @@ public class MemberDTO {
 	private LocalDateTime member_reg;		// 가입일시	(default: sysdate)
 	private String member_status;			// 회원상태	(기본: b, 탈퇴: d, 정지: j)
 	private String friend_request_status;	// 친구신청 상태 리스트 (요청 : R, 친구 : F)
-	
-//	private List<FriendRequestDTO> friendRequestList;
-	
-//	private FriendRequestDTO frDTO;			// 친구신청 상태 객체
+
 }

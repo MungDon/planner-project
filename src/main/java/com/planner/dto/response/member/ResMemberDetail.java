@@ -19,4 +19,6 @@ public class ResMemberDetail {
 	
 	private String member_gender;	// 성별
 	
+	private String oauth_id;				// 소셜고유번호
+	
 }

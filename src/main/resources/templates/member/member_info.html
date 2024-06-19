@@ -18,7 +18,8 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 					<span th:text="${detail.member_email}"></span>
 				</td>
 				<td class="i_td1-1">
-					<a href="/member/update">회원 정보 수정 ></a>
+					<a th:if="${detail.oauth_id =='none'}" href="/member/chk?url=update">회원 정보 수정 ></a>
+					<a th:if="${detail.oauth_id !='none'}" href="/member/update">회원 정보 수정 ></a>
 				</td>
 			</tr>
 			<tr class="i_tr2">
