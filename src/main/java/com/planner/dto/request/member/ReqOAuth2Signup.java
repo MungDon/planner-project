@@ -11,8 +11,6 @@ public class ReqOAuth2Signup {
 	
 	private String oauth_id;
 
-	private	String member_userid;		// 유저 id
-	
 	private	LocalDate member_birth;	// 유저 생일
 	
 	private	String member_phone;		// 유저 폰번호

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="/css/header.css">
+</head>
+<body>
+	<header th:replace="~{header :: header}"></header>
+	<main class="infoMain">
+	<h2>회원정보</h2>
+		<div class="updateBtn">
+		</div>
+		<table class="infoTable">
+			<tr class="i_tr1">
+				<th class="i_th1">아이디</th>
+				<td class="i_td1">
+					<span th:text="${detail.member_userid}"></span>
+				</td>
+				<td class="i_td1-1">
+					<a href="/member/update">회원 정보 수정 ></a>
+				</td>
+			</tr>
+			<tr class="i_tr2">
+				<th class="i_th2">이메일</th>
+				<td class="i_td2">
+					<span th:text="${detail.member_email}"></span>
+				</td>
+			</tr>
+			<tr class="i_tr3">
+				<th class="i_th3">회원명</th>
+				<td class="i_td3">
+					<span th:text="${detail.member_name}"></span>
+				</td>
+			</tr>
+			<tr class="i_tr4">
+				<th class="i_th4">생일</th>
+				<td class="i_td4">
+					<span th:text="${#temporals.format(detail.member_birth,'yyyy/MM/dd')}"></span>
+				</td>
+			</tr>
+			<tr class="i_tr5">
+				<th class="i_th5">휴대폰번호</th>
+				<td class="i_td5">
+					<span th:text="${detail.member_phone}"></span>
+				</td>
+			</tr>
+			<tr class="i_tr6">
+				<th class="i_th6">성별</th>
+				<td class="i_td6">
+					<span th:text="${gender}"></span>
+				</td>
+			</tr>
+		</table>
+	</main>
+</body>
+</html>

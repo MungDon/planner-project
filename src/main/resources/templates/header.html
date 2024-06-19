@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="/css/header.css">
 </head>
 <body>
-	<header th:fragment="header">
-		<table>
-			<tr>
-				<td>
-					<a href="/member/login">로그인</a>
+	<header th:fragment="header" class="header">
+		<table class="headerTable">
+			<tr class="h_tr">
+				<td class="h_td_1">
+					<a href="/planner/main">홈으로</a>
 				</td>
-				<td>
-					<a href="/member/signout">로그아웃</a>
+				<td class="h_td_2"></td>
+				<td class="h_td_3"></td>
+				<td  class="h_td_4">
+					<a sec:authorize="isAuthenticated()"  href="/member/info">내 정보</a>
+				</td>
+				<td class="h_td_5">
+					<a sec:authorize="isAnonymous()"  href="/member/login">로그인</a>
+					<a sec:authorize="isAuthenticated()"  href="/member/signout">로그아웃</a>
 				</td>
 			</tr>
 		</table>

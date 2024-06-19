@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.planner.mapper.MemberMapper">
 	
+	<!-- 소셜로그인 회원생성 -->
 	<insert id="createMember" parameterType="ReqOAuth2MemberAdd">
 		INSERT INTO member(
 			member_id,
-			member_userid,
 			member_birth,
 			member_phone,
 			member_gender,
@@ -17,7 +17,6 @@
 			member_reg
 		)	VALUES	(
 			member_seq.NEXTVAL,
-			'none',
 			'2020-02-01',
 			'none',
 			'none',
@@ -29,10 +28,39 @@
 			sysdate
 		)
 	</insert>
+		
+	<!-- 회원가입 -->
+	<insert id="memberInsert" parameterType="MemberDTO">
+			INSERT INTO member(
+				member_id,
+				member_password,
+				member_name,
+				member_birth,
+				member_email,
+				member_phone,
+				member_gender,
+				member_reg,
+				member_status,
+				oauth_id
+				) values (
+				member_seq.NEXTVAL,
+				#{member_password},
+				#{member_name},
+				#{member_birth},
+				#{member_email},
+				#{member_phone},
+				#{member_gender},
+				sysdate,
+				'B',
+				'none'
+			)
+	</insert>
+	
+	
+	<!-- 소셜로그인 추가 회원정보 -->
 	<update id="fetchAdditionalUserInfo" parameterType="ReqOAuth2Signup">
 		UPDATE member
 		SET	
-			member_userid = #{member_userid},
 			member_birth = #{member_birth},
 			member_phone = #{member_phone},
 			member_gender = #{member_gender},
@@ -41,9 +69,25 @@
 			oauth_id = #{oauth_id}
 	</update>
 	
+	<!-- OAtuhID 고유번호로 회원찾기 -->
 	<select id="findByOAuthID" resultType="ResOAuth2MemberLogin">
 		SELECT *
 		FROM member
 		WHERE oauth_id = #{oauthId}
+	</select>
+	
+		<!-- 회원 이메일로 객체 가져오기 -->
+	<select id="findByUser" resultType="MemberDTO">
+		select *
+		from member
+		where member_email = #{member_email}
+	</select>
+	
+	<!-- 내 정보 -->
+	<select id="findByEmail">
+		SELECT * 
+		FROM member
+		WHERE
+			member_email = #{member_email}
 	</select>
 </mapper>

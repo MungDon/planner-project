@@ -1,0 +1,78 @@
+c<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+</head>
+<body>
+	<header th:replace="~{header :: header}"></header>
+	<div align="center">
+		<form action="/member/insert" method="post">
+			<table style="border: 1px solid; width: 800px; text-align: center;">
+				<tr>
+					<td>
+						<label for="id">아이디</label>
+					</td>
+					<td>
+						<input type="text" name="member_userid" id="id" required="required"	/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="pw">비밀번호</label>
+					</td>
+					<td>
+						<input type="password" name="member_password" id="pw" required="required"	/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="name">이름</label>
+					</td>
+					<td>
+						<input type="text" name="member_name" id="name"	 required="required"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="birth">생년월일</label>
+					</td>
+					<td>
+						<input type="date" name="member_birth" id="birth" required="required"	/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="email">이메일</label>
+					</td>
+					<td>
+						<input type="email" name="member_email" id="email" required="required"	/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="phone">전화번호</label>
+					</td>
+					<td>
+						<input type="text" name="member_phone" id="phone" required="required"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>성별</label>
+					</td>
+					<td>
+						<label for="m">남자</label><input type="radio" name="member_gender" value="M" id="m"	/>
+						<label for="w">여자</label><input type="radio" name="member_gender" value="W" id="w"	/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="submit" value="회원가입"	/>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>

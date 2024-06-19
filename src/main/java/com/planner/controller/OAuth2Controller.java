@@ -22,7 +22,7 @@ public class OAuth2Controller {
 	/*소셜로그인에서 못받은 정보 받기 FORM*/
 	@GetMapping("/signup")
 	public String oAuth2SignupForm() {
-		return "oauth2Signup";
+		return "/member/oauth2Signup";
 	}
 	
 	/*소셜로그인에서 못받은 정보 저장*/	

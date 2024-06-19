@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="/css/header.css">
 </head>
 <body>
 	<header th:replace="~{header :: header}"></header>
-	<a href="http://localhost:8080/oauth2/authorization/google?mode=login">구글소셜</a>
+	
+	<script th:if="${result} == 1">
+		alert('가입이 완료되었습니다.');
+	</script>
 </body>
 </html>
