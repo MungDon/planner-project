@@ -69,6 +69,17 @@
 			oauth_id = #{oauth_id}
 	</update>
 	
+	<!-- 회원 수정 -->
+	<update id="memberUpdate" parameterType="ReqMemberUpdate">
+		UPDATE member
+		SET
+			member_name = #{member_name},
+			member_birth = #{member_birth},
+			member_phone = #{member_phone}
+		WHERE
+			member_id = #{member_id}
+	</update>
+	
 	<!-- OAtuhID 고유번호로 회원찾기 -->
 	<select id="findByOAuthID" resultType="ResOAuth2MemberLogin">
 		SELECT *

@@ -7,6 +7,8 @@ import lombok.Getter;
 @Getter
 public class ResMemberDetail {
 
+	private Long member_id;				// 유저 시퀀스
+	
 	private String member_email;		// 유저 이메일
 	
 	private String member_name;		// 유저명

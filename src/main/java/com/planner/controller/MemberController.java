@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.planner.dto.request.member.MemberDTO;
+import com.planner.dto.request.member.ReqMemberUpdate;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.Gender;
 import com.planner.oauth.CookieUtils;
@@ -48,7 +50,6 @@ public class MemberController {
 	public String memberInsert(MemberDTO memberDTO, RedirectAttributes rttr) {
 		int result = memberService.memberInsert(memberDTO);
 		rttr.addFlashAttribute("result", result);
-
 		return "redirect:/planner/main";
 	}
 
@@ -69,11 +70,20 @@ public class MemberController {
 		return "/member/member_info"; 
 	}
 	
-	/*회원정보수정*/
+	/*회원정보 수정 폼*/
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("update")
-	public String memberUpdate(Principal principal) {
+	public String memberUpdateForm(Principal principal,Model model) {
+		ResMemberDetail detail = memberService.memberDetail(principal.getName());
+		model.addAttribute("detail", detail);
 		return "/member/member_update";
 	}
 
+	/*회원정보 수정*/
+	@PreAuthorize("isAuthenticated()")
+	@PutMapping("update")
+	public String memberUpdate(ReqMemberUpdate req) {
+		memberService.memberUpdate(req);
+		return "redirect:/member/info";
+	}
 }

@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.planner.dto.request.member.MemberDTO;
+import com.planner.dto.request.member.ReqMemberUpdate;
 import com.planner.dto.request.member.ReqOAuth2MemberAdd;
 import com.planner.dto.request.member.ReqOAuth2Signup;
 import com.planner.dto.response.member.ResMemberDetail;
@@ -29,4 +30,7 @@ public interface MemberMapper {
 
 	/*내 정보*/
 	ResMemberDetail findByEmail(@Param(value = "member_email") String member_email);
+	
+	/*회원 수정*/
+	void memberUpdate(ReqMemberUpdate req);
 }
