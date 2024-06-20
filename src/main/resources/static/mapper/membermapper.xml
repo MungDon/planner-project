@@ -79,13 +79,16 @@
 		WHERE
 			member_id = #{member_id}
 	</update>
-	<update id="memberDelete">
+	
+	<!-- 회원 상태변경 -->
+	<update id="changeMemberStatus">
 		UPDATE member
 		SET
 			member_status = #{member_status}
 		WHERE
 			member_email = #{member_email}
 	</update>
+	
 	<!-- OAtuhID 고유번호로 회원찾기 -->
 	<select id="findByOAuthID" resultType="ResOAuth2MemberLogin">
 		SELECT *

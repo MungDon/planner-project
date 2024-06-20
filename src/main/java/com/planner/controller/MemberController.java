@@ -38,11 +38,16 @@ public class MemberController {
 	
 	/*일반 로그인시에 회원탈퇴여부 검사*/
 	@GetMapping("")
-	public String memberChk(Principal principal, RedirectAttributes rttr) {
+	public String memberChk(Principal principal, RedirectAttributes rttr,HttpServletRequest request,HttpServletResponse response) {
 		ResMemberDetail user = memberService.memberDetail(principal.getName());
 		
 		//TODO - 전역 예외처리시 throw new CustomException 으로 교체예정
 		if(user.getMember_status().equals(MemberStatus.DELETE.getCode())) {
+			HttpSession session = request.getSession();
+			session.invalidate();
+			CookieUtils.deleteCookie(request, response, "oauth2_auth_request");
+			CookieUtils.deleteCookie(request, response, "mode");
+			CookieUtils.deleteCookie(request, response, "redirect_uri");
 			rttr.addFlashAttribute("delete", 1);
 			return "redirect:/member/login";
 		}
@@ -133,15 +138,25 @@ public class MemberController {
 	@PreAuthorize("isAuthenticated()")
 	@DeleteMapping("/delete")
 	@ResponseBody
-	public void memberDelete(Principal principal,HttpServletRequest request) {
+	public void memberDelete(Principal principal,HttpServletRequest request,HttpServletResponse response) {
 		HttpSession session = request.getSession();
 		session.invalidate();
+		CookieUtils.deleteCookie(request, response, "oauth2_auth_request");
+		CookieUtils.deleteCookie(request, response, "mode");
+		CookieUtils.deleteCookie(request, response, "redirect_uri");
 		memberService.memberDelete(principal.getName());
 	}
 	
 	/*회원복구 폼*/
 	@GetMapping("/restore")
 	public String memberRestoreForm() {
-		return "/member/restore";
+		return "/member/member_restore";
+	}
+	
+	@PostMapping("/restore")
+	@ResponseBody
+	public int memberRestore(@RequestParam(value = "currentEmail")String currentEmail, @RequestParam(value = "currentPassword")String currentPassword) {
+		int result = memberService.memberRestore(currentEmail,currentPassword);
+		return result;
 	}
 }

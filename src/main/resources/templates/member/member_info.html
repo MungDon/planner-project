@@ -12,6 +12,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<header th:replace="~{header :: header}"></header>
 	<main class="infoMain">
 	<h2>회원정보</h2>
+		<input type="hidden" id="status" th:value="${detail.member_status}">
 		<table class="infoTable">
 			<tr class="i_tr1">
 				<th class="i_th1">이메일</th>
@@ -55,6 +56,14 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	</main>
 	<script>
 		$(function(){
+			$(document).ready(function(){
+				const status = $("#status").val();
+				if(status === null || status != 'B'){
+					alert('권한이없습니다');
+		                    window.location.href = '/planner/main';
+				}
+				
+			});
 			$(document).on("click",".userDeleteBtn",() => {
 				if(!confirm('정말 회원탈퇴를 하시겠습니까?')){
 					return false;

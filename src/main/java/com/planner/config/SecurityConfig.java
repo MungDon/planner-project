@@ -2,6 +2,7 @@ package com.planner.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.planner.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
@@ -39,12 +41,14 @@ public class SecurityConfig {
 	@Bean // 빈객체주입
 	// 필터 체인을 정의하는 메서드
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-	      http.csrf(AbstractHttpConfigurer::disable)
-          .formLogin(AbstractHttpConfigurer::disable)
+	      http.csrf((csrf)->csrf
+					.ignoringRequestMatchers(new AntPathRequestMatcher
+							("/planner/main")))												// 특정요청에대한 보호를 비활성화
           .httpBasic(AbstractHttpConfigurer::disable)
           
           .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB
           .authorizeHttpRequests((requests) -> requests
+        		  .requestMatchers(new AntPathRequestMatcher("/planner/main")).permitAll() // /planner/main 경로는 모든 IP에서 접근 허용
                   .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                   .anyRequest().authenticated()
           )
@@ -66,5 +70,10 @@ public class SecurityConfig {
 					.invalidateHttpSession(true))	;			// 세션 삭제
 			
 		return http.build();
+	}
+
+	private AuthorizationManager<RequestAuthorizationContext> hasIpAddress(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

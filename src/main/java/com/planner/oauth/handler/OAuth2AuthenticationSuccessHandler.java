@@ -86,7 +86,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 		log.error("로그인실패");
 		return UriComponentsBuilder.fromUriString(TokenRedirect.LOGIN_FAILED_URL.getUrlText())
-				.queryParam("error", "Login failed").build().toUriString();
+				.queryParam("error","role").build().toUriString();
 	}
 	
 	private OAuth2UserPrincipal getOAuth2UserPrincipal(Authentication authentication) {

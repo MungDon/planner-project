@@ -45,7 +45,10 @@ public class MemberService {
 	public int passwordChk(String currnetPw,String member_email){
 		int result = 0;
 		ResMemberDetail member = memberMapper.findByEmail(member_email);
-		if(passwordEncoder.matches(currnetPw, member.getMember_password())) {
+		if(member != null && !member.getOauth_id().equals("none")) {
+			return result = 1;
+		}
+		if(member != null && passwordEncoder.matches(currnetPw, member.getMember_password())) {
 			return result = 1;
 		}
 		return result;
@@ -53,6 +56,15 @@ public class MemberService {
 	
 	/*회원 탈퇴*/
 	public void memberDelete(String member_email) {
-		memberMapper.memberDelete(member_email, MemberStatus.DELETE.getCode());
+		memberMapper.changeMemberStatus(member_email, MemberStatus.DELETE.getCode());
+	}
+	
+	/*회원 복구*/
+	public int memberRestore(String currentEmail, String currentPassword) {
+		int result = passwordChk( currentPassword, currentEmail);
+		if(result == 1) {
+			memberMapper.changeMemberStatus(currentEmail, MemberStatus.RESTORE.getCode());
+		}
+		return result;
 	}
 }

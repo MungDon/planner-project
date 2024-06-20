@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<title>Insert title here</title>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+		<input type="email" id="currentEmail" name="currentEmail" placeholder="가입했던 이메일을 적어주세요">
+		<input type="password" id="currentPassword" name="currentPassword" placeholder="가입했던 비밀번호를 적어주세요">
+		<button type="button" class="restoreBtn">신청</button>
+
+
+		<script>
+			$(function(){
+				$(document).on("click",".restoreBtn", function(){
+					const currentEmail = $("#currentEmail").val();
+					const currentPassword = $("#currentPassword").val();
+			        let csrfToken = $("meta[name='_csrf']").attr("content");
+			        let csrfHeader = $("meta[name='_csrf_header']").attr("content");
+					$.ajax({
+						url : "/member/restore",
+						type : "post",
+						data : {
+								currentEmail : currentEmail,
+								currentPassword : currentPassword
+						},
+					     beforeSend: function(xhr) {
+				                // CSRF 토큰을 요청 헤더에 포함
+				                xhr.setRequestHeader(csrfHeader, csrfToken);
+				            },
+						success : function(data){
+							switch(data){
+								case 1 :
+									alert("복구신청이 완료되었습니다.");
+									location.href="/planner/main";
+									break;
+								case 0 : 
+									alert("입력한 계정정보는 유효하지 않은정보입니다.");
+									location.reload();
+									break;
+							}
+						},
+						error : function(){
+							alert('복구신청이 실패하였습니다.');
+							location.href="/planner/main";
+						}
+					});
+					
+				});
+			});
+		</script>
+</body>
+</html>
