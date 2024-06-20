@@ -36,26 +36,8 @@ public class MemberController {
 
 	private final MemberService memberService;
 	
-	/*일반 로그인시에 회원탈퇴여부 검사*/
-	@GetMapping("")
-	public String memberChk(Principal principal, RedirectAttributes rttr,HttpServletRequest request,HttpServletResponse response) {
-		ResMemberDetail user = memberService.memberDetail(principal.getName());
-		
-		//TODO - 전역 예외처리시 throw new CustomException 으로 교체예정
-		if(user.getMember_status().equals(MemberStatus.DELETE.getCode())) {
-			HttpSession session = request.getSession();
-			session.invalidate();
-			CookieUtils.deleteCookie(request, response, "oauth2_auth_request");
-			CookieUtils.deleteCookie(request, response, "mode");
-			CookieUtils.deleteCookie(request, response, "redirect_uri");
-			rttr.addFlashAttribute("delete", 1);
-			return "redirect:/member/login";
-		}
-		return "redirect:/planner/main";
-	}
 	
-	
-	/*소셜로그인에서 생긴 쿠키제거 후 로그아웃*/
+	/*소셜로그인에서 생긴 쿠키 제거 후 로그아웃*/
 	@GetMapping("/signout")
 	public String signout(HttpServletRequest request, HttpServletResponse response) {
 		CookieUtils.deleteCookie(request, response, "oauth2_auth_request");
@@ -83,6 +65,24 @@ public class MemberController {
 	@GetMapping("/login")
 	public String memberLogin() {
 		return "/member/member_login";
+	}
+	
+	/*로그인시에 회원탈퇴여부 검사*/
+	@GetMapping("")
+	public String memberChk(Principal principal, RedirectAttributes rttr,HttpServletRequest request,HttpServletResponse response) {
+		ResMemberDetail user = memberService.memberDetail(principal.getName());
+		
+		//TODO - 전역 예외처리시 throw new CustomException 으로 교체예정
+		if(user.getMember_status().equals(MemberStatus.DELETE.getCode())) {
+			HttpSession session = request.getSession();
+			session.invalidate();
+			CookieUtils.deleteCookie(request, response, "oauth2_auth_request");
+			CookieUtils.deleteCookie(request, response, "mode");
+			CookieUtils.deleteCookie(request, response, "redirect_uri");
+			rttr.addFlashAttribute("delete", 1);
+			return "redirect:/member/login";
+		}
+		return "redirect:/planner/main";
 	}
 	
 	/*내 정보*/

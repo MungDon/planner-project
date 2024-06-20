@@ -11,7 +11,6 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 </head>
 <body>
 		<input type="email" id="currentEmail" name="currentEmail" placeholder="가입했던 이메일을 적어주세요">
-		<input type="password" id="currentPassword" name="currentPassword" placeholder="가입했던 비밀번호를 적어주세요">
 		<button type="button" class="restoreBtn">신청</button>
 
 
@@ -26,8 +25,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						url : "/member/restore",
 						type : "post",
 						data : {
-								currentEmail : currentEmail,
-								currentPassword : currentPassword
+								currentEmail : currentEmail
 						},
 					     beforeSend: function(xhr) {
 				                // CSRF 토큰을 요청 헤더에 포함
