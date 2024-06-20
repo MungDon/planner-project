@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum TokenRedirect {
 
-	LOGIN_SUCCESS_URL("http://localhost:8080/planner/main"),
+	LOGIN_SUCCESS_URL("http://localhost:8080/member"),
 	LOGIN_FAILED_URL("http://localhost:8080/planner/main/error"),
 	LOGOUT_URL("http://localhost:8080/user/logout");
 	

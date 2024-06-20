@@ -16,7 +16,7 @@
 			member_status,
 			member_reg
 		)	VALUES	(
-			nextval('member_seq'),
+			member_seq.NEXTVAL,
 			'2020-02-01',
 			'none',
 			'none',
@@ -25,7 +25,7 @@
 			#{member_name},
 			#{oauth_id},
 			#{member_status},
-			now()
+			sysdate
 		)
 	</insert>
 		
@@ -43,14 +43,14 @@
 				member_status,
 				oauth_id
 				) values (
-				nextval('member_seq'),
+				member_seq.NEXTVAL,
 				#{member_password},
 				#{member_name},
 				#{member_birth},
 				#{member_email},
 				#{member_phone},
 				#{member_gender},
-				now(),
+				sysdate,
 				'B',
 				'none'
 			)
@@ -79,7 +79,13 @@
 		WHERE
 			member_id = #{member_id}
 	</update>
-	
+	<update id="memberDelete">
+		UPDATE member
+		SET
+			member_status = #{member_status}
+		WHERE
+			member_email = #{member_email}
+	</update>
 	<!-- OAtuhID 고유번호로 회원찾기 -->
 	<select id="findByOAuthID" resultType="ResOAuth2MemberLogin">
 		SELECT *
@@ -101,4 +107,6 @@
 		WHERE
 			member_email = #{member_email}
 	</select>
+	
+	
 </mapper>

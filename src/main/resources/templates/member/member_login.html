@@ -24,5 +24,12 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 				<a class="googleBtn" href="http://localhost:8080/oauth2/authorization/google?mode=login"><img src="/images/web_neutral_rd_na@4x.png" class="googleLogo"></a>
 			</div>
 	</main>
+	<!-- 추후 전역 예외처리하면 사라짐 -->
+	<script th:if="${delete} == 1">
+		if(!confrim('이미 탈퇴한 회원입니다, 다시 복구 하시겠습니까?')){
+			return false;
+		}
+		location.href="/member/restore";
+	</script>
 </body>
 </html>

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.planner.dto.request.member.MemberDTO;
 import com.planner.dto.request.member.ReqMemberUpdate;
 import com.planner.dto.response.member.ResMemberDetail;
+import com.planner.enums.MemberStatus;
 import com.planner.mapper.MemberMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -38,5 +39,20 @@ public class MemberService {
 	@Transactional
 	public void memberUpdate(ReqMemberUpdate req) {
 		memberMapper.memberUpdate(req);
+	}
+	
+	/*비번체크*/
+	public int passwordChk(String currnetPw,String member_email){
+		int result = 0;
+		ResMemberDetail member = memberMapper.findByEmail(member_email);
+		if(passwordEncoder.matches(currnetPw, member.getMember_password())) {
+			return result = 1;
+		}
+		return result;
+	}
+	
+	/*회원 탈퇴*/
+	public void memberDelete(String member_email) {
+		memberMapper.memberDelete(member_email, MemberStatus.DELETE.getCode());
 	}
 }

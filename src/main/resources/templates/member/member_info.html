@@ -6,6 +6,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="/css/header.css">
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	<header th:replace="~{header :: header}"></header>
@@ -47,6 +48,26 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 				</td>
 			</tr>
 		</table>
+		<div class="userDeleteBtnBox">
+			<a th:if="${detail.oauth_id =='none'}" href="/member/chk?url=delete">회원탈퇴</a>
+			<button th:if="${detail.oauth_id !='none'}" type="button" class="userDeleteBtn" >회원탈퇴</button>
+		</div>
 	</main>
+	<script>
+		$(function(){
+			$(document).on("click",".userDeleteBtn",() => {
+				if(!confirm('정말 회원탈퇴를 하시겠습니까?')){
+					return false;
+				}
+				$.ajax({
+					url : "/member/delete",
+					type : "delete",
+					success : function(){
+						location.href="/planner/main";
+					}
+				});
+			});
+		});
+	</script>
 </body>
 </html>

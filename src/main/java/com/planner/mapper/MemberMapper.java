@@ -33,4 +33,7 @@ public interface MemberMapper {
 	
 	/*회원 수정*/
 	void memberUpdate(ReqMemberUpdate req);
+	
+	/*회원 탈퇴*/
+	void memberDelete(@Param(value = "member_email")String member_email,@Param(value = "member_status")String member_status);
 }
