@@ -63,7 +63,7 @@ public class SecurityConfig {
 					.loginPage("/member/login")		// 로그인페이지 설정과
 					.usernameParameter("member_email")
 					.passwordParameter("member_password") 		//default = password, username
-					.failureHandler(customAuthenticationFailureHandler)
+					.failureHandler(customAuthenticationFailureHandler)	// 로그인 실패시 사용될 핸들러 - customException 발생
 					.defaultSuccessUrl("/member",true))	// 리다이렉트 URL 설정	
           			
           
