@@ -8,7 +8,6 @@ import com.planner.dto.request.member.ReqMemberUpdate;
 import com.planner.dto.request.member.ReqOAuth2MemberAdd;
 import com.planner.dto.request.member.ReqOAuth2Signup;
 import com.planner.dto.response.member.ResMemberDetail;
-import com.planner.dto.response.member.ResOAuth2MemberLogin;
 
 @Mapper
 public interface MemberMapper {
@@ -20,7 +19,7 @@ public interface MemberMapper {
 	int memberInsert(MemberDTO memberDTO);
 	
 	/*소셜 회원정보 가져오기*/
-	ResOAuth2MemberLogin findByOAuthID(@Param(value = "oauthId")String oauthId);
+	ResMemberDetail findByOAuthID(@Param(value = "oauthId")String oauthId);
 	
 	/*소셜로그인에서 제공받지 못한 유저정보 저장*/
 	void fetchAdditionalUserInfo(ReqOAuth2Signup req);

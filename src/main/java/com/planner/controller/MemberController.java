@@ -5,6 +5,7 @@ import java.security.Principal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,12 +22,13 @@ import com.planner.dto.request.member.ReqMemberUpdate;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.Gender;
 import com.planner.enums.MemberStatus;
-import com.planner.oauth.CookieUtils;
+import com.planner.oauth.service.OAuth2Service;
+import com.planner.oauth.service.OAuth2UserPrincipal;
 import com.planner.service.MemberService;
+import com.planner.util.CommonUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -35,14 +37,12 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService memberService;
-	
+	private final OAuth2Service oAuth2Service;
 	
 	/*소셜로그인에서 생긴 쿠키 제거 후 로그아웃*/
 	@GetMapping("/signout")
 	public String signout(HttpServletRequest request, HttpServletResponse response) {
-		CookieUtils.deleteCookie(request, response, "oauth2_auth_request");
-		CookieUtils.deleteCookie(request, response, "mode");
-		CookieUtils.deleteCookie(request, response, "redirect_uri");
+		CommonUtils.removeCookiesAndSession(request, response);
 		return "redirect:/member/logout";
 	}
 
@@ -63,27 +63,31 @@ public class MemberController {
 
 	//	로그인
 	@GetMapping("/login")
-	public String memberLogin() {
+	public String memberLogin(@AuthenticationPrincipal OAuth2UserPrincipal principal,HttpServletRequest request,HttpServletResponse response) {
+		if(principal != null ) {
+			ResMemberDetail user =  oAuth2Service.findByOAuthId(principal.getOAuthId());
+			if(user.getMember_status().equals(MemberStatus.NOT_DONE.getCode())) {
+				CommonUtils.removeCookiesAndSession(request, response);
+				return"redirect:/member/login";
+			}
+		}
 		return "/member/member_login";
 	}
 	
 	/*로그인시에 회원탈퇴여부 검사*/
 	@GetMapping("")
-	public String memberChk(Principal principal, RedirectAttributes rttr,HttpServletRequest request,HttpServletResponse response) {
-		ResMemberDetail user = memberService.memberDetail(principal.getName());
-		
+	public String memberChk(@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal,Principal principal, RedirectAttributes rttr,HttpServletRequest request,HttpServletResponse response) {
+		boolean isMember = memberService.isMember(oAuth2UserPrincipal, principal);
+		if(!isMember) {
 		//TODO - 전역 예외처리시 throw new CustomException 으로 교체예정
-		if(user.getMember_status().equals(MemberStatus.DELETE.getCode())) {
-			HttpSession session = request.getSession();
-			session.invalidate();
-			CookieUtils.deleteCookie(request, response, "oauth2_auth_request");
-			CookieUtils.deleteCookie(request, response, "mode");
-			CookieUtils.deleteCookie(request, response, "redirect_uri");
+			CommonUtils.removeCookiesAndSession(request, response);
 			rttr.addFlashAttribute("delete", 1);
 			return "redirect:/member/login";
 		}
 		return "redirect:/planner/main";
 	}
+	
+	
 	
 	/*내 정보*/
 	@PreAuthorize("isAuthenticated()")
@@ -139,11 +143,7 @@ public class MemberController {
 	@DeleteMapping("/delete")
 	@ResponseBody
 	public void memberDelete(Principal principal,HttpServletRequest request,HttpServletResponse response) {
-		HttpSession session = request.getSession();
-		session.invalidate();
-		CookieUtils.deleteCookie(request, response, "oauth2_auth_request");
-		CookieUtils.deleteCookie(request, response, "mode");
-		CookieUtils.deleteCookie(request, response, "redirect_uri");
+		CommonUtils.removeCookiesAndSession(request, response);
 		memberService.memberDelete(principal.getName());
 	}
 	

@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -43,12 +42,12 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 	      http.csrf((csrf)->csrf
 					.ignoringRequestMatchers(new AntPathRequestMatcher
-							("/planner/main")))												// 특정요청에대한 보호를 비활성화
+							("/error")))												// 특정요청에대한 보호를 비활성화
           .httpBasic(AbstractHttpConfigurer::disable)
           
           .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB
           .authorizeHttpRequests((requests) -> requests
-        		  .requestMatchers(new AntPathRequestMatcher("/planner/main")).permitAll() // /planner/main 경로는 모든 IP에서 접근 허용
+        		  .requestMatchers(new AntPathRequestMatcher("/oauth2/signup")).permitAll() 
                   .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                   .anyRequest().authenticated()
           )
@@ -72,8 +71,4 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-	private AuthorizationManager<RequestAuthorizationContext> hasIpAddress(String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -9,7 +9,9 @@ import lombok.Setter;
 @Setter
 public class ReqOAuth2Signup {
 	
-	private String oauth_id;
+	private String oauth_id;				// 소셜 고유번호
+	
+	private String member_email;		// 회원이메일
 
 	private	LocalDate member_birth;	// 유저 생일
 	
@@ -17,5 +19,5 @@ public class ReqOAuth2Signup {
 	
 	private	String member_gender;	// 유저 성별
 	
-	private String member_status;
+	private String member_status;		// 회원상태
 }

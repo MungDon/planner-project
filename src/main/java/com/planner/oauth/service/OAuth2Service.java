@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.planner.dto.request.member.ReqOAuth2MemberAdd;
 import com.planner.dto.request.member.ReqOAuth2Signup;
-import com.planner.dto.response.member.ResOAuth2MemberLogin;
+import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.MemberStatus;
 import com.planner.mapper.MemberMapper;
 
@@ -33,13 +33,13 @@ public class OAuth2Service {
 	
 	/*소셜회원정보 가져오기*/
 	@Transactional(readOnly = true)
-	public ResOAuth2MemberLogin findByOAuthId(String oauthId) {
+	public ResMemberDetail findByOAuthId(String oauthId) {
 		return memberMapper.findByOAuthID(oauthId);
 	}
 	
 	/*소셜로 받아오지못한 회원정보 저장*/
 	@Transactional
-	public void fetchAdditionalUserInfo(ReqOAuth2Signup req,OAuth2UserPrincipal principal) {
+	public void fetchAdditionalUserInfo(ReqOAuth2Signup req, OAuth2UserPrincipal principal) {
 		req.setOauth_id(principal.getOAuthId());
 		req.setMember_status(MemberStatus.BASIC.getCode());
 		memberMapper.fetchAdditionalUserInfo(req);

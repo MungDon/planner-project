@@ -1,16 +1,16 @@
 package com.planner.oauth.handler;
 
+import static com.planner.oauth.HttpCookieOAuth2AuthorizationRequestRepository.MODE_PARAM_COOKIE_NAME;
+
 import java.io.IOException;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.planner.dto.response.member.ResOAuth2MemberLogin;
+import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.oauth.CookieUtils;
 import com.planner.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.planner.oauth.TokenRedirect;
@@ -22,11 +22,8 @@ import com.planner.oauth.user.OAuth2UserUnlinkManager;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import static com.planner.oauth.HttpCookieOAuth2AuthorizationRequestRepository.MODE_PARAM_COOKIE_NAME;
 
 
 @Slf4j
@@ -65,7 +62,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .build().toUriString();
         }
 		if ("login".equalsIgnoreCase(mode)) {
-			ResOAuth2MemberLogin member  = oAuth2Service.findByOAuthId(principal.getOAuthId());
+			ResMemberDetail member  = oAuth2Service.findByOAuthId(principal.getOAuthId());
 
 			if (member == null) {
 				oAuth2Service.createMember(principal);
