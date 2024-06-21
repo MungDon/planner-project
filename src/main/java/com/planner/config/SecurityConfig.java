@@ -14,6 +14,7 @@ import org.springframework.security.web.access.intercept.RequestAuthorizationCon
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.planner.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.planner.oauth.handler.CustomAuthenticationFailureHandler;
 import com.planner.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.planner.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.planner.oauth.service.CustomOAuth2UserService;
@@ -30,6 +31,7 @@ public class SecurityConfig {
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {// 시큐리티를 적용하지 않을 리소스
@@ -61,7 +63,9 @@ public class SecurityConfig {
 					.loginPage("/member/login")		// 로그인페이지 설정과
 					.usernameParameter("member_email")
 					.passwordParameter("member_password") 		//default = password, username
+					.failureHandler(customAuthenticationFailureHandler)
 					.defaultSuccessUrl("/member",true))	// 리다이렉트 URL 설정	
+          			
           
           .logout((logout)->logout							//사용자 정의
 					.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout")) // 로그아웃 URL 과

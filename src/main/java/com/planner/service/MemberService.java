@@ -10,6 +10,8 @@ import com.planner.dto.request.member.MemberDTO;
 import com.planner.dto.request.member.ReqMemberUpdate;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.MemberStatus;
+import com.planner.exception.CustomException;
+import com.planner.exception.ErrorCode;
 import com.planner.mapper.MemberMapper;
 import com.planner.oauth.service.OAuth2UserPrincipal;
 
@@ -27,6 +29,9 @@ public class MemberService {
 	@Transactional
 	public int memberInsert(MemberDTO memberDTO)  {
 		ResMemberDetail detail =  memberMapper.findByEmail(memberDTO.getMember_email());
+		if(detail!=null) {
+			throw new CustomException(ErrorCode.ID_DUPLICATE);// 이메일(아이디 중복)에 대한 커스텀예외
+		}
 		memberDTO.setMember_password(passwordEncoder.encode(memberDTO.getMember_password()));
 		return memberMapper.memberInsert(memberDTO);
 	}
