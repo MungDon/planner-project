@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <input type="hidden" id="errorMsg" th:value="${errorMessage}">
-[[${errorMessage}]]
-
-<!-- <script>
+ <script>
 	const errorMsg = document.getElementById("errorMsg").value;
 	if(errorMsg != null){
 		alert(errorMsg);
@@ -16,6 +16,6 @@
 	}
 	
 </script>
- -->
+
 </body>
 </html>

@@ -33,18 +33,18 @@ public class SecurityConfig {
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
     private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {// 시큐리티를 적용하지 않을 리소스
-		return web -> web.ignoring()
-				.requestMatchers("/error");
-	}
+//	@Bean
+//	public WebSecurityCustomizer webSecurityCustomizer() {// 시큐리티를 적용하지 않을 리소스
+//		return web -> web.ignoring()
+//				.requestMatchers("/error");
+//	}
 	
 	@Bean // 빈객체주입
 	// 필터 체인을 정의하는 메서드
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 	      http.csrf((csrf)->csrf
 					.ignoringRequestMatchers(new AntPathRequestMatcher
-							("/error")))												// 특정요청에대한 보호를 비활성화
+							("/planner")))												// 특정요청에대한 보호를 비활성화
           .httpBasic(AbstractHttpConfigurer::disable)
           
           .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB
@@ -62,7 +62,6 @@ public class SecurityConfig {
 					.loginPage("/member/login")		// 로그인페이지 설정과
 					.usernameParameter("member_email")
 					.passwordParameter("member_password") 		//default = password, username
-					.failureHandler(customAuthenticationFailureHandler)	// 로그인 실패시 사용될 핸들러 - customException 발생
 					.defaultSuccessUrl("/member",true))	// 리다이렉트 URL 설정	
           			
           
