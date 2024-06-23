@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<input type="hidden" id="errorMsg" th:value="${errorMessage}">
+[[${errorMessage}]]
+
+<!-- <script>
+	const errorMsg = document.getElementById("errorMsg").value;
+	if(errorMsg != null){
+		alert(errorMsg);
+		history.go(-1);
+	}
+	
+</script>
+ -->
+</body>
+</html>

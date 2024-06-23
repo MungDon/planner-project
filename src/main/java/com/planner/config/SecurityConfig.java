@@ -49,7 +49,6 @@ public class SecurityConfig {
           
           .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB
           .authorizeHttpRequests((requests) -> requests
-        		  .requestMatchers(new AntPathRequestMatcher("/oauth2/signup")).permitAll() 
                   .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                   .anyRequest().authenticated()
           )
