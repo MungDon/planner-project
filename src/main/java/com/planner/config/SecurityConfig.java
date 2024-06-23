@@ -33,11 +33,11 @@ public class SecurityConfig {
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
     private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
-//	@Bean
-//	public WebSecurityCustomizer webSecurityCustomizer() {// 시큐리티를 적용하지 않을 리소스
-//		return web -> web.ignoring()
-//				.requestMatchers("/error");
-//	}
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer() {// 시큐리티를 적용하지 않을 리소스
+		return web -> web.ignoring()
+				.requestMatchers("/error");
+	}
 	
 	@Bean // 빈객체주입
 	// 필터 체인을 정의하는 메서드
