@@ -76,7 +76,7 @@ public class MemberController {
 		}
 		return "/member/member_login";
 	}
-	
+
 	/*로그인시에 회원탈퇴여부 검사*/
 	@GetMapping("")
 	public String memberChk(@UserData ResMemberDetail detail, HttpServletRequest request,HttpServletResponse response) {
