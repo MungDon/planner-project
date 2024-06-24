@@ -7,6 +7,8 @@ import com.planner.dto.request.member.ReqOAuth2MemberAdd;
 import com.planner.dto.request.member.ReqOAuth2Signup;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.MemberStatus;
+import com.planner.exception.CustomException;
+import com.planner.exception.ErrorCode;
 import com.planner.mapper.MemberMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -40,6 +42,10 @@ public class OAuth2Service {
 	/*소셜로 받아오지못한 회원정보 저장*/
 	@Transactional
 	public void fetchAdditionalUserInfo(ReqOAuth2Signup req, OAuth2UserPrincipal principal) {
+		ResMemberDetail user = memberMapper.findByEmail(req.getMember_email());
+		if(user!=null) {
+			throw new CustomException(ErrorCode.ID_DUPLICATE);// 이메일(아이디 중복)에 대한 커스텀예외
+		}
 		req.setOauth_id(principal.getOAuthId());
 		req.setMember_status(MemberStatus.BASIC.getCode());
 		memberMapper.fetchAdditionalUserInfo(req);

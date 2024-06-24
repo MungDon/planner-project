@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
@@ -10,6 +10,10 @@
 <input type="hidden" id="errorMsg" th:value="${errorMessage}">
  <script>
 	const errorMsg = document.getElementById("errorMsg").value;
+	if(errorMsg.indexOf("탈퇴") == 1){
+		confirm()
+	}
+	
 	if(errorMsg != null){
 		alert(errorMsg);
 		history.go(-1);
@@ -18,4 +22,4 @@
 </script>
 
 </body>
-</html>
+</html> 	

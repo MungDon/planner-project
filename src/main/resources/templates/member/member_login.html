@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
@@ -20,21 +20,12 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 			</form>
 			<div class="joinBtn">
 				<p class="join_a"><a class="join_a" sec:authorize="isAnonymous()" href="#">ID/PW 찾기</a>
-				| <a class="join_a" sec:authorize="isAnonymous()" href="/member/insert">회원가입</a></p>
+				| <a class="join_a" sec:authorize="isAnonymous()" href="/member/insert">회원가입</a> | <a class="join_a" sec:authorize="isAnonymous()" href="/member/restore">회원복구</a></p>
 			</div>
 			<div class="btnBox">
 				<a class="googleBtn" href="/oauth2/authorization/google?mode=login"><img src="/images/web_neutral_rd_na@4x.png" class="googleLogo"></a>
 				<a class="kakaoBtn" href="/oauth2/authorization/kakao?mode=login"><img src="/images/kakao.webp" class="kakaoLogo"></a>
 			</div>
 	</main>
-	<!-- 추후 전역 예외처리하면 사라짐 -->
-	<script th:if="${delete} == 1">
-	$(document).ready(function(){
-		if(!confirm('이미 탈퇴한 회원입니다, 다시 복구 하시겠습니까?')){
-			return false;
-		}
-		location.href="/member/restore";
-	});
-	</script>
 </body>
 </html>

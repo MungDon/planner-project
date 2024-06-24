@@ -32,6 +32,7 @@ public class OAuth2Controller {
 	public String oAuth2Signup(@AuthenticationPrincipal OAuth2UserPrincipal principal,ReqOAuth2Signup req) {
 		if(principal != null) {
 			oAuth2Service.fetchAdditionalUserInfo(req, principal);
+			System.out.println(req.getMember_email());
 		}else {
 			return "redirect:/oauth2/signup";
 		}

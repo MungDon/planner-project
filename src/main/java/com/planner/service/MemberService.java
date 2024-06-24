@@ -24,78 +24,72 @@ public class MemberService {
 	private final MemberMapper memberMapper;
 	private final PasswordEncoder passwordEncoder;
 
-
-	//	회원가입
+	// 회원가입
 	@Transactional
-	public int memberInsert(MemberDTO memberDTO)  {
-		ResMemberDetail detail =  memberMapper.findByEmail(memberDTO.getMember_email());
-		if(detail!=null) {
+	public int memberInsert(MemberDTO memberDTO) {
+		ResMemberDetail detail = memberMapper.findByEmail(memberDTO.getMember_email());
+		if (detail != null) {
 			throw new CustomException(ErrorCode.ID_DUPLICATE);// 이메일(아이디 중복)에 대한 커스텀예외
 		}
 		memberDTO.setMember_password(passwordEncoder.encode(memberDTO.getMember_password()));
 		return memberMapper.memberInsert(memberDTO);
 	}
-	
+
 	/* 내 정보 */
 	@Transactional(readOnly = true)
 	public ResMemberDetail memberDetail(String member_email) {
-		ResMemberDetail detail =  memberMapper.findByEmail(member_email);
+		ResMemberDetail detail = memberMapper.findByEmail(member_email);
 		return detail;
 	}
-	
-	/*회원 정보 수정*/
+
+	/* 회원 정보 수정 */
 	@Transactional
 	public void memberUpdate(ReqMemberUpdate req) {
 		memberMapper.memberUpdate(req);
 	}
-	
-	/*비번체크*/
+
+	/* 비번체크 */
 	@Transactional(readOnly = true)
-	public int passwordChk(String currnetPw,String member_email){
+	public int passwordChk(String currnetPw, String member_email) {
 		int result = 0;
 		ResMemberDetail member = memberMapper.findByEmail(member_email);
-		if(member != null && !member.getOauth_id().equals("none")) {
+		if (member != null && !member.getOauth_id().equals("none")) {
 			return result = 1;
 		}
-		if(member != null && passwordEncoder.matches(currnetPw, member.getMember_password())) {
+		if (member != null && passwordEncoder.matches(currnetPw, member.getMember_password())) {
 			return result = 1;
 		}
 		return result;
 	}
-	
-	/*회원 탈퇴*/
+
+	/* 회원 탈퇴 */
 	@Transactional
 	public void memberDelete(String member_email) {
 		memberMapper.changeMemberStatus(member_email, MemberStatus.DELETE.getCode());
 	}
-	
-	/*회원 복구*/
+
+	/* 회원 복구 */
 	@Transactional
 	public int memberRestore(String currentEmail, String currentPassword) {
-		int result = passwordChk( currentPassword, currentEmail);
-		if(result == 1) {
+		int result = passwordChk(currentPassword, currentEmail);
+		if (result == 1) {
 			memberMapper.changeMemberStatus(currentEmail, MemberStatus.RESTORE.getCode());
 		}
 		return result;
 	}
-	
-	/*회원탈퇴여부체크*/
-	@Transactional(readOnly = true)
-	public boolean isMember(OAuth2UserPrincipal oAuth2UserPrincipal,Principal principal) {
-		boolean result = true;
-		if(principal.getName().equals("none")) {
-			ResMemberDetail member = memberMapper.findByOAuthID(oAuth2UserPrincipal.getOAuthId());
-			result = statusChk(member.getMember_status());
-		}else {
-			ResMemberDetail user = memberMapper.findByEmail(principal.getName());
-			result = statusChk(user.getMember_status());
-		}
-		return result;
-	}
-	
-	/*상태체크*/
+
+//	/* 회원탈퇴여부체크 */
+//	@Transactional(readOnly = true)
+//	public boolean isMember(Long member_id) {
+//		boolean result = true;
+//		ResMemberDetail member = memberMapper.findByOAuthID(oAuth2UserPrincipal.getOAuthId());
+//		result = statusChk(member.getMember_status());
+//		return result;
+//	}
+
+	/* 상태체크 */
 	private boolean statusChk(String member_status) {
-		if(member_status.equals(MemberStatus.DELETE.getCode())) {
+		if (member_status.equals(MemberStatus.DELETE.getCode())) {
 			return false;
 		}
 		return true;

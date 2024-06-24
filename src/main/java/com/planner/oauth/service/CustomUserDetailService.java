@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,10 +30,11 @@ public class CustomUserDetailService implements UserDetailsService {
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
         //이메일 체크
-        MemberDTO omember = memberMapper.findByUser(member_email);
-        if(omember != null) {
+        MemberDTO member = memberMapper.findByUser(member_email);
+        if(member != null) {
             grantedAuthorities.add(new SimpleGrantedAuthority("USER"));
-            return new User(omember.getMember_email(), omember.getMember_password(), grantedAuthorities);
+            User user =  new User(member.getMember_email(), member.getMember_password(), grantedAuthorities);
+            return user;
         } else {
             // DB에 정보가 존재하지 않으므로 exception 호출
             throw new UsernameNotFoundException("user doesn't exist, email : " + member_email);

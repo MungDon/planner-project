@@ -62,6 +62,7 @@ public class SecurityConfig {
 					.loginPage("/member/login")		// 로그인페이지 설정과
 					.usernameParameter("member_email")
 					.passwordParameter("member_password") 		//default = password, username
+					.failureUrl("/member/fail")
 					.defaultSuccessUrl("/member",true))	// 리다이렉트 URL 설정	
           			
           

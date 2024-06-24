@@ -22,10 +22,13 @@ import com.planner.dto.request.member.ReqMemberUpdate;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.Gender;
 import com.planner.enums.MemberStatus;
+import com.planner.exception.CustomException;
+import com.planner.exception.ErrorCode;
 import com.planner.oauth.service.OAuth2Service;
 import com.planner.oauth.service.OAuth2UserPrincipal;
 import com.planner.service.MemberService;
 import com.planner.util.CommonUtils;
+import com.planner.util.UserData;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -76,23 +79,24 @@ public class MemberController {
 	
 	/*로그인시에 회원탈퇴여부 검사*/
 	@GetMapping("")
-	public String memberChk(@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal,Principal principal, RedirectAttributes rttr,HttpServletRequest request,HttpServletResponse response) {
-		boolean isMember = memberService.isMember(oAuth2UserPrincipal, principal);
-		if(!isMember) {
-		//TODO - 전역 예외처리시 throw new CustomException 으로 교체예정
+	public String memberChk(@UserData ResMemberDetail detail, HttpServletRequest request,HttpServletResponse response) {
+		if(detail.getMember_status().equals(MemberStatus.DELETE.getCode())) {
 			CommonUtils.removeCookiesAndSession(request, response);
-			rttr.addFlashAttribute("delete", 1);
-			return "redirect:/member/login";
+			throw new CustomException(ErrorCode.WITHDRAWN_MEMBER);
 		}
 		return "redirect:/planner/main";
 	}
 	
-	
+	@GetMapping("/fail")
+	public void loginFail() {
+		throw new CustomException(ErrorCode.NO_ACCOUNT);
+	}
 	
 	/*내 정보*/
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/info")
 	public String memberInfo(Model model,Principal principal) {
+		System.out.println(principal.getName());
 		ResMemberDetail detail = memberService.memberDetail(principal.getName());
 		String gender = Gender.findNameByCode(detail.getMember_gender());
 		model.addAttribute("detail", detail);

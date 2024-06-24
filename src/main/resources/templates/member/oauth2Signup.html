@@ -3,53 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="/css/oauth2insert.css">
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-	<main class="mainCon">
-		<div class="mainBox">
-			<form class="signupForm" action="/oauth2/signup" method="post">
+	<main class="oauth2Main">
+		<form  action="/oauth2/signup" method="post" class="oauth2Form" onsubmit="return validateOauth2Insert()">
 			<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
 			<input type="hidden" id="principal" th:value="${principal}"/>
-				<table>
-					<tr  th:if="${principal != null && principal.getUsername()=='none'}">
-						<th>
-							<label for="member_email">이메일</label>
-						</th>
-						<td>
-							<input type="email" id="member_email" name="member_email">
-						</td>
-					</tr>
-					<tr>
-						<th>
-							<label for="birth">생일</label>
-						</th>
-						<td>
-							<input type="date" id="birth" name="member_birth" required="required">
-						</td>
-					</tr>
-					<tr>
-						<th>
-							<label for="phone">휴대폰 번호</label>
-						</th>
-						<td>
-							<input type="text" id="phone" name="member_phone" placeholder="-빼고 입력하세요" required="required"> 
-						</td>					
-					</tr>
-					<tr>
-						<th>성별</th>
-						<td>
-							<input type="radio" id="male" name="member_gender" value="M" checked="checked">
-							<label for="male">남자</label>
-							<input type="radio" id="female" name="member_zzgender" value="W">
-							<label for="female">여자</label>
-						</td>
-					</tr>
-				</table>
-				<button type="submit">회원가입</button>
-			</form>
+			
+			<span class="joinText">회원가입을 위해<br> 정보를 입력해주세요</span>
+			
+			<label th:if="${principal != null && principal.getUsername()=='none'}" for="member_email">이메일</label>
+			<input type="email" th:if="${principal != null && principal.getUsername()=='none'}" id="member_email" name="member_email">
+			
+			<label for="birth">생년월일</label>
+			<input type="date" name="member_birth" id="birth" required="required"	/>
+			
+			<label for="phone">전화번호</label>
+			<input type="number" name="member_phone" id="phone" required="required" placeholder="-빼고 작성해주세요"/>			
+			<div class="genderCon">
+				<div class="genderBox">
+					<div>
+						<label for="m">남성</label><input type="radio" name="member_gender" value="M" id="m"	/>
+					</div>
+					<div>
+						<label for="w">여성</label><input type="radio" name="member_gender" value="W" id="w"	/>
+				    </div>
+				</div>
+			</div>	
+			<div class="signChkBox">
+				<input type="checkbox" id="signChk">개인정보 수집 및 이용에 동의합니다.<a href="#" onclick="openModal()">[이용약관]</a>
+			</div>
+			<button type="submit" class="joinBtn">회원가입</button>
+		</form>
+		<div class="signChkModal" id="signModal">
+			<div class="modalBody">
+				<div class="Modaltop">
+					<button type="button" class="Xbtn" onclick="closeModal()">X</button>
+				</div>
+				<div class="modalMain">
+					<h1>이용약관</h1>
+					<span>대충이용약관임</span>
+				</div>
+				<div class="btns">
+					<button type="button" class="closeBtn" onclick="closeModal()">확인</button>
+				</div>
+			</div>
 		</div>
 	</main>
+	<script src="/js/oauth2_insert.js"></script>
 	<script>
 	$(function(){
 		$(document).ready(function(){
