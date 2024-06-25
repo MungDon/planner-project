@@ -2,6 +2,7 @@ package com.planner.oauth.user;
 
 import java.util.Map;
 
+import com.planner.enums.MemberRole;
 import com.planner.enums.OAuthType;
 
 public class GoogleOAuth2UserInfo implements OAuth2UserInfo{
@@ -52,5 +53,10 @@ public class GoogleOAuth2UserInfo implements OAuth2UserInfo{
 	@Override
 	public String getType() {
 		return OAuthType.GOOGLE.getOAuthType();
+	}
+
+	@Override
+	public String getRole() {
+		return MemberRole.USER.getType();
 	}
 }

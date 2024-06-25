@@ -3,17 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<meta name="_csrf" th:content="${_csrf.token}"/>
-<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <input type="hidden" id="errorMsg" th:value="${errorMessage}">
  <script>
 	const errorMsg = document.getElementById("errorMsg").value;
-	if(errorMsg.indexOf("탈퇴") == 1){
-		confirm()
-	}
-	
+
 	if(errorMsg != null){
 		alert(errorMsg);
 		history.go(-1);

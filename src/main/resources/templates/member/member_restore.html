@@ -47,7 +47,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 			        let csrfToken = $("meta[name='_csrf']").attr("content");
 			        let csrfHeader = $("meta[name='_csrf_header']").attr("content");
 					$.ajax({
-						url : "/member/restore",
+						url : "/member/anon/restore",
 						type : "post",
 						data : {
 								currentEmail : currentEmail
@@ -70,7 +70,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						},
 						error : function(){
 							alert('복구신청이 실패하였습니다.');
-							location.href="/member/login";
+							location.href="/member/anon/login";
 						}
 					});
 					

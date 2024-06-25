@@ -2,6 +2,7 @@ package com.planner.oauth.user;
 
 import java.util.Map;
 
+import com.planner.enums.MemberRole;
 import com.planner.enums.OAuthType;
 
 public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
@@ -57,6 +58,10 @@ public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
 	@Override
 	public String getType() {
 		return OAuthType.KAKAO.getOAuthType();
+	}
+	@Override
+	public String getRole() {
+		return MemberRole.USER.getType();
 	}
 
 }

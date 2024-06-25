@@ -23,20 +23,19 @@ public class OAuth2Controller {
 	private final OAuth2Service oAuth2Service;
 	
 	/*소셜로그인에서 못받은 정보 받기 FORM*/
-	@GetMapping("/signup")
+	@GetMapping("/auth/signup")
 	public String oAuth2SignupForm(@UserData ResMemberDetail member, Model model) {
 		model.addAttribute("member", member);
 		return "/member/oauth2Signup";
 	}
 	
 	/*소셜로그인에서 못받은 정보 저장*/	
-	@PostMapping("/signup")
+	@PostMapping("/auth/signup")
 	public String oAuth2Signup(@AuthenticationPrincipal OAuth2UserPrincipal principal,ReqOAuth2Signup req) {
 		if(principal != null) {
 			oAuth2Service.fetchAdditionalUserInfo(req, principal);
-			System.out.println(req.getMember_email());
 		}else {
-			return "redirect:/oauth2/signup";
+			return "redirect:/oauth2/auth/signup";
 		}
 		return "redirect:/planner/main";
 		//TODO - 메인 링크 추후 바뀜

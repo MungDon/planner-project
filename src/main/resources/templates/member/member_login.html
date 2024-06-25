@@ -20,7 +20,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 			</form>
 			<div class="joinBtn">
 				<p class="join_a"><a class="join_a" sec:authorize="isAnonymous()" href="#">ID/PW 찾기</a>
-				| <a class="join_a" sec:authorize="isAnonymous()" href="/member/insert">회원가입</a> | <a class="join_a" sec:authorize="isAnonymous()" href="/member/restore">회원복구</a></p>
+				| <a class="join_a" sec:authorize="isAnonymous()" href="/member/anon/insert">회원가입</a> | <a class="join_a" sec:authorize="isAnonymous()" href="/member/anon/restore">회원복구</a></p>
 			</div>
 			<div class="btnBox">
 				<a class="googleBtn" href="/oauth2/authorization/google?mode=login"><img src="/images/web_neutral_rd_na@4x.png" class="googleLogo"></a>

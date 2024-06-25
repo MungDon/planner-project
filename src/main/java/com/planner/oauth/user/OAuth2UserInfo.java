@@ -18,4 +18,5 @@ public interface OAuth2UserInfo {
 	
 	String getType();
 	
+	String getRole();
 }

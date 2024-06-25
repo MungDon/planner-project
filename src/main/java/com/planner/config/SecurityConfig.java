@@ -2,7 +2,6 @@ package com.planner.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,11 +9,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.planner.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.planner.oauth.handler.CustomAuthenticationFailureHandler;
 import com.planner.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.planner.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.planner.oauth.service.CustomOAuth2UserService;
@@ -31,12 +28,11 @@ public class SecurityConfig {
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
-    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {// 시큐리티를 적용하지 않을 리소스
 		return web -> web.ignoring()
-				.requestMatchers("/error");
+				.requestMatchers("/error","/css/**", "/js/**", "/images/**");// 정적 리소스 시큐리티 무시 => 안하면 적용이 안됌
 	}
 	
 	@Bean // 빈객체주입
@@ -49,7 +45,10 @@ public class SecurityConfig {
           
           .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB
           .authorizeHttpRequests((requests) -> requests
-                  .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
+                  .requestMatchers(new AntPathRequestMatcher("/planner/main")).permitAll()
+                  .requestMatchers(new AntPathRequestMatcher("/member/anon/**")).permitAll()
+                  .requestMatchers(new AntPathRequestMatcher("/oauth2/**")).permitAll()
+                  .requestMatchers(new AntPathRequestMatcher("/member/auth/**")).hasRole("USER")
                   .anyRequest().authenticated()
           )
           .oauth2Login(configure ->

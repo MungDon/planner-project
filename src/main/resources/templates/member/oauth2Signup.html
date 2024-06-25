@@ -8,7 +8,7 @@
 </head>
 <body>
 	<main class="oauth2Main">
-		<form  action="/oauth2/signup" method="post" class="oauth2Form" onsubmit="return validateOauth2Insert()">
+		<form  action="/oauth2/auth/signup" method="post" class="oauth2Form" onsubmit="return validateOauth2Insert()">
 			<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
 			<input type="hidden" id="member" th:value="${member}"/>
 			
@@ -60,7 +60,7 @@
 			console.log(member);
 			if(member == null || member == ""){
 				alert("권한이 없습니다.");
-				location.href="/member/login";
+				location.href="/member/anon/login";
 			}
 		});
 	});

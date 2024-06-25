@@ -38,7 +38,7 @@ public class MemberController {
 	private final MemberService memberService;
 	
 	/*소셜로그인에서 생긴 쿠키 제거 후 로그아웃*/
-	@GetMapping("/signout")
+	@GetMapping("/anon/signout")
 	public String signout(HttpServletRequest request, HttpServletResponse response) {
 		CommonUtils.removeCookiesAndSession(request, response);
 		return "redirect:/member/logout";
@@ -46,13 +46,13 @@ public class MemberController {
 
 
 	//	회원가입 Get
-	@GetMapping("/insert")
+	@GetMapping("/anon/insert")
 	public String memberInsert() {
 		return "/member/member_insert";
 	}
 	
 	//	회원가입 Post
-	@PostMapping("/insert")
+	@PostMapping("/anon/insert")
 	public String memberInsert(MemberDTO memberDTO, RedirectAttributes rttr) {
 		int result = memberService.memberInsert(memberDTO);
 		rttr.addFlashAttribute("result", result);
@@ -60,17 +60,17 @@ public class MemberController {
 	}
 
 	//	로그인
-	@GetMapping("/login")
+	@GetMapping("/anon/login")
 	public String memberLogin(@UserData ResMemberDetail detail,HttpServletRequest request,HttpServletResponse response) {
 			if(detail != null &&detail.getMember_status().equals(MemberStatus.NOT_DONE.getCode())) {
 				CommonUtils.removeCookiesAndSession(request, response);
-				return"redirect:/member/login";
+				return"redirect:/member/anon/login";
 			}
 		return "/member/member_login";
 	}
 
 	/*로그인시에 회원탈퇴여부 검사*/
-	@GetMapping("")
+	@GetMapping("/anon")
 	public String memberChk(@UserData ResMemberDetail detail, HttpServletRequest request,HttpServletResponse response) {
 		if(detail.getMember_status().equals(MemberStatus.DELETE.getCode())) {
 			CommonUtils.removeCookiesAndSession(request, response);
@@ -80,14 +80,14 @@ public class MemberController {
 	}
 	
 	/*로그인 실패시 매핑*/
-	@GetMapping("/fail")
+	@GetMapping("/anon/fail")
 	public void loginFail() {
 		throw new CustomException(ErrorCode.NO_ACCOUNT);
 	}
 	
 	/*내 정보*/
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/info")
+	@GetMapping("/auth/info")
 	public String memberInfo(Model model,@UserData ResMemberDetail detail) {
 		String gender = Gender.findNameByCode(detail.getMember_gender());
 		model.addAttribute("detail", detail);
@@ -97,7 +97,7 @@ public class MemberController {
 	
 	/*비밀번호 확인 폼*/
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/chk")
+	@GetMapping("/auth/chk")
 	public String passwordChkForm(@RequestParam(value = "url")String url, Model model) {
 		model.addAttribute("url", url);
 		return"/member/passwordChk";
@@ -105,7 +105,7 @@ public class MemberController {
 	
 	/*비밀번호 확인*/
 	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/chk")
+	@PostMapping("/auth/chk")
 	@ResponseBody
 	public ResponseEntity<String> passwordChk(@RequestParam(value = "currentPw")String currentPw,@UserData ResMemberDetail member) {
 		int result = memberService.passwordChk(currentPw,member);
@@ -117,7 +117,7 @@ public class MemberController {
 	
 	/*회원정보 수정 폼*/
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/update")
+	@GetMapping("/auth/update")
 	public String memberUpdateForm(Model model,@UserData ResMemberDetail detail) {
 		model.addAttribute("detail", detail);
 		return "/member/member_update";
@@ -125,16 +125,16 @@ public class MemberController {
 
 	/*회원정보 수정*/
 	@PreAuthorize("isAuthenticated()")
-	@PutMapping("/update")
+	@PutMapping("/auth/update")
 	public String memberUpdate(ReqMemberUpdate req) {
 		memberService.memberUpdate(req);
 		//TODO - 회원 정보 이메일 수정시에 이메일 인증 추가
-		return "redirect:/member/info";
+		return "redirect:/member/auth/info";
 	}
 	
 	/*회원 탈퇴*/
 	@PreAuthorize("isAuthenticated()")
-	@DeleteMapping("/delete")
+	@DeleteMapping("/auth/delete")
 	@ResponseBody
 	public void memberDelete(@UserData ResMemberDetail detail,HttpServletRequest request,HttpServletResponse response) {
 		CommonUtils.removeCookiesAndSession(request, response);
@@ -142,13 +142,13 @@ public class MemberController {
 	}
 	
 	/*회원복구 폼*/
-	@GetMapping("/restore")
+	@GetMapping("/anon/restore")
 	public String memberRestoreForm() {
 		return "/member/member_restore";
 	}
 	
 	/*회원 복구*/
-	@PostMapping("/restore")
+	@PostMapping("/anon/restore")
 	@ResponseBody
 	public int memberRestore(ReqMemberRestore req) {
 		int result = memberService.memberRestore(req);

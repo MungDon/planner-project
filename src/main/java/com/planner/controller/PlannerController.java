@@ -23,7 +23,7 @@ public class PlannerController {
 	public String main(@UserData ResMemberDetail detail,HttpServletRequest request,HttpServletResponse response) {
 		if(detail !=null) {
 			if(detail.getMember_status().equals(MemberStatus.NOT_DONE.getCode())) {
-				return "redirect:/oauth2/signup";
+				return "redirect:/oauth2/auth/signup";
 			}
 		}
 		return"main";

@@ -9,7 +9,7 @@
 <body>
 	<header th:replace="~{header :: header}"></header>
 	<main class="insertMain">
-		<form action="/member/insert" method="post" class="insertForm" onsubmit="return validateInsert()">
+		<form action="/member/anon/insert" method="post" class="insertForm" onsubmit="return validateInsert()">
 		<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
 		
 		<span class="joinText">회원가입을 위해<br> 정보를 입력해주세요</span>

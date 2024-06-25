@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.planner.dto.request.member.MemberDTO;
+import com.planner.enums.MemberRole;
+import com.planner.enums.MemberStatus;
 import com.planner.mapper.MemberMapper;
 
 import lombok.AllArgsConstructor;
@@ -32,7 +34,7 @@ public class CustomUserDetailService implements UserDetailsService {
         //이메일 체크
         MemberDTO member = memberMapper.findByUser(member_email);
         if(member != null) {
-            grantedAuthorities.add(new SimpleGrantedAuthority("USER"));
+            grantedAuthorities.add(new SimpleGrantedAuthority(MemberRole.USER.getType()));
             User user =  new User(member.getMember_email(), member.getMember_password(), grantedAuthorities);
             return user;
         } else {

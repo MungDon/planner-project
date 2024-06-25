@@ -16,4 +16,8 @@ public class ReqOAuth2MemberAdd {
 	private String oauth_id;					// 소셜 고유번호
 	
 	private String member_status;			// 가입상태
+	
+	private String oauth_type;				// 소셜로그인 종류
+	
+	private String member_role;			// 회원 권한
 }

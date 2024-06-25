@@ -17,11 +17,11 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 				<td class="h_td_2"></td>
 				<td class="h_td_3"></td>
 				<td  class="h_td_4">
-					<a sec:authorize="isAuthenticated()"  href="/member/info">내 정보</a>
+					<a sec:authorize="isAuthenticated()"  href="/member/auth/info">내 정보</a>
 				</td>
 				<td class="h_td_5">
-					<a sec:authorize="isAnonymous()"  href="/member/login">로그인</a>
-					<a sec:authorize="isAuthenticated()"  href="/member/signout">로그아웃</a>
+					<a sec:authorize="isAnonymous()"  href="/member/anon/login">로그인</a>
+					<a sec:authorize="isAuthenticated()"  href="/member/anon/signout">로그아웃</a>
 				</td>
 			</tr>
 		</table>

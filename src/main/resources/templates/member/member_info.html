@@ -12,7 +12,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 </head>
 <body>
 	<header th:replace="~{header :: header}"></header>
-	<main class="infoMain">
+  	<main class="infoMain">
 	<h2>회원정보</h2>
 		<input type="hidden" id="status" th:value="${detail.member_status}">
 		<table class="infoTable">
@@ -22,8 +22,8 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 					<span th:text="${detail.member_email}"></span>
 				</td>
 				<td class="i_td1-1">
-					<a th:if="${detail.oauth_id =='none'}" href="/member/chk?url=update">회원 정보 수정 ></a>
-					<a th:if="${detail.oauth_id !='none'}" href="/member/update">회원 정보 수정 ></a>
+					<a th:if="${detail.oauth_id =='none'}" href="/member/auth/chk?url=update">회원 정보 수정 ></a>
+					<a th:if="${detail.oauth_id !='none'}" href="/member/auth/update">회원 정보 수정 ></a>
 				</td>
 			</tr>
 			<tr class="i_tr2">
@@ -52,8 +52,8 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 			</tr>
 		</table>
 		<div class="userDeleteBtnBox">
-			<a th:if="${detail.oauth_id =='none'}" href="/member/chk?url=delete">회원탈퇴</a>
-			<button th:if="${detail.oauth_id !='none'}" type="button" class="userDeleteBtn" >회원탈퇴</button>
+			<a th:if="${detail.oauth_id =='none'}" href="/member/auth/chk?url=delete">회원탈퇴</a>
+			<button th:if="${detail.oauth_id !='none'}" type="button" class="userDeleteBtn">회원탈퇴</button>
 		</div>
 	</main>
 	<script>
@@ -73,7 +73,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 					return false;
 				}
 				$.ajax({
-					url : "/member/delete",
+					url : "/member/auth/delete",
 					type : "delete",
 					beforeSend: function(xhr) {
 		                // CSRF 토큰을 요청 헤더에 포함
