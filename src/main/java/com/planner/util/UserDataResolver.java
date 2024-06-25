@@ -44,12 +44,10 @@ public class UserDataResolver implements HandlerMethodArgumentResolver{
 		
 		if(principal instanceof OAuth2UserPrincipal) {
 			OAuth2UserPrincipal oAuth2UserPrincipal = (OAuth2UserPrincipal)principal;
-			System.out.println("동작함?");
 			ResMemberDetail member = oAuth2Service.findByOAuthId(oAuth2UserPrincipal.getOAuthId());
 			return member;
 		}else if(principal instanceof User) {
 			User user = (User)principal;
-			System.out.println("동작함?");
 			ResMemberDetail member = memberService.memberDetail(user.getUsername());
 			return member;
 		}
