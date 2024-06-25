@@ -10,12 +10,12 @@
 	<main class="oauth2Main">
 		<form  action="/oauth2/signup" method="post" class="oauth2Form" onsubmit="return validateOauth2Insert()">
 			<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
-			<input type="hidden" id="principal" th:value="${principal}"/>
+			<input type="hidden" id="member" th:value="${member}"/>
 			
 			<span class="joinText">회원가입을 위해<br> 정보를 입력해주세요</span>
 			
-			<label th:if="${principal != null && principal.getUsername()=='none'}" for="member_email">이메일</label>
-			<input type="email" th:if="${principal != null && principal.getUsername()=='none'}" id="member_email" name="member_email">
+			<label th:if="${member != null && member.getMember_email()=='none'}" for="member_email">이메일</label>
+			<input type="email" th:if="${member != null && member.getMember_email()=='none'}" id="member_email" name="member_email">
 			
 			<label for="birth">생년월일</label>
 			<input type="date" name="member_birth" id="birth" required="required"	/>
@@ -56,9 +56,9 @@
 	<script>
 	$(function(){
 		$(document).ready(function(){
-			const principal = $("#principal").val();
-			console.log(principal);
-			if(principal == null || principal == ""){
+			const member = $("#member").val();
+			console.log(member);
+			if(member == null || member == ""){
 				alert("권한이 없습니다.");
 				location.href="/member/login";
 			}

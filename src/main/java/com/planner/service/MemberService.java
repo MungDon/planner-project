@@ -1,19 +1,18 @@
 package com.planner.service;
 
-import java.security.Principal;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.planner.dto.request.member.MemberDTO;
+import com.planner.dto.request.member.ReqMemberRestore;
 import com.planner.dto.request.member.ReqMemberUpdate;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.MemberStatus;
 import com.planner.exception.CustomException;
 import com.planner.exception.ErrorCode;
 import com.planner.mapper.MemberMapper;
-import com.planner.oauth.service.OAuth2UserPrincipal;
+import com.planner.util.CommonUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,8 +26,7 @@ public class MemberService {
 	// 회원가입
 	@Transactional
 	public int memberInsert(MemberDTO memberDTO) {
-		ResMemberDetail detail = memberMapper.findByEmail(memberDTO.getMember_email());
-		if (detail != null) {
+		if (isMember(memberDTO.getMember_email())) {
 			throw new CustomException(ErrorCode.ID_DUPLICATE);// 이메일(아이디 중복)에 대한 커스텀예외
 		}
 		memberDTO.setMember_password(passwordEncoder.encode(memberDTO.getMember_password()));
@@ -50,9 +48,8 @@ public class MemberService {
 
 	/* 비번체크 */
 	@Transactional(readOnly = true)
-	public int passwordChk(String currnetPw, String member_email) {
+	public int passwordChk(String currnetPw, ResMemberDetail member) {
 		int result = 0;
-		ResMemberDetail member = memberMapper.findByEmail(member_email);
 		if (member != null && !member.getOauth_id().equals("none")) {
 			return result = 1;
 		}
@@ -64,34 +61,57 @@ public class MemberService {
 
 	/* 회원 탈퇴 */
 	@Transactional
-	public void memberDelete(String member_email) {
-		memberMapper.changeMemberStatus(member_email, MemberStatus.DELETE.getCode());
+	public void memberDelete(Long member_id) {
+		memberMapper.changeMemberStatus(member_id, MemberStatus.DELETE.getCode());
 	}
 
 	/* 회원 복구 */
 	@Transactional
-	public int memberRestore(String currentEmail, String currentPassword) {
-		int result = passwordChk(currentPassword, currentEmail);
-		if (result == 1) {
-			memberMapper.changeMemberStatus(currentEmail, MemberStatus.RESTORE.getCode());
+	public int memberRestore(ReqMemberRestore req) {
+		int result = 0;
+		if (!CommonUtils.isEmpty(req.getOauth_type())) { // 소셜 로그인일때
+			ResMemberDetail memberDetail = memberMapper.findByEmailAndOAuthType(req.getCurrentEmail(),
+					req.getOauth_type());
+			result = changeMemberStatus(memberDetail);
+			return result;
+		}
+		if (CommonUtils.isEmpty(req.getOauth_type())) {// 일반로그인일때
+			ResMemberDetail memberDetail = memberMapper.findByEmail(req.getCurrentEmail());
+			int pwChk = passwordChk(req.getCurrentPassword(), memberDetail);
+
+			if (pwChk == 1) {
+				result = changeMemberStatus(memberDetail);
+				return result;
+			}
 		}
 		return result;
 	}
 
-//	/* 회원탈퇴여부체크 */
-//	@Transactional(readOnly = true)
-//	public boolean isMember(Long member_id) {
-//		boolean result = true;
-//		ResMemberDetail member = memberMapper.findByOAuthID(oAuth2UserPrincipal.getOAuthId());
-//		result = statusChk(member.getMember_status());
-//		return result;
-//	}
-
-	/* 상태체크 */
-	private boolean statusChk(String member_status) {
-		if (member_status.equals(MemberStatus.DELETE.getCode())) {
-			return false;
+	/* 회원 상태변경 */
+	@Transactional
+	private int changeMemberStatus(ResMemberDetail memberDetail) {
+		int result = 0;
+		if (!CommonUtils.isEmpty(memberDetail)) {
+			result = memberMapper.changeMemberStatus(memberDetail.getMember_id(), MemberStatus.BASIC.getCode());
+			return result;
 		}
-		return true;
+		throw new CustomException(ErrorCode.NO_ACCOUNT);
+
+	}
+
+	/* 회원체크 */
+	@Transactional
+	public boolean isMember(String email) {
+		boolean result = true;
+		ResMemberDetail user = memberMapper.findByEmail(email);
+		if (user == null) {
+			result = false;
+		}
+		// 탈퇴한 회원이면 예외 발생
+		if (user != null && user.getMember_status().equals(MemberStatus.DELETE.getCode())) {
+			throw new CustomException(ErrorCode.WITHDRAWN_MEMBER);
+		}
+		return result;
+
 	}
 }

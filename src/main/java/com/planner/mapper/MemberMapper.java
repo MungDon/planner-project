@@ -24,6 +24,9 @@ public interface MemberMapper {
 	/*소셜로그인에서 제공받지 못한 유저정보 저장*/
 	void fetchAdditionalUserInfo(ReqOAuth2Signup req);
 	
+	/*회원 이메일, 소셜로그인 종류로 회원정보 가져오기*/
+	ResMemberDetail findByEmailAndOAuthType(@Param(value = "member_email")String member_email,@Param(value = "oauth_tpye")String oauth_tpye);
+	
 	//	회원 이메일로 객체 가져오기
 	MemberDTO findByUser(@Param(value = "member_email")String member_email);
 
@@ -34,6 +37,6 @@ public interface MemberMapper {
 	void memberUpdate(ReqMemberUpdate req);
 	
 	/*회원 상태변경*/
-	void changeMemberStatus(@Param(value = "member_email")String member_email,@Param(value = "member_status")String member_status);
+	int changeMemberStatus(@Param(value = "member_id")Long member_id,@Param(value = "member_status")String member_status);
 	
 }

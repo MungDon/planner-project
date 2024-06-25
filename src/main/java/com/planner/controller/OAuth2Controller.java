@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.planner.dto.request.member.ReqOAuth2Signup;
+import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.oauth.service.OAuth2Service;
 import com.planner.oauth.service.OAuth2UserPrincipal;
+import com.planner.util.UserData;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,8 +24,8 @@ public class OAuth2Controller {
 	
 	/*소셜로그인에서 못받은 정보 받기 FORM*/
 	@GetMapping("/signup")
-	public String oAuth2SignupForm(@AuthenticationPrincipal OAuth2UserPrincipal principal, Model model) {
-		model.addAttribute("principal", principal);
+	public String oAuth2SignupForm(@UserData ResMemberDetail member, Model model) {
+		model.addAttribute("member", member);
 		return "/member/oauth2Signup";
 	}
 	

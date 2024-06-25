@@ -2,6 +2,8 @@ package com.planner.oauth.user;
 
 import java.util.Map;
 
+import com.planner.enums.OAuthType;
+
 public class GoogleOAuth2UserInfo implements OAuth2UserInfo{
 	
 	private final Map<String,Object> attributes;
@@ -46,5 +48,9 @@ public class GoogleOAuth2UserInfo implements OAuth2UserInfo{
 	@Override
 	public String getName() {
 		return name;
+	}
+	@Override
+	public String getType() {
+		return OAuthType.GOOGLE.getOAuthType();
 	}
 }

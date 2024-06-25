@@ -1,11 +1,8 @@
 package com.planner.controller;
 
-import java.security.Principal;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,14 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.planner.dto.request.member.MemberDTO;
+import com.planner.dto.request.member.ReqMemberRestore;
 import com.planner.dto.request.member.ReqMemberUpdate;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.Gender;
 import com.planner.enums.MemberStatus;
 import com.planner.exception.CustomException;
 import com.planner.exception.ErrorCode;
-import com.planner.oauth.service.OAuth2Service;
-import com.planner.oauth.service.OAuth2UserPrincipal;
 import com.planner.service.MemberService;
 import com.planner.util.CommonUtils;
 import com.planner.util.UserData;
@@ -40,7 +36,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService memberService;
-	private final OAuth2Service oAuth2Service;
 	
 	/*소셜로그인에서 생긴 쿠키 제거 후 로그아웃*/
 	@GetMapping("/signout")
@@ -66,14 +61,11 @@ public class MemberController {
 
 	//	로그인
 	@GetMapping("/login")
-	public String memberLogin(@AuthenticationPrincipal OAuth2UserPrincipal principal,HttpServletRequest request,HttpServletResponse response) {
-		if(principal != null ) {
-			ResMemberDetail user =  oAuth2Service.findByOAuthId(principal.getOAuthId());
-			if(user.getMember_status().equals(MemberStatus.NOT_DONE.getCode())) {
+	public String memberLogin(@UserData ResMemberDetail detail,HttpServletRequest request,HttpServletResponse response) {
+			if(detail != null &&detail.getMember_status().equals(MemberStatus.NOT_DONE.getCode())) {
 				CommonUtils.removeCookiesAndSession(request, response);
 				return"redirect:/member/login";
 			}
-		}
 		return "/member/member_login";
 	}
 
@@ -87,6 +79,7 @@ public class MemberController {
 		return "redirect:/planner/main";
 	}
 	
+	/*로그인 실패시 매핑*/
 	@GetMapping("/fail")
 	public void loginFail() {
 		throw new CustomException(ErrorCode.NO_ACCOUNT);
@@ -95,9 +88,7 @@ public class MemberController {
 	/*내 정보*/
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/info")
-	public String memberInfo(Model model,Principal principal) {
-		System.out.println(principal.getName());
-		ResMemberDetail detail = memberService.memberDetail(principal.getName());
+	public String memberInfo(Model model,@UserData ResMemberDetail detail) {
 		String gender = Gender.findNameByCode(detail.getMember_gender());
 		model.addAttribute("detail", detail);
 		model.addAttribute("gender", gender);
@@ -116,8 +107,8 @@ public class MemberController {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/chk")
 	@ResponseBody
-	public ResponseEntity<String> passwordChk(@RequestParam(value = "currentPw")String currentPw,Principal principal) {
-		int result = memberService.passwordChk(currentPw,principal.getName());
+	public ResponseEntity<String> passwordChk(@RequestParam(value = "currentPw")String currentPw,@UserData ResMemberDetail member) {
+		int result = memberService.passwordChk(currentPw,member);
 		if(result ==1) {
 			return ResponseEntity.ok("성공");
 		}
@@ -127,8 +118,7 @@ public class MemberController {
 	/*회원정보 수정 폼*/
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/update")
-	public String memberUpdateForm(Principal principal,Model model) {
-		ResMemberDetail detail = memberService.memberDetail(principal.getName());
+	public String memberUpdateForm(Model model,@UserData ResMemberDetail detail) {
 		model.addAttribute("detail", detail);
 		return "/member/member_update";
 	}
@@ -146,9 +136,9 @@ public class MemberController {
 	@PreAuthorize("isAuthenticated()")
 	@DeleteMapping("/delete")
 	@ResponseBody
-	public void memberDelete(Principal principal,HttpServletRequest request,HttpServletResponse response) {
+	public void memberDelete(@UserData ResMemberDetail detail,HttpServletRequest request,HttpServletResponse response) {
 		CommonUtils.removeCookiesAndSession(request, response);
-		memberService.memberDelete(principal.getName());
+		memberService.memberDelete(detail.getMember_id());
 	}
 	
 	/*회원복구 폼*/
@@ -157,10 +147,11 @@ public class MemberController {
 		return "/member/member_restore";
 	}
 	
+	/*회원 복구*/
 	@PostMapping("/restore")
 	@ResponseBody
-	public int memberRestore(@RequestParam(value = "currentEmail")String currentEmail, @RequestParam(value = "currentPassword")String currentPassword) {
-		int result = memberService.memberRestore(currentEmail,currentPassword);
+	public int memberRestore(ReqMemberRestore req) {
+		int result = memberService.memberRestore(req);
 		return result;
 	}
 }

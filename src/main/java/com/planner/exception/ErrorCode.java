@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 	
-	ID_DUPLICATE ( HttpStatus.CONFLICT, "이미 있는 아이디입니다 로그인해주세요"),
+	ID_DUPLICATE ( HttpStatus.CONFLICT, "이미 사용중인 아이디입니다."),
 	NO_ACCOUNT(HttpStatus.NO_CONTENT,"입력정보가 유효하지않거나 없는계정입니다."),
 	NOT_FOUND(HttpStatus.NOT_FOUND, "없는 페이지입니다"),
 	INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST,"입력 정보가 유효하지 않습니다. 사유 : "),

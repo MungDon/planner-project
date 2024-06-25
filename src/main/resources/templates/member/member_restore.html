@@ -7,15 +7,40 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="/css/restore.css">
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+	<main class="restoreMain">
 		<input type="email" id="currentEmail" name="currentEmail" placeholder="가입했던 이메일을 적어주세요">
+		<input type="password" id="currentPassword" name="currentPassword" placeholder="비밀번호 작성">
+		<input type="checkbox" class="isOAuth">소셜로그인으로 가입했나요?
+		
+		<!-- display default none -->
+		<div id="oauthTypeBox">
+			<select name="oauth_type">
+				<option value="google">구글</option>
+				<option value="kakao">카카오</option>
+			</select>
+		</div>
 		<button type="button" class="restoreBtn">신청</button>
-
+	</main>
 
 		<script>
 			$(function(){
+				// 소셜로그인 타입 박스 보여주기 안보여주기
+				$(document).on("change",".isOAuth",function(){
+					
+				    if ($(this).is(":checked")) {// 체크 되었을 때
+				        $("#oauthTypeBox").css("display", "block");
+				        $("#currentPassword").css("display","none");
+				    } else {					// 체크 해제 되었을 때
+				        $("#oauthTypeBox").css("display", "none");
+				        $("#currentPassword").css("display","block");
+				    }
+				});
+				
+				// 신청하기 버튼 클릭
 				$(document).on("click",".restoreBtn", function(){
 					const currentEmail = $("#currentEmail").val();
 					const currentPassword = $("#currentPassword").val();
@@ -28,7 +53,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 								currentEmail : currentEmail
 						},
 					     beforeSend: function(xhr) {
-				                // CSRF 토큰을 요청 헤더에 포함
+				                // CSRF 토큰을 요청 헤더에 포함 / 토큰 안넘기면 security에 걸려서 403에러뜸
 				                xhr.setRequestHeader(csrfHeader, csrfToken);
 				            },
 						success : function(data){
@@ -45,7 +70,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 						},
 						error : function(){
 							alert('복구신청이 실패하였습니다.');
-							location.href="/planner/main";
+							location.href="/member/login";
 						}
 					});
 					
