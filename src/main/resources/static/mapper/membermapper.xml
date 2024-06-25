@@ -45,6 +45,7 @@
 				member_gender,
 				member_reg,
 				member_status,
+				member_role,
 				oauth_id
 				) values (
 				member_seq.nextval,
@@ -56,6 +57,7 @@
 				#{member_gender},
 				sysdate,
 				'B',
+				#{member_role},
 				'none'
 			)
 	</insert>
