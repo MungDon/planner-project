@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
 	
 	private final UserDataResolver userDataResolver;
 
-	// 커스텀 어노테이션 리졸버 등록
+	// 커스텀 어노테이션 리졸버 등록 / 이걸안하면 커스텀 어노테이션이 동작을 안함
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
 		resolvers.add(userDataResolver);

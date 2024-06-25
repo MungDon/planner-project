@@ -24,10 +24,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final CustomOAuth2UserService customOAuth2UserService;	// 소셜로그인 사용자 정의 객체 생성을 위한 클래스
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;		// 소셜로그인 성공 시 작동하는 클래스(핸들러)
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;		// 소셜로그인 실패 시 작동하는 클래스(핸들러)
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;	// redirectURl, state, mode 등 담아놓는 쿠키 생성하는 클래스
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {// 시큐리티를 적용하지 않을 리소스
@@ -35,40 +35,40 @@ public class SecurityConfig {
 				.requestMatchers("/error","/css/**", "/js/**", "/images/**");// 정적 리소스 시큐리티 무시 => 안하면 적용이 안됌
 	}
 	
-	@Bean // 빈객체주입
 	// 필터 체인을 정의하는 메서드
+	@Bean // 빈객체주입
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 	      http.csrf((csrf)->csrf
 					.ignoringRequestMatchers(new AntPathRequestMatcher
-							("/planner")))												// 특정요청에대한 보호를 비활성화
-          .httpBasic(AbstractHttpConfigurer::disable)
+							("/error")))												// 특정요청에대한 보호를 비활성화
+          .httpBasic(AbstractHttpConfigurer::disable)				// http 기본인증 비활성화
           
-          .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB
+          .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB 기능 비활성화
           .authorizeHttpRequests((requests) -> requests
-                  .requestMatchers(new AntPathRequestMatcher("/planner/main")).permitAll()
-                  .requestMatchers(new AntPathRequestMatcher("/member/anon/**")).permitAll()
-                  .requestMatchers(new AntPathRequestMatcher("/oauth2/**")).permitAll()
-                  .requestMatchers(new AntPathRequestMatcher("/member/auth/**")).hasRole("USER")
+                  .requestMatchers(new AntPathRequestMatcher("/planner/main")).permitAll()					// "/planner/main" 은 모든권한의 접속을 허용함
+                  .requestMatchers(new AntPathRequestMatcher("/member/anon/**")).permitAll() 			// "/member/anon/**" 은 모든권한의 접속을 허용함
+                  .requestMatchers(new AntPathRequestMatcher("/oauth2/**")).permitAll()						// "/oauth2/**" 은 모든 권한의 접속을 허용함
+                  .requestMatchers(new AntPathRequestMatcher("/member/auth/**")).hasRole("USER")	// "/member/auth/**" 은 USER 권한을 가진 사용자만 접속을 허용함
                   .anyRequest().authenticated()
           )
-          .oauth2Login(configure ->
-          configure.authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))
-                  .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
-                  .successHandler(oAuth2AuthenticationSuccessHandler)
-                  .failureHandler(oAuth2AuthenticationFailureHandler)
+          .oauth2Login(configure ->				// OAuth2 인증 로그인( 소셜 ) 정의
+          configure.authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))// OAuth2 인증 엔드포인트 설정
+                  .userInfoEndpoint(config -> config.userService(customOAuth2UserService)) /// OAuth2 사용자 정보 엔드포인트 설정
+                  .successHandler(oAuth2AuthenticationSuccessHandler) // OAuth2 로그인 성공 핸들러 설정
+                  .failureHandler(oAuth2AuthenticationFailureHandler)// OAuth2 로그인 실패 핸들러 설정
   )	
-          .formLogin((formLogin) -> formLogin		// 사용자 정의
-					.loginPage("/member/login")		// 로그인페이지 설정과
-					.usernameParameter("member_email")
-					.passwordParameter("member_password") 		//default = password, username
-					.failureUrl("/member/fail")
-					.defaultSuccessUrl("/member",true))	// 리다이렉트 URL 설정	
+          .formLogin((formLogin) -> formLogin							// 폼(일반) 로그인 정의
+					.loginPage("/member/anon/login")					// 로그인페이지 설정
+					.usernameParameter("member_email")			// 시큐리티 Username 사용자정의
+					.passwordParameter("member_password") 		//시큐리티 password 사용자정의
+					.failureUrl("/member/anon/fail")						// 로그인 실패시 URL
+					.defaultSuccessUrl("/member/auth",true))		// 로그인 성공시 URL 	
           			
           
-          .logout((logout)->logout							//사용자 정의
-					.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout")) // 로그아웃 URL 과
-					.logoutSuccessUrl("/planner/main")		// 성공시 리다이렉트 URL 설정
-					.invalidateHttpSession(true))	;			// 세션 삭제
+          .logout((logout)->logout									// 로그아웃 정의
+					.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout")) // 로그아웃 URL 
+					.logoutSuccessUrl("/planner/main")		// 로그아웃 성공시 리다이렉트 URL 
+					.invalidateHttpSession(true))	;				// 세션 삭제
 			
 		return http.build();
 	}

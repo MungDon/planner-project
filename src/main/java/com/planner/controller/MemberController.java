@@ -70,7 +70,7 @@ public class MemberController {
 	}
 
 	/*로그인시에 회원탈퇴여부 검사*/
-	@GetMapping("/anon")
+	@GetMapping("/auth")
 	public String memberChk(@UserData ResMemberDetail detail, HttpServletRequest request,HttpServletResponse response) {
 		if(detail.getMember_status().equals(MemberStatus.DELETE.getCode())) {
 			CommonUtils.removeCookiesAndSession(request, response);
