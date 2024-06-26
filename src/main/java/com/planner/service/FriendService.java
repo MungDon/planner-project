@@ -1,6 +1,5 @@
 package com.planner.service;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -24,11 +23,6 @@ public class FriendService {
 //	시퀀스 받아서 객체 찾기
 	public FriendRequestDTO findByFriendRequest(Long member_id) {
 		return friendMapper.findByFriendRequest(member_id);
-	}
-	
-//	친구찾기 리스트
-	public List<FriendDTO> findFriend(@Param("member_my_id") Long member_my_id) {
-		return friendMapper.findFriend(member_my_id);
 	}
 	
 //	친구신청 (보냄)

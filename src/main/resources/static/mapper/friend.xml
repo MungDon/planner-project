@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.planner.mapper.FriendMapper">
 
 	<!-- 친구요청 객체 찾기 -->
@@ -11,15 +9,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where member_send_id=#{member_send_id}
 	</select>
 	
-	<!-- 친구찾기 리스트 -->
-	<select id="findFriend" resultType="FriendDTO">
-		
-	</select>
 	
 	<!-- 친구신청 (보낼 때) -->
 	<insert id="friendRequest" parameterType="FriendRequestDTO">
 		insert into friend_request values(
-			friend_request_seq.NEXTVAL,
+			NEXTVAL('friend_request_seq'),
 			#{member_receive_id},
 			#{member_send_id},
 			'R'
@@ -37,8 +31,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- (받은)친구신청 갯수 -->
 	<select id="receiveRequestCount" resultType="int">
 		select count(*)
-		from member m
-		left outer join friend_request fr
+		from member as m
+		left outer join friend_request as fr
 		on m.member_id = fr.member_send_id
 		where fr.member_receive_id = #{member_receive_id}
 		and friend_request_status = 'R'
@@ -48,8 +42,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- (받은)친구신청 리스트 -->
 	<select id="receiveRequestList" resultType="FriendRequestDTO">
 		select m.member_email, fr.*
-		from member m
-		left outer join friend_request fr
+		from member as m
+		left outer join friend_request as fr
 		on m.member_id = fr.member_send_id
 		where fr.member_receive_id = #{member_receive_id}
 		and friend_request_status = 'R'
@@ -59,8 +53,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- (보낸)친구신청 리스트 -->
 	<select id="sendRequestList" resultType="FriendRequestDTO">
 		select m.member_email, fr.*
-		from member m
-		left outer join friend_request fr
+		from member as m
+		left outer join friend_request as fr
 		on m.member_id = fr.member_receive_id
 		where fr.member_send_id = #{member_send_id}
 		and friend_request_status = 'R'
@@ -75,14 +69,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and member_send_id = #{member_send_id}
 	</delete>
 	
-	<!-- (보낸)친구신청 취소 -->
-<!-- 	<delete id="sendDelete"> -->
-<!-- 		delete -->
-<!-- 		from friend_request -->
-<!-- 		where member_receive_id = #{member_receive_id} -->
-<!-- 		and member_send_id = #{member_send_id} -->
-<!-- 	</delete> -->
-	
 	<!-- 친구수락 -->
 	<update id="friendAccept" parameterType="Long">
 		update friend_request
@@ -94,7 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 친구 테이블에 추가 -->
 	<insert id="friendAdd" parameterType="FriendDTO">
 		insert into friend values(
-			friend_seq.NEXTVAL,
+			nextval('friend_seq'),
 			#{member_my_id},
 			#{member_friend_id},
 			#{friend_my_nickname},
@@ -133,8 +119,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 친구정보 (정방향) -->
 	<select id="friendInfo" resultMap="resultInfo">
 		select f.*, m.*
-		from friend f
-		left outer join member m
+		from friend as f
+		left outer join member as m
 		on f.member_friend_id = m.member_id
 		where member_my_id = #{member_my_id}
 		and member_friend_id = #{member_friend_id}
@@ -143,8 +129,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 친구정보 (역방향) join 시 상대 회원 정보로 반환하기 위함 -->
 	<select id="friendInfoC" resultMap="resultInfo">
 		select f.*, m.*
-		from friend f
-		left outer join member m
+		from friend as f
+		left outer join member as m
 		on f.member_my_id = m.member_id
 		where member_my_id = #{member_my_id}
 		and member_friend_id = #{member_friend_id}
@@ -177,63 +163,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from friend
 		where friend_id = #{friend_id}
 	</delete>
-	
-	<!-- 친구요청 삭제 / 친구요청 테이블에 status = 'F' 상태인것 같이 삭제 / 기존 요청삭제 메서드 써도될듯?????????????? -->
-<!-- 	<delete id="friendRequestDelete"> -->
-<!-- 		delete -->
-<!-- 		from friend_request -->
-<!-- 		where member_receive_id = #{member_receive_id} -->
-<!-- 		and member_send_id = #{member_send_id} -->
-<!-- 	</delete> -->
-	
-	<!-- 친구신청 보낸 아이디 찾기 -->
-	<!-- 
-	<select id="findBySendId" resultType="FriendRequestDTO">
-		select *
-		from friend_request
-		where member_receive_id=#{member_receive_id}
-		and member_send_id=#{member_send_id}
-	</select>
-	-->
-	
-	<!-- 친구신청 보낸 아이디 찾기 -->
-	<!-- 
-	<select id="findBySendId" resultType="FriendRequestDTO">
-		select member_send_id
-		from friend_request
-		where member_receive_id=#{member_receive_id}
-	</select>
-	-->
-	
-	<!-- 친구신청 보낸 아이디 찾기 -->
-	<!--  
-	<select id="findBySendId" resultType="FriendRequestDTO">
-		select *
-		from friend_request
-		where member_send_id = #{member_send_id}
-		and member_receive_id = #{member_receive_id}
-	</select>
-	-->
-	
-	
-	<!-- 친구 신청 (받을 때 / 받는사람 데이터 추가) -->
-<!-- 	<insert id="friendReceive" parameterType="FriendRequestDTO"> -->
-<!-- 		insert into friend_request values( -->
-<!-- 			friend_request_seq.NEXTVAL, -->
-<!-- 			#{member_receive_id}, -->
-<!-- 			#{member_send_id}, -->
-<!-- 			'R' -->
-<!-- 		) -->
-<!-- 	</insert> -->
-	
-	<!-- 친구신청 상태 -->
-	<!--  
-	<select id="RequestStatus" resultType="String">
-		select friend_request_status
-		from friend_request
-		where member_receive_id=#{member_receive_id}
-		and member_send_id=#{member_send_id}
-	</select>
-	-->
 	
 </mapper>

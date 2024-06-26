@@ -93,12 +93,12 @@ public class MemberController {
 	
 	/*내 정보*/
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/auth/myInfo")
+	@GetMapping("/auth/info")
 	public String memberInfo(Model model,@UserData ResMemberDetail detail) {
 		String gender = Gender.findNameByCode(detail.getMember_gender());
 		model.addAttribute("detail", detail);
 		model.addAttribute("gender", gender);
-		return "/member/member_myInfo"; 
+		return "/member/member_info"; 
 	}
 	
 	/*비밀번호 확인 폼*/
@@ -135,7 +135,7 @@ public class MemberController {
 	public String memberUpdate(ReqMemberUpdate req) {
 		memberService.memberUpdate(req);
 		//TODO - 회원 정보 이메일 수정시에 이메일 인증 추가
-		return "redirect:/member/auth/myInfo";
+		return "redirect:/member/auth/info";
 	}
 	
 	/*회원 탈퇴*/
