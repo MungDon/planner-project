@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  layout:decorate="~{layout/layout}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="/css/header.css">
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<meta name="_csrf" th:content="${_csrf.token}"/>
-<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
-	<header th:replace="~{header :: header}"></header>
+	<div layout:fragment="content">
   	<main class="infoMain">
 	<h2>회원정보</h2>
 		<input type="hidden" id="status" th:value="${detail.member_status}">
@@ -52,20 +48,15 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 			</tr>
 		</table>
 		<div class="userDeleteBtnBox">
+			<!-- 일반로그인 -->
 			<a th:if="${detail.oauth_id =='none'}" href="/member/auth/chk?url=delete">회원탈퇴</a>
+			<!-- 소셜로그인 -->
 			<button th:if="${detail.oauth_id !='none'}" type="button" class="userDeleteBtn">회원탈퇴</button>
 		</div>
 	</main>
+	<script src="/js/rolechk.js"></script>
 	<script>
 		$(function(){
-			$(document).ready(function(){
-				const status = $("#status").val();
-				if(status === null || status != 'B'){
-					alert('권한이없습니다');
-		                    window.location.href = '/planner/main';
-				}
-				
-			});
 			$(document).on("click",".userDeleteBtn",() => {
 		        let csrfToken = $("meta[name='_csrf']").attr("content");
 		        let csrfHeader = $("meta[name='_csrf_header']").attr("content");
@@ -80,6 +71,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 		                xhr.setRequestHeader(csrfHeader, csrfToken);
 		            },
 					success : function(){
+						alert('탈퇴되었습니다.');
 						location.href="/planner/main";
 					},
 					error : function(){
@@ -89,5 +81,6 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 			});
 		});
 	</script>
+	</div>
 </body>
 </html>

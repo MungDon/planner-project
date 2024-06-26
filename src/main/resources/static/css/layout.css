@@ -1,0 +1,103 @@
+.navbar{		/* 상단 헤더 */
+	display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    background-color: lightgray;
+	padding: 8px 12px;
+	
+}
+
+.logo {			/* 왼쪽 위 로고 */
+	font-size: 24px; 
+    color: white; 
+}
+
+.navImg {		/* 로고 이미지 색상 */
+	color: gray;
+}
+
+.nav_menu {		/* 상단 메뉴 */
+	display: flex;
+    list-style: none;
+    padding-left: 0;
+}
+
+.nav_menu li {	/* 메뉴 리스트 */
+	padding: 8px 12px;
+}
+
+.nav_menu li:hover {	/* 리스트에 마우스 올렸을 때 */
+	background-color: darkgray;
+    border-radius: 4px;
+}
+
+.nav_icon {		/* 오른쪽 위 아이콘 */
+	list-style:none; 
+    display: flex;
+/*     color:white; */
+}
+
+.myPage {		/* 오른쪽 위 계정관련 리스트 (내정보, 로그인) */
+	padding: 8px 12px;
+}
+
+
+.nav_toggleBtn {			/* TODO 토글 */
+	display: none;
+	position: absolute;		/* 절대적 위치 설정, 상단으로 올라감 */
+    right: 32px;			/* 우측에서 32px떨어진 곳에 위치 */
+    font-size: 24px;		/* 명칭과 달리 아이콘의 이미지가 크게 하기 위한 조절 */
+    color: purple;
+}
+
+/*	position 속성
+static		기준 없음 (배치 불가능 / 기본값)
+relative	요소 자기 자신을 기준으로 배치
+absolute	부모(조상) 요소를 기준으로 배치
+fixed		뷰포트 기준으로 배치
+stickey		스크롤 영역 기준으로 배치
+*/
+
+html {
+    position: relative;
+    min-height: 100%;
+    margin: 0;
+}
+
+body {
+	margin: 0;
+    min-height: 100%;
+}
+
+header {
+    width: 100;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 15px 0;
+    text-align: center;
+}
+content{
+    margin-bottom:100px;
+    margin-top: 50px;
+    margin-left: 200px;
+    margin-right: 200px;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    outline: none;
+}

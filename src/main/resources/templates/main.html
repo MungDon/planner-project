@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/layout}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="/css/header.css">
+<!-- <meta charset="UTF-8"> -->
+<!-- <title>Insert title here</title> -->
+<!-- <link rel="stylesheet" type="text/css" href="/css/header.css"> -->
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
-	<header th:replace="~{header :: header}"></header>
+	<div layout:fragment="content" align="center">
+<!-- 	<header th:replace="~{header :: header}"></header> -->
+	</div>
 	
 	<script th:if="${result} == 1">
 		alert('가입이 완료되었습니다.');

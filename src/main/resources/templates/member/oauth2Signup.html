@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/layout}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="/css/oauth2insert.css">
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+	<div layout:fragment="content">
 	<main class="oauth2Main">
 		<form  action="/oauth2/auth/signup" method="post" class="oauth2Form" onsubmit="return validateOauth2Insert()">
 			<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
-			<input type="hidden" id="member" th:value="${member}"/>
+			<input type="hidden" id="member" th:value="${member.getMember_status()}"/>
 			
 			<span class="joinText">회원가입을 위해<br> 정보를 입력해주세요</span>
 			
@@ -52,13 +54,14 @@
 			</div>
 		</div>
 	</main>
-	<script src="/js/oauth2_insert.js"></script>
-	<script>
+	</div>
+	<script layout:fragment="script" src="/js/oauth2_insert.js"></script>
+	<script layout:fragment="script">
 	$(function(){
 		$(document).ready(function(){
 			const member = $("#member").val();
 			console.log(member);
-			if(member == null || member == ""){
+			if((member == null || member == "")){
 				alert("권한이 없습니다.");
 				location.href="/member/anon/login";
 			}

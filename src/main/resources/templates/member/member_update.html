@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="/css/header.css">
-</head>
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/layout}">
 <body>
-	<header th:replace="~{header :: header}"></header>
+	<div layout:fragment="content">
 	<main class="updateMain">
 		<h2>회원정보수정</h2>
 		<form class="updateForm" action="/member/auth/update" th:method="put">
@@ -36,9 +32,10 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 			</table>
 			<div class="btns">
 				<button type="submit">저장</button>
-				<button type="button" onclick="location.href='/member/auth/info'">수정 취소</button>
+				<button type="button" onclick="location.href='/member/auth/myInfo'">수정 취소</button>
 			</div>
 		</form>
 	</main>
+	</div>
 </body>
 </html>

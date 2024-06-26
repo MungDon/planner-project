@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/layout}">
 <head>
-<meta charset="UTF-8">
-<title>회원가입</title>
-<link rel="stylesheet" type="text/css" href="/css/header.css">
 <link rel="stylesheet" type="text/css" href="/css/memberinsert.css">
 </head>
 <body>
-	<header th:replace="~{header :: header}"></header>
+	<div layout:fragment="content">
 	<main class="insertMain">
 		<form action="/member/anon/insert" method="post" class="insertForm" onsubmit="return validateInsert()">
 		<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
@@ -60,7 +60,7 @@
 			</div>
 		</div>
 	</main>
-	
+	</div>
 	<script>
 	</script>
 	<script src="/js/memberinsert.js"></script>

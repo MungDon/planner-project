@@ -1,35 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/layout}">
 <head>
-<meta charset="UTF-8">
-<meta name="_csrf" th:content="${_csrf.token}"/>
-<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-<title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="/css/restore.css">
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+	<div layout:fragment="content">
 	<main class="restoreMain">
 		<input type="email" id="currentEmail" name="currentEmail" placeholder="가입했던 이메일을 적어주세요">
 		<input type="password" id="currentPassword" name="currentPassword" placeholder="비밀번호 작성">
-		<input type="checkbox" class="isOAuth">소셜로그인으로 가입했나요?
+		<input type="checkbox" id="isOAuth">소셜로그인으로 가입했나요?
 		
 		<!-- display default none -->
 		<div id="oauthTypeBox">
-			<select name="oauth_type">
+			<select name="oauth_type" id="oauth_type">
+				<option value="">==선택==</option>
 				<option value="google">구글</option>
 				<option value="kakao">카카오</option>
 			</select>
 		</div>
 		<button type="button" class="restoreBtn">신청</button>
 	</main>
-
-		<script>
+	</div>
+		<script layout:fragment="script">
 			$(function(){
 				// 소셜로그인 타입 박스 보여주기 안보여주기
-				$(document).on("change",".isOAuth",function(){
+				$(document).on("change","#isOAuth",function(){
 					
 				    if ($(this).is(":checked")) {// 체크 되었을 때
 				        $("#oauthTypeBox").css("display", "block");
@@ -44,13 +43,30 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 				$(document).on("click",".restoreBtn", function(){
 					const currentEmail = $("#currentEmail").val();
 					const currentPassword = $("#currentPassword").val();
+					const oauth_type = $("#oauth_type").val();
 			        let csrfToken = $("meta[name='_csrf']").attr("content");
 			        let csrfHeader = $("meta[name='_csrf_header']").attr("content");
+			        
+			        if(currentEmail ==null ||currentEmail==""){
+			        	alert('이메일을 입력해주세요');
+			        	return;
+			        }
+			        if($("#isOAuth").is(":checked") && oauth_type == ""){
+			        	alert('어떤 소셜로그인 종류인지 선택해주세요.');
+			        	return;
+			        }
+			        if((oauth_type == null||oauth_type =="")&& (currentPassword == null || currentPassword =="")){
+			        	alert('일반로그인 이용 회원은 복구신청 시 비밀번호는 필수 입니다.');
+			        	return;
+			        }
+			        
 					$.ajax({
 						url : "/member/anon/restore",
 						type : "post",
 						data : {
-								currentEmail : currentEmail
+								currentEmail : currentEmail,
+								currentPassword : currentPassword,
+								oauth_type : oauth_type
 						},
 					     beforeSend: function(xhr) {
 				                // CSRF 토큰을 요청 헤더에 포함 / 토큰 안넘기면 security에 걸려서 403에러뜸

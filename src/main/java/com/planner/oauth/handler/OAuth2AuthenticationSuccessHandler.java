@@ -62,8 +62,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .build().toUriString();
         }
 		if ("login".equalsIgnoreCase(mode)) {
+			
 			ResMemberDetail member  = oAuth2Service.findByOAuthId(principal.getOAuthId());
-
 			if (member == null) {
 				oAuth2Service.createMember(principal);
 				member = oAuth2Service.findByOAuthId(principal.getOAuthId());
@@ -71,6 +71,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 			
 			return UriComponentsBuilder.fromUriString(TokenRedirect.LOGIN_SUCCESS_URL.getUrlText()).build()
 					.toUriString();
+			
 		} else if ("unlink".equalsIgnoreCase(mode)) {
 
 			String accessToken = principal.userInfo().getAccessToken();
@@ -85,6 +86,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		return UriComponentsBuilder.fromUriString(TokenRedirect.LOGIN_FAILED_URL.getUrlText())
 				.queryParam("error","role").build().toUriString();
 	}
+	
+	
 	
 	private OAuth2UserPrincipal getOAuth2UserPrincipal(Authentication authentication) {
 		Object principal = authentication.getPrincipal();

@@ -40,7 +40,7 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 	      http.csrf((csrf)->csrf
 					.ignoringRequestMatchers(new AntPathRequestMatcher
-							("/error")))												// 특정요청에대한 보호를 비활성화
+							("/n")))												// 특정요청에대한 보호를 비활성화
           .httpBasic(AbstractHttpConfigurer::disable)				// http 기본인증 비활성화
           
           .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB 기능 비활성화
@@ -48,6 +48,7 @@ public class SecurityConfig {
                   .requestMatchers(new AntPathRequestMatcher("/planner/main")).permitAll()					// "/planner/main" 은 모든권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/member/anon/**")).permitAll() 			// "/member/anon/**" 은 모든권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/oauth2/**")).permitAll()						// "/oauth2/**" 은 모든 권한의 접속을 허용함
+                  .requestMatchers(new AntPathRequestMatcher("/friend/**")).hasRole("USER")							// "/oauth2/**" 은 모든 권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/member/auth/**")).hasRole("USER")	// "/member/auth/**" 은 USER 권한을 가진 사용자만 접속을 허용함
                   .anyRequest().authenticated()
           )

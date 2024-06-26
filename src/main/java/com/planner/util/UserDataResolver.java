@@ -39,7 +39,6 @@ public class UserDataResolver implements HandlerMethodArgumentResolver{
 		if(authentication == null) {
 			return null;
 		}
-			
 		Object principal = authentication.getPrincipal();
 		
 		if(principal instanceof OAuth2UserPrincipal) {

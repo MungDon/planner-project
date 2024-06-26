@@ -50,6 +50,7 @@ public class GoogleOAuth2UserInfo implements OAuth2UserInfo{
 	public String getName() {
 		return name;
 	}
+	
 	@Override
 	public String getType() {
 		return OAuthType.GOOGLE.getOAuthType();

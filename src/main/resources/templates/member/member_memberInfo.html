@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/layout}">
+<body>
+	<div layout:fragment="content">
+		<th:block th:replace="~{fragments/friend :: friendLayout}"></th:block>
+		<h1>회원정보</h1>
+		<table style="border: 1px solid; width: 400px; text-align: center;">
+			<tr>
+				<td>이메일</td>
+				<td th:text="${memberDTO.member_email}"></td>
+			</tr>
+			<tr>
+				<td>이름</td>
+				<td th:text="${memberDTO.member_name}"></td>
+			</tr>
+			<tr>
+				<td>생년월일</td>
+				<td th:text="${memberDTO.member_birth}"></td>
+			</tr>
+			<tr th:if="${myId == memberDTO.member_id}">			<!-- 내정보 인 경우 보여질 항목 -->
+				<td>전화번호</td>
+				<td th:text="${memberDTO.member_phone}"></td>
+			</tr>
+			<tr>
+				<td>성별</td>
+				<td th:text="${memberDTO.member_gender}"></td>
+			</tr>
+			<tr th:if="${myId == memberDTO.member_id}">			<!-- 내정보 인 경우 보여질 항목 -->
+				<td colspan="2">
+					<button>정보수정</button>
+					<button>회원탈퇴</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

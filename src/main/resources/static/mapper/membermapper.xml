@@ -18,7 +18,7 @@
 			member_role,
 			member_reg
 		)	VALUES	(
-			nextval('member_seq'),
+			member_seq.nextval,
 			'2020-02-01',
 			'none',
 			'none',
@@ -29,7 +29,7 @@
 			#{member_status},
 			#{oauth_type},
 			#{member_role},
-			now()
+			sysdate
 		)
 	</insert>
 		<!--member_seq.NEXTVAL , sysdate -->
@@ -46,18 +46,20 @@
 				member_reg,
 				member_status,
 				member_role,
+				oauth_type,
 				oauth_id
 				) values (
-				nextval('member_seq'),
+				member_seq.nextval,
 				#{member_password},
 				#{member_name},
 				#{member_birth},
 				#{member_email},
 				#{member_phone},
 				#{member_gender},
-				now(),
+				sysdate,
 				'B',
 				#{member_role},
+				'none',
 				'none'
 			)
 	</insert>
@@ -105,13 +107,6 @@
 		WHERE oauth_id = #{oauthId}
 	</select>
 	
-		<!-- 회원 이메일로 객체 가져오기 -->
-	<select id="findByUser" resultType="MemberDTO">
-		select *
-		from member
-		where member_email = #{member_email}
-	</select>
-	
 	<!-- 내 정보 -->
 	<select id="findByEmail">
 		SELECT * 
@@ -125,8 +120,89 @@
 		SELECT *
 		FROM member
 		WHERE
-			member_email = #{member_email},
-			oauth_tpye = #{oauth_tpye}
+			member_email = #{member_email} 
+		AND
+			oauth_type = #{oauth_type}
 	</select>
+	
+	
+	
+	<!-- ================== 주성이햄========================= -->
+	
+	<!-- 회원 이메일로 객체 가져오기 -->
+	<select id="findByUser" resultType="MemberDTO">
+		select *
+		from member
+		where member_email = #{member_email}
+	</select>
+	
+	<!-- 회원 시퀀스로 객체 가져오기 -->
+	<select id="findByMemberSeq" resultType="MemberDTO">
+		select *
+		from member
+		where member_id = #{member_id}
+	</select>
+
+	<!-- 회원 이메일로 시퀀스 찾기 -->
+	<select id="findByMemberId" resultType="Long">
+		select member_id
+		from member
+		where member_email = #{member_email}
+	</select>
+	
+	<!-- 회원 시퀀스로 이메일 찾기 -->
+	<select id="findByMemberEmail" resultType="String">
+		select member_email
+		from member
+		where member_id = #{member_id}
+	</select>
+	
+	<!-- 회원 시퀀스로 이름 찾기 -->
+	<select id="findByMemberName" resultType="String">
+		select member_name
+		from member
+		where member_id = #{member_id}
+	</select>
+	
+	<!-- 내 (회원)정보 -->
+	<select id="memberInfo" resultType="MemberDTO">
+		select *
+		from member
+		where member_email = #{member_email}
+	</select>
+	
+	<!-- 모든 회원 정보 / 페이징 처리 / 키워드 추가 / 이메일 '@' 앞 부분만 검색 가능 / 회원 목록 숨김 / 검색으로만 찾을 수 있음 -->
+	<select id="memberSearch" resultType="MemberDTO">
+		<![CDATA[
+			select *
+			from
+			(select distinct m.*, fr.member_send_id, rownum r
+			from (
+				select *
+				from member
+				where member_id != #{member_id}
+				and substr (member_email, 1, instr(member_email, '@') - 1) like '%' || #{keyword} || '%'
+				and member_status = 'B'
+			)m
+			left outer join friend_request fr
+			on m.member_id = fr.member_send_id
+			and m.member_id = fr.member_receive_id
+			where fr.friend_request_status != 'F'
+			or fr.member_receive_id is null)
+			where r between #{start} and #{end}
+		]]>
+	</select>
+	
+	
+	<!-- (나에게) 친구신청 보낸 아이디 찾기 -->
+	<select id="findBySendId" resultType="MemberDTO">
+		select m.*, fr.member_send_id, rownum r
+		from member m
+		left outer join friend_request fr
+		on m.member_id = fr.member_send_id
+		where fr.member_receive_id=#{member_id}
+		and substr (member_email, 1, instr(member_email, '@') - 1) like '%' || #{keyword} || '%'
+	</select>
+	
 	
 </mapper>

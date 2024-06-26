@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8">
+<title>친구목록</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<th:block th:replace="~{fragments/friend :: friendLayout}"></th:block>
+		<h1>친구목록</h1>
+		<table style="border: 1px solid; width: 600px; text-align: center;">	<!-- 이 페이지에서는 정/역 방향 설정 완료 my_id=나, friend_id=친구 -->
+			<tr>
+				<th width="200">친구이메일</th>
+				<th width="200" colspan="2">친구별명</th>
+				<th width="200" colspan="2">친구메모</th>
+			</tr>
+			<tr th:each="friendDTO : ${friendList}">
+				<!-- 이메일 -->
+				<td>
+					<form action="/friend/friendInfo" method="post" th:attr="id='infoForm' + ${friendDTO.friend_id}">
+						<a onclick="infoForm()" class="infoA" th:attr="data-info='infoForm' + ${friendDTO.friend_id}" href="javascript:void(0);">
+							[[${friendDTO.member_email}]]
+						</a>
+						<input type="hidden" name="member_my_id" th:value="${friendDTO.member_my_id}"			/>
+						<input type="hidden" name="member_friend_id" th:value="${friendDTO.member_friend_id}"	/>
+						<input type="hidden" name="friend_status" th:value="${friendDTO.friend_status}"			/>
+						<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
+					</form>
+				</td>
+				<!-- 별명 -->
+				<td>
+					<div th:attr="id='nameT' + ${friendDTO.friend_id}"
+					 th:text="${friendDTO.friend_nickname}">
+					</div>
+					<div>
+						<input type="text" style="display: none; width: 60px;"
+						 th:attr="id='nameI' + ${friendDTO.friend_id}"
+						 th:value="${friendDTO.friend_nickname}"/>
+					</div>
+				</td>
+				<td align="left">
+					<form action="/friend/friendName" method="post" th:attr="id='nickForm' + ${friendDTO.friend_id}">
+						<input type="hidden" name="friend_id" th:value="${friendDTO.friend_id}"	/>
+						<input type="hidden" name="friend_status" th:value="${friendDTO.friend_status}"	/>
+						<input type="hidden" name="friend_my_nickname" th:value="${friendDTO.friend_my_nickname}"	/>
+						<!-- 텍스트박스에 입력된 밸류 가져와서 서밋 (텍스트박스가 form 밖에있음) -->
+						<input type="hidden" name="friend_nickname"
+						 th:attr="id='nameH' + ${friendDTO.friend_id}"	/>
+						<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
+						
+						<!-- 서밋 버튼 -->
+						<button type="button" style="display: none;"
+						 th:attr="id='submitBtn' + ${friendDTO.friend_id}">
+							변경
+						</button>
+					</form>
+					
+					<!-- 숨김 버튼 / 클릭 시 인풋박스, 서밋버튼 나타냄 / 텍스트, 클릭한 버튼 숨김-->
+					<button class="hideBtn" type="button"
+					 th:attr="data-hide='nameT' + ${friendDTO.friend_id},
+					 data-show='nameI' + ${friendDTO.friend_id},
+					 data-submit='submitBtn' + ${friendDTO.friend_id},
+					 data-hidden='nameH' + ${friendDTO.friend_id},
+					 data-nick='nickForm' + ${friendDTO.friend_id}">
+						변경
+					</button>
+				</td>
+				<!-- 메모 -->
+				<td colspan="2">
+					<div th:attr="id='memoT' + ${friendDTO.friend_id}"
+					 th:text="${friendDTO.friend_memo}">
+					</div>
+					<div>
+						<input type="text" style="display: none; width: 60px;"
+						 th:attr="id='memoI' + ${friendDTO.friend_id}"
+						 th:value="${friendDTO.friend_memo}"/>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<!-- 반복문으로 꺼낸 숨김버튼에 속성을 부여함 / 이메일 클릭 시 친구정보로 직접 서밋 -->
+	<script layout:fragment="script" type="text/javascript" src="/js/friendList.js"></script>
+</body>
+</html>
