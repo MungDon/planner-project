@@ -31,8 +31,8 @@
 	<!-- (받은)친구신청 갯수 -->
 	<select id="receiveRequestCount" resultType="int">
 		select count(*)
-		from member as m
-		left outer join friend_request as fr
+		from member  m
+		left outer join friend_request  fr
 		on m.member_id = fr.member_send_id
 		where fr.member_receive_id = #{member_receive_id}
 		and friend_request_status = 'R'
@@ -42,8 +42,8 @@
 	<!-- (받은)친구신청 리스트 -->
 	<select id="receiveRequestList" resultType="FriendRequestDTO">
 		select m.member_email, fr.*
-		from member as m
-		left outer join friend_request as fr
+		from member  m
+		left outer join friend_request  fr
 		on m.member_id = fr.member_send_id
 		where fr.member_receive_id = #{member_receive_id}
 		and friend_request_status = 'R'
@@ -53,8 +53,8 @@
 	<!-- (보낸)친구신청 리스트 -->
 	<select id="sendRequestList" resultType="FriendRequestDTO">
 		select m.member_email, fr.*
-		from member as m
-		left outer join friend_request as fr
+		from member  m
+		left outer join friend_request  fr
 		on m.member_id = fr.member_receive_id
 		where fr.member_send_id = #{member_send_id}
 		and friend_request_status = 'R'
@@ -119,8 +119,8 @@
 	<!-- 친구정보 (정방향) -->
 	<select id="friendInfo" resultMap="resultInfo">
 		select f.*, m.*
-		from friend as f
-		left outer join member as m
+		from friend  f
+		left outer join member  m
 		on f.member_friend_id = m.member_id
 		where member_my_id = #{member_my_id}
 		and member_friend_id = #{member_friend_id}
@@ -129,8 +129,8 @@
 	<!-- 친구정보 (역방향) join 시 상대 회원 정보로 반환하기 위함 -->
 	<select id="friendInfoC" resultMap="resultInfo">
 		select f.*, m.*
-		from friend as f
-		left outer join member as m
+		from friend  f
+		left outer join member  m
 		on f.member_my_id = m.member_id
 		where member_my_id = #{member_my_id}
 		and member_friend_id = #{member_friend_id}

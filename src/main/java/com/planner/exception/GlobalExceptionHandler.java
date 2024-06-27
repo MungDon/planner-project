@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(CustomException.class) // CustomException 클래스를 value 값으로 설정
 	public String handleCustomException(CustomException e,Model model) { 
 		model.addAttribute("errorMessage", e.getErrorCode().getMessage());
-		return "error";
+		return "/error/throws_error";
 	}
 	
 	/**
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
 	public String handleValidErrorException(MethodArgumentNotValidException e,Model model) {
 		final ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE,e.getBindingResult());
 		model.addAttribute("errorMessage", errorResponse.getMessage());
-		return "error";
+		return "/error/throws_error";
 	}
 	
 	/**
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(IOException.class)// 파일업로드 실패시 발생한 예외 처리 핸들러
 	public String handleIOException(IOException e,Model model) {
 		model.addAttribute("errorMessage", ErrorCode.FILE_UPLOAD_FAILED.getMessage());
-		return "error";
+		return "/error/throws_error";
 	}
 	
 

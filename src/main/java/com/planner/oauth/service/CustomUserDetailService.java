@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.planner.dto.request.member.MemberDTO;
 import com.planner.enums.MemberRole;
-import com.planner.enums.MemberStatus;
 import com.planner.mapper.MemberMapper;
 
 import lombok.AllArgsConstructor;

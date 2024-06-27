@@ -18,7 +18,7 @@
 			member_role,
 			member_reg
 		)	VALUES	(
-			nextval('member_seq'),
+			member_seq.nextval
 			'2020-02-01',
 			'none',
 			'none',
@@ -29,7 +29,7 @@
 			#{member_status},
 			#{oauth_type},
 			#{member_role},
-			now()
+			sysdate
 		)
 	</insert>
 		<!--member_seq.NEXTVAL , sysdate -->
@@ -49,14 +49,14 @@
 				oauth_type,
 				oauth_id
 				) values (
-				nextval('member_seq'),
+				member_seq.nextval
 				#{member_password},
 				#{member_name},
 				#{member_birth},
 				#{member_email},
 				#{member_phone},
 				#{member_gender},
-				now(),
+				sysdate,
 				'B',
 				#{member_role},
 				'none',
@@ -176,19 +176,19 @@
 		<![CDATA[
 			select *
 			from
-			(select distinct m.*, fr.member_send_id, rownum as r
+			(select distinct m.*, fr.member_send_id, rownum r
 			from (
 				select *
 				from member
 				where member_id != #{member_id}
 				and substr (member_email, 1, instr(member_email, '@') - 1) like '%' || #{keyword} || '%'
 				and member_status = 'B'
-			) as m
-			left outer join friend_request as fr
+			)m
+			left outer join friend_request fr
 			on m.member_id = fr.member_send_id
 			and m.member_id = fr.member_receive_id
 			where fr.friend_request_status != 'F'
-			or fr.member_receive_id is null) as c
+			or fr.member_receive_id is null)
 			where r between #{start} and #{end}
 		]]>
 	</select>
@@ -197,8 +197,8 @@
 	<!-- (나에게) 친구신청 보낸 아이디 찾기 -->
 	<select id="findBySendId" resultType="MemberDTO">
 		select m.*, fr.member_send_id, rownum r
-		from member as m
-		left outer join friend_request as fr
+		from member  m
+		left outer join friend_request  fr
 		on m.member_id = fr.member_send_id
 		where fr.member_receive_id=#{member_id}
 		and substr (member_email, 1, instr(member_email, '@') - 1) like '%' || #{keyword} || '%'
