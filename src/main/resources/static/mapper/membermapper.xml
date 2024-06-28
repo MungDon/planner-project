@@ -18,7 +18,7 @@
 			member_role,
 			member_reg
 		)	VALUES	(
-			member_seq.nextval
+			nextval('member_seq'),
 			'2020-02-01',
 			'none',
 			'none',
@@ -29,10 +29,10 @@
 			#{member_status},
 			#{oauth_type},
 			#{member_role},
-			sysdate
+			now()
 		)
 	</insert>
-		<!--member_seq.NEXTVAL , sysdate -->
+		<!--member_seq.NEXTVAL ,nextval('member_seq'),now(), sysdate -->
 	<!-- 회원가입 -->
 	<insert id="memberInsert" parameterType="MemberDTO">
 			INSERT INTO member(
@@ -49,14 +49,14 @@
 				oauth_type,
 				oauth_id
 				) values (
-				member_seq.nextval
+				nextval('member_seq')
 				#{member_password},
 				#{member_name},
 				#{member_birth},
 				#{member_email},
 				#{member_phone},
 				#{member_gender},
-				sysdate,
+				now(),
 				'B',
 				#{member_role},
 				'none',
@@ -176,19 +176,19 @@
 		<![CDATA[
 			select *
 			from
-			(select distinct m.*, fr.member_send_id, rownum r
+			(select distinct m.*, fr.member_send_id, rownum as r
 			from (
 				select *
 				from member
 				where member_id != #{member_id}
 				and substr (member_email, 1, instr(member_email, '@') - 1) like '%' || #{keyword} || '%'
 				and member_status = 'B'
-			)m
-			left outer join friend_request fr
+			) as m
+			left outer join friend_request as fr
 			on m.member_id = fr.member_send_id
 			and m.member_id = fr.member_receive_id
 			where fr.friend_request_status != 'F'
-			or fr.member_receive_id is null)
+			or fr.member_receive_id is null) as c
 			where r between #{start} and #{end}
 		]]>
 	</select>
@@ -196,9 +196,9 @@
 	
 	<!-- (나에게) 친구신청 보낸 아이디 찾기 -->
 	<select id="findBySendId" resultType="MemberDTO">
-		select m.*, fr.member_send_id, rownum r
-		from member  m
-		left outer join friend_request  fr
+		select m.*, fr.member_send_id, rownum as r
+		from member as m
+		left outer join friend_request as fr
 		on m.member_id = fr.member_send_id
 		where fr.member_receive_id=#{member_id}
 		and substr (member_email, 1, instr(member_email, '@') - 1) like '%' || #{keyword} || '%'

@@ -26,6 +26,7 @@ import com.planner.enums.Gender;
 import com.planner.enums.MemberStatus;
 import com.planner.exception.CustomException;
 import com.planner.exception.ErrorCode;
+import com.planner.service.EmailService;
 import com.planner.service.FriendService;
 import com.planner.service.MemberService;
 import com.planner.util.CommonUtils;
@@ -42,6 +43,7 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final FriendService friendService;
+	private final EmailService emailService;
 	
 	/*소셜로그인에서 생긴 쿠키 제거 후 로그아웃*/
 	@GetMapping("/anon/signout")
@@ -55,6 +57,12 @@ public class MemberController {
 	@GetMapping("/anon/insert")
 	public String memberInsert() {
 		return "/member/member_insert";
+	}
+	
+	/* 이메일 인증*/
+	@PostMapping("/anon/email/chk")
+	public String emailChk(@RequestParam(value = "toEmail")String toEmail) {
+		return null;
 	}
 	
 	//	회원가입 Post
