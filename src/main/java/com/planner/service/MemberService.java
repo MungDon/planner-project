@@ -73,51 +73,71 @@ public class MemberService {
 	}
 
 	/* 회원복구시 회원 상태코드별 반환 예외 */
-	private void throwExceptionForStatus(String status) {
+	private int statusToCode(String status) {
+		int code = 1;
 		switch (status) {
 		case "R": // 이미 신청상태
-			System.out.println(status);
-			throw new CustomException(ErrorCode.REQUEST_DUPLICATE);
+			code = 2;
+			break;
 		case "B": // 신청대상아님
 		case "N":
-			System.out.println("계시나요");
-			throw new CustomException(ErrorCode.INELIGIBLE_REQUEST);
+			code = 3;
+			break;
 		}
+		return code;
 	}
 
 	/* 회원 복구 */
 	@Transactional
 	public int memberRestore(ReqMemberRestore req) {
 		int result = 0;
-		if (!CommonUtils.isEmpty(req.getOauth_type())) { // 소셜 로그인일때
+		int code = 0;
+		
+		 // 소셜 로그인일때
+		if (!CommonUtils.isEmpty(req.getOauth_type())) {
 			ResMemberDetail memberDetail = memberMapper.findByEmailAndOAuthType(req.getCurrentEmail(),req.getOauth_type());
 
+			// member 값이 없으면 0 반환
 			if (CommonUtils.isEmpty(memberDetail)) {
 				return result;
 			}
-			// 이미 신청한상태거나 신청대상아닌경우 걸러주기
-			throwExceptionForStatus(memberDetail.getMember_status());
-
-			// 상태코드 변경(R)
-			result = memberMapper.changeMemberStatus(memberDetail.getMember_id(), MemberStatus.RESTORE.getCode());
-
-			return result;
-		}
-		if (CommonUtils.isEmpty(req.getOauth_type())) {// 일반로그인일때
-			ResMemberDetail memberDetail = memberMapper.findByEmail(req.getCurrentEmail());
-			if (CommonUtils.isEmpty(memberDetail)) {
-				return result;
-			}
-			// 이미 신청한상태거나 신청대상아닌경우 걸러주기
-			throwExceptionForStatus(memberDetail.getMember_status());
-
-			// 비번일치한지 안한지 검사
-			int pwChk = passwordChk(req.getCurrentPassword(), memberDetail);
-
-			if (pwChk == 1) {
+			
+			// member_status 별 숫자 코드 반환 
+			code = statusToCode(memberDetail.getMember_status());
+			
+			// statusToCode에서 해당하는 조건이 없으면 1 반환 == 신청가능
+			if (code == 1) {
+				// 상태코드 변경(R)
 				result = memberMapper.changeMemberStatus(memberDetail.getMember_id(), MemberStatus.RESTORE.getCode());
 				return result;
 			}
+			//statusToCode 해당되는조건 발생 해당하는 숫자코드 반환 == 신청불가
+			return code;
+		}
+		
+		// 일반로그인일때
+		if (CommonUtils.isEmpty(req.getOauth_type())) {
+			ResMemberDetail memberDetail = memberMapper.findByEmail(req.getCurrentEmail());
+			
+			// member 값이 없으면 0 반환
+			if (CommonUtils.isEmpty(memberDetail)) {
+				return result;
+			}
+
+			// 비번일치한지 안한지 검사
+			int pwChk = passwordChk(req.getCurrentPassword(), memberDetail);
+		
+			// member_status 별 숫자 코드 반환 
+			code = statusToCode(memberDetail.getMember_status());
+
+			// statusToCode에서 해당하는 조건이 없으면 1 반환, 비번체크성공 시  == 신청가능
+			if (pwChk == 1 && code == 1) {
+				result = memberMapper.changeMemberStatus(memberDetail.getMember_id(), MemberStatus.RESTORE.getCode());
+				return result;
+			}
+			
+			//statusToCode 해당되는조건 발생 해당하는 숫자코드 반환 == 신청불가
+			return code;
 		}
 		return result;
 	}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+.errorMain {
+	display: flex;
+	flex-direction : column;
+	align-items: center;
+	justify-content: center;
+}
+
+.notFoundImg {
+	width: 600px;
+	height: 600px;
+}
+#redirectMessage{
+	font-size : 30px;
+	font-weight: bold;
+	color : gray;
+}
+#countdown{
+	color : red;
+}
+#event-text{
+	font-size: 50px;
+	color : #ddd;
+}
+</style>
+</head>
+<body>
+	<main class="errorMain">
+		<div>
+			<img class="notFoundImg" src="/images/404.png">
+		</div>
+     	<div id="redirectMessage">
+			5초 후에 <span id="countdown">5</span>초 후에 다른 페이지로 이동합니다.
+        </div>
+        <div id="event-text">
+        
+        </div>
+    </main>
+    <script>
+        function redirectToNextPage() {
+        	const nextPageUrl = "/planner/main";
+            const countdownElement = document.getElementById('countdown');
+            const event_text = document.getElementById('event-text');
+            const redirectMessage = document.getElementById('redirectMessage');
+            let countdown = 5;
+
+            let intervalId = setInterval(function() {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                
+                if (countdown <= 0) {
+                    clearInterval(intervalId);
+                    redirectMessage.style.display = "none";
+                    event_text.textContent = "뿅";
+                    
+                    window.location.href = nextPageUrl;
+                }
+            }, 1000);
+        }
+
+        window.onload = redirectToNextPage;
+    </script>
+</body>
+</html>

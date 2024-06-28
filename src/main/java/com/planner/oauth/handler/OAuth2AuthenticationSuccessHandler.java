@@ -12,7 +12,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.oauth.CookieUtils;
-import com.planner.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.planner.oauth.TokenRedirect;
 import com.planner.oauth.service.OAuth2Service;
 import com.planner.oauth.service.OAuth2UserPrincipal;
@@ -31,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-	private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 	private final OAuth2UserUnlinkManager oAuth2UserUnlinkManager;
 	private final OAuth2Service oAuth2Service;
 

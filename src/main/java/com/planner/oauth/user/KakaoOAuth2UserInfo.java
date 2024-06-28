@@ -15,8 +15,8 @@ public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
 	
 	public KakaoOAuth2UserInfo(String accessToken, Map<String, Object>attributes) {
 		this.accessToken = accessToken;
-        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
+		Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+		Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
         this.attributes = kakaoProfile;
         
         this.id = ((Long)attributes.get("id")).toString();

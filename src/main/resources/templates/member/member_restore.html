@@ -24,8 +24,7 @@
 		</div>
 		<button type="button" class="restoreBtn">신청</button>
 	</main>
-	</div>
-		<script layout:fragment="script">
+		<script >
 			$(function(){
 				// 소셜로그인 타입 박스 보여주기 안보여주기
 				$(document).on("change","#isOAuth",function(){
@@ -74,13 +73,21 @@
 				            },
 						success : function(data){
 							switch(data){
-								case 1 :
-									alert("복구신청이 완료되었습니다.");
-									location.href="/planner/main";
-									break;
 								case 0 : 
 									alert("입력한 계정정보는 유효하지 않은정보입니다.");
 									location.reload();
+									break;
+								case 1 :
+									alert("복구신청이 완료되었습니다. 복구는 영업일 수 2~3일 걸릴 수 도있습니다.");
+									location.href="/planner/main";
+									break;
+								case 2 :
+									alert("이미 신청 완료되었습니다. 자세한문의는 문의게시판에 작성해주세요");
+									location.href="/planner/main";
+									break;
+								case 3 :
+									alert("복구신청 대상이 아닙니다.");
+									location.href="/planner/main";
 									break;
 							}
 						},
@@ -93,5 +100,6 @@
 				});
 			});
 		</script>
+		</div>
 </body>
 </html>

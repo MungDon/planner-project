@@ -3,7 +3,6 @@ package com.planner.util;
 import java.util.Collection;
 import java.util.Map;
 
-import com.planner.enums.MemberStatus;
 import com.planner.oauth.CookieUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
