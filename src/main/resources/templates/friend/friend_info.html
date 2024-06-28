@@ -48,7 +48,7 @@
 					</td>
 					
 					<td align="left" width="50">
-						<form action="/friend/friendInfo" method="post" id="nickForm">
+						<form action="/friend/info" method="post" id="nickForm">
 							<!-- 정방향인 경우 나의 시퀀스 = 나의 시퀀스 -->
 							<div th:if="${friendDTO.friend_status == 'B'}">
 								<input type="hidden" name="member_my_id" th:value="${friendDTO.member_my_id}"	/>
@@ -118,7 +118,7 @@
 						</div>
 					</td>
 					<td align="left" width="50" colspan="2">
-						<form action="/friend/friendInfo" method="post" id="memoForm">
+						<form action="/friend/info" method="post" id="memoForm">
 							<!-- 정방향인 경우 나의 시퀀스 = 나의 시퀀스 -->
 							<div th:if="${friendDTO.friend_status == 'B'}">
 								<input type="hidden" name="member_my_id" th:value="${friendDTO.member_my_id}"	/>
@@ -161,13 +161,13 @@
 				<tr>
 					<td colspan="4">
 						<!-- 친구삭제 form -->
-						<form action="/friend/friendDelete" method="post" id="deleteForm">
+						<form action="/friend/delete" method="post" id="deleteForm">
 							<input type="hidden" name="friend_id" th:value="${friendDTO.friend_id}"	/>
 							<input type="hidden" name="member_my_id" th:value="${friendDTO.member_my_id}"	/>
 							<input type="hidden" name="member_friend_id" th:value="${friendDTO.member_friend_id}"	/>
 							<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
 							
-							<button type="button" onclick="location.href='/friend/friendList'">목록</button>
+							<button type="button" onclick="location.href='/friend/list'">목록</button>
 							<!-- 서밋버튼 -->
 							<button type="button" id="deleteBtn">삭제</button>
 						</form>
@@ -175,7 +175,7 @@
 				</tr>
 			</tbody>
 		</table>
+		<script type="text/javascript" src="/js/friend/friendInfo.js"></script>	
 	</div>
-	<script layout:fragment="script" type="text/javascript" src="/js/friendInfo.js"></script>	
 </body>
 </html>

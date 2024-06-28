@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<title>그룹 정보 수정</title>
+</head>
+<body>
+<script th:if="${dto} == null">
+	alert("잘못된 접근입니다");
+	location.replace('/team/main');
+</script>
+<form th:action="@{|/team/update?team_id=${dto.team_id}|}" method="post" enctype="multipart/form-data" onsubmit="return imgcheck()">
+<table th:if="${dto} != null" th:object="${dto}">
+	<tr>
+		<td><label for="team_name">그룹 이름</label></td>
+		<td><input type="text" th:field="*{team_name}" maxlength="50" required></td>
+	</tr>
+	<tr>
+		<td><label for="team_explain">그룹 소개</label></td>
+		<td><textarea th:field="*{team_explain}" cols="42" rows="7" maxlength="333"></textarea></td>
+	</tr>
+	<tr>
+		<td>이미지</td>
+		<td>
+			<span th:if="*{team_image} != null">
+				<img th:src="'/team/img?img='+*{team_image}" th:alt="*{team_name}+' 그룹의 이미지'">
+				<label for="delimg">이미지 제거</label><input type="checkbox" name="delimg" id="delimg" value="delimg">
+			</span>
+			<span th:if="*{team_image} == null">
+				<img src="/images/team_default.png" alt="기본이미지"></img>
+				<span style="font-size:0.8em; color:gray;">기본 이미지</span>
+				<input type="hidden" name="delimg">
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="team_image">그룹 이미지</label></td>
+		<!-- 업로드 한 파일 유효성 검사. 크기제한, 확장자 제한 -->
+		<td><input type="file" name="team_image" id="team_image" accept=".jpg, .jpeg, .png, .gif, .wbmp, .bmp, .tif, .tiff"></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<span style="font-size:0.8em; color:gray;">이미지는 100x100 사이즈를 권장합니다.<br>움직이는 이미지는 지원하지 않습니다.</span>
+		</td>
+	</tr>
+	<!-- 회원 권한 따라서 수정 버튼 출력해야됨. -->
+	<tr>
+		<td colspan="2" align="right">
+			<button type="submit">수정</button>
+			<button type="button" th:onclick="|window.location='/team/info?team_id=*{team_id}'|">취소</button>
+		</td>
+	</tr>
+</table>
+</form>
+
+<script>
+	const img = document.getElementById('team_image');
+	const fileFormat = /(jpg|jpeg|png|bmp|wbmp|gif|tif|tiff)/; // 허용할 이미지 확장자
+ 	const maxSize = 2*1024*1024;	// 최대 크기 2MB
+ 	const delimg = document.getElementById('delimg');
+	function imgcheck(){
+ 		if(img.files[0] == null){
+ 			return true;
+ 		}
+		let filename = img.value.split('.');
+		if(filename[filename.length-1].match(fileFormat) == null){
+			alert("지원하지 않는 형식의 파일입니다.");
+			return false;
+		}
+		if(img.files[0].size > maxSize){
+			alert('2MB 이하의 이미지를 사용해 주세요.');
+			return false;
+		}
+		// delimg 아예 안넘어가면 requestparam에서 오류생김.
+		if(delimg.checked == false){
+			delimg.disabled = true;
+		}
+	}
+</script>
+	
+</body>
+</html>

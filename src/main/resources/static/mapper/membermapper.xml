@@ -18,7 +18,7 @@
 			member_role,
 			member_reg
 		)	VALUES	(
-			nextval('member_seq'),
+			member_seq.NEXTVAL,
 			'2020-02-01',
 			'none',
 			'none',
@@ -29,7 +29,7 @@
 			#{member_status},
 			#{oauth_type},
 			#{member_role},
-			now()
+			sysdate
 		)
 	</insert>
 		<!--member_seq.NEXTVAL ,nextval('member_seq'),now(), sysdate -->
@@ -49,7 +49,7 @@
 				oauth_type,
 				oauth_id
 				) values (
-				nextval('member_seq')
+				member_seq.NEXTVAL,
 				#{member_password},
 				#{member_name},
 				#{member_birth},
@@ -128,7 +128,7 @@
 	
 	
 	<!-- ================== 주성이햄========================= -->
-	
+
 	<!-- 회원 이메일로 객체 가져오기 -->
 	<select id="findByUser" resultType="MemberDTO">
 		select *
@@ -136,13 +136,6 @@
 		where member_email = #{member_email}
 	</select>
 	
-	<!-- 회원 시퀀스로 객체 가져오기 -->
-	<select id="findByMemberSeq" resultType="MemberDTO">
-		select *
-		from member
-		where member_id = #{member_id}
-	</select>
-
 	<!-- 회원 이메일로 시퀀스 찾기 -->
 	<select id="findByMemberId" resultType="Long">
 		select member_id
@@ -150,59 +143,51 @@
 		where member_email = #{member_email}
 	</select>
 	
-	<!-- 회원 시퀀스로 이메일 찾기 -->
+	<!-- 회원 시퀀스로 객체 가져오기 (친구 객체 찾을 때 사용) -->
+	<select id="findByMemberSeq" resultType="MemberDTO">
+		select *
+		from member
+		where member_id = #{member_id}
+	</select>
+	
+	<!-- 회원 시퀀스로 이메일 찾기 (친구 이메일 찾을 때 사용) -->
 	<select id="findByMemberEmail" resultType="String">
 		select member_email
 		from member
 		where member_id = #{member_id}
 	</select>
 	
-	<!-- 회원 시퀀스로 이름 찾기 -->
-	<select id="findByMemberName" resultType="String">
-		select member_name
-		from member
-		where member_id = #{member_id}
-	</select>
-	
-	<!-- 내 (회원)정보 -->
-	<select id="memberInfo" resultType="MemberDTO">
-		select *
-		from member
-		where member_email = #{member_email}
-	</select>
-	
 	<!-- 모든 회원 정보 / 페이징 처리 / 키워드 추가 / 이메일 '@' 앞 부분만 검색 가능 / 회원 목록 숨김 / 검색으로만 찾을 수 있음 -->
-	<select id="memberSearch" resultType="MemberDTO">
+	<select id="search" resultType="MemberDTO">
 		<![CDATA[
 			select *
 			from
-			(select distinct m.*, fr.member_send_id, rownum as r
+			(select distinct m.*, fr.member_send_id, rownum r
 			from (
 				select *
 				from member
 				where member_id != #{member_id}
 				and substr (member_email, 1, instr(member_email, '@') - 1) like '%' || #{keyword} || '%'
 				and member_status = 'B'
-			) as m
-			left outer join friend_request as fr
+			)m
+			left outer join friend_request fr
 			on m.member_id = fr.member_send_id
 			and m.member_id = fr.member_receive_id
 			where fr.friend_request_status != 'F'
-			or fr.member_receive_id is null) as c
+			or fr.member_receive_id is null)
 			where r between #{start} and #{end}
 		]]>
 	</select>
 	
-	
 	<!-- (나에게) 친구신청 보낸 아이디 찾기 -->
 	<select id="findBySendId" resultType="MemberDTO">
-		select m.*, fr.member_send_id, rownum as r
-		from member as m
-		left outer join friend_request as fr
+		select m.*, fr.member_send_id, rownum r
+		from member m
+		left outer join friend_request fr
 		on m.member_id = fr.member_send_id
 		where fr.member_receive_id=#{member_id}
+		and m.member_status='B'
 		and substr (member_email, 1, instr(member_email, '@') - 1) like '%' || #{keyword} || '%'
 	</select>
-	
 	
 </mapper>

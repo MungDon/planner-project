@@ -54,16 +54,11 @@ function validateInsert() {
 	}
 	return true;
 }
-// 모달창 켜기
 function openModal() {
 	const signModal = document.getElementById("signModal");
 	signModal.style.display = "block";
 }
-
-// 모달창 끄기
 function closeModal() {
 	const signModal = document.getElementById("signModal");
 	signModal.style.display = "none";
 }
-
-// 이메일 인증

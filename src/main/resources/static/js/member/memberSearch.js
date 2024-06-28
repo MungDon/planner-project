@@ -5,7 +5,7 @@ $(document).on("click", ".btn", function(){
 	let csrfToken = $("meta[name='_csrf']").attr("content");
     let csrfHeader = $("meta[name='_csrf_header']").attr("content");
 	$.ajax({
-		url		: "/friend/friendRequest",
+		url		: "/friend/request",
 		type	: "post",
 		data	: {member_id : member_id},
 		beforeSend: function(xhr) {

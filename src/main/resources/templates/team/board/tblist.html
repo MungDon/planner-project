@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<title th:text="${teamDTO.team_name}+' 게시판'"></title>
+	<style>
+		#team-banner img{
+			height:50px;
+		}
+		#pageBox a, b{
+			padding:0 2px;
+			margin:2px 1px;
+		}
+		#pageBox a{
+			text-decoration: none;
+		}
+		#pageBox a:hover{
+			background-color:darkgray;
+			color:white;
+		}
+		.reply_count {
+			color:gray;
+			font-size:0.8em;
+		}
+		#notice{
+			background:lightyellow;
+		}
+		.pointer{
+			cursor:pointer;
+		}
+		.fold{
+			display:none;
+		}
+		.text-center{
+			text-align:center;
+			color:slategray;
+		}
+		td span img{
+			vertical-align:bottom;
+		}
+	</style>
+</head>
+<body>
+<th:block th:with="params=|team_id=${team_id}&ca=${ca}&ps=${ps}&so=${so}&search=${search}|">
+<h3 id="team-banner" th:onclick="window.location='list?team_id=[[${team_id}]]'">
+<img th:if="${teamDTO.team_image} != null" th:src="'/team/img?img='+${teamDTO.team_image}" th:alt="${teamDTO.team_name}+' 그룹의 이미지'" />
+<img th:if="${teamDTO.team_image} == null" src="/images/team_default.png" alt="기본이미지" />
+<span>[[${teamDTO.team_name}]] 게시판</span>
+</h3>
+<p>
+	총 게시글 : <span th:text="${tbCountAll}"></span> <br>
+	검색된 게시글 : <span th:text="${tbCount}"></span>
+</p>
+
+<div>
+	페이지 당 게시글 : 
+	<select id="ps">
+		<option value="15" th:selected="${ps} == 15">15
+		<option value="30" th:selected="${ps} == 30">30
+		<option value="50" th:selected="${ps} == 50">50
+	</select>
+</div>
+
+<div>
+	카테고리 : 
+	<select id="ca">
+		<option value="전체" th:selected="${ca} == '전체'">전체
+		<option value="공지사항" th:selected="${ca} == '공지사항'">공지사항
+		<option value="일반" th:selected="${ca} == '일반'">일반
+		<option value="질문" th:selected="${ca} == '질문'">질문
+	</select>
+</div>
+
+<form action="/team/board/list" method="get" id="listForm" onsubmit="return searchCheck()">
+	<input type="hidden" name="team_id" th:value="${team_id}">
+	<input type="hidden" name="ps" th:value="${ps}">
+	<input type="hidden" name="ca" th:value="${ca}">
+	<input type="hidden" name="pageNum" th:value="${pageNum}">
+	<select id="so" name="so">
+		<option value="TC" th:selected="${so} == 'TC'">제목+내용
+		<option value="T" th:selected="${so} == 'T'">제목
+		<option value="C" th:selected="${so} == 'C'">내용
+		<option value="W" th:selected="${so} == 'W'">글쓴이
+	</select>
+	<input type="text" th:value="${search}" name="search" id="search" placeholder="검색어">
+	<button type="submit" id="search_btn">검색</button>
+</form>
+<button type="button" th:onclick="|window.location='write?team_id=${team_id}&team_member_id=2'|">글쓰기</button>
+<table th:with="today=${#temporals.createToday()}">
+<thead>
+	<tr>
+		<th>카테고리
+		<th>글번호
+		<th>제목
+		<th>작성자
+		<th>작성시간
+	</tr>
+</thead>
+<tbody th:if="!${#lists.isEmpty(notice_list)} and ${ca} != '공지사항'" id="notice" >
+	<tr th:each="dto, loop : ${notice_list}" th:classappend="${loop.count} > 3 ? fold">
+		<td>공지사항
+		<td th:text="${dto.team_board_id}">
+		<td><a th:text="${dto.tb_title}" 
+			th:href="@{|/team/board/view?${params}&pageNum=${pageNum}&tb_id=${dto.team_board_id}|}"></a>
+			<span th:if="${dto.vote_id != null}"><img src="/images/vote.png" alt="투표"></img></span>
+			<span th:if="${dto.schedule_id != null}"><img src="/images/schedule.png" alt="일정"></img></span>
+			<span th:if="${dto.reply_count != null}" class="reply_count" th:text="|(${dto.reply_count})|"></span>
+		<td th:text="${dto.tm_nickname}">
+		<td th:if="${dto.tb_reg.toLocalDate().isEqual(today)}" th:text="${#temporals.format(dto.tb_reg, 'HH:mm')}">
+		<td th:unless="${dto.tb_reg.toLocalDate().isEqual(today)}" th:text="${#temporals.format(dto.tb_reg, 'MM-dd')}">
+	</tr>
+	<th:block th:if="${#lists.size(notice_list) > 3}">
+	<tr class="text-center pointer" id="unfold">
+		<td colspan="5" style="width:100%">▼펼치기▼
+	</tr>
+	<tr class="text-center pointer fold" id="fold">
+		<td colspan="5" style="width:100%">▲접기▲
+	</tr>
+	</th:block>
+</tbody>
+<tbody>
+	<tr th:if="${list} != null" th:each="dto : ${list}">
+		<td th:text="${dto.tb_category}">
+		<td th:text="${dto.team_board_id}">
+		<td><a th:text="${dto.tb_title}" 
+			th:href="@{|/team/board/view?${params}&pageNum=${pageNum}&tb_id=${dto.team_board_id}|}"></a>
+			<span th:if="${dto.vote_id != null}"><img src="/images/vote.png" alt="투표"></img></span>
+			<span th:if="${dto.schedule_id != null}"><img src="/images/schedule.png" alt="일정"></img></span>
+			<span th:if="${dto.reply_count != null}" class="reply_count" th:text="|(${dto.reply_count})|"></span>
+		<td th:text="${dto.tm_nickname}">
+		<td th:if="${dto.tb_reg.toLocalDate().isEqual(today)}" th:text="${#temporals.format(dto.tb_reg, 'HH:mm')}">
+		<td th:unless="${dto.tb_reg.toLocalDate().isEqual(today)}" th:text="${#temporals.format(dto.tb_reg, 'MM-dd')}">
+	</tr>
+</tbody>
+</table>
+
+<div id="pageBox" th:if="${tbCount} > 0">
+	<!--/* 페이지 번호, 이전, 다음 사이에 공백 안나오게 하려고 한줄로 만듬 */-->
+	<a th:if="${pageNum} > ${pageBlock}" th:href="@{|/team/board/list?${params}&pageNum=${startPage - 1}|}">이전</a><th:block th:each="pnum : ${#numbers.sequence(startPage, endPage)}"><a th:if="${pnum != pageNum}" th:href="@{|/team/board/list?${params}&pageNum=${pnum}|}" th:text="${pnum}"></a><b th:if="${pnum == pageNum}" th:href="@{/}" th:text="${pageNum}"></b></th:block><a th:if="${endPage} < ${totalPage}" th:href="@{|/team/board/list?${params}&pageNum=${startPage + pageBlock}|}">다음</a>
+</div>
+
+<script th:if="${ca} != '공지사항' and ${#lists.size(notice_list)} > 3">
+const unfold = document.getElementById("unfold");
+const fold = document.getElementById("fold");
+// 공지사항 펼치기
+unfold.addEventListener("click", function(){
+	unfold.style.display = 'none';
+	fold_notice.forEach(element => {
+		element.style.display = 'table-row';
+	});
+});
+// 공지사항 접기
+fold.addEventListener("click", function(){
+	unfold.style.display = 'table-row';
+	fold_notice.forEach(element => {
+		element.style.display = 'none';
+	});
+});
+</script>
+
+<script>
+	const listForm = document.getElementById("listForm")
+	const ps = document.getElementById("ps")
+	const ca = document.getElementById("ca")
+	const fold_notice = document.querySelectorAll(".fold");
+	
+	// 페이지 사이즈 변경
+	ps.onchange = function(){
+		let ops = listForm.ps.value;
+		let nps = ps.options[ps.selectedIndex].value;
+		let pn = listForm.pageNum.value;
+		listForm.ps.value = nps;
+		listForm.pageNum.value = Math.ceil((ops*(pn-1)+1)/nps); 
+		listForm.submit();
+	}
+	// 카테고리 변경
+	ca.onchange = function(){
+		listForm.ca.value = ca.options[ca.selectedIndex].value;
+		listForm.pageNum.value = 1;
+		listForm.submit();
+	}
+	// 검색어 검사
+	function searchCheck(){
+		let search = listForm.search.value.trim();
+		if(search.length != 1){
+			listForm.pageNum.value = 1;
+			return true;
+		}else{
+			alert("검색어는 2글자 이상 입력해주세요.");
+			return false;
+		}
+	}
+</script>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="_csrf_header" th:content="${_csrf.headerName}">
+<meta name="_csrf" th:content="${_csrf.token}">
+<title>Calendar</title>
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<link rel="stylesheet" type="text/css" href="/css/kakaomap.css">
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0705776345a6b686de0b391cfcd66b8&libraries=services"></script>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+	<div id="alldiv">
+		<div class="calendar">
+			<div style="margin: auto;">
+				<button onclick="previousMonth()" class="btn">&lt;&lt;</button>
+				<span class="month-name"></span>
+				<button onclick="nextMonth()" class="btn">&gt;&gt;</button>
+			</div>
+			<div class="weekdays"></div>
+			<div class="days"></div>
+		</div>
+
+		<!-- right.hmtl을 호출 할꺼임. -->
+		<div class="schedule"></div>
+	</div>
+
+	<script th:src="@{/js/calendar.js}"></script>
+</body>
+</html>

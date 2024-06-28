@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+	<meta name="_csrf_token" th:content="${_csrf.token}">
+	<meta name="team_board_id" th:content="${dto.team_board_id}">
+	<meta name="vote_id" th:content="${dto.vote_id}">
+	<title th:text="${dto.tb_title}"></title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/board/tbview.css}">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="/js/board/tbview.js" defer></script>
+</head>
+<body>
+<span th:text="${dto.tb_category}"></span>
+<h2 id="title" th:text="${dto.tb_title}"></h2>
+<p>
+	<span>작성자 : <span th:text="${dto.tm_nickname}"></span></span>
+	<span class="linkbox">
+		<span class="float-right">작성시간 : [[${#temporals.format(dto.tb_reg, 'yyyy-MM-dd HH:mm:ss')}]]</span>
+		<a href="#reply_refresh">댓글로</a>
+	</span>
+</p>
+<hr>
+<div id="content">
+<div id="board_content" th:utext="${dto.tb_content}"></div>
+<!-- TODO 나중에 schedule_id, vote_id 있으면 출력 -->
+<div id="schedule" th:if="${dto.schedule_id}">
+	<!--/* 일정 출력 */-->
+</div>
+<div id="vote" th:if="${dto.vote_id}">
+</div>
+</div>
+<div>
+	<span>
+		<a id="reply_refresh" href="javascript:void(0);">댓글 새로고침</a>
+	</span>
+	<span class="linkbox"> <!--/* float:right 때문에 순서 반대 */-->
+		<a id="check_delete" href="javascript:void(0);">삭제</a> <!-- 모달 띄우고 예, 아니오, 예 누르면 요청 post로 처리 -->
+		<a th:href="@{|modify?team_id=${dto.team_id}&tb_id=${dto.team_board_id}&team_member_id=${dto.team_member_id}|}">수정</a>
+		<a href="#title">본문으로</a>
+		<a th:href="@{|list?team_id=${dto.team_id}&ca=${ca}&ps=${ps}&so=${so}&search=${search}&pageNum=${pageNum}|}">목록</a>
+	</span>
+</div>
+<hr color="darkgray">
+<div id="reply_box">
+	<div id="reply_list">
+	</div>
+	<form id="reply_form" class="reply_form" onsubmit="return false;">
+		<input type="hidden" name="team_board_id" th:value="${dto.team_board_id}">
+		<input type="hidden" name="team_member_id" value="2">
+		<textarea name="reply_content" id="reply_content" placeholder="댓글을 작성해 주세요." maxlength="333"></textarea><button type="button" id="reply_btn">등록</button>
+	</form>
+</div>
+
+<div id="modal">
+	<div id="modal_body">
+		<h2>게시글을 삭제하시겠습니까?</h2>
+		<p id="modal_btns">
+			<button type="button" id="board_delete" th:data-tb_id="${dto.team_board_id}" 
+			th:data-team_id="${dto.team_id}" th:data-vote_id="${dto.vote_id}"
+			>삭제</button><button type="button" id="modal_close">취소</button>
+		</p>
+	</div>
+</div>
+</body>
+</html>

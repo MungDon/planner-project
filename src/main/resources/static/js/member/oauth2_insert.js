@@ -1,4 +1,15 @@
-  const birthDate = document.getElementById("birth");
+$(function(){
+	$(document).ready(function(){
+		const member = $("#member").val();
+		console.log(member);
+		if(member == null || member == ""){
+			alert("권한이 없습니다.");
+			location.href="/member/anon/login";
+		}
+	});
+});
+
+const birthDate = document.getElementById("birth");
 
 document.addEventListener('DOMContentLoaded', () => {
 	birthDate.value = getTodayDate();

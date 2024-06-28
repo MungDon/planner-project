@@ -1,0 +1,15 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<span><b>댓글</b> : <span th:text="${replyList.size}" id="reply_count"></span> 개</span>
+<th:block th:each="reply : ${replyList}">
+	<div th:object="${reply}" th:id=*{reply_id} class="reply" th:classappend="*{reply_id != reply_group} ? group : ''">
+		<p>작성자 : <span th:text="*{tm_nickname}" th:data-tm-id="*{team_member_id}"></span><span class="float-right" th:text="*{#temporals.format(reply_reg, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+		<th:block><!--/* 조건 걸어서 작성자만 버튼 보이게 */-->
+			<button class="float-right re-del-btn" th:data-reply_id="*{reply_id}">삭제</button>
+			<button class="float-right re-mod-btn" th:data-reply_id="*{reply_id}">수정</button>
+		</th:block>
+		<p th:text="*{reply_content}" th:data-reply_group="*{reply_group}" class="reply_content"></p>
+	</div>
+</th:block>
+</body>
+</html>

@@ -8,79 +8,74 @@
 </head>
 <body>
 	<div layout:fragment="content">
-  	<main class="infoMain">
-	<h2>회원정보</h2>
-		<input type="hidden" id="status" th:value="${detail.member_status}">
-		<table class="infoTable">
-			<tr class="i_tr1">
-				<th class="i_th1">이메일</th>
-				<td class="i_td1">
-					<span th:text="${detail.member_email}"></span>
-				</td>
-				<td class="i_td1-1">
-					<a th:if="${detail.oauth_id =='none'}" href="/member/auth/chk?url=update">회원 정보 수정 ></a>
-					<a th:if="${detail.oauth_id !='none'}" href="/member/auth/update">회원 정보 수정 ></a>
-				</td>
-			</tr>
-			<tr class="i_tr2">
-				<th class="i_th2">회원명</th>
-				<td class="i_td2">
-					<span th:text="${detail.member_name}"></span>
-				</td>
-			</tr>
-			<tr class="i_tr3">
-				<th class="i_th3">생일</th>
-				<td class="i_td3">
-					<span th:text="${#temporals.format(detail.member_birth,'yyyy/MM/dd')}"></span>
-				</td>
-			</tr>
-			<tr class="i_tr4">
-				<th class="i_th4">휴대폰번호</th>
-				<td class="i_td4">
-					<span th:text="${detail.member_phone}"></span>
-				</td>
-			</tr>
-			<tr class="i_tr5">
-				<th class="i_th5">성별</th>
-				<td class="i_td5">
-					<span th:text="${gender}"></span>
-				</td>
-			</tr>
-		</table>
-		<div class="userDeleteBtnBox">
-			<!-- 일반로그인 -->
-			<a th:if="${detail.oauth_id =='none'}" href="/member/auth/chk?url=delete">회원탈퇴</a>
-			<!-- 소셜로그인 -->
-			<button th:if="${detail.oauth_id !='none'}" type="button" class="userDeleteBtn">회원탈퇴</button>
+		<div th:if="${memberDTO.member_id != myId}">
+			<th:block th:replace="~{fragments/friend :: friendLayout}"></th:block>
 		</div>
-	</main>
-	<script src="/js/rolechk.js"></script>
-	<script>
-		$(function(){
-			$(document).on("click",".userDeleteBtn",() => {
-		        let csrfToken = $("meta[name='_csrf']").attr("content");
-		        let csrfHeader = $("meta[name='_csrf_header']").attr("content");
-				if(!confirm('정말 회원탈퇴를 하시겠습니까?')){
-					return false;
-				}
-				$.ajax({
-					url : "/member/auth/delete",
-					type : "delete",
-					beforeSend: function(xhr) {
-		                // CSRF 토큰을 요청 헤더에 포함
-		                xhr.setRequestHeader(csrfHeader, csrfToken);
-		            },
-					success : function(){
-						alert('탈퇴되었습니다.');
-						location.href="/planner/main";
-					},
-					error : function(){
-						alert("탈퇴실패");
-					}
-				});
-			});
-		});
-	</script>
+	  	<main class="infoMain">
+		<h2>회원정보</h2>
+			<input type="hidden" id="status" th:value="${memberDTO.member_status}">
+			<table class="infoTable">
+				<tr class="i_tr1">
+					<th class="i_th1">이메일</th>
+					<td class="i_td1">
+						<span th:text="${memberDTO.member_email}"></span>
+					</td>
+					<td class="i_td1-1" th:if="${memberDTO.member_id == myId}">
+						<a th:if="${memberDTO.oauth_id =='none'}" href="/member/auth/chk?url=update">회원 정보 수정 ></a>
+						<a th:if="${memberDTO.oauth_id !='none'}" href="/member/auth/update">회원 정보 수정 ></a>
+					</td>
+				</tr>
+				<tr class="i_tr2">
+					<th class="i_th2">회원명</th>
+					<td class="i_td2">
+						<span th:text="${memberDTO.member_name}"></span>
+					</td>
+				</tr>
+				<tr class="i_tr3">
+					<th class="i_th3">생일</th>
+					<td class="i_td3">
+						<span th:text="${#temporals.format(memberDTO.member_birth,'yyyy/MM/dd')}"></span>
+					</td>
+				</tr>
+				<tr class="i_tr4" th:if="${memberDTO.member_id == myId}">
+					<th class="i_th4">휴대폰번호</th>
+					<td class="i_td4">
+						<span th:text="${memberDTO.member_phone}"></span>
+					</td>
+				</tr>
+				<tr class="i_tr5">
+					<th class="i_th5">성별</th>
+					<td class="i_td5">
+						<span th:text="${gender}"></span>
+					</td>
+				</tr>
+			</table>
+			<form action="/friend/requestByInfo" method="post" id="requestForm">
+				<div th:if="${memberDTO.friend_request_status.equals('search')}">	<!-- 회원검색 에서 회원정보 진입 -->
+					<button type="submit">친구추가</button>
+					<input type="hidden" name="member_id" th:value="${memberDTO.member_id}"	/>
+					<input type="hidden" name="friend_request_status" th:value="${memberDTO.friend_request_status}"	/>
+					<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
+				</div>
+				<div th:if="${memberDTO.friend_request_status.equals('send')}">		<!-- 받은목록 에서 회원정보 진입 -->
+					<input type="hidden" name="member_id" th:value="${memberDTO.member_id}"	/>
+					<input type="hidden" name="friend_request_status" th:value="${memberDTO.friend_request_status}"	/>
+					<input type="hidden" name="delete_who" id="sendDelete"	/>
+					<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
+					<button type="submit">수락</button>
+					<button id="sendDeleteBtn" type="button">거절</button>
+				</div>
+				<div th:if="${memberDTO.friend_request_status.equals('receive')}">	<!-- 보낸목록 에서 회원정보 진입 -->
+					<input type="hidden" name="friend_request_status" th:value="${memberDTO.friend_request_status}"	/>
+					<input type="hidden" name="member_id" th:value="${memberDTO.member_id}"	/>
+					<input type="hidden" name="delete_who" value="receive"	/>
+					<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
+					<button>취소</button>
+				</div>
+			</form>
+			<input type="hidden" id="sendDeleteH" value="send"	/>
+		</main>
+		<script type="text/javascript" src="/js/member/memberInfo.js"></script>
 	</div>
 </body>
 </html>

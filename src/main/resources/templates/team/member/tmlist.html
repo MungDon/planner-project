@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="team_id" th:content="${tmlist[0].team_id}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+	<meta name="_csrf_token" th:content="${_csrf.token}">
+	<title>그룹 회원 목록</title>
+	<style>
+		.nodrag{
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-use-select: none;
+			user-select: none;
+		}
+	</style>
+</head>
+<body>
+<p>
+	그룹 회원 : <span th:text="${#lists.size(tmlist)} - ${wait_count}" id="member_count"></span>명 <br>
+	가입 대기 : <span th:text="${wait_count}" id="wait_count"></span>명
+</p>
+<!-- TODO 권한 따라서 버튼 출력 전환 -->
+<div class="nodrag" id="grades">
+	<label for="TEAM_MASTER">그룹장</label>
+	<input type="checkbox" id="TEAM_MASTER" checked>
+	<label for="TEAM_SUB_MASTER">부그룹장</label>
+	<input type="checkbox" id="TEAM_SUB_MASTER" checked>
+	<label for="TEAM_USER">그룹원</label>
+	<input type="checkbox" id="TEAM_USER" checked>
+	<label for="WAIT">가입대기</label>
+	<input type="checkbox" id="WAIT" checked>
+</div>
+<table>
+	<tr>
+		<th>회원번호</th>
+		<th>별명</th>
+		<th>등급</th>
+		<th>가입일자</th>
+		<th></th>
+	</tr>
+	<tr th:each="dto : ${tmlist}" th:id="${dto.member_id}" th:class="${dto.tm_grade}">
+		<td th:text="${dto.member_id}"></td>
+		<td th:text="${dto.tm_nickname}"></td>
+		<td th:text="${dto.tm_grade}"></td>
+		<td th:text="${#temporals.format(dto.tm_reg, 'yyyy-MM-dd')}"></td>
+		<td th:if="${dto.tm_grade} != 'TEAM_MASTER' and ${dto.tm_grade} != 'WAIT'"><button 
+			type="button" th:data-member_id="${dto.member_id}" class="kick">추방</button></td>
+		<td th:if="${dto.tm_grade} == 'WAIT'"
+		><button type="button" class="accept" th:data-member_id="${dto.member_id}">가입승인</button
+		><button type="button" class="kick" th:data-member_id="${dto.member_id}">가입거절</button></td>
+	</tr>
+</table>
+<script>
+	const member_count = document.getElementById("member_count");
+	const wait_count = document.getElementById("wait_count");
+	const team_id = document.querySelector('meta[name="team_id"]').content;
+	const kick = document.querySelectorAll(".kick");
+	const accept = document.querySelectorAll(".accept");
+	const checkboxs = document.querySelectorAll('#grades input[type="checkbox"]');
+	const offset = 1000 * 60 * 60 * 9;
+	const header = document.querySelector('meta[name="_csrf_header"]').content;
+	const token = document.querySelector('meta[name="_csrf_token"]').content;
+	const headers = new Headers();
+	headers.append('header',header);
+	headers.append('X-CSRF-Token',token);
+	// grade 따라 표시 전환
+	checkboxs.forEach(e => {
+		e.addEventListener("change", function(){
+			let trs = document.querySelectorAll("."+e.id);
+			if(e.checked == true){
+				trs.forEach(tr => {
+					tr.style.display = 'table-row';
+				});
+			}else{
+				trs.forEach(tr => {
+					tr.style.display = 'none';
+				});
+			}
+		});
+	});
+	
+	// 추방
+	kick.forEach(e => {
+		e.addEventListener("click", function(){
+			let member_id = e.dataset.member_id;
+			let data = new FormData();
+			data.append('team_id', team_id);
+			data.append('member_id', member_id);
+			let del_request = new Request("/team/member/kick", {
+				method:'DELETE',
+				headers:headers,
+				body:data
+			});
+ 			fetch(del_request)
+				.then(response => {
+					if(response.ok){
+						document.getElementById(member_id).remove();
+						member_count.innerText = member_count.innerText - 1;
+					}else{
+						alert("오류 발생");
+					}
+				})
+				.catch(e => {
+					alert("오류 발생");
+				})
+ 			;
+		});
+	});
+	// 가입승인
+	accept.forEach(e => {
+		e.addEventListener("click", function(){
+			let member_id = e.dataset.member_id;
+			let data = new FormData();
+			data.append('team_id', team_id);
+			data.append('member_id', member_id);
+			let acc_request = new Request("/team/member/accept", {
+				method:"PATCH",
+				headers:headers,
+				body:data
+			});
+			fetch(acc_request)
+				.then(response => {
+					if(response.ok){
+						let tr = document.getElementById(member_id);
+						tr.cells[2].innerText='TEAM_USER';
+						// offset으로 시간대 보정. (UTC+9)
+						let today = new Date(Date.now() + offset).toISOString().substring(0, 10);
+						tr.cells[3].innerText= today;
+						tr.cells[4].innerText= '가입완료';
+						wait_count.innerText = parseInt(wait_count.innerText) - 1;
+						member_count.innerText = parseInt(member_count.innerText) + 1;
+					}else{
+						alert("오류 발생");
+					}
+				})
+				.catch(e => {
+					alert("오류 발생");
+				})
+			;
+		});
+	});
+</script>
+</body>
+</html>

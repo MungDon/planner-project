@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<title>그룹 페이지</title>
+</head>
+<body>
+<h1>임시 메인</h1>
+<label for="team_id">team_id </label><input type="number" name="team_id" id="team_id"> / 
+<label for="member_id">member_id </label><input type="number" name="member_id" id="member_id"> / 
+<label for="team_member_id">team_member_id </label><input type="number" name="team_member_id" id="team_member_id">
+<br>
+<button type="button" name="create" onclick="btnf(this)">그룹 생성</button>
+<button type="button" name="info" onclick="btnf(this)">그룹 정보</button>
+<button type="button" name="delete" onclick="btnf(this)">그룹 제거</button>
+<br>
+<button type="button" name="member/insert" onclick="btnf(this)">그룹 멤버 추가</button>
+<button type="button" name="member/tmlist" onclick="btnf(this)">그룹 멤버 목록</button>
+<button type="button" name="member/info" onclick="btnf(this)">그룹 멤버 정보</button>
+<br>
+<button type="button" name="board/list" onclick="btnf(this)">그룹 게시판</button>
+<script>
+	function btnf(btn){
+		let path = btn.name;
+		let team_id = document.getElementById("team_id").value;
+		let member_id = document.getElementById("member_id").value;
+		let team_member_id = document.getElementById("team_member_id").value;
+			window.location=path+'?team_id='+team_id+'&member_id='+member_id+'&team_member_id='+team_member_id;
+	}
+</script>
+</body>
+</html>

@@ -8,61 +8,59 @@
 </head>
 <body>
 	<div layout:fragment="content">
-	<main class="insertMain">
-		<form action="/member/anon/insert" method="post" class="insertForm" onsubmit="return validateInsert()">
-		<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
-		
-		<span class="joinText">회원가입을 위해<br> 정보를 입력해주세요</span>
+		<main class="insertMain">
+			<form action="/member/anon/insert" method="post" class="insertForm" onsubmit="return validateInsert()">
+				<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
 			
-			<label for="email">이메일(아이디)</label>
-			<input type="email" name="member_email" id="email" required="required"	/>
-			<button type="button" class="emailChk">이메일 인증</button>
-			
-			
-			<label for="pw">비밀번호</label>
-			<input type="password" name="member_password" id="pw" required="required"	/>
-			<label for="pw">비밀번호 재확인</label>
-			<input type="password"  id="pw2" required="required"	/>
-			<div id="failText"></div>
-			<label for="name">이름</label>
-			<input type="text" name="member_name" id="name"	 required="required"/>
-			
-			<label for="birth">생년월일</label>
-			<input type="date" name="member_birth" id="birth" required="required"	/>
-			
-			<label for="phone">전화번호</label>
-			<input type="number" name="member_phone" id="phone" required="required" placeholder="-빼고 작성해주세요"/>			
-			<div class="genderCon">
-				<div class="genderBox">
-					<div>
-						<label for="m">남성</label><input type="radio" name="member_gender" value="M" id="m"	/>
+				<span class="joinText">회원가입을 위해<br> 정보를 입력해주세요</span>
+				
+				<label for="email">이메일(아이디)</label>
+				<input type="email" name="member_email" id="email" required="required"	/>
+				
+				<label for="pw">비밀번호</label>
+				<input type="password" name="member_password" id="pw" required="required"	/>
+				<label for="pw">비밀번호 재확인</label>
+				<input type="password"  id="pw2" required="required"	/>
+				<div id="failText"></div>
+				<label for="name">이름</label>
+				<input type="text" name="member_name" id="name"	 required="required"/>
+				
+				<label for="birth">생년월일</label>
+				<input type="date" name="member_birth" id="birth" required="required"	/>
+				
+				<label for="phone">전화번호</label>
+				<input type="number" name="member_phone" id="phone" required="required" placeholder="-빼고 작성해주세요" />			
+				<div class="genderCon">
+					<div class="genderBox">
+						<div>
+							<label for="m">남성</label><input type="radio" name="member_gender" value="M" id="m"	/>
+						</div>
+						<div>
+							<label for="w">여성</label><input type="radio" name="member_gender" value="W" id="w"	/>
+					    </div>
 					</div>
-					<div>
-						<label for="w">여성</label><input type="radio" name="member_gender" value="W" id="w"	/>
-				    </div>
+				</div>	
+				<div class="signChkBox">
+					<input type="checkbox" id="signChk">개인정보 수집 및 이용에 동의합니다.<a href="#" onclick="openModal()">[이용약관]</a>
 				</div>
-			</div>	
-			<div class="signChkBox">
-				<input type="checkbox" id="signChk">개인정보 수집 및 이용에 동의합니다.<a href="#" onclick="openModal()">[이용약관]</a>
-			</div>
-			<button type="submit" class="joinBtn">회원가입</button>
-		</form>
-		<div class="signChkModal" id="signModal">
-			<div class="modalBody">
-				<div class="Modaltop">
-					<button type="button" class="Xbtn" onclick="closeModal()">X</button>
-				</div>
-				<div class="modalMain">
-					<h1>이용약관</h1>
-					<span>대충이용약관임</span>
-				</div>
-				<div class="btns">
-					<button type="button" class="closeBtn" onclick="closeModal()">확인</button>
+				<button type="submit" class="joinBtn">회원가입</button>
+			</form>
+			<div class="signChkModal" id="signModal">
+				<div class="modalBody">
+					<div class="Modaltop">
+						<button type="button" class="Xbtn" onclick="closeModal()">X</button>
+					</div>
+					<div class="modalMain">
+						<h1>이용약관</h1>
+						<span>대충이용약관임</span>
+					</div>
+					<div class="btns">
+						<button type="button" class="closeBtn" onclick="closeModal()">확인</button>
+					</div>
 				</div>
 			</div>
-		</div>
-	</main>
-	<script src="/js/memberinsert.js"></script>
+		</main>
+		<script type="text/javascript" src="/js/member/memberinsert.js"></script>
 	</div>
 </body>
 </html>

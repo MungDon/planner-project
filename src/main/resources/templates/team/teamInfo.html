@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<title>그룹 정보</title>
+</head>
+<body>
+<h2 th:if="${dto} == null" th:text="${nodto}"></h2>
+<table th:if="${dto} != null" th:object="${dto}">
+	<tr>
+		<td>그룹명</td>
+		<td th:text="*{team_name}"></td>
+	</tr>
+	<tr>
+		<td>그룹 소개</td>
+		<td th:text="*{team_explain}"></td>
+	</tr>
+	<tr>
+		<td>이미지</td>
+		<td>
+			<img th:if="*{team_image} != null" th:src="'/team/img?img='+*{team_image}" th:alt="*{team_name}+' 그룹의 이미지'">
+			<img th:if="*{team_image} == null" src="/images/team_default.png" alt="기본이미지"></img>
+		</td>
+	</tr>
+	<!-- 회원 권한 따라서 수정 버튼 출력해야됨. -->
+	<tr>
+		<td colspan="2" align="right">
+			<button type="button" th:onclick="|window.location='/team/update?team_id=*{team_id}'|">수정하기</button>
+		</td>
+	</tr>
+</table>
+</body>
+</html>

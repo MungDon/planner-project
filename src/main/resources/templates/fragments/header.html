@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-  
-<header class="navbar" th:fragment="headerLayout">
+  <header class="navbar" th:fragment="headerLayout">
 	<div class="logo">
 		<i class="navImg"></i>	<!-- 로고 이미지 -->
 		<a href="/planner/main">Planner</a>
 	</div>
   	<ul class="nav_menu">
-  		<li sec:authorize="isAuthenticated()" >
-  			<a href="/member/auth/memberSearch" >친구</a>
+  		<li sec:authorize="isAuthenticated()">
+  			<a href="/member/auth/search">친구</a>
   		</li>
   	</ul>
+  	
   	<ul class="nav_icon">
   		<li class="myPage">
   			<!-- 아이콘 이미지 -->
-  			<a sec:authorize="isAuthenticated()" href="/member/auth/info">내 정보</a>
-  			<a sec:authorize="isAuthenticated()" href="/member/anon/signout">로그아웃</a>
+  			<a sec:authorize="isAuthenticated()"  href="/member/auth/myInfo">내 정보</a>
+  			<a sec:authorize="isAuthenticated()"  href="/member/anon/signout">로그아웃</a>
   			<a sec:authorize="isAnonymous()"  href="/member/anon/login">로그인</a>
   		</li>
   	</ul>
-</header>
+  </header>
 </html>

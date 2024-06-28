@@ -1,0 +1,16 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div>
+	<p class="float-right">투표 종료 시간 : <span th:text="${#temporals.format(dto.vote_end, 'yyyy-MM-dd HH:mm')}"></span></p>
+	<h3 id="vote_title" th:text="${dto.vote_title}"></h3>
+	<div id="vote_content" th:utext="${dto.vote_content}"></div>
+</div>
+<hr style="margin:5px 0;">
+<div th:each="item : ${dto.vote_items}">
+<p>
+	<label th:for="|vote${item.vote_item_id}|" th:text="${item.vote_item_name}"></label>
+	<input type="radio" name="vote_radio" th:value="${item.vote_item_id}" th:id="|vote${item.vote_item_id}|">
+</p>
+</div>
+</body>
+</html>

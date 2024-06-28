@@ -1,0 +1,115 @@
+@charset "EUC-KR";
+       /* Calendar 레이아웃을 그리드로 설정 */
+        #alldiv{
+        	/*display:flex;*/
+        	margin:auto;
+        }
+        .calendar {
+            display: grid;
+            gap: 5px; /* 셀 사이의 간격 설정 */
+            border: 1px solid black;
+            border-radius: 10px; 
+            width: 700px;
+            margin: auto;
+            min-height: 190px;
+        }
+
+        /* 달 이름을 가운데 정렬 */
+        .month-name {
+            text-align: center;
+            display: inline-block;
+            min-width: 120px;
+        }
+
+        /* 요일과 날짜를 그리드로 표시 */
+        .weekdays, .days {
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(7, 100px);
+        }
+
+        /* 요일과 날짜의 내용을 중앙 정렬 */
+        .weekdays div, .days .day {
+            margin: auto;
+        }
+        
+        .buttons {
+            text-align: center;		  /* 버튼을 가운데 정렬 */
+            margin-bottom: 10px; /* 버튼 아래 여백 추가 */
+        }
+
+        /* 토요일 */
+        .weekdays div:nth-child(7n) {
+            color: #046582; /* 파란색 */
+        }
+
+        /* 토요일 */
+        .days .day:nth-child(7n) {
+            color: #195aa0 ; /* 파란색 */
+        }
+        
+        /* 일요일 */
+        .weekdays div:nth-child(7n+1) {
+            color: red; /* 빨간색 */
+        }
+
+        /* 일요일 */
+        .days .day:nth-child(7n+1) {
+            color: red; /* 빨간색 */
+        }
+
+        .blank {
+            /*background-color: lightgray;*/
+            /*border: 1px solid gray;*/
+            height: 100%; /* 높이를 100%로 설정 */
+        }
+        
+        .btn {
+            background-color: gray; 
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        /* 오늘의 날짜에 강조 */
+        .today {
+            border: 3px solid  rgb(255, 210, 220);
+            border-radius: 6px;
+        }
+        
+		.ddiv{
+			border:1px solid black;
+			border-collapse: collapse;
+			border-radius:20px;
+			padding : 5px; 
+		}
+		
+		.bbig{
+			margin:auto;
+			width:800px; 
+			min-height:600px; 
+			border:3px solid black;
+		}
+		
+		.my-div{
+			display : none; 
+			padding: 5px; 
+			border : 0px;
+		} 
+		
+		.div_each{
+			margin-bottom:5px;
+		}
+		
+		a{color:black;}
+		h2{text-align: left; margin-left:30px;}
+		input{margin-left:15px; height:22px;}
+		textarea{
+			margin-left:15px;
+		    width: 386px;
+	    	height: 100px;
+			resize: none;
+		}

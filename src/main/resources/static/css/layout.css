@@ -50,6 +50,13 @@
     color: purple;
 }
 
+/*	position 속성
+static		기준 없음 (배치 불가능 / 기본값)
+relative	요소 자기 자신을 기준으로 배치
+absolute	부모(조상) 요소를 기준으로 배치
+fixed		뷰포트 기준으로 배치
+stickey		스크롤 영역 기준으로 배치
+*/
 
 html {
     position: relative;
@@ -62,6 +69,11 @@ body {
     min-height: 100%;
 }
 
+/* header { */
+/*     width: 100%; */
+/*     height: 40px; */
+/* } */
+
 footer {
     position: absolute;
     left: 0;
@@ -72,8 +84,7 @@ footer {
     text-align: center;
 }
 .content{
-		   /* 상    우     하    좌   */
-	margin : 50px 200px 100px 200px;
+    margin : 50px 200px 100px;
 }
 
 ul {

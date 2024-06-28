@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+     <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -9,10 +9,10 @@
 <body>
 	<div layout:fragment="content">
 		<th:block th:replace="~{fragments/friend :: friendLayout}"></th:block>
-		<input type="hidden" id="status" th:value="${status}">
+		<input type="hidden" id="status" th:value="${status}"	/>
 		<div>
 			<h1>Friend Search</h1>
-			<form action="/member/auth/memberSearch" method="get" id="keywordForm" onsubmit="return false">	<!-- Enter Key 로 서밋 방지 -->
+			<form action="/member/auth/search" method="get" id="keywordForm" onsubmit="return false">	<!-- Enter Key 로 서밋 방지 -->
 				<input type="text" name="keyword" id="keywordInput"	/>
 				<button type="button" id="keywordBtn">검색</button>
 			</form>
@@ -30,16 +30,16 @@
 				</tr>
 				<tr th:each="memberDTO : ${list}">
 					<td>
-						<form action="/member/auth/memberInfo" method="post" th:attr="id='infoForm' + ${memberDTO.member_id}">
-							<a onclick="infoForm()" class="infoA" th:attr="data-info='infoForm' + ${memberDTO.member_id}" href="javascript:void(0);">
-								[[${memberDTO.member_email}]]
-							</a>
-							<input type="hidden" name="member_email" th:value="${memberDTO.member_email}"			/>
-							<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
-						</form>
-						<script>
-							
-						</script>
+						<a th:if="${memberDTO.friend_request_status != 'F'}" th:href="@{|/member/auth/info/${memberDTO.member_id}|}">
+							[[${memberDTO.member_email}]]
+						</a>
+						<div th:if="${memberDTO.friend_request_status == 'F'}">
+							<form action="/friend/info" method="get" name="friendInfo">
+								<a th:text="${memberDTO.member_email}" onclick="friendInfo.submit()" href="javascript:void(0);"></a>
+								<input type="hidden" name="member_id" th:value="${memberDTO.member_id}"	/>	<!-- 친구신청 보낸사람이 friend_id 위치로 데이터가 들어감 / "C"로 바뀐상태 알림 -->
+								<input type="hidden" name="friend_status" value="C"	/>	<!-- 친구신청 보낸사람이 friend_id 위치로 데이터가 들어감 / "C"로 바뀐상태 알림 -->
+							</form>
+						</div>
 					</td>
 					<td th:text="${memberDTO.member_birth}"></td>
 					<td th:text="${memberDTO.member_gender}"></td>
@@ -57,22 +57,21 @@
 			<!-- 페이징 처리 시작 -->
 			<div th:if="${count > 0}">
 				<span th:if="${startPage > 10}">
-					<a th:href="@{|/member/memberSearch?keyword=${keyword}&pageNum=${startPage - 10}|}" th:text="'[이전]'"></a>
+					<a th:href="@{|/member/search?keyword=${keyword}&pageNum=${startPage - 10}|}" th:text="'[이전]'"></a>
 				</span>
 				<span th:each="i : ${#numbers.sequence(startPage, endPage)}">
-					<a th:if="${pageNum != i}" th:href="@{|/member/memberSearch?keyword=${keyword}&pageNum=${i}|}" th:text="'['+${i}+']'"></a>
+					<a th:if="${pageNum != i}" th:href="@{|/member/search?keyword=${keyword}&pageNum=${i}|}" th:text="'['+${i}+']'"></a>
 					<span th:if="${pageNum == i}">
 						[<b th:text="${i}"></b>]
 					</span>
 				</span>
 				<span th:if="${endPage} < ${pageCount}">
-					<a th:href="@{|/member/memberSearch?keyword=${keyword}&pageNum=${startPage + 10}|}" th:text="'[다음]'"></a>
+					<a th:href="@{|/member/search?keyword=${keyword}&pageNum=${startPage + 10}|}" th:text="'[다음]'"></a>
 				</span>
 			</div>
 			<!-- 페이징 처리 끝 -->
 		</div>
-		<script src="/js/rolechk.js"></script>
-		<script type="text/javascript" src="/js/memberSearch.js"></script>
+		<script type="text/javascript" src="/js/member/memberSearch.js"></script>
 	</div>
 </body>
 </html>

@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,13 +100,38 @@ public class MemberController {
 		throw new CustomException(ErrorCode.NO_ACCOUNT);
 	}
 	
-	/*내 정보*/
+//	내정보
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/auth/info")
-	public String memberInfo(Model model,@UserData ResMemberDetail detail) {
-		String gender = Gender.findNameByCode(detail.getMember_gender());
-		model.addAttribute("detail", detail);
+	@GetMapping("/auth/myInfo")
+	public String myInfo(@UserData ResMemberDetail detail, Model model) {
+		ResMemberDetail memberDTO;
+		String gender;
+		
+		memberDTO = memberService.memberDetail(detail.getMember_email());	// 나의 객체
+		gender = Gender.findNameByCode(detail.getMember_gender());
+		
+		model.addAttribute("memberDTO", memberDTO);
 		model.addAttribute("gender", gender);
+		
+		return "/member/member_myInfo";
+	}
+	
+//	회원정보
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/auth/info/{member_id}")
+	public String memberInfo(@PathVariable(value = "member_id") Long member_id,
+					   		 @UserData ResMemberDetail detail, Model model) {
+		String gender;
+		int receive_count = 0;
+		
+		MemberDTO memberDTO = memberService.info(member_id, detail);
+		gender = Gender.findNameByCode(memberDTO.getMember_gender());
+		receive_count = friendService.receiveRequestCount(detail.getMember_email());	// 받은 친구신청 수
+		
+		model.addAttribute("receive_count", receive_count);
+		model.addAttribute("memberDTO", memberDTO);
+		model.addAttribute("gender", gender);
+		
 		return "/member/member_info"; 
 	}
 	
@@ -143,7 +169,7 @@ public class MemberController {
 	public String memberUpdate(ReqMemberUpdate req) {
 		memberService.memberUpdate(req);
 		//TODO - 회원 정보 이메일 수정시에 이메일 인증 추가
-		return "redirect:/member/auth/info";
+		return "redirect:/member/auth/myInfo";
 	}
 	
 	/*회원 탈퇴*/
@@ -172,10 +198,10 @@ public class MemberController {
 	/*쭈썽이햄--------------------------------------------------------------------------------------------------------------------------------------->*/
 //	회원찾기
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/auth/memberSearch")
-	public String memberSearch(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
-						   @RequestParam(name = "keyword", defaultValue = "!@#$%^&*()") String keyword,		// 키워드 기본값 특수문자로 초기 화면 없애기
-						   @UserData ResMemberDetail detail, Model model) {
+	@GetMapping("/auth/search")
+	public String search(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
+						   	   @RequestParam(name = "keyword", defaultValue = "!@#$%^&*()") String keyword,		// 키워드 기본값 특수문자로 초기 화면 없애기
+						   	   @UserData ResMemberDetail detail, Model model) {
 //		TODO 페이징처리 유효성검사 하기
 //		페이징 처리
 		int pageSize = 10;
@@ -184,7 +210,7 @@ public class MemberController {
 		int end = currentPage * pageSize;
 		int count = 0;
 		
-		List<MemberDTO> list = memberService.memberSearch(detail.getMember_email(), keyword, start, end);
+		List<MemberDTO> list = memberService.search(detail.getMember_email(), keyword, start, end);
 		if (list.size() > 0) {
 			memberService.findBySendId(detail.getMember_email(), keyword);
 			count = list.size();
@@ -209,38 +235,13 @@ public class MemberController {
 		
 		model.addAttribute("list", list);						// 친구신청 리스트 (친구신청 상태 담겨있음)
 		model.addAttribute("friendRoles", FriendRole.values());	// FriendRole 상태 권한설정
+		
 		model.addAttribute("status", detail.getMember_status());
 		
 		int receive_count = friendService.receiveRequestCount(detail.getMember_email());	// 받은 친구신청 수
 		model.addAttribute("receive_count", receive_count);
 		
-		return "member/member_memberSearch";
+		return "member/member_search";
 	}
-	
-//	회원정보(내정보) Get
-	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/auth/memberInfo")
-	public String memberInfo(@ModelAttribute(value = "member_email") String member_email,
-							 @UserData ResMemberDetail detail, Model model) {
-		if (!member_email.isEmpty()) {		// 회원 정보인 경우
-			MemberDTO memberDTO = memberService.memberInfo(member_email);
-			model.addAttribute("memberDTO", memberDTO);
-		}
-		int receive_count = friendService.receiveRequestCount(detail.getMember_email());	// 받은 친구신청 수
-		model.addAttribute("receive_count", receive_count);
-		
-		return "member/member_memberInfo";
-	}
-	
-//	회원정보 Post
-	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/auth/memberInfo")
-	public String memberInfo(@RequestParam(value = "member_email") String member_email,
-							 RedirectAttributes rttr) {
-		rttr.addFlashAttribute("member_email", member_email);
-		
-		return "redirect:/member/auth/memberInfo";
-	}
-	
 	
 }

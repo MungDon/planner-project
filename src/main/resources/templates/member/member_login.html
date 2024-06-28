@@ -5,7 +5,6 @@
 	  layout:decorate="~{layout/layout}">
 <head>
 <link rel="stylesheet" type="text/css" href="/css/login.css">
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	<div layout:fragment="content">
@@ -18,7 +17,7 @@
 				<input type="submit" value="로그인" class="loginBtn"	/>
 			</form>
 			<div class="joinBtn">
-				<p class="join_a"><a class="join_a" sec:authorize="isAnonymous()" href="/member/anon/find/pw">PW 찾기</a>
+				<p class="join_a"><a class="join_a" sec:authorize="isAnonymous()" href="#">ID/PW 찾기</a>
 				| <a class="join_a" sec:authorize="isAnonymous()" href="/member/anon/insert">회원가입</a> | <a class="join_a" sec:authorize="isAnonymous()" href="/member/anon/restore">회원복구</a></p>
 			</div>
 			<div class="btnBox">
@@ -26,6 +25,7 @@
 				<a class="kakaoBtn" href="/oauth2/authorization/kakao?mode=login"><img src="/images/kakao.webp" class="kakaoLogo"></a>
 			</div>
 		</main>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	</div>
 </body>
 </html>

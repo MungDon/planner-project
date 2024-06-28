@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+	<meta name="_csrf_token" th:content="${_csrf.token}">
+	<title>그룹 회원 정보</title>
+</head>
+<body>
+<table>
+	<tr>
+		<td>그룹 명
+		<td th:text="${dto.team_name}">
+	<tr>
+		<td>별명
+		<td th:text="${dto.tm_nickname}">
+	<tr>
+		<td>등급
+		<td th:text="${dto.tm_grade}">
+	<tr>
+		<td>그룹 참가 일자
+		<td th:text="${#temporals.format(dto.tm_reg, 'yyyy-MM-dd')}">
+	<tr>
+		<td colspan="2">
+			<input type="hidden" name="team_id" id="team_id" th:value="${dto.team_id}">
+			<input type="hidden" name="member_id" id="member_id" th:value="${dto.member_id}">
+			<button type="button" name="update" id="update">수정</button>
+			<button type="button" name="delete" id="delete">그룹 탈퇴</button>
+			<button type="button" onclick="window.location='/'">취소</button>
+</table>
+<script>
+		const team_id = document.getElementById("team_id").value;
+		const member_id = document.getElementById("member_id").value;
+		const update_btn = document.getElementById("update");
+		const delete_btn = document.getElementById("delete");
+		const header = document.querySelector('meta[name="_csrf_header"]').content;
+		const token = document.querySelector('meta[name="_csrf_token"]').content;
+		const headers = new Headers();
+		headers.append('header',header);
+		headers.append('X-CSRF-Token',token);
+		
+		update_btn.addEventListener("click", function(){
+			window.location='/team/member/update?team_id='+team_id+'&member_id='+member_id;
+		});
+		
+		delete_btn.addEventListener("click", function(){
+			let data = new FormData();
+			data.append('team_id', team_id);
+			data.append('member_id', member_id);
+			let del_request = new Request("/team/member/delete", {
+				method:'DELETE',
+				headers:headers,
+				body:data,
+				redirect:"follow"
+			});
+			fetch(del_request)
+				.then(response => {
+					if(response.ok){
+						// 그룹 탈퇴 요청 성공시 redirect
+						window.location.href = response.url;
+					}else{
+						alert("탈퇴 요청 실패");
+					}
+				})
+			;
+		});
+</script>
+</body>
+</html>

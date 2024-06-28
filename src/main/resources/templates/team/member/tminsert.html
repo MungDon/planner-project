@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<title>그룹 참가</title>
+</head>
+<body>
+<th:block th:if="${dto} != null">
+<table th:object="${dto}">
+	<tr>
+		<td>그룹명</td>
+		<td th:text="*{team_name}"></td>
+	</tr>
+	<tr>
+		<td>그룹 소개</td>
+		<td th:text="*{team_explain}"></td>
+	</tr>
+	<tr>
+		<td>이미지</td>
+		<td>
+			<img th:if="*{team_image} != null" th:src="'/team/img?img='+*{team_image}" th:alt="*{team_name}+' 그룹의 이미지'">
+			<img th:if="*{team_image} == null" src="/images/team_default.jpg" alt="기본이미지"></img>
+		</td>
+	</tr>
+</table>
+<hr>
+<form th:action="@{/team/member/insert}" method="post">
+	<!-- 합치면 바꿔야댐. 로그인 정보에서 member_id 가져올 수 있도록. -->
+	<input type="hidden" name="member_id" th:value="${member_id}"> <br>
+	<input type="hidden" name="team_id" th:value="${dto.team_id}"> <br>
+	<label for="nickname">별명</label>
+	<input type="text" name="nickname" id="nickname" th:value="${member_userid}" required> <br>
+	<button type="submit">참가</button>	
+</form>
+</th:block>
+<th:block th:if="${overlap} != null">
+<input type="hidden" id="overlap" th:value="${overlap}">
+<script>
+	msg = document.getElementById("overlap").value;
+	alert(msg);
+	location.href="/";
+</script>
+</th:block>
+</body>
+</html>

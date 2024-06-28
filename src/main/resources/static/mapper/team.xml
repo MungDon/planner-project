@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.planner.mapper.TeamMapper">
+
+	<select id="teamNameOverlap" resultType="int">
+		select count(*) from team where team_name=#{team_name}
+	</select>
+
+	<insert id="teamInsert" parameterType="TeamDTO">
+		<selectKey keyProperty="team_id" resultType="long" order="BEFORE">
+			select team_seq.nextval from dual
+		</selectKey>
+		insert into team values(#{team_id}, #{team_name}, #{team_explain}, #{team_image})
+	</insert>
+
+	<update id="teamUpdate" parameterType="TeamDTO">
+		update team set team_name=#{team_name}, team_explain=#{team_explain}, team_image=#{team_image, jdbcType=VARCHAR} where team_id=#{team_id}
+	</update>
+
+	<delete id="teamDelete">
+		delete team where team_id=
+			(select team_id from team_member where member_id=#{member_id} and team_id=#{team_id} and tm_grade='TEAM_MASTER')
+	</delete>
+	
+	<select id="teamInfo" resultType="TeamDTO">
+		select * from team where team_id=#{team_id}
+	</select>
+
+</mapper>

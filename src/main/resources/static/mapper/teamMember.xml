@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.planner.mapper.TeamMemberMapper">
+
+	<select id="teamMemberOverlap" resultType="String">
+		select tm_grade from team_member where team_id=#{team_id} and member_id=#{member_id}
+	</select>
+
+	<insert id="insertTeamMember" parameterType="TeamMemberDTO">
+		insert into team_member values(
+			team_member_seq.nextval,
+			#{member_id},
+			#{team_id},
+			#{tm_grade},
+			sysdate,
+			#{tm_nickname}
+		)
+	</insert>
+
+	<select id="myinfo" resultType="TeamMyInfoDTO">
+		select t.team_id,
+			t.team_name,
+			tm.member_id,
+			tm.tm_grade,
+			tm.tm_nickname,
+			tm.tm_reg
+		from team t, team_member tm 
+		where t.team_id=tm.team_id
+			and t.team_id=#{team_id} 
+			and tm.member_id=#{member_id}
+	</select>
+
+	<select id="tmInfoList" resultType="TeamMemberDTO">
+		select * from team_member where team_id=#{team_id} order by tm_reg asc
+	</select>
+	
+	<update id="tmUpdate">
+		update team_member set tm_nickname=#{tm_nickname} where team_id=#{team_id} and member_id=#{member_id}
+	</update>
+	
+	<delete id="tmDelete">
+		delete team_member 
+		where team_id=#{team_id} 
+			and member_id=#{member_id} 
+			and tm_grade != 'TEAM_MASTER'
+	</delete>
+	
+	<update id="accept">
+		update team_member 
+		set tm_grade=#{tm_grade},
+			tm_reg=sysdate
+		where team_id=#{team_id}
+			and member_id=#{member_id}
+			and tm_grade = 'WAIT'
+	</update>
+	
+	<update id="gradeModify">
+		update team_member 
+		set tm_grade=#{tm_grade}
+		where team_id=#{team_id}
+			and member_id=#{member_id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>qwer1234</title>
+<link rel="stylesheet" type="text/css" href="/css/kakaomap.css">
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+	<div class="bbig ddiv">
+		<div class="ddiv"><h2 th:text=${date}></h2></div>	<!-- 여기 width = 100% , height : 한 10 ~ 20% 정도 ? --> <!-- YYYY MM DD 들어갈 곳 -->
+		<!-- 	<a> HH DD (start) ~ HH DD (end)</a> -->	<!-- 이미 적혀있는 일정임. 반복문을 통해서 일정을 꺼낼 꺼임. -->
+		<div th:each="scheduleDTO : ${list}" class="div_each ddiv">
+			<form onsubmit="return false" >
+				<input type="datetime-local" th:value="${scheduleDTO.schedule_start}" id="edtScheduleStart" name="schedule_start" readonly="readonly" />
+				<input type="datetime-local" th:value="${scheduleDTO.schedule_end}" id="edtScheduleEnd" name="schedule_end" readonly="readonly">			
+				<br />
+				<input type="hidden" th:value="${scheduleDTO.schedule_id}" name="schedule_id" class="schedule_id" />
+				<!-- <input type="hidden" th:value="${date}" naqqwe,22me="date" /> -->
+				<input type="text" th:value="${scheduleDTO.schedule_title}" class="schedule_title" name="schedule_title" readonly="readonly" />  <br />
+				<textarea th:value="${scheduleDTO.schedule_content}" th:utext="${scheduleDTO.schedule_content}" class="schedule_content" name="schedule_content" readonly="readonly"></textarea>
+				<br />
+				<div th:unless="${scheduleDTO.place == null }">
+					 <input type="hidden" class="mapPlace" th:value=${scheduleDTO.place} name="edt_place"  readOnly="readOnly"/> 
+					 <input type="hidden" class="mapAddress" th:value=${scheduleDTO.address} name="edt_address" readOnly="readOnly" />
+					<span th:text="${scheduleDTO.place}"></span>
+					<span th:text="${scheduleDTO.address}"></span>
+					<button type="button"  onclick="openModal(this)" class="edt_place" style="display:none">장소수정</button>
+				</div>
+				<button type="button" th:if="${scheduleDTO.place == null}" onclick="openModal(this)" class="add_place" style="display:none">장소추가</button>
+				<button type="button" onClick="enableInputs(this)" class="edit_btn" th:text="수정하기" style="display:inline-block;"></button>
+				<button type="button" th:value="${scheduleDTO.schedule_id}" onClick="editSchedule(this)" class="submit_btn" style="display:none;" >수정하기</button>
+				<button type="reset"  th:text="수정취소" class="none_btn" style="display:none;" onclick="resetForm(this)"> </button>
+				<button type="button" th:value="${scheduleDTO.schedule_id}"  class="delete_btn" onClick="del_btn(this)">삭제하기</button>
+			</form>
+		</div>		<!-- 반복 끝 -->
+		
+		
+		<div class="ddiv">		<!-- 여기서부터 글작성 파트 !-->
+			<button onclick="btnClick()">글작성</button>	<!--  가능하면 이 버튼을 누르면 div 창이 열려서 글작성 form  -->
+			<div id="my-div" class="my-div ddiv" >
+				<form id="form" method="post" onsubmit="return false">
+					<input type="text" placeholder="title" name="schedule_title" class="schedule_title" id="schedule_title" />
+					<input type="hidden" th:value="${date}" name="date"  id="date"/>
+					<input type="datetime-local" class="dateTimeLocal" name="schedule_start" > <span>~</span>
+					<input type="datetime-local" class="secondDateTimeLocal" name="schedule_end" > <br />
+					<textarea rows="10" cols="20" placeholder="content" name="schedule_content" id="schedule_content" ></textarea>
+					<br />
+				    <input type="text" id="mapPlace" th:value=${place} name="place"  readOnly="readOnly"/>
+				    <input type="text" id="mapAddress" th:value=${address} name="address" readOnly="readOnly" />
+					<button type="button"  onclick="openModal(this)">장소추가</button>
+					<br />
+					<input type="button" value="입력" onClick="writeSchedule()" />
+
+					 &nbsp; &nbsp;<br />
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="signChkModal" id="signModal">
+				<div class="modalBody">
+						<div class="Modaltop">
+							<button type="button" class="Xbtn" onclick="closeModal()">X</button>
+						</div>
+						<div class="modalMain">
+							<h1>test</h1>
+							<div class="map_wrap">
+							    <div id="map" style="width:500px;height:500px;position:relative;overflow:hidden;"></div>
+							    <div id="menu_wrap" class="bg_white">
+							        <div class="option">
+							            <div>
+							                <form onsubmit="searchPlaces(); return false;">	
+							                    키워드 : <input type="text" id="keyword" size="15"> 
+							                    <button type="submit">검색하기</button> 
+							                </form>
+							            </div>
+							        </div>
+							        <hr>
+							        <ul id="placesList"></ul>
+							        <div id="pagination"></div>
+							    </div>
+							</div>
+							<input type="hidden" th:value="${msg}" id="msg">
+
+							<div id="placeDisplay">장소: <span id="placeValue"></span></div>
+							<div id="addressDisplay">주소: <span id="addressValue"></span></div>
+							<form id="share"action="mapPro" method="post">
+								<input type ="hidden" name="place" class="place" />
+								<input type ="hidden" name="address" class="address"/>
+								<input type = "hidden" name="date" id="date" />
+								<button type="button" onclick="share()" id="insert_place" style="display:inline-block;" >장소 추가</button>
+								<button type="button" onclick="share()" id="update_place" style="display:none;" >장소 수정</button>
+							</form>
+							<form id="Favorites" action="list" method="post">
+								<input type ="hidden" name="map_title" id="map_title" readOnly="readOnly" />
+								<input type ="hidden" name="map_address" id="map_address" readOnly="readOnly"/>
+								<button type="submit" onclick="return Favorites()">즐겨찾기 추가</button>
+							</form>
+						</div>
+						<div class="btns">
+							<button type="button" class="closeBtn" onclick="closeModal()">확인</button>
+						</div>
+					</div>
+		</div>
+
+	<script th:src="@{/js/mapScript.js}"></script>
+	<script th:src="@{/js/kakaomap.js}"></script>
+<!-- <script th:src="@{/calendar.js}"></script> -->
+</body>
+</html>
+
+<!--  
+
+	.readOnly = true;	<< readOnly가 켜지는것.
+	.readOnly = false; << readOnly가 꺼지는것
+
+	.style.display = 'none';	<< 안보이게
+	.style.display = 'block';	<< 보이게
+
+	toISOString() 메서드는 자바스크립트의 Date 객체에서 제공하는 메서드로, UTC(협정 세계 시간) 기준의 날짜와 시간을 나타내는 문자열을 반환합니다.
+	
+	현재 , 제일 큰 div 에 height 지정을 했었음..
+	근데 ? 이제 지정이 되니까 내 글이 최대 크기가 되니까 그걸 넘어서 되더라.
+	따라서 일단은 height 지정을 안했음 . << 이러니까 늘어나면 자동으로 같이 늘어남., 
+	그런데?  최소 높이는 지정 해야 할거같음.
+	
+	버튼 두개 + 셀렉스 
+	 
+	 
+	 // 글 작성 건들기 전임 
+ 				<form action="/right" method="post" onsubmit="return dateCheck();" >
+					<input type="text" placeholder="title" name="schedule_title"/>
+					<input type="hidden" th:value="${date}" name="date" />
+					<input type="datetime-local" id="dateTimeLocal" name="schedule_start"> <span>~</span>
+					<input type="datetime-local" id="secondDateTimeLocal" name="schedule_end"> <br />
+					<textarea rows="10" cols="20" placeholder="content" name="schedule_content"></textarea>
+
+					 &nbsp; &nbsp;<br />
+					<button type="submit">입력하기</button>
+				</form>
+
+-->		

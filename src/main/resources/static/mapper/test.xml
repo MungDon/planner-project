@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.planner.mapper.MapRepository">
+
+	<insert id="MapInsert" parameterType="MapDTO">
+		insert into map values(
+			map_seq.NEXTVAL,
+			#{schedule_id},
+			#{place},
+			#{address}
+		)
+	</insert>
+	
+	<select id="MapList">
+		select count(*) from map  where map_number = ? 
+	</select>
+	
+	<delete id="MapDelete">
+		delete from map where schedule_id = #{schedule_id}
+	</delete>
+	
+</mapper>
+

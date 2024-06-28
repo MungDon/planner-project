@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  layout:decorate="~{layout/layout}">
+<head>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+	<div layout:fragment="content">
+	  	<main class="infoMain">
+		<h2>회원정보</h2>
+			<input type="hidden" id="status" th:value="${memberDTO.member_status}">
+			<table class="infoTable">
+				<tr class="i_tr1">
+					<th class="i_th1">이메일</th>
+					<td class="i_td1">
+						<span th:text="${memberDTO.member_email}"></span>
+					</td>
+					<td class="i_td1-1">
+						<a th:if="${memberDTO.oauth_id =='none'}" href="/member/auth/chk?url=update">회원 정보 수정 ></a>
+						<a th:if="${memberDTO.oauth_id !='none'}" href="/member/auth/update">회원 정보 수정 ></a>
+					</td>
+				</tr>
+				<tr class="i_tr2">
+					<th class="i_th2">회원명</th>
+					<td class="i_td2">
+						<span th:text="${memberDTO.member_name}"></span>
+					</td>
+				</tr>
+				<tr class="i_tr3">
+					<th class="i_th3">생일</th>
+					<td class="i_td3">
+						<span th:text="${#temporals.format(memberDTO.member_birth,'yyyy/MM/dd')}"></span>
+					</td>
+				</tr>
+				<tr class="i_tr4">
+					<th class="i_th4">휴대폰번호</th>
+					<td class="i_td4">
+						<span th:text="${memberDTO.member_phone}"></span>
+					</td>
+				</tr>
+				<tr class="i_tr5">
+					<th class="i_th5">성별</th>
+					<td class="i_td5">
+						<span th:text="${gender}"></span>
+					</td>
+				</tr>
+			</table>
+			<div class="userDeleteBtnBox">
+				<!-- 일반 로그인 -->
+				<a th:if="${memberDTO.oauth_id =='none'}" href="/member/auth/chk?url=delete">회원탈퇴</a>
+				<!-- 소셜 로그인 -->
+				<button th:if="${memberDTO.oauth_id !='none'}" type="button" class="userDeleteBtn">회원탈퇴</button>
+			</div>
+		</main>
+		<script type="text/javascript" src="/js/member/memberInfo.js"></script>
+	</div>
+</body>
+</html>

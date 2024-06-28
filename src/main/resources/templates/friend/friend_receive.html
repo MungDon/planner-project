@@ -14,16 +14,19 @@
 			</tr>
 			<tr th:each="friendRequestDTO : ${receiveList}">
 				<td>	<!-- 이메일 클릭 시 회원정보로 이동 -->
-					<form action="/member/auth/memberInfo" method="post" th:attr="id='infoForm' + ${friendRequestDTO.friend_request_id}">
-						<a onclick="infoForm()" class="infoA" th:attr="data-info='infoForm' + ${friendRequestDTO.friend_request_id}" href="javascript:void(0);">
+<!-- 					<form action="/member/auth/info" method="get" th:attr="id='infoForm' + ${friendRequestDTO.friend_request_id}"> -->
+<!-- 						<a onclick="infoForm()" class="infoA" th:attr="data-info='infoForm' + ${friendRequestDTO.friend_request_id}" href="javascript:void(0);"> -->
+						<a th:href="@{|/member/auth/info/${friendRequestDTO.member_send_id}|}">
 							[[${friendRequestDTO.member_email}]]
 						</a>
-						<input type="hidden" name="member_email" th:value="${friendRequestDTO.member_email}"			/>
-						<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
-					</form>
+<!-- 						</a> -->
+<!-- 						<input type="hidden" name="member_email" th:value="${friendRequestDTO.member_email}"	/> -->
+<!-- 						<input type="hidden" name="infoRoot" value="receive"	/>			회원정보 / 어디에서 왔는지 표시 -->
+<!-- 						<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/> -->
+<!-- 					</form> -->
 				</td>
 				<td>
-					<form action="/friend/friendAccept" method="post">
+					<form action="/friend/accept" method="post">
 						<button type="submit">수락</button>
 						<input type="hidden" name="member_send_id" th:value="${friendRequestDTO.member_send_id}"	/>
 						<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
@@ -37,7 +40,7 @@
 				</td>
 			</tr>
 		</table>
+		<script type="text/javascript" src="/js/friend/friendRequest.js"></script>
 	</div>
-	<script layout:fragment="script" type="text/javascript" src="/js/friendRequest.js"></script>
 </body>
 </html>

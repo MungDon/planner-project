@@ -45,25 +45,18 @@ public interface MemberMapper {
 
 	/* 주썽이햄 */
 //	회원 시퀀스로 객체 가져오기
-	public MemberDTO findByMemberSeq(Long member_id);
-
+	public MemberDTO findByMemberSeq(Long member_id);	// 친구 객체 찾을 때 사용
+	
 //	회원 이메일로 시퀀스 가져오기
 	public Long findByMemberId(String member_email);
-
+	
 //	회원 시퀀스로 이메일 찾기
-	public String findByMemberEmail(Long member_id);
-
-//	회원 시퀀스로 회원이름 찾기
-	public String findByMemberName(Long member_id);
-
+	public String findByMemberEmail(Long member_id);	// 친구 이메일 찾을 때 사용
+	
 //	회원 검색
-	public List<MemberDTO> memberSearch(@Param("member_id") Long member_id, @Param("keyword") String keyword,
-			@Param("start") int start, @Param("end") int end);
-
+	public List<MemberDTO> search(@Param("member_id") Long member_id, @Param("keyword") String keyword,
+								  @Param("start") int start, @Param("end") int end);
+	
 //	친구신청 보낸 아이디 찾기
 	public List<MemberDTO> findBySendId(@Param("member_id") Long member_id, @Param("keyword") String keyword);
-
-//	회원정보
-	public MemberDTO memberInfo(String member_email);
-
 }
