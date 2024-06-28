@@ -1,6 +1,5 @@
 package com.planner.controller;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +30,7 @@ public class FriendController {
 	private final FriendService friendService;
 	private final MemberService memberService;
 	
-//	친구찾기 리스트 Get
+//	친구찾기 리스트
 //	@PreAuthorize("isAuthenticated()")
 //	@GetMapping("findFriend")
 //	public String findFriend() {
