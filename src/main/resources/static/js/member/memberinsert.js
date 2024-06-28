@@ -17,6 +17,7 @@ function validateInsert() {
 	const genderSelected = document.querySelector('input[name="member_gender"]:checked');
 	const phone = document.getElementById("phone");
 	const signChk = document.getElementById("signChk");
+	const emailChkBox = document.getElementById("emailChkBox");
 	const name = document.getElementById("name");
 	const failText = document.getElementById("failText");
 	const pw = document.getElementById('pw').value;
@@ -44,6 +45,10 @@ function validateInsert() {
 		alert("개인정보 수집에 동의해주세요.");
 		return false;
 	}
+	if (!emailChkBox.checked) {
+		alert("이메일 인증은 필수입니다.");
+		return false;
+	}
 	if (birthDate.value > getTodayDate()) {
 		alert("만 9세 이상만 가입 가능합니다.");
 		return false;
@@ -54,10 +59,13 @@ function validateInsert() {
 	}
 	return true;
 }
+// 모달창 켜기
 function openModal() {
 	const signModal = document.getElementById("signModal");
 	signModal.style.display = "block";
 }
+
+// 모달창 끄기
 function closeModal() {
 	const signModal = document.getElementById("signModal");
 	signModal.style.display = "none";

@@ -62,7 +62,9 @@ public class MemberController {
 	
 	/* 이메일 인증*/
 	@PostMapping("/anon/email/chk")
+	@ResponseBody
 	public String emailChk(@RequestParam(value = "toEmail")String toEmail) {
+		
 		return null;
 	}
 	
