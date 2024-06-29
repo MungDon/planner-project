@@ -63,8 +63,11 @@ public class MemberController {
 	/* 이메일 인증*/
 	@PostMapping("/anon/email/chk")
 	@ResponseBody
-	public String emailChk(@RequestParam(value = "toEmail")String toEmail) {
-		
+	public ResponseEntity<String> emailChk(@RequestParam(value = "toEmail")String toEmail) {
+		boolean member = memberService.isMember(toEmail);
+		if(member) {
+			throw new CustomException(ErrorCode.ID_DUPLICATE);
+		}
 		return null;
 	}
 	
