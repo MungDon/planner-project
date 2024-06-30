@@ -5,6 +5,7 @@
 	  layout:decorate="~{layout/layout}">
 <head>
 <link rel="stylesheet" type="text/css" href="/css/memberinsert.css">
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	<div layout:fragment="content">
@@ -22,7 +23,6 @@
 				<div class="inputCodeBox" id="inputCodeBox">
 					<span>인증번호를 입력해주세요.</span>
 					<input type="text" name="inputCode" id="inputCode">
-					<input type="hidden" id="authCode" th:value="${authCode}">
 					<button type="button" class="codeChk">인증완료</button>
 				</div>
 				

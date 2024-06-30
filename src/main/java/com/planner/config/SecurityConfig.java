@@ -54,6 +54,7 @@ public class SecurityConfig {
                   .requestMatchers(new AntPathRequestMatcher("/team/**")).hasRole("USER")	
                   .requestMatchers(new AntPathRequestMatcher("/vote/**")).hasRole("USER")	
                   .requestMatchers(new AntPathRequestMatcher("/reply/**")).hasRole("USER")	
+                  .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")	
                   .anyRequest().authenticated()
           )
           .oauth2Login(configure ->															// OAuth2 인증 로그인( 소셜 ) 정의

@@ -73,6 +73,7 @@ public class OAuth2UserPrincipal implements OAuth2User, UserDetails {
 	public String getType() {
 		return userInfo.getType();
 	}
+	
 	public String getRole() {
 		return userInfo.getRole();
 	}

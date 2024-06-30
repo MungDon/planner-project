@@ -15,9 +15,10 @@ public enum ErrorCode {
 	DB_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"데이터 삭제 실패, 다시 시도해도 안될 시 운영자에게 문의 해주세요"),
 	FILE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패하였습니다, 다시 시도해도 안될 시 운영자에게 문의 해주세요"),
 	WITHDRAWN_MEMBER(HttpStatus.FORBIDDEN,"탈퇴한 회원입니다."),
-	
 	REQUEST_DUPLICATE(HttpStatus.CONFLICT,"이미 신청하였습니다."),
-	INELIGIBLE_REQUEST(HttpStatus.BAD_REQUEST,"신청대상이 아닙니다.");
+	INELIGIBLE_REQUEST(HttpStatus.BAD_REQUEST,"신청대상이 아닙니다."),
+	FAIL_CREATE_AUTHCODE(HttpStatus.INTERNAL_SERVER_ERROR,"인증코드 발급이 실패하였습니다."),
+	FAIL_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR,"이메일 전송 실패.");
 	
 	private final  HttpStatus status; // http 상태코드
 	private final String message;	// 에러 메세지

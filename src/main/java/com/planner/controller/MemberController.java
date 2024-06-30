@@ -33,6 +33,7 @@ import com.planner.service.MemberService;
 import com.planner.util.CommonUtils;
 import com.planner.util.UserData;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -52,25 +53,36 @@ public class MemberController {
 		CommonUtils.removeCookiesAndSession(request, response);
 		return "redirect:/member/logout";
 	}
-
-
+	
+	/*사용자 이메일로 인증코드 보내기*/
+	@PostMapping("/anon/email/chk")
+	@ResponseBody
+	public ResponseEntity<String> emailChk(@RequestParam(value = "toEmail")String toEmail) throws MessagingException {
+		boolean member = memberService.isMember(toEmail);
+		if(member) {
+			throw new CustomException(ErrorCode.ID_DUPLICATE);
+		}
+		emailService.sendAuthCode(toEmail);
+		return ResponseEntity.ok("ok");
+	}
+	
+	/*인증코드 검증*/
+	@PostMapping("/anon/code/chk")
+	@ResponseBody
+	public  ResponseEntity<String> authCodeChk(@RequestParam(value = "toEmail")String toEmail,@RequestParam(value = "authCode")String authCode){
+		int result = 0;
+		result = emailService.authCodeChk(toEmail,authCode);
+		if(result != 1) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+		}
+		return ResponseEntity.ok("ok");
+	}
+	
 	//	회원가입 Get
 	@GetMapping("/anon/insert")
 	public String memberInsert() {
 		return "/member/member_insert";
 	}
-	
-	/* 이메일 인증*/
-	@PostMapping("/anon/email/chk")
-	@ResponseBody
-	public ResponseEntity<String> emailChk(@RequestParam(value = "toEmail")String toEmail) {
-		boolean member = memberService.isMember(toEmail);
-		if(member) {
-			throw new CustomException(ErrorCode.ID_DUPLICATE);
-		}
-		return null;
-	}
-	
 	//	회원가입 Post
 	@PostMapping("/anon/insert")
 	public String memberInsert(MemberDTO memberDTO, RedirectAttributes rttr) {

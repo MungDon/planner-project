@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.planner.mapper.EmailMapper">
-	
+	<insert id="saveAuthCode">
+		INSERT INTO email(
+			email_id,
+			to_email,
+			auth_code
+		) VALUES (
+			nextval('email_seq'),
+			#{toEmail},
+			#{authCode}
+		)
+	</insert>
+	<select id="authCodeChk" resultType="int">
+		SELECT	count(*)
+		FROM 	email
+		WHERE 
+			to_email = #{toEmail} and auth_code = #{authCode}
+			
+	</select>
 </mapper>
