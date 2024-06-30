@@ -17,7 +17,8 @@ $(function() {
 				inputCodeBox.css("display", "block");
 			},
 			function() {
-				alert("인증코드 전송 실패!");
+				alert("이미 가입된 회원입니다");
+				inputCodeBox.css("display", "none");
 			});
 	});
 

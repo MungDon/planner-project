@@ -60,7 +60,7 @@ public class MemberController {
 	public ResponseEntity<String> emailChk(@RequestParam(value = "toEmail")String toEmail) throws MessagingException {
 		boolean member = memberService.isMember(toEmail);
 		if(member) {
-			throw new CustomException(ErrorCode.ID_DUPLICATE);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
 		}
 		emailService.sendAuthCode(toEmail);
 		return ResponseEntity.ok("ok");
