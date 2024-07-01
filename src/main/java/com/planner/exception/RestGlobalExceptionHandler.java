@@ -1,22 +1,34 @@
 package com.planner.exception;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import jakarta.mail.MessagingException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestControllerAdvice
 public class RestGlobalExceptionHandler {
 	/**
-	 * MessagingException 에러 처리/ 이메일 전송 실패시
-	 * @param e (MessagingException) 예외
-	 * @param model
+	 * MailSendException 에러 처리/ 이메일 전송 실패시
+	 * @param e (MailSendException) 예외
 	 * @return
 	 */
-	@ExceptionHandler(MessagingException.class)
-	public String handleMessagingException(MessagingException e, Model model) {
-		model.addAttribute("errorMessage",ErrorCode.FAIL_SEND_EMAIL.getMessage());
-		return "/error/throws_error";
+	@ExceptionHandler(MailSendException.class)
+	public ResponseEntity<ErrorResponse> handleMailSendException(MailSendException e) {
+		log.info("메일전송 실패");
+		return ErrorResponse.toResponseEntity(ErrorCode.FAIL_SEND_EMAIL);
+	}
+	
+	/**
+	 * RestCustomException 커스텀 예외처리
+	 * @param e(RestCustomException) 예외
+	 * @return
+	 */
+	@ExceptionHandler(RestCustomException.class)
+	public ResponseEntity<ErrorResponse> handleRestCustomException(RestCustomException e){
+		return ErrorResponse.toResponseEntity(e.getErrorCode());
 	}
 }

@@ -21,8 +21,9 @@ $(function() {
 					openModal(modalId);
 				}
 			},
-			function() {
-				alert("이미 가입된 회원입니다");
+			function(errorResponse) {
+				const response = errorResponse.responseJSON;
+				alert(response.message);
 			}
 		);
 	}

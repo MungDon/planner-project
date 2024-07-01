@@ -3,16 +3,17 @@ package com.planner.exception;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
+@Builder
 @AllArgsConstructor
 public class ErrorResponse {
 		
@@ -35,6 +36,12 @@ public class ErrorResponse {
 		} 
 
 
+		public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorCode){
+			return ResponseEntity.status(errorCode.getStatus().value())
+												.body(ErrorResponse.builder()
+														.message(errorCode.getMessage())
+														.build());
+		}
 
 
 		//Valid 에러감지

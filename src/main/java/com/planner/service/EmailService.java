@@ -8,8 +8,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.planner.exception.CustomException;
 import com.planner.exception.ErrorCode;
+import com.planner.exception.RestCustomException;
 import com.planner.mapper.EmailMapper;
 
 import jakarta.mail.MessagingException;
@@ -55,7 +55,7 @@ public class EmailService {
 		
 		int result = emailMapper.saveAuthCode(toEmail, authCode.toString()); // 인증코드저장
 		if(result != 1) {
-			throw new CustomException(ErrorCode.FAIL_CREATE_AUTHCODE);
+			throw new RestCustomException(ErrorCode.FAIL_CREATE_AUTHCODE);
 		}
 		return authCode.toString();
 	}

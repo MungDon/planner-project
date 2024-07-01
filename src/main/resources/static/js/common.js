@@ -23,9 +23,9 @@ function ajaxCall(url, method, param,csrfHeader, csrfToken, successFn, errorFn) 
 				successFn(data);
 			}
 		},
-		error: function() {
+		error: function(xhr) {
 			if (typeof errorFn == "function") {
-				errorFn();
+				errorFn(xhr);
 			}
 		}
 	});
