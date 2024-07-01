@@ -1,5 +1,6 @@
 package com.planner.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -57,7 +57,7 @@ public class MemberController {
 	/*사용자 이메일로 인증코드 보내기*/
 	@PostMapping("/anon/email/chk")
 	@ResponseBody
-	public ResponseEntity<String> emailChk(@RequestParam(value = "toEmail")String toEmail) throws MessagingException {
+	public ResponseEntity<String> emailChk(@RequestParam(value = "toEmail")String toEmail) throws MessagingException, UnsupportedEncodingException {
 		boolean member = memberService.isMember(toEmail);
 		if(member) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");

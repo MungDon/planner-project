@@ -60,13 +60,13 @@ function validateInsert() {
 	return true;
 }
 // 모달창 켜기
-function openModal() {
-	const signModal = document.getElementById("signModal");
+function openModal(modalId) {
+	const signModal = document.getElementById(modalId);
 	signModal.style.display = "block";
 }
 
 // 모달창 끄기
-function closeModal() {
-	const signModal = document.getElementById("signModal");
+function closeModal(modalId) {
+	const signModal = document.getElementById(modalId);
 	signModal.style.display = "none";
 }

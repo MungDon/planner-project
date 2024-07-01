@@ -15,7 +15,7 @@
 	flex-direction: column;
 	box-shadow: 0px 0px 10px 1px #a8c9ff;
 }
-
+/* input */
 .insertForm>input {
 	font-size: 20px;
 	width: 100%;
@@ -32,10 +32,69 @@
 .insertForm>input::placeholder {
 	font-size: 15px;
 }
+#inputCode:focus {
+	outline: none;
+	border-bottom: 2px solid skyblue;
+}
+#inputCode{
+	font-size: 20px;
+	width: 100%;
+	margin: 15px 0 15px 0;
+	border-style: none;
+	border-bottom: 2px solid #ddd;
+}
 
-.insertForm>label {
+/* text */
+.insertForm>label,.emailText {
 	font-size: 15px;
 	color: gray;
+}
+.authChkText{
+	font-size: 13px;
+	color: darkgray;
+}
+#failText {
+	width: 420px;
+	display: flex;
+	flex-wrap: wrap;
+	color: red;
+	display: flex;
+}
+.joinText ,.authText{
+	color: gray;
+	font-weight: bold;
+	font-size: 27px;
+	margin-bottom: 20px;
+}
+.emailText{
+	display: flex;
+	flex-direction: row;
+}
+/* btn */
+.joinBtn {
+	width: 100%;
+	font-size: 15px;
+	font-weight: bold;
+	color: gray;
+	margin-top: 50px;
+	height: 45px;
+	border: 2px solid gray;
+	border-radius: 10px;
+	background-color: white;
+}
+.emailChkBtn,.codeChkBtn,.resendBtn{
+	width: 30%;
+	font-size: 15px;
+	font-weight: bold;
+	color: gray;
+	height: 45px;
+	border: 2px solid gray;
+	border-radius: 10px;
+	background-color: white;
+}
+.Modaltop, .btns {
+	width: 100%;
+	text-align: right;
 }
 
 .genderCon {
@@ -59,35 +118,14 @@
 #birth {
 	text-align: center;
 }
-
-#failText {
-	width: 420px;
-	display: flex;
-	flex-wrap: wrap;
-	color: red;
-	display: flex;
-}
-
-.joinBtn {
+.emailChkBtnBox{
 	width: 100%;
-	font-size: 15px;
-	font-weight: bold;
-	color: gray;
-	margin-top: 50px;
-	height: 45px;
-	border: 2px solid gray;
-	border-radius: 10px;
-	background-color: white;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
 }
-
-.joinText {
-	color: gray;
-	font-weight: bold;
-	font-size: 27px;
-	margin-bottom: 20px;
-}
-
-.signChkModal {
+	
+.signChkModal,.authCodeModal {
 	position: absolute;
 	display: none;
 	justify-content: center;
@@ -98,7 +136,7 @@
 	background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modalBody {
+.modalBody{
 	position: absolute;
 	width: 500px;
 	top: 50%;
@@ -110,15 +148,11 @@
 	top: 50%;
 }
 
-.Modaltop, .btns {
-	width: 100%;
-	text-align: right;
-}
 
 .modalMain {
+	width : 100%;
 	display: flex;
 	flex-direction: column; 
-	align-items : center;
 	justify-content: center;
 	align-items: center;
 }
@@ -140,6 +174,33 @@
 	font-weight: bold;
 	cursor: pointer;
 }
+.inputCodeCon{
+	display: flex;
+	flex-direction : column;
+	width : 100%;
+}
+
 .inputCodeBox{
-	display : none;
+	margin : 10px 0 10px 0;
+}
+
+.authCodeBtns{
+	display: flex;
+	align-items : center;
+	justify-content :flex-end;
+	flex-direction: row;
+	width: 100%;
+}
+.resendBtn{
+	margin-left: 10px;
+}
+.disabled-checkbox { /*disabled custom chk*/
+    pointer-events: none; /* 클릭 막기 */
+    background-color: #07ed4c;
+    border: 1px solid #ccc;
+}
+.disabled-uncheck{ /*disabled custom unchk*/
+    pointer-events: none; /* 클릭 막기 */
+    background-color: white;
+    border: 1px solid #ccc;
 }
