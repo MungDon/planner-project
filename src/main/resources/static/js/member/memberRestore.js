@@ -31,20 +31,8 @@ $(function() {
 			alert('일반로그인 이용 회원은 복구신청 시 비밀번호는 필수 입니다.');
 			return;
 		}
-
-		$.ajax({
-			url: "/member/anon/restore",
-			type: "post",
-			data: {
-				currentEmail: currentEmail,
-				currentPassword: currentPassword,
-				oauth_type: oauth_type
-			},
-			beforeSend: function(xhr) {
-				// CSRF 토큰을 요청 헤더에 포함 / 토큰 안넘기면 security에 걸려서 403에러뜸
-				xhr.setRequestHeader(csrfHeader, csrfToken);
-			},
-			success: function(data) {
+		ajaxCall("/member/anon/restore", "post", { currentEmail, currentPassword, oauth_type }, csrfHeader, csrfToken,
+			function(data) {
 				switch (data) {
 					case 0:
 						alert("입력한 계정정보는 유효하지 않은정보입니다.");
@@ -64,11 +52,10 @@ $(function() {
 						break;
 				}
 			},
-			error: function() {
+			function() {
 				alert('복구신청이 실패하였습니다.');
 				location.href = "/member/anon/login";
 			}
-		});
-
+		);
 	});
 });
