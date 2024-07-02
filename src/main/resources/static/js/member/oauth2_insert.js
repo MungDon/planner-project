@@ -49,11 +49,3 @@ function validateOauth2Insert() {
 	}
 	return true;
 }
-function openModal(){
-	 const signModal = document.getElementById("signModal");
-	 signModal.style.display = "block";
-}
-function closeModal(){
-	 const signModal = document.getElementById("signModal");
-	 signModal.style.display = "none";
-}

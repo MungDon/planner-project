@@ -1,5 +1,5 @@
 $(function() {
-	$(document).ready(function() {
+	$(document).ready( () => {
 		const status = $("#status").val();
 		if (status === null || status != 'B') {
 			alert('권한이없습니다');
@@ -7,12 +7,10 @@ $(function() {
 		}
 	});
 	$(document).on("click", ".userDeleteBtn", () => {
-		let csrfToken = $("meta[name='_csrf']").attr("content");
-		let csrfHeader = $("meta[name='_csrf_header']").attr("content");
 		if (!confirm('정말 회원탈퇴를 하시겠습니까?')) {
 			return false;
 		}
-		ajaxCall("/member/auth/delete", "delete", null, csrfHeader, csrfToken,
+		ajaxCall("/member/auth/delete", "delete", null,
 			function() {
 				location.href = "/planner/main";
 			}, function() {

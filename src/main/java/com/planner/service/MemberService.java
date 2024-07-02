@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.planner.dto.request.friend.FriendRequestDTO;
 import com.planner.dto.request.member.MemberDTO;
+import com.planner.dto.request.member.ReqChangePassword;
 import com.planner.dto.request.member.ReqMemberRestore;
 import com.planner.dto.request.member.ReqMemberUpdate;
 import com.planner.dto.response.member.ResMemberDetail;
@@ -57,7 +58,6 @@ public class MemberService {
 	}
 
 	/* 비번체크 */
-	@Transactional(readOnly = true)
 	public int passwordChk(String currnetPw, ResMemberDetail member) {
 		int result = 0;
 		if (member != null && !member.getOauth_id().equals("none")) {
@@ -178,6 +178,13 @@ public class MemberService {
 		if (type.equals("findPw") && !isMember(toEmail)) {
 			throw new RestCustomException(ErrorCode.NO_ACCOUNT);
 		}
+	}
+	
+	/*비밀번호 변경*/
+	public int changePassword(ReqChangePassword req) {
+		req.setNewPassword(passwordEncoder.encode(req.getNewPassword()));
+		int result = memberMapper.changePassword(req);
+		return result;
 	}
 
 	/*

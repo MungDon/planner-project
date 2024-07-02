@@ -16,8 +16,6 @@ $(function() {
 		const currentEmail = $("#currentEmail").val();
 		const currentPassword = $("#currentPassword").val();
 		const oauth_type = $("#oauth_type").val();
-		let csrfToken = $("meta[name='_csrf']").attr("content");
-		let csrfHeader = $("meta[name='_csrf_header']").attr("content");
 
 		if (currentEmail == null || currentEmail == "") {
 			alert('이메일을 입력해주세요');
@@ -31,7 +29,7 @@ $(function() {
 			alert('일반로그인 이용 회원은 복구신청 시 비밀번호는 필수 입니다.');
 			return;
 		}
-		ajaxCall("/member/anon/restore", "post", { currentEmail, currentPassword, oauth_type }, csrfHeader, csrfToken,
+		ajaxCall("/member/anon/restore", "post", { currentEmail, currentPassword, oauth_type },
 			function(data) {
 				switch (data) {
 					case 0:

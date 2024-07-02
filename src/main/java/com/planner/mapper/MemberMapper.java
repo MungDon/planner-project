@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.planner.dto.request.member.MemberDTO;
+import com.planner.dto.request.member.ReqChangePassword;
 import com.planner.dto.request.member.ReqMemberUpdate;
 import com.planner.dto.request.member.ReqOAuth2MemberAdd;
 import com.planner.dto.request.member.ReqOAuth2Signup;
@@ -44,6 +45,9 @@ public interface MemberMapper {
 			@Param(value = "member_status") String member_status);
 	/*회원계정수(소셜로그인시 여러개일수있음)*/
 	int accountCount(@Param(value = "toEmail")String toEmail);
+	
+	/*회원 비밀번호 변경*/
+	int changePassword(ReqChangePassword req);
 	
 	/* 주썽이햄=======================================================>*/
 //	회원 시퀀스로 객체 가져오기

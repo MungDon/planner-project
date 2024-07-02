@@ -1,29 +1,35 @@
 // null 체크공동 메서드
-function isNull(chkData) {
+const isNull = (chkData) => {
 	if (chkData == null || chkData == "") {
 		return true;
 	}
 	return false;
 }
+
+// CSRF 토큰
+let csrfToken = $("meta[name='_csrf']").attr("content");
+let csrfHeader = $("meta[name='_csrf_header']").attr("content");
+
+const defaultErrorFn = (errorResponse) => {
+	const response = errorResponse.responseJSON;
+	alert(response.message);
+};
 // AJAX 공통 
-function ajaxCall(url, method, param,csrfHeader, csrfToken, successFn, errorFn) {
-	console.log(method);
-	console.log(csrfHeader);
-	console.log(csrfToken);
+const ajaxCall = ({ url, method, param, successFn, errorFn = defaultErrorFn}) => {
 	$.ajax({
 		url: url,
 		method: method,
 		data: param,
-		beforeSend: function(xhr) {
+		beforeSend: (xhr) => {
 			// CSRF 토큰을 요청 헤더에 포함
 			xhr.setRequestHeader(csrfHeader, csrfToken);
 		},
-		success: function(data) {
+		success: (data) => {
 			if (typeof successFn == "function") {
 				successFn(data);
 			}
 		},
-		error: function(xhr) {
+		error: (xhr) => {
 			if (typeof errorFn == "function") {
 				errorFn(xhr);
 			}

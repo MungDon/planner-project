@@ -132,6 +132,10 @@
 			member_email = #{toEmail}
 	</select>
 	
+	<update id="changePassword" parameterType="ReqChangePassword">
+		UPDATE member
+	</update>
+	
 	<!-- ================== 주성이햄========================= -->
 
 	<!-- 회원 이메일로 객체 가져오기 -->

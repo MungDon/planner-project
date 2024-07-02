@@ -128,7 +128,7 @@ public class MemberController {
 	@PostMapping("/anon/pw/change")
 	public String pwChange(ReqChangePassword req) {
 		if(req.getNewPassword().equals(req.getNewPassword2())) {
-			//memberService.changePassword(req);
+			memberService.changePassword(req);
 		}
 		return "redirect:/member/anon/login";
 	}
