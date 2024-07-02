@@ -27,6 +27,8 @@ public class EmailService {
 	@Value("${spring.mail.username}")
 	private String senderEmail;
 
+	
+	
 	// 이메일 인증 코드 보내기
 	@Transactional
 	public void sendAuthCode(String toEmail) throws MessagingException, UnsupportedEncodingException {
@@ -82,7 +84,7 @@ public class EmailService {
 		return result;
 	}
 
-	// 스켈쥴러로 정기적으로 잉여데이터 전부다 삭제
+	// 스케쥴러로 정기적으로 잉여데이터 전부다 삭제
 	@Transactional
 	public void removeAllEmailAuthCode() {
 		emailMapper.removeAll();

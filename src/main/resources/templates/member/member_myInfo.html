@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	  layout:decorate="~{layout/layout}">
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
-	<div layout:fragment="content">
 	  	<main class="infoMain">
 		<h2>회원정보</h2>
 			<input type="hidden" id="status" th:value="${memberDTO.member_status}">
@@ -55,6 +55,5 @@
 			</div>
 		</main>
 		<script type="text/javascript" src="/js/member/memberInfo.js"></script>
-	</div>
 </body>
 </html>

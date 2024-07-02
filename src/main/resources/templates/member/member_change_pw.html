@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>비번 변경</title>
+
+</head>
+<body>
+	<header th:replace="~{/fragments/header :: headerLayout}"></header>
+	<main class="pwChangeMain">
+		<!-- th:action 쓰면 자동으로 csrf 토큰 넣어줌 -->
+		<form class="pwChangeForm" th:action="@{/member/anon/pw/change}" method="post" onsubmit="return changePwValid()">
+			<input type="hidden" name="member_id" th:value="${member_id}">
+			<input type="password" name="newPassword" placeholder="새로운 비밀번호를 입력하세요."> 
+			<input type="password" name="newPassword2" placeholder="비밀번호재입력 하세요."> 
+			<button type="submit">변경</button>
+		</form>
+	</main>
+</body>
+</html>

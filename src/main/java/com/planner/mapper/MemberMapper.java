@@ -42,8 +42,10 @@ public interface MemberMapper {
 	/* 회원 상태변경 */
 	int changeMemberStatus(@Param(value = "member_id") Long member_id,
 			@Param(value = "member_status") String member_status);
-
-	/* 주썽이햄 */
+	/*회원계정수(소셜로그인시 여러개일수있음)*/
+	int accountCount(@Param(value = "toEmail")String toEmail);
+	
+	/* 주썽이햄=======================================================>*/
 //	회원 시퀀스로 객체 가져오기
 	public MemberDTO findByMemberSeq(Long member_id);	// 친구 객체 찾을 때 사용
 	

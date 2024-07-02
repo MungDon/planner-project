@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>비밀번호 찾기</title>
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<link rel="stylesheet" href="/css/find_pw.css">
+<link rel="stylesheet" href="/css/layout.css">
+</head>
+<body>
+	<header th:replace="~{/fragments/header :: headerLayout}"></header>
+	<main class="findPwMain">
+		<div class="emailInputBox">
+		<span class="findPwText">비밀번호를 찾기/변경 위해서 현재 가입한 이메일을 입력하세요</span>
+			<input type="email" id="email" autocomplete="email" th:value="${member_email}" placeholder="현재 가입한 이메일을 입력하세요.">
+			<input type="hidden" id="type" value="findPw">
+			<button type="button" class="emailChkBtn">이메일 인증</button>
+		</div>			
+			
+		<!-- 인증코드 입력 모달 -->
+		<div class="authCodeModal" id="authCodeModal">
+			<div class="modalBody">
+				<div class="Modaltop">
+					<button type="button" class="Xbtn" onclick="closeModal('authCodeModal')">X</button>
+				</div>
+				<div class="modalMain">
+					<div class="inputCodeCon" id="inputCodeBox">
+						<span class="authText">인증번호를 입력해주세요.</span>
+						<div class="inputCodeBox">
+							<input type="text" name="inputCode" id="inputCode">
+						</div>
+						<div class="authCodeBtns">
+							<button type="button" class="codeChkBtn">인증완료</button>
+							<button type="button" class="resendBtn">인증번호 재전송</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<script src="/js/modal.js"></script>
+	<script src="/js/common.js"></script>
+	<script src="/js/member/email_chk.js"></script>
+</body>
+</html>

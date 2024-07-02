@@ -125,7 +125,12 @@
 			oauth_type = #{oauth_type}
 	</select>
 	
-	
+	<select id="accountCount">
+		SELECT 	count(*)
+		FROM	member
+		WHERE
+			member_email = #{toEmail}
+	</select>
 	
 	<!-- ================== 주성이햄========================= -->
 

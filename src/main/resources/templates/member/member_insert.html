@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layout/layout}">
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-<link rel="stylesheet" type="text/css" href="/css/memberinsert.css">
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/memberinsert.css">
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
-	<div layout:fragment="content">
 		<main class="insertMain">
 			<form action="/member/anon/insert" method="post" class="insertForm" onsubmit="return validateInsert()">
 				<!-- csrf 토큰 -->
@@ -17,10 +17,10 @@
 				<span class="joinText">회원가입을 위해<br> 정보를 입력해주세요</span>
 				
 				<div class="emailText">
-					<label for="email">이메일(아이디)</label><input type="checkbox" id="emailChkBox"><span class="">인증여부</span>
+					<label for="email">이메일(아이디)</label><input type="checkbox" id="emailChkBox"><span class="authChkText">인증여부</span>
 				</div>
 				<input type="email" name="member_email" id="email" required="required" autocomplete="email"/>
-				
+				<input type="hidden" id="type" value="insert">
 				<!-- 이메일 인증 버튼 -->
 				<div class="emailChkBtnBox">
 					<button type="button" class="emailChkBtn" id="emailChkBtn">이메일 인증</button>
@@ -28,14 +28,16 @@
 
 				<label for="pw">비밀번호</label>
 				<input type="password" name="member_password" id="pw" required="required"	/>
+				
 				<label for="pw">비밀번호 재확인</label>
 				<input type="password"  id="pw2" required="required"	/>
 				<div id="failText"></div>
+				
 				<label for="name">이름</label>
 				<input type="text" name="member_name" id="name"	 required="required"/>
 				
 				<label for="birth">생년월일</label>
-				<input type="date" name="member_birth" id="birth" required="required"	/>
+				<input type="date" name="member_birth" id="birth" required="required"/>
 				
 				<label for="phone">전화번호</label>
 				<input type="number" name="member_phone" id="phone" required="required" placeholder="-빼고 작성해주세요" />			
@@ -96,9 +98,9 @@
 		</main>
 		
 		<!-- 스크립트 -->
+		<script src="/js/modal.js"></script>
 		<script src="/js/member/email_chk.js"></script>
 		<script src="/js/common.js"></script>
 		<script type="text/javascript" src="/js/member/memberinsert.js"></script>
-	</div>
 </body>
 </html>

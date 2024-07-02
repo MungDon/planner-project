@@ -58,7 +58,8 @@ public class SecurityConfig {
                   .anyRequest().authenticated()
           )
           .oauth2Login(configure ->															// OAuth2 인증 로그인( 소셜 ) 정의
-          configure.authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))// OAuth2 인증 엔드포인트 설정
+          configure.loginPage("/member/anon/login")								// 스프링 소셜로그인 페이지가 아닌 사용자 정의 로그인 페이지 지정
+          		  .authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))// OAuth2 인증 엔드포인트 설정
                   .userInfoEndpoint(config -> config.userService(customOAuth2UserService)) /// OAuth2 사용자 정보 엔드포인트 설정
                   .successHandler(oAuth2AuthenticationSuccessHandler)	// OAuth2 로그인 성공 핸들러 설정
                   .failureHandler(oAuth2AuthenticationFailureHandler)		// OAuth2 로그인 실패 핸들러 설정

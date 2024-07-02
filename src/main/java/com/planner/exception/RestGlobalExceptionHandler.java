@@ -28,6 +28,7 @@ public class RestGlobalExceptionHandler {
 	 */
 	@ExceptionHandler(RestCustomException.class)
 	public ResponseEntity<ErrorResponse> handleRestCustomException(RestCustomException e){
+		
 		return ErrorResponse.toResponseEntity(e.getErrorCode());
 	}
 }

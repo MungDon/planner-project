@@ -59,14 +59,3 @@ function validateInsert() {
 	}
 	return true;
 }
-// 모달창 켜기
-function openModal(modalId) {
-	const signModal = document.getElementById(modalId);
-	signModal.style.display = "block";
-}
-
-// 모달창 끄기
-function closeModal(modalId) {
-	const signModal = document.getElementById(modalId);
-	signModal.style.display = "none";
-}

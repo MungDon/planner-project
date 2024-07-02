@@ -1,0 +1,134 @@
+@charset "UTF-8";
+.findPwMain{
+	margin-top : 50px;
+	width : 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.emailInputBox{
+	width : 500px;
+	display: flex;
+	flex-direction: row;
+	border: 1px solid #ddd;
+	border-radius: 20px;
+	padding: 50px;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0px 0px 10px 1px #a8c9ff;
+}
+.authChkText{
+	font-size: 13px;
+	color: darkgray;
+}
+.authText{
+	color: gray;
+	font-weight: bold;
+	font-size: 27px;
+	margin-bottom: 20px;
+}
+.findPwText{
+	font-size: 30px;
+	font-weight: bolder;
+	color : gray;
+	margin-bottom : 30px;
+}
+.emailChkBtn,.codeChkBtn,.resendBtn{
+	width: 30%;
+	font-size: 15px;
+	font-weight: bold;
+	color: gray;
+	height: 45px;
+	border: 2px solid gray;
+	border-radius: 10px;
+	background-color: white;
+}
+.Modaltop{
+	width: 100%;
+	text-align: right;
+}
+.authCodeModal {
+	position: absolute;
+	display: none;
+	justify-content: center;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+.modalBody{
+	position: absolute;
+	width: 500px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding: 20px;
+	background: #ffffff;
+	border-radius: 20px;
+	top: 50%;
+}
+.modalMain {
+	width : 100%;
+	display: flex;
+	flex-direction: column; 
+	justify-content: center;
+	align-items: center;
+}
+.Xbtn {
+	border-style: none;
+	background-color: #ffffff;
+	color: gray;
+	font-size: 30px;
+	font-weight: bold;
+	cursor: pointer;
+}
+.inputCodeCon{
+	display: flex;
+	flex-direction : column;
+	width : 100%;
+}
+
+.inputCodeBox{
+	margin : 10px 0 10px 0;
+}
+#inputCode:focus {
+	outline: none;
+	border-bottom: 2px solid skyblue;
+}
+#inputCode{
+	font-size: 20px;
+	width: 100%;
+	margin: 15px 0 15px 0;
+	border-style: none;
+	border-bottom: 2px solid #ddd;
+}
+
+.authCodeBtns{
+	display: flex;
+	align-items : center;
+	justify-content :flex-end;
+	flex-direction: row;
+	width: 100%;
+}
+.resendBtn{
+	margin-left: 10px;
+}
+#email{
+	font-size: 20px;
+	width: 100%;
+	margin: 15px 0 15px 0;
+	border-style: none;
+	border-bottom: 2px solid #ddd;
+}
+#email:focus{
+	outline: none;
+	border-bottom: 2px solid skybl
+}
+#email::placeholder{
+	font-size: 15px;
+}
+.emailChkBtn{
+	align-self: flex-end;
+}

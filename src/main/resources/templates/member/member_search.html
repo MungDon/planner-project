@@ -1,13 +1,11 @@
      <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layout/layout}">
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
   <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 </head>
 <body>
-	<div layout:fragment="content">
 		<th:block th:replace="~{fragments/friend :: friendLayout}"></th:block>
 		<input type="hidden" id="status" th:value="${status}"	/>
 		<div>
@@ -72,6 +70,5 @@
 			<!-- 페이징 처리 끝 -->
 		</div>
 		<script type="text/javascript" src="/js/member/memberSearch.js"></script>
-	</div>
 </body>
 </html>
