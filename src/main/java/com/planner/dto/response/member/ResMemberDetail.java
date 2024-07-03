@@ -25,4 +25,6 @@ public class ResMemberDetail {
 	
 	private String oauth_id;				// 소셜고유번호
 	
+	private String oauth_type;			// 소셜로그인 타입
+	
 }

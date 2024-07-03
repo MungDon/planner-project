@@ -12,13 +12,13 @@ $(function() { // $(document).ready(function(){}); 와 같음
 	});
 
 	// 이메일 전송요청
-	const sendEmail = (toEmail, type, modalId) => {
+	const sendEmail = (toEmail, type, modalId=null) => {
 		if (isNull(toEmail)) {
 			alert("이메일을 입력해주세요");
 			return;
 		}
 		const ajaxObj = {
-			url: "/member/anon/email/chk",
+			url: API_LIST.EMAIL_SEND,
 			method: "post",
 			param: {
 				toEmail: toEmail,
@@ -37,6 +37,7 @@ $(function() { // $(document).ready(function(){}); 와 같음
 	$(".emailChkBtn").click(() => {
 		const toEmail = $("#email").val();
 		const type = $("#type").val();
+		$(".emailChkBtn").prop("disabled",true);
 		$("#email").attr("readonly", true);
 		sendEmail(toEmail, type, "authCodeModal");
 	});
@@ -45,7 +46,11 @@ $(function() { // $(document).ready(function(){}); 와 같음
 	$(".resendBtn").click(() => {
 		const toEmail = $("#email").val();
 		const type = $("#type").val();
-		sendEmail(toEmail, type, null);
+		sendEmail(toEmail, type);
+	});
+
+	$(".Xbtn").click(() =>{
+		$(".emailChkBtn").prop("disabled",false);
 	});
 
 	// 인증 완료 버튼 눌렀을시
@@ -53,13 +58,13 @@ $(function() { // $(document).ready(function(){}); 와 같음
 		const toEmail = $("#email").val();
 		const authCode = $("#inputCode").val();
 		const type = $("#type").val();
-
+		$(".emailChkBtn").prop("disabled",false);
 		if (isNull(authCode)) {
 			alert("인증코드를 입력해주세요");
 			return;
 		}
 		const ajaxObj = {
-			url: "/member/anon/code/chk",
+			url: API_LIST.AUTH_CODE_CHK,
 			method: "post",
 			param: {
 				toEmail: toEmail,
@@ -71,7 +76,8 @@ $(function() { // $(document).ready(function(){}); 와 같음
 					closeModal("authCodeModal");
 					if (type === "findPw") {
 						alert("보안을위해 비밀번호 변경 페이지로 이동됩니다.");
-						location.href = "/member/anon/pw/change/" + data;
+						$(window).off('beforeunload');
+						location.href = PAGE_LIST.CHANGE_PASSWORD_FORM + data;
 					}
 					$("#emailChkBox").prop("checked", true);
 					$("#emailChkBox").addClass("disabled-checkbox");

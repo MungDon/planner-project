@@ -12,7 +12,7 @@ $(function() {
 	});
 
 	// 신청하기 버튼 클릭
-	$(document).on("click", ".restoreBtn", function() {
+	$(document).on("click", ".restoreBtn", () => {
 		const currentEmail = $("#currentEmail").val();
 		const currentPassword = $("#currentPassword").val();
 		const oauth_type = $("#oauth_type").val();
@@ -29,8 +29,16 @@ $(function() {
 			alert('일반로그인 이용 회원은 복구신청 시 비밀번호는 필수 입니다.');
 			return;
 		}
-		ajaxCall("/member/anon/restore", "post", { currentEmail, currentPassword, oauth_type },
-			function(data) {
+		const ajaxObj = {
+			url: API_LIST.MEMBER_RESTORE,
+			method: "post",
+			param: {
+				currentEmail: currentEmail,
+				currentPassword: currentPassword,
+				oauth_type: oauth_type
+			},
+			successFn: (data) => {
+				console.log(data);
 				switch (data) {
 					case 0:
 						alert("입력한 계정정보는 유효하지 않은정보입니다.");
@@ -38,22 +46,11 @@ $(function() {
 						break;
 					case 1:
 						alert("복구신청이 완료되었습니다. 복구는 영업일 수 2~3일 걸릴 수 도있습니다.");
-						location.href = "/planner/main";
-						break;
-					case 2:
-						alert("이미 신청 완료되었습니다. 자세한문의는 문의게시판에 작성해주세요");
-						location.href = "/planner/main";
-						break;
-					case 3:
-						alert("복구신청 대상이 아닙니다.");
-						location.href = "/planner/main";
+						location.href = PAGE_LIST.MAIN_PAGE;
 						break;
 				}
 			},
-			function() {
-				alert('복구신청이 실패하였습니다.');
-				location.href = "/member/anon/login";
-			}
-		);
+		};
+		ajaxCall(ajaxObj);
 	});
 });

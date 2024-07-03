@@ -22,6 +22,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(CustomException.class) // CustomException 클래스를 value 값으로 설정
 	public String handleCustomException(CustomException e,Model model) { 
 		model.addAttribute("errorMessage", e.getErrorCode().getMessage());
+		model.addAttribute("deleteMember",ErrorCode.WITHDRAWN_MEMBER.getMessage());
 		return "/error/throws_error";
 	}
 	

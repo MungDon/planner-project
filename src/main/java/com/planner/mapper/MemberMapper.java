@@ -49,6 +49,8 @@ public interface MemberMapper {
 	/*회원 비밀번호 변경*/
 	int changePassword(ReqChangePassword req);
 	
+	/*일반로그인회원*/
+	ResMemberDetail formMember(@Param(value = "member_email")String member_email);
 	/* 주썽이햄=======================================================>*/
 //	회원 시퀀스로 객체 가져오기
 	public MemberDTO findByMemberSeq(Long member_id);	// 친구 객체 찾을 때 사용

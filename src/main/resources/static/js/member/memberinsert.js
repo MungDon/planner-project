@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	birthDate.max = getTodayDate();
 });
 // 오늘날짜 가져오는 함수
-function getTodayDate() {
+const getTodayDate = () => {
 	const today = new Date();
 	const year = today.getFullYear() - 10;
 	const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -13,7 +13,7 @@ function getTodayDate() {
 }
 
 // 회원가입 폼 ONSUBMIT
-function validateInsert() {
+const validateInsert = () => {
 	const genderSelected = document.querySelector('input[name="member_gender"]:checked');
 	const phone = document.getElementById("phone");
 	const signChk = document.getElementById("signChk");

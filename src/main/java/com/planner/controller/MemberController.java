@@ -3,6 +3,7 @@ package com.planner.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -64,7 +65,7 @@ public class MemberController {
 	}
 
 	/* 사용자 이메일로 인증코드 보내기 */
-	@PostMapping("/anon/email/chk")
+	@PostMapping("/anon/email/send")
 	@ResponseBody
 	public ResponseEntity<String> emailChk(@RequestParam(value = "toEmail") String toEmail,
 			@RequestParam(value = "type") String type) throws MessagingException, UnsupportedEncodingException {
@@ -79,17 +80,25 @@ public class MemberController {
 	public ResponseEntity<Long> authCodeChk(@RequestParam(value = "toEmail") String toEmail,
 			@RequestParam(value = "authCode") String authCode) {
 		int result = 0;
-		ResMemberDetail member = memberService.memberDetail(toEmail);
+		ResMemberDetail member = null;
+		try {
+			member = memberService.memberDetail(toEmail);
+		}catch(MyBatisSystemException e){
+			member = memberService.formMember(toEmail);
+		}
 		result = emailService.authCodeChk(toEmail, authCode);
 		if (result != 1) {
 			throw new RestCustomException(ErrorCode.FAIL_AUTHENTICATION);
 		}
-		return ResponseEntity.ok(member.getMember_id());
+		if (member != null) {
+			return ResponseEntity.ok(member.getMember_id());
+		}
+		return ResponseEntity.ok(1L);
 	}
 
 	/* 비밀번호 확인 폼 */
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/auth/chk")
+	@GetMapping("/auth/pw/chk")
 	public String passwordChkForm(@RequestParam(value = "url") String url, Model model) {
 		model.addAttribute("url", url);
 		return "/member/passwordChk";
@@ -97,7 +106,7 @@ public class MemberController {
 
 	/* 비밀번호 확인 */
 	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/auth/chk")
+	@PostMapping("/auth/pw/chk")
 	@ResponseBody
 	public ResponseEntity<String> passwordChk(@RequestParam(value = "currentPw") String currentPw,
 			@UserData ResMemberDetail member) {
@@ -110,8 +119,8 @@ public class MemberController {
 
 	/* 비밀번호 찾기 */
 	@GetMapping("/anon/find/pw")
-	public String findPwForm(@UserData ResMemberDetail detail,Model model) {
-		if(!CommonUtils.isEmpty(detail)) {
+	public String findPwForm(@UserData ResMemberDetail detail, Model model) {
+		if (!CommonUtils.isEmpty(detail)) {
 			model.addAttribute("member_email", detail.getMember_email());
 		}
 		return "/member/member_find_pw";
@@ -124,15 +133,16 @@ public class MemberController {
 		return "/member/member_change_pw";
 	}
 
-	/*비밀번호 변경*/
+	/* 비밀번호 변경 */
 	@PostMapping("/anon/pw/change")
-	public String pwChange(ReqChangePassword req) {
-		if(req.getNewPassword().equals(req.getNewPassword2())) {
+	@ResponseBody
+	public ResponseEntity<String> pwChange(ReqChangePassword req) {
+		if (req.getNewPassword().equals(req.getNewPassword2())) {
 			memberService.changePassword(req);
 		}
-		return "redirect:/member/anon/login";
+		return ResponseEntity.ok("ok");
 	}
-	
+
 	// 로그인
 	@GetMapping("/anon/login")
 	public String memberLogin(@UserData ResMemberDetail detail, HttpServletRequest request,
@@ -144,14 +154,11 @@ public class MemberController {
 		return "/member/member_login";
 	}
 
-	/* 로그인시에 회원탈퇴여부 검사 */
+	/* 로그인시에 상태코드 검사 */
 	@GetMapping("/auth")
-	public String memberChk(@UserData ResMemberDetail detail, HttpServletRequest request,
+	public String memberStatusChk(@UserData ResMemberDetail detail, HttpServletRequest request,
 			HttpServletResponse response) {
-		if (detail.getMember_status().equals(MemberStatus.DELETE.getCode())) {
-			CommonUtils.removeCookiesAndSession(request, response);
-			throw new CustomException(ErrorCode.WITHDRAWN_MEMBER);
-		}
+		memberService.memberStatusChk(detail.getMember_status(), request, response);
 		return "redirect:/planner/main";
 	}
 
@@ -172,10 +179,15 @@ public class MemberController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/auth/myInfo")
 	public String myInfo(@UserData ResMemberDetail detail, Model model) {
-		ResMemberDetail memberDTO;
+		ResMemberDetail memberDTO = null;
 		String gender;
 
-		memberDTO = memberService.memberDetail(detail.getMember_email()); // 나의 객체
+		if (CommonUtils.isEmpty(detail.getOauth_id())) {
+			memberDTO = memberService.memberDetail(detail.getMember_email()); // 나의 객체
+		}
+		if (!CommonUtils.isEmpty(detail.getOauth_id())) {
+			memberDTO = memberService.memberDetailForSocial(detail.getMember_email(), detail.getOauth_type());
+		}
 		gender = Gender.findNameByCode(detail.getMember_gender());
 
 		model.addAttribute("memberDTO", memberDTO);
@@ -238,9 +250,9 @@ public class MemberController {
 	/* 회원 복구 */
 	@PostMapping("/anon/restore")
 	@ResponseBody
-	public int memberRestore(ReqMemberRestore req) {
+	public ResponseEntity<Integer> memberRestore(ReqMemberRestore req) {
 		int result = memberService.memberRestore(req);
-		return result;
+		return ResponseEntity.ok(result);
 	}
 
 	/*

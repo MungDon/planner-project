@@ -1,10 +1,10 @@
-$(function(){
-	$(document).ready(function(){
+$(function() {
+	$(document).ready(() => {
 		const member = $("#member").val();
 		console.log(member);
-		if(member == null || member == ""){
+		if (isNull(member)) {
 			alert("권한이 없습니다.");
-			location.href="/member/anon/login";
+			location.href = PAGE_LIST.LOGIN_PAGE;
 		}
 	});
 });
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	birthDate.max = getTodayDate();
 });
 // 오늘날짜 가져오는 함수
-function getTodayDate() {
+const getTodayDate = () => {
 	const today = new Date();
 	const year = today.getFullYear() - 10;
 	const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -25,7 +25,7 @@ function getTodayDate() {
 }
 
 // 회원가입 폼 ONSUBMIT
-function validateOauth2Insert() {
+const validateOauth2Insert = () => {
 	const genderSelected = document.querySelector('input[name="member_gender"]:checked');
 	const phone = document.getElementById("phone");
 	const signChk = document.getElementById("signChk");
