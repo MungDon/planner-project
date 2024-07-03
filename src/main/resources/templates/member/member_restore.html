@@ -3,12 +3,14 @@
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-<link rel="stylesheet" type="text/css" href="/css/restore.css">
+<link rel="stylesheet" type="text/css" href="/css/member/restore.css">
+<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 	<main class="restoreMain">
 		<input type="email" id="currentEmail" name="currentEmail" placeholder="가입했던 이메일을 적어주세요">
 		<input type="password" id="currentPassword" name="currentPassword" placeholder="비밀번호 작성">

@@ -1,0 +1,76 @@
+.infoMain {
+	margin-top: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.info_table {
+	width: 420px;
+	border: 1px solid #ddd;
+	border-radius: 20px;
+	padding: 20px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	box-shadow: 0px 0px 10px 1px lightgray;
+}
+
+.info_tbody {
+	width: 300px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.info_title {
+	color: gray;
+	font-weight: bold;
+	font-size: 27px;
+	padding-bottom: 30px;
+}
+
+.info_tr {
+/* 	font-size: 16px; */
+/* 	color: gray; */
+	text-align: center;
+}
+
+.info_td_nick, .info_td_memo {
+/* 	width: 75%; */
+	text-align: left;
+	height: 3em;
+	
+}
+.info_td_name {
+	font: 12px "malhun gothic";
+	color: gray;
+/* 	width: 25%; */
+/* 	text-align: left; */
+}
+.info_td_btn {
+	display: flex;
+	align-items: center;
+}
+
+.info_th {
+	margin-top: 15px;
+	display: flex;
+	justify-content: left;
+/* 	padding: 10px 0; */
+	color: gray;
+	font-size: 14px;
+	
+}
+
+.info_td {
+	font-size: 18px;
+	font: 16px "malhun gothic";
+}
+
+.info_end_tr {
+	margin: 30px 0 0;
+	display: flex;
+	justify-content: center;
+}

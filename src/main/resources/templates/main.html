@@ -4,12 +4,12 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <!-- <title>Insert title here</title> -->
-<link rel="stylesheet" type="text/css" href="/css/layout.css"> 
+<link rel="stylesheet" type="text/css" href="/css/header.css"> 
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
-	<header th:replace="~{/fragments/header :: headerLayout}"></header>
+	<header th:replace="~{/fragments/header :: header}"></header>
 	
 	
 	<script th:if="${result} == 1">

@@ -1,14 +1,15 @@
   <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-	<link rel="stylesheet" type="text/css" href="/css/memberinsert.css">
+	<link rel="stylesheet" type="text/css" href="/css/member/memberinsert.css">
+	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
 	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<meta name="_csrf" th:content="${_csrf.token}"/>
 	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 		<main class="insertMain">
 			<form action="/member/anon/insert" method="post" class="insertForm" onsubmit="return validateInsert()">
 				<!-- csrf 토큰 -->

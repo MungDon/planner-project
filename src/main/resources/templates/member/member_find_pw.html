@@ -6,11 +6,11 @@
 	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-<link rel="stylesheet" href="/css/find_pw.css">
-<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/member/find_pw.css">
+<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
 </head>
 <body>
-	<header th:replace="~{/fragments/header :: headerLayout}"></header>
+	<header th:replace="~{/fragments/header :: header}"></header>
 	<main class="findPwMain">
 		<div class="emailInputBox">
 		<span class="findPwText">비밀번호를 찾기/변경 위해서 현재 가입한 이메일을 입력하세요</span>

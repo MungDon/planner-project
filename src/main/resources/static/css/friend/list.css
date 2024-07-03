@@ -1,0 +1,70 @@
+.listMain {
+	margin-top: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.list_table {
+	width: 600px;
+	border: 2px solid #ddd;
+	border-radius: 20px;
+	padding: 20px;
+	box-shadow: 0px 0px 10px 1px lightgray;
+}
+
+.list_title {
+	color: gray;
+	font-weight: bold;
+	font-size: 27px;
+	padding-bottom: 30px;
+}
+
+.receive_sub_tr {
+	font-size: 18px;
+	color: darkgray;
+}
+
+.list_tr {
+	font-size: 16px;
+	color: gray;
+	height: 1.8em;
+}
+
+.infoA {
+	color: purple;
+}
+
+.list_th1 {
+	padding: 0 0 10px;
+	text-align: center;
+	width: 40%;
+}
+
+.list_th2, .list_th3 {
+	padding: 0 0 10px;
+	text-align: center;
+	width: 30%;
+}
+
+.nameT {
+	width: 120px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.list_td {
+	text-align: center;
+}
+/* 메모 길이 1줄로 조정 / 뒷부분 .. 표시 */
+.memoT {
+	width: 180px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.list_tdBtn {
+	width: 80px;
+}

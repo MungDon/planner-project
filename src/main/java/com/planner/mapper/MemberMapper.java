@@ -65,6 +65,10 @@ public interface MemberMapper {
 	public List<MemberDTO> search(@Param("member_id") Long member_id, @Param("keyword") String keyword,
 								  @Param("start") int start, @Param("end") int end);
 	
+//	전체회원 수
+	public int searchCount(@Param("member_id") Long member_id,
+						   @Param("keyword") String keyword);
+	
 //	친구신청 보낸 아이디 찾기
 	public List<MemberDTO> findBySendId(@Param("member_id") Long member_id, @Param("keyword") String keyword);
 }

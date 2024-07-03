@@ -4,10 +4,12 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
    	<title>회원수정</title>
+   	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
    	<meta name="_csrf" th:content="${_csrf.token}"/>
 	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 	<main class="updateMain">
 		<h2>회원정보수정</h2>
 		<form class="updateForm" action="/member/auth/update" th:method="put">

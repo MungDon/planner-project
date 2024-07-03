@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.planner.mapper.FriendMapper">
 	<!-- 친구 시퀀스로 객체 찾기 -->
 	<select id="findByFriendId" resultType="FriendDTO">
@@ -31,7 +31,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 		from member m
 		left outer join friend_request fr
 		on m.member_id = fr.member_receive_id
-		where fr.member_receive_id = #{member_id}
+		where m.member_status = 'B'
+		and fr.member_receive_id = #{member_id}
 		or fr.member_send_id = #{member_id}
 	</select>
 	
@@ -43,6 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 		on m.member_id = fr.member_receive_id
 		where fr.member_receive_id = #{member_id}
 		and fr.friend_request_status != 'F'
+		and m.member_status = 'B'
 	</select>
 	
 	<!-- 보낸 친구요청 / 상대 찾기 -->
@@ -53,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 		on m.member_id = fr.member_send_id
 		where fr.member_send_id = #{member_id}
 		and fr.friend_request_status != 'F'
+		and m.member_status = 'B'
 	</select>
 	
 	<!-- 친구신청 (보낼 때) -->
@@ -67,10 +70,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 	
 	<!-- 친구신청 상태 찾기 -->
 	<select id="friendRequestStatus" resultType="String">
-		select friend_request_status
-		from friend_request
+		select fr.friend_request_status
+		from friend_request fr
+		left outer join member m
+		on fr.member_receive_id = m.member_id
 		where member_receive_id = #{member_receive_id}
 		and member_send_id = #{member_send_id}
+		and m.member_status = 'B'
 	</select>
 	
 	<!-- (받은)친구신청 갯수 -->
@@ -137,10 +143,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 	
 	<!-- 친구목록 -->
 	<select id="friendList" resultType="FriendDTO">
-		select *
-		from friend
-		where member_my_id = #{member_my_id}
-		or member_friend_id = #{member_my_id}
+		select f.*
+		from friend f
+		left outer join member m
+		on f.member_my_id = m.member_id
+		where m.member_status = 'B'
+		and f.member_my_id = #{member_my_id}
+		or f.member_friend_id = #{member_my_id}
 	</select>
 	
 	<!-- 친구 닉네임 변경 -->
@@ -169,6 +178,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 		on f.member_friend_id = m.member_id
 		where member_my_id = #{member_my_id}
 		and member_friend_id = #{member_friend_id}
+		and member_status = 'B'
 	</select>
 	
 	<!-- 친구정보 (역방향) join 시 상대 회원 정보로 반환하기 위함 -->
@@ -179,8 +189,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 		on f.member_my_id = m.member_id
 		where member_my_id = #{member_my_id}
 		and member_friend_id = #{member_friend_id}
+		and member_status = 'B'
 	</select>
 	
+	<!-- 회원 정보 List ResultMap -->
 	<resultMap id="resultInfo" type="FriendDTO">
 		<id column="friend_id" property="friend_id"	/>
 		<result column="member_my_id" property="member_my_id"	/>
@@ -192,6 +204,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 		<collection property="memberInfo" resultMap="selectMemberInfo"></collection>
 	</resultMap>
 	
+	<!-- 회원 정보 -->
 	<resultMap id="selectMemberInfo" type="MemberDTO">
 		<id column="member_id" property="member_id"	/>
 		<result column="member_email" property="member_email"	/>

@@ -3,11 +3,12 @@
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-<link rel="stylesheet" type="text/css" href="/css/oauth2insert.css">
+<link rel="stylesheet" type="text/css" href="/css/member/oauth2insert.css">
+<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-	<div layout:fragment="content">
+<header th:replace="~{/fragments/header :: header}"></header>
 		<main class="oauth2Main">
 			<form  action="/oauth2/auth/signup" method="post" class="oauth2Form" onsubmit="return validateOauth2Insert()">
 				<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
@@ -55,6 +56,5 @@
 		</main>
 		<script src="/js/modal.js"></script>
 		<script type="text/javascript" src="/js/member/oauth2_insert.js"></script>
-	</div>
 </body>
 </html>

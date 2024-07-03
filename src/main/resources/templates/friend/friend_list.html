@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layout/layout}">
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<link rel="stylesheet" type="text/css" href="/css/friend/button.css"	/>
+	<link rel="stylesheet" type="text/css" href="/css/friend/list.css"	/>
+	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
+</head>
 <body>
-	<div layout:fragment="content">
-		<th:block th:replace="~{fragments/friend :: friendLayout}"></th:block>
-		<h1>친구목록</h1>
-		<table style="border: 1px solid; width: 600px; text-align: center;">	<!-- 이 페이지에서는 정/역 방향 설정 완료 my_id=나, friend_id=친구 -->
+	<header th:replace="~{/fragments/header :: header}"></header>
+	<div th:replace="~{fragments/friendBar :: friendHeader}"></div>
+	<main class="listMain">
+		<table class="list_table">	<!-- 이 페이지에서는 정/역 방향 설정 완료 my_id=나, friend_id=친구 -->
 			<tr>
-				<th width="200">친구이메일</th>
-				<th width="200" colspan="2">친구별명</th>
-				<th width="200" colspan="2">친구메모</th>
+				<th class="list_title" colspan="6">
+					<span>친구목록</span>
+				</th>
 			</tr>
-			<tr th:each="friendDTO : ${friendList}">
+			<tr class="receive_sub_tr">
+				<th class="list_th1" colspan="2">친구이메일</th>
+				<th class="list_th2" colspan="2">친구별명</th>
+				<th class="list_th3" colspan="2">친구메모</th>
+			</tr>
+			<tr th:each="friendDTO : ${friendList}" class="list_tr">
 				<!-- 이메일 -->
-				<td>
+				<td class="list_td" colspan="2">
 					<form action="/friend/info" method="get" th:attr="id='infoForm' + ${friendDTO.friend_id}">
 						<a onclick="infoForm()" class="infoA" th:attr="data-info='infoForm' + ${friendDTO.friend_id}" href="javascript:void(0);">
 							[[${friendDTO.member_email}]]
@@ -25,17 +33,19 @@
 					</form>
 				</td>
 				<!-- 별명 -->
-				<td>
+				<td class="list_td">
+					<!-- 나타나 있음 -->
 					<div th:attr="id='nameT' + ${friendDTO.friend_id}"
-					 th:text="${friendDTO.friend_nickname}">
+					 th:text="${friendDTO.friend_nickname}" class="nameT">
 					</div>
+					<!-- 숨겨져 있음 -->
 					<div>
-						<input type="text" style="display: none; width: 60px;"
+						<input type="text" maxlength="16" style="display: none; width: 90px;"
 						 th:attr="id='nameI' + ${friendDTO.friend_id}"
-						 th:value="${friendDTO.friend_nickname}"/>
+						 th:value="${friendDTO.friend_nickname}"	/>
 					</div>
 				</td>
-				<td align="left">
+				<td class="list_tdBtn">
 					<form action="/friend/nickname" method="post" th:attr="id='nickForm' + ${friendDTO.friend_id}">
 						<input type="hidden" name="friend_id" th:value="${friendDTO.friend_id}"	/>
 						<input type="hidden" name="friend_status" th:value="${friendDTO.friend_status}"	/>
@@ -47,7 +57,7 @@
 						
 						<!-- 서밋 버튼 -->
 						<button type="button" style="display: none;"
-						 th:attr="id='submitBtn' + ${friendDTO.friend_id}">
+						 th:attr="id='submitBtn' + ${friendDTO.friend_id}" class="submitBtn">
 							변경
 						</button>
 					</form>
@@ -63,20 +73,15 @@
 					</button>
 				</td>
 				<!-- 메모 -->
-				<td colspan="2">
+				<td colspan="2" class="list_td">
 					<div th:attr="id='memoT' + ${friendDTO.friend_id}"
-					 th:text="${friendDTO.friend_memo}">
-					</div>
-					<div>
-						<input type="text" style="display: none; width: 60px;"
-						 th:attr="id='memoI' + ${friendDTO.friend_id}"
-						 th:value="${friendDTO.friend_memo}"/>
+					 th:text="${friendDTO.friend_memo}" class="memoT">
 					</div>
 				</td>
 			</tr>
 		</table>
-		<!-- 반복문으로 꺼낸 숨김버튼에 속성을 부여함 / 이메일 클릭 시 친구정보로 직접 서밋 -->
-		<script type="text/javascript" src="/js/friend/friendList.js"></script>
-	</div>
+	</main>
+	<!-- 반복문으로 꺼낸 숨김버튼에 속성을 부여함 / 이메일 클릭 시 친구정보로 직접 서밋 -->
+	<script type="text/javascript" src="/js/friend/friendList.js"></script>
 </body>
 </html>

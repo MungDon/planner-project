@@ -4,11 +4,12 @@
 <meta charset="UTF-8">
 <title>비번 변경</title>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
-	<header th:replace="~{/fragments/header :: headerLayout}"></header>
+<header th:replace="~{/fragments/header :: header}"></header>
 	<main class="pwChangeMain">
 		<div class="pwChangeBox">
 			<input type="hidden" id="member_id" th:value="${member_id}">

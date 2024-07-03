@@ -1,0 +1,100 @@
+/* member_myInfo.html */
+.infoMain {
+	margin-top: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.infoTable {
+	width: 380px;
+	border: 1px solid #ddd;
+	border-radius: 20px;
+	padding: 20px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	box-shadow: 0px 0px 10px 1px lightgray;
+}
+
+.i_title {
+	color: gray;
+	font-weight: bold;
+	font-size: 27px;
+	padding-bottom: 30px;
+}
+
+.i_tr {
+	font-size: 15px;
+	color: gray;
+	height: 2em;
+	text-align: left;
+}
+
+.i_th {
+ 	padding: 0 20px;
+}
+
+
+.modifyBtn {
+	font-size: 12px;
+	color: darkgray;
+}
+
+.userPwBtn {
+	width: 100%;
+	font-size: 15px;
+	font-weight: bold;
+	color: silver;
+	margin-top: 50px;
+	height: 35px;
+	border: 2px solid darkgray;
+	border-radius: 10px;
+	background-color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.userDeleteBtn {
+	width: 100%;
+	font-size: 15px;
+	font-weight: bold;
+	color: darkgray;
+	margin-top: 10px;
+	height: 35px;
+	border: 2px solid gray;
+	border-radius: 10px;
+	background-color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+/* member_info.html */
+/* 친구추가/취소 버튼 */
+.addOrCancelBtn {
+	width: 100%;
+	font-size: 15px;
+	font-weight: bold;
+	color: gray;
+	margin-top: 50px;
+	height: 35px;
+	border: 2px solid gray;
+	border-radius: 10px;
+	background-color: white;
+}
+.addOrCancelBtn:hover,.acceptBtn:hover{
+	cursor: pointer;
+} 
+/* 친구수락/거절 버튼 */
+.acceptBtn {
+	width: 48%;
+	font-size: 15px;
+	font-weight: bold;
+	color: gray;
+	margin-top: 50px;
+	height: 35px;
+	border: 2px solid gray;
+	border-radius: 10px;
+	background-color: white;
+}

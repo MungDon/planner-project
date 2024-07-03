@@ -3,11 +3,13 @@
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-<link rel="stylesheet" type="text/css" href="/css/login.css">
+<link rel="stylesheet" type="text/css" href="/css/member/login.css">
+<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 		<main class="loginMain">
 		<form class="loginForm" method="post">
 		<h1>Planner</h1>

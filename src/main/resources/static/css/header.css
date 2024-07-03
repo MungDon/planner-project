@@ -1,10 +1,93 @@
-@charset "UTF-8";
-.headerTable{
+/* 노멀라이즈 */
+body, ul, li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+a {
+  text-decoration: none;	/* 해당 태그의 밑줄 제거 */
+  color: #333;
+}
+/* 노멀라이즈 끝 */
+
+/* 메뉴 박스 스타일 설정 */
+.menu {
+	font: bold 16px "malhun gothic";
 	width: 100%;
-	height: 100px;
-	border-bottom : 1px solid #ddd;
+	height: 60px;
+	background: #ddd;
+	color: black;
+	line-height: 60px;
+	display: flex;
+	justify-content: space-between; /* 좌우 정렬 간격 벌리기 */
+	align-items: center; 			/* 세로 가운데 정렬 */
+}
+
+.menu > ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	display: flex; 		/* 가로로 나열 */
+}
+
+.my_menu {
+	text-align: right;
+}
+
+.logo {
+	margin-left: 20px; 	/* 로고를 왼쪽으로 조정 */
+}
+
+/* 메뉴의 자식 ul 의 자식 li 를 왼쪽 정렬 */
+.menu > ul > li {
+	float: left;
+	width: 150px;
+	position: relative;
+	margin: 0 25px;
 	text-align: center;
 }
-.h_td_1,.h_td_2,.h_td_3,.h_td_4,.h_td_5{
-	width: 10%;
+
+/* 서브 메뉴 숨김 */
+.menu ul ul {
+	display: none;
+	position: absolute;
+	top: 60px;
+	left: 0;
+	width: 150px;
+	background: #eee;
+}
+
+/* 상위 메뉴에 마우스 올리면 서브메뉴 보이기 */
+/* 부모 li 에 마우스 올리면 display -> block */
+.menu ul li:hover > ul {
+	display: block;
+}
+
+/* 서브 메뉴 스타일 */
+/* 서브 메뉴 항목 너비 150px, 가운데 정렬 */
+.menu ul ul li {
+	width: 150px;
+	text-align: center;
+}
+
+/* 서브 메뉴 항목 스타일 */
+/* 서브 메뉴 항목 높이 맞추기 위함 */
+.menu ul ul li a {
+	line-height: 60px;
+}
+
+/* 서브 메뉴 항목에 마우스 올리면 글자색 변경 */
+.menu ul ul li a:hover {
+	color: purple;
+}
+
+/* friendBar 네비게이션바 */
+.friend_menu {
+	font: bold 14px "malhun gothic";
+	display: flex;
+	align-items: right;
+	justify-content: right;
+	margin: 0 80px;
+	padding: 7px 0px;
 }

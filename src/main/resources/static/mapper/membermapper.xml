@@ -199,6 +199,25 @@
 		]]>
 	</select>
 	
+	<!-- 모든 회원 수 -->
+	<select id="searchCount" resultType="int">
+		<![CDATA[
+			select count(*)
+			from (
+				select *
+				from member
+				where member_id != #{member_id}
+				and substr (member_email, 1, instr(member_email, '@') - 1) like '%' || #{keyword} || '%'
+				and member_status = 'B'
+			)m
+			left outer join friend_request fr
+			on m.member_id = fr.member_send_id
+			and m.member_id = fr.member_receive_id
+			where fr.friend_request_status != 'F'
+			or fr.member_receive_id is null
+		]]>
+	</select>
+	
 	<!-- (나에게) 친구신청 보낸 아이디 찾기 -->
 	<select id="findBySendId" resultType="MemberDTO">
 		select m.*, fr.member_send_id, rownum r

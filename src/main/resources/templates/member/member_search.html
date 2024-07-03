@@ -1,34 +1,39 @@
      <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+	<link rel="stylesheet" type="text/css" href="/css/friend/button.css"	/>
+	<link rel="stylesheet" type="text/css" href="/css/member/search.css"	/>
+	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
+	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
-		<th:block th:replace="~{fragments/friend :: friendLayout}"></th:block>
+	<header th:replace="~{/fragments/header :: header}"></header>
+	<div th:replace="~{fragments/friendBar :: friendHeader}"></div>
+	<main class="searchMain">
 		<input type="hidden" id="status" th:value="${status}"	/>
-		<div>
-			<h1>Friend Search</h1>
-			<form action="/member/auth/search" method="get" id="keywordForm" onsubmit="return false">	<!-- Enter Key 로 서밋 방지 -->
-				<input type="text" name="keyword" id="keywordInput"	/>
+		<div class="search_title">
+			<span class="title_text">Search</span>
+			<form action="/member/auth/search" method="get" id="keywordForm">	<!-- Enter Key 로 서밋 방지 -->
+				<input type="text" name="keyword" id="keywordInput"	maxlength="20" style="font-size : 18px; color : gray; font-style : oblique;"/>
 				<button type="button" id="keywordBtn">검색</button>
 			</form>
 		</div>
 			<div th:if="${#lists.isEmpty(list) && keyword != '!@#$%^&*()'}" align="center">
 				<h2>검색 결과가 없습니다.</h2>
 			</div>
-		<div th:if="${count != 0}" align="center">
-			<table>
-				<tr>
-					<th>이메일</th>
+		<div th:if="${count != 0}">
+			<table class="searchTable">
+				<tr class="search_sub_tr">
+					<th class="search_td1">이메일</th>
 					<th>생년월일</th>
 					<th>성별</th>
-					<th>친구추가</th>
 				</tr>
-				<tr th:each="memberDTO : ${list}">
-					<td>
-						<a th:if="${memberDTO.friend_request_status != 'F'}" th:href="@{|/member/auth/info/${memberDTO.member_id}|}">
+				<tr th:each="memberDTO : ${list}" class="search_tr">
+					<td class="search_td1">
+						<a th:if="${memberDTO.friend_request_status != 'F'}" class="search_a" th:href="@{|/member/auth/info/${memberDTO.member_id}|}">
 							[[${memberDTO.member_email}]]
 						</a>
 						<div th:if="${memberDTO.friend_request_status == 'F'}">
@@ -39,36 +44,40 @@
 							</form>
 						</div>
 					</td>
-					<td th:text="${memberDTO.member_birth}"></td>
-					<td th:text="${memberDTO.member_gender}"></td>
-					<td>
+					<td class="search_td2" th:text="${memberDTO.member_birth}"></td>
+					<td class="search_td3" th:text="${gender}"></td>
+					<td class="search_td4">
 						<div th:if="${memberDTO.friend_request_status != 'R' and memberDTO.friend_request_status != 'F'}">	<!-- 친구 요청상태 이거나 친구 이거나 -->
-							<button type="button" th:value="${memberDTO.member_id}" class="btn">친구추가</button>
+							<button type="button" th:value="${memberDTO.member_id}" class="addBtn">친구추가</button>
 						</div>
 						<div>
-							<span th:text="${@friendRoleUtils.getFriendRoleName(memberDTO.friend_request_status)}"></span>
+							<span class="fr-status" th:text="${@friendRoleUtils.getFriendRoleName(memberDTO.friend_request_status)}"></span>
 						</div>
 					</td>
 				</tr>
+				<tr class="search_tr">
+					<td colspan="4">
+						<!-- 페이징 처리 시작 -->
+						<div th:if="${count > 0}" class="paging">
+							<span th:if="${startPage > 10}">
+								<a th:href="@{|/member/auth/search?keyword=${keyword}&pageNum=${startPage - 10}|}" th:text="'[이전]'"></a>
+							</span>
+							<span th:each="i : ${#numbers.sequence(startPage, endPage)}">
+								<a th:if="${pageNum != i}" th:href="@{|/member/auth/search?keyword=${keyword}&pageNum=${i}|}" th:text="'['+${i}+']'"></a>
+								<span th:if="${pageNum == i}">
+									[<b th:text="${i}"></b>]
+								</span>
+							</span>
+							<span th:if="${endPage} < ${pageCount}">
+								<a th:href="@{|/member/auth/search?keyword=${keyword}&pageNum=${startPage + 10}|}" th:text="'[다음]'"></a>
+							</span>
+						</div>
+						<!-- 페이징 처리 끝 -->
+					</td>
+				</tr>
 			</table>
-			
-			<!-- 페이징 처리 시작 -->
-			<div th:if="${count > 0}">
-				<span th:if="${startPage > 10}">
-					<a th:href="@{|/member/search?keyword=${keyword}&pageNum=${startPage - 10}|}" th:text="'[이전]'"></a>
-				</span>
-				<span th:each="i : ${#numbers.sequence(startPage, endPage)}">
-					<a th:if="${pageNum != i}" th:href="@{|/member/search?keyword=${keyword}&pageNum=${i}|}" th:text="'['+${i}+']'"></a>
-					<span th:if="${pageNum == i}">
-						[<b th:text="${i}"></b>]
-					</span>
-				</span>
-				<span th:if="${endPage} < ${pageCount}">
-					<a th:href="@{|/member/search?keyword=${keyword}&pageNum=${startPage + 10}|}" th:text="'[다음]'"></a>
-				</span>
-			</div>
-			<!-- 페이징 처리 끝 -->
 		</div>
-		<script type="text/javascript" src="/js/member/memberSearch.js"></script>
+	</main>
+	<script type="text/javascript" src="/js/member/memberSearch.js"></script>
 </body>
 </html>

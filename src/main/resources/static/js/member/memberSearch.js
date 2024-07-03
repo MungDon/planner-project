@@ -1,5 +1,5 @@
 /* 버튼 클릭 시 서밋하고 친구상태 불러오기 / 비동기로 버튼 비활성화 */
-$(document).on("click", ".btn", function(){
+$(document).on("click", ".addBtn", function(){
 	let button = $(this);
 	let member_id = button.val();
 	let csrfToken = $("meta[name='_csrf']").attr("content");
