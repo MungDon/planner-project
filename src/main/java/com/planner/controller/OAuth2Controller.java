@@ -38,6 +38,5 @@ public class OAuth2Controller {
 			return "redirect:/oauth2/auth/signup";
 		}
 		return "redirect:/planner/main";
-		//TODO - 메인 링크 추후 바뀜
 	}
 }
