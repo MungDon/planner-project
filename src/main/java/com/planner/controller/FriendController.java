@@ -16,6 +16,7 @@ import com.planner.dto.request.friend.FriendRequestDTO;
 import com.planner.dto.request.member.MemberDTO;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.Gender;
+import com.planner.enums.Masking;
 import com.planner.service.FriendService;
 import com.planner.service.MemberService;
 import com.planner.util.CommonUtils;
@@ -78,8 +79,11 @@ public class FriendController {
 	public String receiveList(@UserData ResMemberDetail dtail, Model model) {
 		List<FriendRequestDTO> receiveList = friendService.receiveRequestList(dtail.getMember_email());
 		int receive_count = friendService.receiveRequestCount(dtail.getMember_email());	// 받은 친구신청 수
+		
 		model.addAttribute("receive_count", receive_count);
 		model.addAttribute("receiveList", receiveList);
+		
+		model.addAttribute("NAME", Masking.NAME);		// 타임리프로 마스킹 처리를 하기위해 넘겨줌
 		
 		return "friend/friend_receive";
 	}
@@ -92,6 +96,8 @@ public class FriendController {
 		int receive_count = friendService.receiveRequestCount(dtail.getMember_email());	// 받은 친구신청 수
 		model.addAttribute("receive_count", receive_count);
 		model.addAttribute("sendList", sendList);
+		
+		model.addAttribute("NAME", Masking.NAME);		// 타임리프로 마스킹 처리를 하기위해 넘겨줌
 		
 		return "friend/friend_send";
 	}
@@ -165,12 +171,14 @@ public class FriendController {
 	public String friendInfo(@RequestParam(name = "friend_id", defaultValue = "") Long friend_id, @UserData ResMemberDetail detail,
 							 @RequestParam("friend_status") String friend_status, Model model,
 							 @RequestParam(name = "member_id", defaultValue = "") Long member_id) {
-		FriendDTO friendDTO = friendService.friendInfo(friend_id, friend_status);					// 친구정보 메서드
+		String phone;
 		String gender;
 		
 		if (CommonUtils.isEmpty(friend_id)) {
 			friend_id = friendService.findByFriendSeq(member_id, detail.getMember_id());	// 친구 시퀀스 찾는 메서드
 		}
+		
+		FriendDTO friendDTO = friendService.friendInfo(friend_id, friend_status);			// 친구정보 메서드
 		for (MemberDTO memberDTO : friendDTO.getMemberInfo()) {
 			gender = Gender.findNameByCode(memberDTO.getMember_gender());
 			model.addAttribute("gender", gender);
@@ -180,6 +188,11 @@ public class FriendController {
 		model.addAttribute("friendDTO", friendDTO);
 		model.addAttribute("receive_count", receive_count);
 		
+		for (MemberDTO memberDTO : friendDTO.getMemberInfo()) {
+			phone = Masking.maskAs(memberDTO.getMember_phone(), Masking.PHONE);				// 마스킹 처리
+			
+			model.addAttribute("phone", phone);
+		}
 		return "friend/friend_info";
 	}
 	

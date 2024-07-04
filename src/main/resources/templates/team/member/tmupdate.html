@@ -3,8 +3,10 @@
 <head>
 	<meta charset="UTF-8"/>
 	<title>그룹 회원 정보 수정</title>
+	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 </head>
 <body>
+<div id="main-container"> <!-- main-container 시작 -->
 <form th:action="update" method="post">
 <table>
 	<tr>
@@ -27,5 +29,6 @@
 			<button type="button" onclick="history.go(-1)">취소</button>
 </table>
 </form>
+</div> <!-- main-container 끝 -->
 </body>
 </html>

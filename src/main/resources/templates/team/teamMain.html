@@ -3,30 +3,36 @@
 <head>
 	<meta charset="UTF-8"/>
 	<title>그룹 페이지</title>
+	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
+	<link rel="stylesheet" type="text/css" href="/css/team/teamMain.css">
+	<script type="text/javascript" src="/js/team/teamMain.js" defer></script>
 </head>
 <body>
-<h1>임시 메인</h1>
-<label for="team_id">team_id </label><input type="number" name="team_id" id="team_id"> / 
-<label for="member_id">member_id </label><input type="number" name="member_id" id="member_id"> / 
-<label for="team_member_id">team_member_id </label><input type="number" name="team_member_id" id="team_member_id">
-<br>
-<button type="button" name="create" onclick="btnf(this)">그룹 생성</button>
-<button type="button" name="info" onclick="btnf(this)">그룹 정보</button>
-<button type="button" name="delete" onclick="btnf(this)">그룹 제거</button>
-<br>
-<button type="button" name="member/insert" onclick="btnf(this)">그룹 멤버 추가</button>
-<button type="button" name="member/tmlist" onclick="btnf(this)">그룹 멤버 목록</button>
-<button type="button" name="member/info" onclick="btnf(this)">그룹 멤버 정보</button>
-<br>
-<button type="button" name="board/list" onclick="btnf(this)">그룹 게시판</button>
-<script>
-	function btnf(btn){
-		let path = btn.name;
-		let team_id = document.getElementById("team_id").value;
-		let member_id = document.getElementById("member_id").value;
-		let team_member_id = document.getElementById("team_member_id").value;
-			window.location=path+'?team_id='+team_id+'&member_id='+member_id+'&team_member_id='+team_member_id;
-	}
-</script>
+<div id="main-container"> <!-- main-container 시작 -->
+<h1>그룹 메인</h1>
+<div class="float-clear">
+	<div class="float-left team-cs">
+		<p><a href="/team/create">그룹생성</a></p>
+		<hr style="border-top:2px dashed gray; margin:0px 5px;">
+		<p><a href="/team/search">그룹찾기</a></p>
+	</div>
+	<div class="float-left team-item " th:each="dto : ${teamList}">
+		<p th:text="${dto.team_name}" class="font-big text-center team-name"></p>
+		<div class="float-left text-center">
+			<img th:if="${dto.team_image} != null" th:src="'/team/img?img='+${dto.team_image}" th:alt="${dto.team_name}+' 그룹의 이미지'">
+			<img th:if="${dto.team_image} == null" src="/images/team_default.png" alt="기본이미지"></img>
+		</div>
+		<div class="float-right" th:data-team_id="${dto.team_id}">
+			<p th:if="${dto.tm_grade} == 'WAIT'" class="font-gray">가입대기중</p>
+			<span class="font-blue pointer" data-link="member/info">내 정보</span>
+			<span class="font-blue pointer" data-link="info">그룹 정보</span>
+			<th:block th:if="${dto.tm_grade} != 'WAIT'">
+			<span class="font-blue pointer" data-link="calendar">그룹 일정</span>
+			<span class="font-blue pointer" data-link="board/list">그룹 게시판</span>
+			</th:block>
+		</div>
+	</div>
+</div>
+</div> <!-- main-container 끝 -->
 </body>
 </html>

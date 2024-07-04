@@ -45,7 +45,8 @@ public class SecurityConfig {
           
           .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB 기능 비활성화
           .authorizeHttpRequests((requests) -> requests
-                  .requestMatchers(new AntPathRequestMatcher("/planner/**")).permitAll()					// "/planner/main" 은 모든권한의 접속을 허용함
+        		  .requestMatchers(new AntPathRequestMatcher("/intro/**")).permitAll()					// "/planner/main" 은 모든권한의 접속을 허용함
+                  .requestMatchers(new AntPathRequestMatcher("/planner/**")).hasRole("USER")					// "/planner/main" 은 모든권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/planner/main")).permitAll()				// "/planner/main" 은 모든권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/member/anon/**")).permitAll() 			// "/member/anon/**" 은 모든권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/oauth2/**")).permitAll()						// "/oauth2/**" 은 모든 권한의 접속을 허용함

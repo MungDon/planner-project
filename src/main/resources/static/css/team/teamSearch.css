@@ -1,0 +1,23 @@
+.team{
+	width:590px;
+	height:120px;
+	margin:3px;
+	cursor:pointer;
+}
+.team img{
+	padding-top:10px;
+}
+.team .thead{
+	width:90px;
+}
+.team .tbody{
+	width:390px;
+}
+#pagebar{
+	width:max-content;
+	margin:10px auto;
+}
+.explain{
+	height:65px;
+	overflow:hidden;
+}

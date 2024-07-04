@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class VoteInfoDTO {
-
 	private long vote_id;
 	private String vote_title;
 	private String vote_content;

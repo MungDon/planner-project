@@ -12,19 +12,26 @@
 <body>
 <header th:replace="~{/fragments/header :: header}"></header>
 	<main class="restoreMain">
-		<input type="email" id="currentEmail" name="currentEmail" placeholder="가입했던 이메일을 적어주세요">
-		<input type="password" id="currentPassword" name="currentPassword" placeholder="비밀번호 작성">
-		<input type="checkbox" id="isOAuth">소셜로그인으로 가입했나요?
-		
-		<!-- display default none -->
-		<div id="oauthTypeBox">
-			<select name="oauth_type" id="oauth_type">
-				<option value="">==선택==</option>
-				<option value="google">구글</option>
-				<option value="kakao">카카오</option>
-			</select>
-		</div>
+		<div class="inputCon">
+		<span class="restoreText">회원복구를 위해<br> 정보를 입력해주세요</span>
+			<div class="inputBox">
+				<input type="email" id="currentEmail" name="currentEmail" placeholder="가입했던 이메일을 적어주세요">
+				<input type="password" id="currentPassword" name="currentPassword" placeholder="비밀번호 작성">
+			</div>
+			<div class="socialChkBox">
+				<input type="checkbox" id="isOAuth">
+				<span class="chkText"><label for="isOAuth">소셜로그인으로 가입했나요?</label></span>
+			</div>
+			<!-- display default none -->
+			<div id="oauthTypeBox">
+				<select name="oauth_type" id="oauth_type">
+					<option value="">======선택======</option>
+					<option value="google">구글</option>
+					<option value="kakao">카카오</option>
+				</select>
+			</div>
 		<button type="button" class="restoreBtn">신청</button>
+		</div>
 	</main>
 	<script src="/js/common.js"></script>
 	<script type="text/javascript" src="/js/member/memberRestore.js"></script>

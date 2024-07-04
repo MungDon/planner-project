@@ -15,4 +15,7 @@ public interface MapRepository {
 	public int MapList(MapDTO dto);
 	
 	public int MapDelete(Long schedule_id);
+	
+	public int MapUpdate(MapDTO dto);
+	
 }

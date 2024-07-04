@@ -28,7 +28,7 @@
 	color: gray;
 	font-weight: bold;
 	font-size: 27px;
-	padding-bottom: 30px;
+	padding-bottom: 20px;
 }
 
 .info_tr {
@@ -40,9 +40,13 @@
 .info_td_nick, .info_td_memo {
 /* 	width: 75%; */
 	text-align: left;
-	height: 3em;
-	
+	height: 2.5em;
 }
+
+#memoI{
+	resize: none;
+}
+
 .info_td_name {
 	font: 12px "malhun gothic";
 	color: gray;
@@ -55,12 +59,12 @@
 }
 
 .info_th {
-	margin-top: 15px;
+	margin-top: 20px;
 	display: flex;
 	justify-content: left;
 /* 	padding: 10px 0; */
 	color: gray;
-	font-size: 14px;
+	font-size: 13px;
 	
 }
 

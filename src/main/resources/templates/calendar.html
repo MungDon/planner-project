@@ -6,27 +6,29 @@
 <meta name="_csrf_header" th:content="${_csrf.headerName}">
 <meta name="_csrf" th:content="${_csrf.token}">
 <title>Calendar</title>
-<link rel="stylesheet" type="text/css" href="/css/style.css">
-<link rel="stylesheet" type="text/css" href="/css/kakaomap.css">
+<link rel="stylesheet" type="text/css" href="/css/header.css" >
+<link rel="stylesheet" type="text/css" href="/css/calendar/calendar.css">
+<link rel="stylesheet" type="text/css" href="/css/map/kakaomap.css">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0705776345a6b686de0b391cfcd66b8&libraries=services"></script>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
-<body>
-	<div id="alldiv">
+<body class="calendar-body">
+<header th:replace="~{/fragments/header :: header}"></header>
+  <div th:if="${msg}" th:text="${msg}" id="flashMessage" style="display: none;"></div>
+	<div id="alldiv" th:fragment="calendar">
 		<div class="calendar">
 			<div style="margin: auto;">
-				<button onclick="previousMonth()" class="btn">&lt;&lt;</button>
+				<button onclick="previousMonth()" class="btn-calendar">&lt;&lt;</button>
 				<span class="month-name"></span>
-				<button onclick="nextMonth()" class="btn">&gt;&gt;</button>
+				<button onclick="nextMonth()" class="btn-calendar">&gt;&gt;</button>
 			</div>
 			<div class="weekdays"></div>
 			<div class="days"></div>
 		</div>
-
-		<!-- right.hmtl을 호출 할꺼임. -->
+		<div style="height: 1px; width:50px;"></div>
 		<div class="schedule"></div>
 	</div>
 
-	<script th:src="@{/js/calendar.js}"></script>
+	<script th:src="@{/js/calendar/calendar.js}"></script>
 </body>
 </html>

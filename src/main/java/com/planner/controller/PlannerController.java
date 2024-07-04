@@ -16,7 +16,11 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class PlannerController {
-
+	
+	@GetMapping("/intro")
+	public String intro() {
+		return "intro";
+	}
 	
 	@GetMapping("/planner/main")
 	public String main(@UserData ResMemberDetail detail,HttpServletRequest request,HttpServletResponse response,Model model) {
@@ -25,8 +29,9 @@ public class PlannerController {
 				return "redirect:/oauth2/auth/signup";
 			}
 		model.addAttribute("member", detail);
+		return "main";
 		}
-		return"main";
+		return"redirect:/member/anon/login";
 	}
 	
 }

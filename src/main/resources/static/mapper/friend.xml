@@ -92,7 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-m
 	
 	<!-- (받은)친구신청 리스트 -->
 	<select id="receiveRequestList" resultType="FriendRequestDTO">
-		select m.member_email, fr.*
+		select m.member_email, m.member_name, fr.*
 		from member m
 		left outer join friend_request fr
 		on m.member_id = fr.member_send_id
@@ -103,7 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-m
 	
 	<!-- (보낸)친구신청 리스트 -->
 	<select id="sendRequestList" resultType="FriendRequestDTO">
-		select m.member_email, fr.*
+		select m.member_email, m.member_name, fr.*
 		from member m
 		left outer join friend_request fr
 		on m.member_id = fr.member_receive_id

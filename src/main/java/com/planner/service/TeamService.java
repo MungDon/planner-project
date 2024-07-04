@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -23,12 +22,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.planner.dto.request.member.MemberDTO;
+import com.planner.dto.request.team.MyTeamListDTO;
 import com.planner.dto.request.team.TeamDTO;
+import com.planner.dto.request.team.TeamInfoDTO;
 import com.planner.dto.request.team.TeamMemberDTO;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.TM_Grade;
-import com.planner.mapper.MemberMapper;
 import com.planner.mapper.TeamMapper;
 import com.planner.mapper.TeamMemberMapper;
 
@@ -38,17 +37,16 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class TeamService {
 
-	private final MemberMapper memberMapper;
 	private final TeamMapper teamMapper;
 	private final TeamMemberMapper tmMapper;
 	private final String uploadPath = new File("").getAbsolutePath() +"\\src\\main\\resources\\static\\upload\\";
 	private final List<String> exts = Arrays.asList(ImageIO.getReaderFormatNames()); 
-	
-	// 그룹 이름 중복 검사
+
+	// 그룹 이름 중복 검사. 중복이면 false
 	public boolean teamNameOverlap(String team_name) {
 		return teamMapper.teamNameOverlap(team_name) == 1 ? false : true;
 	}
-	
+
 	// 그룹 이미지 리사이즈 후 저장
 	public boolean setImg(TeamDTO dto, MultipartFile team_image) {
 		String team_name = dto.getTeam_name();
@@ -88,41 +86,46 @@ public class TeamService {
 		}
 		return true;
 	}
-	
+
 	// 그룹 이미지 제거
 	public void delImg(TeamDTO dto) {
 		File img = new File(uploadPath+dto.getTeam_image());
 		img.delete();
 	}
-	
+
 	// 그룹 생성
-	public boolean teamCreate(ResMemberDetail detail, String team_name, String team_explain, MultipartFile team_image) {
+	public long teamCreate(ResMemberDetail detail, String team_name, String team_explain, MultipartFile team_image) {
 		TeamDTO dto = new TeamDTO();
 		dto.setTeam_name(team_name);
 		dto.setTeam_explain(team_explain);
 		dto.setTeam_image("");
 		boolean imgResult = this.setImg(dto, team_image);
 		if(!imgResult) { // team_image가 검사를 통과 못했으면
-			return false;
+			return -1;
 		}
-		
+
 		teamMapper.teamInsert(dto); // team 생성
-		
+
 		TeamMemberDTO tmdto = new TeamMemberDTO();
-		
-		tmdto.setMember_id(detail.getMember_id());	// TODO 합치고나서 principal에서 뭐 가져오는지, member_id 어떻게 가져올 지 확인 후 변경 
+
+		tmdto.setMember_id(detail.getMember_id()); 
 		tmdto.setTeam_id(dto.getTeam_id());
 		tmdto.setTm_grade(TM_Grade.ROLE_TEAM_MASTER.getValue()); // enums의 TM_Grade 확인
 		tmdto.setTm_nickname(detail.getMember_name());
 		// team을 생성한 member를 해당 team의 team_member로 추가
 		tmMapper.insertTeamMember(tmdto);
-		
-		return true;
+
+		return dto.getTeam_id();
 	}
 
 	// 그룹 정보 읽기
 	public TeamDTO teamInfo(long team_id) {
 		return teamMapper.teamInfo(team_id);
+	}
+	
+	// 그룹 정보 + 그룹장 email 읽기
+	public TeamInfoDTO teamAndMasterInfo(long team_id) {
+		return teamMapper.teamAndMasterInfo(team_id);
 	}
 
 	// 이미지 파일 읽기
@@ -145,7 +148,7 @@ public class TeamService {
 	}
 
 	// 그룹 정보 수정
-	public void teamInfoUpdate(Principal principal, long team_id, String team_name, String team_explain,
+	public void teamInfoUpdate(long team_id, String team_name, String team_explain,
 								MultipartFile team_image, String delimg) {
 		TeamDTO dto = teamMapper.teamInfo(team_id);
 		dto.setTeam_name(team_name);
@@ -162,14 +165,32 @@ public class TeamService {
 		}
 		teamMapper.teamUpdate(dto);
 	}
-	
-	public void teamDelete(long team_id, long member_id) {
+
+	// 그룹 제거
+	public void teamDelete(long member_id, long team_id) {
 		TeamDTO dto = teamMapper.teamInfo(team_id);
-		int result = teamMapper.teamDelete(team_id, member_id);
+		int result = teamMapper.teamDelete(member_id, team_id);
 		if(result == 1) {
 			if(dto.getTeam_image() != null) {
 				this.delImg(dto);
 			}
 		}
+	}
+
+	// 가입 그룹 목록
+	public List<MyTeamListDTO> myTeamList(Long member_id) {
+		return teamMapper.myTeamList(member_id);
+	}
+
+	// 그룹 검색
+	public List<TeamInfoDTO> teamListSearch(int pageSize, long page, String searchOption, String search) {
+		long start = (page-1)*pageSize + 1;
+		long end = page*pageSize;
+		return teamMapper.teamListSearch(start, end, searchOption, search);
+	}
+
+	// 검색된 그룹 수 count
+	public long teamCount(String searchOption, String search) {
+		return teamMapper.teamCount(searchOption, search);
 	}
 }

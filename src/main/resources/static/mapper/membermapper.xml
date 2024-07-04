@@ -114,6 +114,7 @@
 		WHERE
 			member_email = #{member_email}
 	</select>
+	
 		<!-- 내 정보 -->
 	<select id="formMember" resultType="ResMemberDetail">
 		SELECT * 

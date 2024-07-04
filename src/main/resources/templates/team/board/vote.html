@@ -1,16 +1,34 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div>
-	<p class="float-right">투표 종료 시간 : <span th:text="${#temporals.format(dto.vote_end, 'yyyy-MM-dd HH:mm')}"></span></p>
+<div id="vote_info">
+	<h3 th:if="${end}" align="center">마감된 투표입니다</h3>
+	<p class="float-right">
+		투표 종료 시간 : <span th:text="${#temporals.format(dto.vote_end, 'yyyy-MM-dd HH:mm')}"></span>
+		<input type="hidden" id="vote_end" th:value="${dto.vote_end}">
+	</p>
 	<h3 id="vote_title" th:text="${dto.vote_title}"></h3>
 	<div id="vote_content" th:utext="${dto.vote_content}"></div>
 </div>
 <hr style="margin:5px 0;">
+
+<div id="vote_items" th:if="${voted} == 0 AND !${end}">
 <div th:each="item : ${dto.vote_items}">
-<p>
+	<input type="radio" name="vote_item_id" th:value="${item.vote_item_id}" th:id="|vote${item.vote_item_id}|">
 	<label th:for="|vote${item.vote_item_id}|" th:text="${item.vote_item_name}"></label>
-	<input type="radio" name="vote_radio" th:value="${item.vote_item_id}" th:id="|vote${item.vote_item_id}|">
-</p>
+</div>
+<button type="button" id="do_vote">투표하기</button>
+<button type="button" class="toggle_result">결과보기</button>
+</div>
+
+<div id="vote_result" th:classappend="${voted} == 0 AND !${end} ? dpn">
+<p>총 투표 인원 : <span th:text="${total_vote}"></span>명</p>
+<div th:each="item : ${dto.vote_items}">
+	<p>
+		<span th:text="${item.vote_item_name}"></span> : 
+		<span th:text="${#lists.size(item.vote_members)}"></span>명
+	</p>
+</div>
+<button type="button" class="toggle_result" th:if="${voted} == 0 AND !${end}">투표하기</button>
 </div>
 </body>
 </html>

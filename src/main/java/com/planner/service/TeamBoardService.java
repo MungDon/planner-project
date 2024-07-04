@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.planner.dto.request.team.board.TeamBoardDTO;
 import com.planner.dto.request.team.board.TeamBoardListDTO;
+import com.planner.dto.request.team.board.TeamBoardUpdateDTO;
 import com.planner.mapper.TeamBoardMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class TeamBoardService {
 
 	private final TeamBoardMapper teamBoardMapper;
+	private final TeamMemberService tmService;
 	
 	public int tbCountAll(Long team_id) {
 		return teamBoardMapper.teamBoardCountAll(team_id);
@@ -30,7 +32,9 @@ public class TeamBoardService {
 		return teamBoardMapper.teamBoardList(team_id, category, searchOption, search, start, end);
 	}
 
-	public void tbInsert(TeamBoardDTO dto) {
+	public void tbInsert(TeamBoardDTO dto, long member_id) {
+		long team_member_id = tmService.teamMemberId(dto.getTeam_id(), member_id);
+		dto.setTeam_member_id(team_member_id);
 		teamBoardMapper.teamBoardInsert(dto);
 	}
 
@@ -38,7 +42,7 @@ public class TeamBoardService {
 		return teamBoardMapper.teamBoardView(team_board_id);
 	}
 
-	public void teamBoardUpdate(TeamBoardDTO dto) {
+	public void teamBoardUpdate(TeamBoardUpdateDTO dto) {
 		teamBoardMapper.teamBoardUpdate(dto);
 	}
 

@@ -16,9 +16,9 @@
 		<input type="hidden" id="status" th:value="${status}"	/>
 		<div class="search_title">
 			<span class="title_text">Search</span>
-			<form action="/member/auth/search" method="get" id="keywordForm">	<!-- Enter Key 로 서밋 방지 -->
-				<input type="text" name="keyword" id="keywordInput"	maxlength="20" style="font-size : 18px; color : gray; font-style : oblique;"/>
-				<button type="button" id="keywordBtn">검색</button>
+			<form action="/member/auth/search" method="get" id="keywordForm" onsubmit="return keywordCheck()">	<!-- Enter Key 로 서밋 방지 -->
+				<input type="text" name="keyword" id="keywordInput" maxlength="20" style="font-size: 18px; color: gray; font-style: oblique;"	/>
+				<button type="submit" id="keywordBtn">검색</button>
 			</form>
 		</div>
 			<div th:if="${#lists.isEmpty(list) && keyword != '!@#$%^&*()'}" align="center">
@@ -28,14 +28,16 @@
 			<table class="searchTable">
 				<tr class="search_sub_tr">
 					<th class="search_td1">이메일</th>
-					<th>생년월일</th>
-					<th>성별</th>
+					<th class="search_td2">이름</th>
+					<th class="search_td3">성별</th>
 				</tr>
 				<tr th:each="memberDTO : ${list}" class="search_tr">
 					<td class="search_td1">
-						<a th:if="${memberDTO.friend_request_status != 'F'}" class="search_a" th:href="@{|/member/auth/info/${memberDTO.member_id}|}">
-							[[${memberDTO.member_email}]]
-						</a>
+						<div th:if="${memberDTO.friend_request_status != 'F'}">
+							<a class="search_a" th:href="@{|/member/auth/info/${memberDTO.member_id}|}">
+								[[${memberDTO.member_email}]]
+							</a>
+						</div>
 						<div th:if="${memberDTO.friend_request_status == 'F'}">
 							<form action="/friend/info" method="get" name="friendInfo">
 								<a th:text="${memberDTO.member_email}" onclick="friendInfo.submit()" href="javascript:void(0);"></a>
@@ -44,7 +46,7 @@
 							</form>
 						</div>
 					</td>
-					<td class="search_td2" th:text="${memberDTO.member_birth}"></td>
+					<td class="search_td2" th:text="${@friendRoleUtils.getMemberMaskingName(memberDTO.member_name, NAME)}"></td>
 					<td class="search_td3" th:text="${gender}"></td>
 					<td class="search_td4">
 						<div th:if="${memberDTO.friend_request_status != 'R' and memberDTO.friend_request_status != 'F'}">	<!-- 친구 요청상태 이거나 친구 이거나 -->

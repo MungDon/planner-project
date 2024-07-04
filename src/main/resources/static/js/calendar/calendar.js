@@ -5,9 +5,20 @@ const monthNames = [
 
 let currentMonth;
 let currentYear;
-let currentDate;
-let clickedDate;
-let dateValue;
+let local_date_start;		// datetime-local 에 들어갈 값을 저장해둔것임.
+let local_date_end;
+let clickedDate;				// 클릭한 날짜의 값을 저장해 두는것임.
+let id;									// form 의 번호임.
+
+const header = $("meta[name='_csrf_header']").attr('content');
+const token = $("meta[name='_csrf']").attr('content');
+
+document.addEventListener("DOMContentLoaded", function() {
+	var flashMessage = document.getElementById("flashMessage");
+	if (flashMessage && flashMessage.textContent.trim() !== '') {
+		alert(flashMessage.textContent);
+	}
+});
 
 
 // 달력 생성 함수
@@ -53,6 +64,7 @@ function createCalendar(month, year) {
 		if (i === currentDate.getDate() && month === currentDate.getMonth() + 1 && year === currentDate.getFullYear()) {
 			day.classList.add('today');
 		}
+		
 	}
 	$(document).off("click");
 
@@ -70,7 +82,8 @@ function createCalendar(month, year) {
 		clickDateSec.setMinutes(clickDateSec.getMinutes() + 30);
 		var clickDateStr2 = clickDateSec.toISOString().slice(0, 16);
 
-		currentDate = clickDate;
+		local_date_start = clickDate.toISOString().slice(0, 16);
+		local_date_end = clickDateSec.toISOString().slice(0, 16);
 
 		$.ajax({
 			url: "schedule",
@@ -161,10 +174,8 @@ function enableInputs(button) {
 
 	// edt_mapPlace 요소 가져오기
 	const edt_place = form.querySelector('.mapPlace');
-
-	if (edt_place !== null) {
+	if (edt_place.value.trim().length != 0) {
 		const trimmedValue = edt_place.value.trim(); // 값 가져오기 및 공백 제거
-
 		if (trimmedValue !== '') { // 값이 비어 있지 않은 경우
 			form.querySelector('.edt_place').style.display = 'inline-block';
 		}
@@ -190,9 +201,6 @@ function resetForm(button) {
 
 // 글 작성시 
 function writeSchedule() {
-
-	const place = document.getElementById('mapPlace');
-	const address = document.getElementById('mapAddress');
 	const firstDate = document.querySelector('.dateTimeLocal');
 	const secondDate = document.querySelector('.secondDateTimeLocal');
 	const writeContent = document.getElementById('schedule_content');
@@ -212,13 +220,9 @@ function writeSchedule() {
 		return;
 	}
 
-	if (new Date(firstDate.value) > new Date(secondDate.value)) {
-		alert('시작 시간이 종료 시간보다 늦을 수 없습니다.');
-		return; // 유효성 검사 실패 시 함수 종료
+	if (dateCheck(firstDate.value, secondDate.value)) {
+		return;
 	}
-
-	var header = $("meta[name='_csrf_header']").attr('content');
-	var token = $("meta[name='_csrf']").attr('content');
 
 	$.ajax({
 		url: 'schedule',
@@ -230,20 +234,8 @@ function writeSchedule() {
 		success: function() {
 			// 첫 번째 AJAX 요청 성공 시 실행되는 부분
 			$(".schedule").load(window.location.href + "");
-			$.ajax({
-				url: "schedule",
-				type: "GET",
-				data: { date: clickedDate },
-				success: function(html) {
-					// 두 번째 AJAX 요청 성공 시 실행되는 부분
-					$(".schedule").empty();
-					$(".schedule").append(html);
 
-				},
-				error: function(xhr, status, error) {
-					console.error("글작성 후 페이지 이동 오류", status, error);
-				}
-			});
+			scheduleAjax();
 		},
 		error: function(xhr, status, error) {
 			console.error("글 작성시에 오류 발생", status, error);
@@ -252,26 +244,18 @@ function writeSchedule() {
 }
 
 // 삭제 버튼
-function del_btn(btn) {
+function deleteScheduel(btn) {
 	const schedule_id = btn.value;
 	$.ajax({
 		url: 'schedule/del',
-		type: 'get',
+		type: 'delete',
 		data: { schedule_id: schedule_id },
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader(header, token);
+		},
 		success: function() {
 			$(".schedule").load(window.location.href + "");
-			$.ajax({
-				url: "schedule",
-				type: "GET",
-				data: { "date": clickedDate },
-				success: function(html) {
-					$(".schedule").empty();
-					$(".schedule").append(html);
-				},
-				error: function(xhr, status, error) {
-					console.error("삭제 후 이동 오류", status, error);
-				}
-			});
+			scheduleAjax();
 		}
 	});
 }
@@ -285,100 +269,55 @@ function editSchedule(btn) {
 	var start = form.find('#edtScheduleStart').val();		// 값 찾아서 꺼내옴.
 	var end = form.find('#edtScheduleEnd').val();
 
-	// start와 end 값을 Date 객체로 변환하여 비교
-	if (new Date(start) > new Date(end)) {
-		alert('시작 시간이 종료 시간보다 늦을 수 없습니다.');
-		return; // 유효성 검사 실패 시 함수 종료
+	if (dateCheck(start, end)) {
+		return;
 	}
 
 	$.ajax({
 		url: 'schedule/edt',
 		type: 'post',
 		data: formData,
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader(header, token);
+		},
 		success: function() {
 			$(".schedule").load(window.location.href + "");
-
-			$.ajax({
-				url: "schedule",
-				type: "GET",
-				data: { "date": clickedDate },
-				success: function(html) {
-					console.log(clickedDate);
-					// 두 번째 AJAX 요청 성공 시 실행되는 부분
-					$(".schedule").empty();
-					$(".schedule").append(html);
-				}
-			});
+			scheduleAjax();
 		}
 	});
 }
 
-/* 주완이 코드  */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-$(document).on("click", ".delete_btn", function() {
-	const schedule_id = $(this).val();
+// 처리 이후 페이지 새로고침 하는 ajax;
+function scheduleAjax() {
 	$.ajax({
-		url: '/right/del',
-		type: 'get',
-		data: { schedule_id: schedule_id },
-		success: function() {
-			console.log(schedule_id);
+		url: "schedule",
+		type: "GET",
+		data: { "date": clickedDate },
+		success: function(html) {
+			$(".schedule").empty();
+			$(".schedule").append(html);
+
+			let dateElement = document.querySelector('.dateTimeLocal');
+			let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+			dateElement.value = local_date_start;
+			dateElement.setAttribute("min", date);
+
+			let secondDateElement = document.querySelector('.secondDateTimeLocal');
+			secondDateElement.value = local_date_end;
+			secondDateElement.setAttribute("min", date);
+		},
+		error: function(xhr, status, error) {
+			console.error("삭제 후 이동 오류", status, error);
 		}
 	});
-});
-*/
-/*        
-			현재 사용 안함
-				날짜 클릭시		
-				day.addEventListener('click', function() {
-				클릭한 날짜의 정보를 YYYY MM DD 형식으로 출력
-				console.log(clickedDate);
-				window.location.href = 'right?date=' + encodeURIComponent(clickedDate);
-				const clickedDate = `${year}${String(month).padStart(2, '0')}${String().padStart(2, '0')}`; // YYYYMMDD 형식의 날짜 문자열
-		 ajax 쓸꺼임.
-		$(document).ready(function(){
-			$(".days").click(function(){
-				$.ajax({
-					success:function(html){
-						$(".schedule").append(html);
-					}
-				});
-			});
-		});
-    
-				리셋 후에 , 값 넣기.
-				$("#form")[0].reset();
-				dateElement.value = date;
-				secondDateElement.value = secondDate;
-				
-				//let currentDate = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000); // 현재 시간을 가져옴
-				//currentDate.setMinutes(currentDate.getMinutes() + 30);  // 현재 시간에서 30분을 더함
-				//let secondDate = currentDate.toISOString().slice(0, 16); // 16자리까지 자름 YYYY mm DD T HH
+}
 
-*/
-
-
-
-
-
-
-
-
-
-
-
-
+// 시간 유효성 검사.
+function dateCheck(start, end) {
+	if (new Date(start) > new Date(end)) {
+		alert('시작 시간이 종료 시간보다 늦을 수 없습니다.');
+		return ture; // 유효성 검사 실패 시 함수 종료
+	} else {
+		return false;
+	}
+}

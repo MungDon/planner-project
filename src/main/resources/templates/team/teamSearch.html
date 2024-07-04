@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<title>그룹 찾기</title>
+	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
+	<link rel="stylesheet" type="text/css" href="/css/team/teamSearch.css">
+	<script type="text/javascript" src="/js/team/teamSearch.js" defer></script>
+</head>
+<body>
+<div id="main-container"> <!-- main-container 시작 -->
+<p>검색된 그룹 개수: <span th:text="${count}"></span></p>
+<form method="get" id="searchForm" onsubmit="return submitCheck()"><!-- 글자수 2글자 이상으로 검사 -->
+<input type="hidden" name="page" value="1">
+<select name="so">
+	<option value="team_name" th:selected="${so} == 'team_name'">그룹 이름
+	<option value="team_explain" th:selected="${so} == 'team_explain'">그룹 설명
+	<option value="master_email" th:selected="${so} == 'master_email'">그룹장 이메일
+</select>
+<input type="text" name="search" id="search" th:value="${search}" placeholder="검색어를 입력해주세요">
+<button type="submit">검색</button>
+</form>
+<div th:if="${count > 0}" class="float-clear">
+	<div th:each="dto : ${list}" class="float-left team" th:data-team_id="${dto.team_id}">
+		<img th:if="${dto.team_image} != null" th:src="'/team/img?img='+${dto.team_image}" th:alt="${dto.team_name}+' 그룹의 이미지'">
+		<img th:if="${dto.team_image} == null" src="/images/team_default.png" alt="기본이미지"></img>
+		<table class="float-right">
+			<tr>
+				<td class="thead">그룹이름
+				<td class="tbody" th:text="${dto.team_name}">
+			<tr>
+				<td>그룹장
+				<td th:text="${dto.member_email}">
+			<tr>
+				<td>그룹소개
+				<td><div class="explain" th:unless="${#strings.isEmpty(dto.team_explain)}" th:text="${dto.team_explain}" ></div>
+				<div class="explain font-gray" th:if="${#strings.isEmpty(dto.team_explain)}">그룹 소개가 없습니다.</div>
+		</table>
+	</div>
+</div>
+<div th:if="${count == 0}">
+	<h1>검색된 그룹이 없습니다.</h1>
+</div>
+<nav th:if="${pageCount > 0}" id="pagebar">
+	<a th:if="${page} > ${pageBlock}" class="page" th:data-page="${pageStart} - 1" href="javascript:void(0);">이전</a>
+	<th:block th:each="pnum : ${#numbers.sequence(pageStart, pageEnd)}">
+		<a th:if="${pnum} != ${page}" class="page" th:text="${pnum}" th:data-page="${pnum}" href="javascript:void(0);"></a>
+		<a th:if="${pnum} == ${page}" class="page" th:text="${pnum}" th:data-page="${pnum}" href="javascript:void(0);"></a>
+	</th:block>
+	<a th:if="${pageEnd} < ${pageCount}" class="page" th:data-page="${pageEnd} + 1" href="javascript:void(0);">다음</a>
+</nav>
+</div> <!-- main-container 끝 -->
+</body>
+</html>

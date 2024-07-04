@@ -20,6 +20,13 @@
 	<delete id="MapDelete">
 		delete from map where schedule_id = #{schedule_id}
 	</delete>
+	<update id="MapUpdate" parameterType="MapDTO">
+	update map 
+		set place =	#{place},
+		address = #{address}
+	where schedule_id = #{schedule_id}
+</update>
+	
 	
 </mapper>
 

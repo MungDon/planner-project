@@ -1,0 +1,50 @@
+*{
+	margin:0;
+	padding:0;
+}
+#main-container{
+	width:1200px;
+	margin:0 auto;
+	padding:20px 0px;
+}
+.nodrag{
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-use-select: none;
+	user-select: none;
+}
+.float-right{
+	float:right;
+}
+.float-left{
+	float:left;
+}
+.float-clear{
+	content:'';
+	display:block;
+	clear:both;
+}
+.text-center{
+	text-align:center;
+}
+.font-big{
+	font-size:1.3em;
+}
+.font-small{
+	font-size:0.7em;
+}
+.font-gray{
+	color:gray;
+}
+.font-sgray{
+	color:slategray;
+}
+.font-blue{
+	color:blue;
+}
+.font-lsblue{
+	color:lightskyblue;
+}
+.pointer{
+	cursor:pointer;
+}

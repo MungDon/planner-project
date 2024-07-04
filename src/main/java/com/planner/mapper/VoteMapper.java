@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.planner.dto.request.team.vote.VoteDTO;
 import com.planner.dto.request.team.vote.VoteInfoDTO;
-import com.planner.dto.request.team.vote.VoteMemberDTO;
 
 @Mapper
 @Repository
@@ -18,5 +17,8 @@ public interface VoteMapper {
 							@Param("vote_item_names")List<String> vote_item_names);
 	public void voteDelete(Long vote_id);
 	public VoteInfoDTO voteInfo(Long vote_id);
-	public List<VoteMemberDTO> voteMemberList(Long vote_id);
+	public int voteCheck(@Param("vote_id") Long vote_id,
+						@Param("team_member_id")Long team_member_id);
+	public int voteMemberInsert(@Param("vote_item_id") Long vote_item_id,
+								@Param("team_member_id")Long team_member_id);
 }

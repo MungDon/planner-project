@@ -1,0 +1,27 @@
+#team-banner img{
+	height:50px;
+}
+#pageBox a, b{
+	padding:0 2px;
+	margin:2px 1px;
+}
+#pageBox a{
+	text-decoration: none;
+}
+#pageBox a:hover{
+	background-color:darkgray;
+	color:white;
+}
+.reply_count {
+	color:gray;
+	font-size:0.8em;
+}
+#notice{
+	background:lightyellow;
+}
+.fold{
+	display:none;
+}
+td span img{
+	vertical-align:bottom;
+}

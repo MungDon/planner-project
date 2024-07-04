@@ -21,17 +21,15 @@ $(document).on("click", ".addBtn", function(){
 });
 
 /* 키워드 검색 글자수 3글자 미만 알림창 띄우는 메서드 (input type="text" : maxlength 밖에 없음) */
-const keywordInput = document.getElementById('keywordInput');
-const keywordBtn = document.getElementById('keywordBtn');
-const keywordForm = document.getElementById('keywordForm');
-keywordBtn.addEventListener('click', () => {
-	const keyword = keywordInput.value.trim();
-	if (keyword.length < 3) {
+const keywordCheck = () => {
+	let keywordInput = document.getElementById('keywordInput');
+	keywordInput.value = keywordInput.value.trim();
+	if (keywordInput.value.length < 3) {
 		alert('최소 3글자 이상 입력하세요.');
 		return false;
 	}
-	keywordForm.submit();
-});
+	return true;
+};
 
 /* 링크 클릭 시 직접 서밋 */
 const infoA = document.querySelectorAll('.infoA');

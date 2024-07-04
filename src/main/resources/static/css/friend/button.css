@@ -58,8 +58,8 @@
 }
 /* 비활성화된 버튼 */
 .addBtn:disabled {
-	pointer-events: none; /* 클릭 막기 */
-	opacity : 0;
+	pointer-events: none;
+	opacity: 0;
 	transition: 1.2s;
 }
 

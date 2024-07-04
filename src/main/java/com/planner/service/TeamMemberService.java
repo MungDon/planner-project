@@ -17,10 +17,10 @@ public class TeamMemberService {
 
 	private final TeamMemberMapper tmMapper;
 
-	public String teamMemberOverlap(long team_id, long member_id) {
-		return tmMapper.teamMemberOverlap(team_id, member_id);
+	public String teamMemberGrade(long team_id, long member_id) {
+		return tmMapper.teamMemberGrade(team_id, member_id);
 	}
-	
+
 	public void tmInsert(Long team_id, Long member_id, String nickname) {
 		TeamMemberDTO dto = new TeamMemberDTO();
 		dto.setTeam_id(team_id);
@@ -42,6 +42,10 @@ public class TeamMemberService {
 		return tmMapper.myinfo(team_id, member_id);
 	}
 
+	public TeamMyInfoDTO myinfo2(Long team_id, Long team_member_id) {
+		return tmMapper.myinfo2(team_id, team_member_id);
+	}
+
 	public void tmUpdate(Long team_id, Long member_id, String tm_nickname) {
 		tmMapper.tmUpdate(team_id, member_id, tm_nickname);
 	}
@@ -49,9 +53,13 @@ public class TeamMemberService {
 	public int accept(Long team_id, Long member_id, String tm_grade) {
 		return tmMapper.accept(team_id, member_id, tm_grade);
 	}
-	
+
 	public int gradeModify(Long team_id, Long member_id, String tm_grade) {
 		return tmMapper.gradeModify(team_id, member_id, tm_grade);
+	}
+
+	public long teamMemberId(long team_id, long member_id) {
+		return tmMapper.myTeamMemberId(team_id, member_id);
 	}
 
 }

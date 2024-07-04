@@ -1,0 +1,145 @@
+@charset "UTF-8";
+        #alldiv{
+        	display:flex;
+        	flex-wrap: wrap;
+        	justify-content: center;
+       	}
+        
+        /* /planner/calendar 의 달력 css. */
+        .calendar {
+            display: grid;
+            gap: 5px; /* 셀 사이의 간격 설정 */
+            border: 1px solid black;
+            border-radius: 10px; 
+            width: 700px;
+            min-height: 190px;
+            height : 250px;
+            margin: 10% 10px 0% 0%;
+   			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-use-select: none;
+			user-select: none;
+        }
+
+        /* 달 이름을 가운데 정렬 */
+        .month-name {
+            text-align: center;
+            display: inline-block;
+            font-size : 21px;
+            min-width: 120px;
+        }
+
+        /* 요일과 날짜를 그리드로 표시 */
+        .weekdays, .days {
+            margin: auto;
+            display: grid;
+            font-size : 21px;
+            grid-template-columns: repeat(7, 100px);
+        }
+
+        /* 요일과 날짜의 내용을 중앙 정렬 */
+        .weekdays div, .days .day {
+			text-align : center;
+			margin: auto;
+        }
+        .day {
+            width: 24px;
+			height: 30px;
+			cursor: pointer;
+		}
+
+        /* 토요일 */
+        .weekdays div:nth-child(7n) {
+            color: #046582; /* 파란색 */
+        }
+
+        /* 토요일 */
+        .days .day:nth-child(7n) {
+            color: #195aa0 ; /* 파란색 */
+        }
+        
+        /* 일요일 */
+        .weekdays div:nth-child(7n+1) {
+            color: red; /* 빨간색 */
+        }
+
+        /* 일요일 */
+        .days .day:nth-child(7n+1) {
+            color: red; /* 빨간색 */
+        }
+
+		/* 달력 내부의 빈공간. */
+        .blank {
+            height: 100%;
+        }
+		
+        .btn-calendar {
+            background-color: gray; 
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        /* 오늘의 날짜에 강조 */
+        .today {
+            border: 3px solid  rgb(255, 210, 220);
+            border-radius: 6px;
+        }
+        
+        
+        /* schedule 전체 div 에 씌워짐 */
+		.schedule-container{
+			border: 3px solid black;
+			overflow-y : auto;
+			overflow-x : hidden;
+   			scrollbar-color: rgb(255, 255, 255) rgb(255, 255, 255);
+   			margin : 30px 0 30px 0%;
+			width:800px; 
+			min-height:750px; 
+			max-height :70vh;
+		}
+        
+		.schedule-content{
+			border:1px solid black;
+			border-collapse: collapse;
+			border-radius:20px;
+			padding : 5px; 
+		}
+		
+		.my-div{
+			display : none; 
+			padding: 5px; 
+			border : 0px;
+		} 
+		
+		.schedule-list{
+			margin-top:2px;
+			margin-bottom:2px;
+		}
+		
+		.click-date{
+			text-align: left;
+			margin-left:30px;
+		}
+		
+		/*			화면에서 스크롤바 지움.		*/
+        .calendar-body{overflow:auto;}
+		 
+		.text-con{
+			margin-left:15px;
+		    width: 386px;
+	    	height: 100px;
+			resize: none;
+			font-size: 13px;
+			font-weight: bolder;
+		}
+		
+		.calendar-body input{
+			margin-left:15px;
+			 height:22px;
+			 font-size: 13px;
+			 font-weight: bold;
+		 }

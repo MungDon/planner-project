@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.planner.dto.request.team.board.TeamBoardDTO;
 import com.planner.dto.request.team.board.TeamBoardListDTO;
+import com.planner.dto.request.team.board.TeamBoardUpdateDTO;
 
 @Mapper
 @Repository
@@ -26,7 +27,7 @@ public interface TeamBoardMapper {
 
 	public TeamBoardDTO teamBoardView(Long team_board_id);
 	
-	public void teamBoardUpdate(TeamBoardDTO dto);
+	public void teamBoardUpdate(TeamBoardUpdateDTO dto);
 	
 	public void teamBoardDelete(Long team_board_id);
 }

@@ -8,7 +8,7 @@ import lombok.Data;
  CREATE TABLE schedule (
 	schedule_id	number	primary key,
     member_id number NULL,
-    team_id number null,
+    team_id number NULL,
 	schedule_title	varchar2(50)	NOT NULL,
 	schedule_content	varchar2(500)	NULL,
 	schedule_start	TIMESTAMP	NOT NULL,
@@ -22,12 +22,21 @@ Create SEQUENCE schedule_seq;
 @Data
 public class ScheduleDTO {
 	private Long schedule_id;
-	private String schedule_title;
-	private String schedule_content;
-	private LocalDateTime schedule_start;
-	private LocalDateTime schedule_end;
-	private String place;
-	private String address;
 	
+	private Long member_id;
+	
+	private Long team_id;	
+	
+	private String schedule_title;
+	
+	private String schedule_content;
+	
+	private LocalDateTime schedule_start;
+	
+	private LocalDateTime schedule_end;
+	
+	private String place;
+	
+	private String address;
 	
 }

@@ -3,8 +3,10 @@
 <head>
 	<meta charset="UTF-8"/>
 	<title>그룹 참가</title>
+	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 </head>
 <body>
+<div id="main-container"> <!-- main-container 시작 -->
 <th:block th:if="${dto} != null">
 <table th:object="${dto}">
 	<tr>
@@ -26,19 +28,20 @@
 <hr>
 <form th:action="@{/team/member/insert}" method="post">
 	<!-- 합치면 바꿔야댐. 로그인 정보에서 member_id 가져올 수 있도록. -->
-	<input type="hidden" name="member_id" th:value="${member_id}"> <br>
-	<input type="hidden" name="team_id" th:value="${dto.team_id}"> <br>
+	<input type="hidden" name="team_id" th:value="${dto.team_id}">
 	<label for="nickname">별명</label>
-	<input type="text" name="nickname" id="nickname" th:value="${member_userid}" required> <br>
+	<input type="text" name="nickname" id="nickname" th:value="${member_name}" required> <br>
 	<button type="submit">참가</button>	
 </form>
 </th:block>
+</div> <!-- main-container 끝 -->
+
 <th:block th:if="${overlap} != null">
 <input type="hidden" id="overlap" th:value="${overlap}">
 <script>
 	msg = document.getElementById("overlap").value;
 	alert(msg);
-	location.href="/";
+	location.href="/team/main";
 </script>
 </th:block>
 </body>

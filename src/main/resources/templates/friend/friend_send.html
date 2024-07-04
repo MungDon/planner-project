@@ -12,12 +12,13 @@
 	<main class="receiveMain">
 		<table class="receive_table">
 			<tr>
-				<th class="receive_title" colspan="2">
+				<th class="receive_title" colspan="3">
 					<span>보낸요청</span>
 				</th>
 			</tr>
 			<tr class="receive_sub_tr">
-				<th class="receive_td1">받는사람 이메일</th>
+				<th class="receive_td1">이메일</th>
+				<th class="receive_td2">이름</th>
 			</tr>
 			<tr th:each="friendRequestDTO : ${sendList}" class="receive_tr">
 				<td class="receive_td1">	<!-- 이메일 클릭 시 회원정보로 이동 -->
@@ -26,6 +27,9 @@
 					</a>
 				</td>
 				<td class="receive_td2">
+					<span th:text="${@friendRoleUtils.getMemberMaskingName(friendRequestDTO.member_name, NAME)}"></span>
+				</td>
+				<td class="receive_td3">
 					<form action="/friend/requestDelete" method="post">
 						<button type="submit" class="addBtn">취소</button>
 						<input type="hidden" name="member_receive_id" th:value="${friendRequestDTO.member_receive_id}"	/>

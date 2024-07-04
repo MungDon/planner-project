@@ -22,27 +22,38 @@
 }
 
 .receive_tr {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+/* 	display: flex; */
+/* 	align-items: center; */
+/* 	justify-content: center; */
 	height: 1.8em;
 }
 
 .receive_a {
 	font-size: 16px;
 	color: purple;
+	
 }
 
 .receive_td1 {
-	margin-right: 10px;
+	width: 120px;
+	text-align: center;
+	overflow: hidden;
+	word-wrap: break-word;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+}
+
+.receive_td2 {
+/* 	margin-right: 10px; */
 	width: 160px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	text-align: center;
 }
-.receive_td2 {
-	width: 20px;
+.receive_td3 {
+	width: 60px;
 /* 	text-align: center; */
 	display: flex;
 	align-items: center;

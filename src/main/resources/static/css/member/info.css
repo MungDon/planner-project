@@ -32,9 +32,8 @@
 }
 
 .i_th {
- 	padding: 0 20px;
+	padding: 0 20px;
 }
-
 
 .modifyBtn {
 	font-size: 12px;
@@ -77,24 +76,26 @@
 	font-size: 15px;
 	font-weight: bold;
 	color: gray;
-	margin-top: 50px;
+	margin-top: 20px;
 	height: 35px;
 	border: 2px solid gray;
 	border-radius: 10px;
 	background-color: white;
 }
-.addOrCancelBtn:hover,.acceptBtn:hover{
-	cursor: pointer;
-} 
+
 /* 친구수락/거절 버튼 */
 .acceptBtn {
 	width: 48%;
 	font-size: 15px;
 	font-weight: bold;
 	color: gray;
-	margin-top: 50px;
+	margin-top: 20px;
 	height: 35px;
 	border: 2px solid gray;
 	border-radius: 10px;
 	background-color: white;
+}
+
+.addOrCancelBtn:hover, .acceptBtn:hover {
+	cursor: pointer;
 }

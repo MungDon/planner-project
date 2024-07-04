@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.planner.mapper.ScheduleMapper">
 
 	<insert id="schedule_insert" parameterType="ScheduleDTO" useGeneratedKeys="true" keyProperty="schedule_id"  keyColumn="schedule_id">
-		insert into schedule values(schedule_seq.nextVal, #{schedule_title}, #{schedule_content}, #{schedule_start, jdbcType=TIMESTAMP}, #{schedule_end, jdbcType=TIMESTAMP})
+		insert into schedule (schedule_id, member_id, schedule_title, schedule_content, schedule_start, schedule_end)
+		values(schedule_seq.nextVal,#{member_id} ,#{schedule_title}, #{schedule_content}, #{schedule_start, jdbcType=TIMESTAMP}, #{schedule_end, jdbcType=TIMESTAMP})
 	</insert>
 	
 	<select id="schedule_select" resultType="ScheduleDTO">
@@ -13,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM schedule S
 		left outer join map M
 		on S.schedule_id = M.schedule_id
-		WHERE to_char(schedule_start, 'yyyyMMdd') = #{date}
+		WHERE S.member_id = #{member_id} and to_char(schedule_start, 'yyyyMMdd') = #{date}
         ORDER BY S.schedule_start ASC, S.schedule_end ASC, S.schedule_id ASC
 	</select>
 	
@@ -23,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        schedule_content = #{schedule_content},
 	        schedule_start = #{schedule_start, jdbcType=TIMESTAMP}, 
 	        schedule_end = #{schedule_end, jdbcType=TIMESTAMP}
-	    where schedule_id = #{schedule_id}
+	    where schedule_id = #{schedule_id} 
 	</update>
 	
 	<delete id="schedule_delete">

@@ -4,58 +4,68 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.planner.mapper.VoteMapper">
 
-	<insert id="voteInsert" parameterType="VoteDTO">
-		<selectKey keyProperty="vote_id" resultType="long" order="BEFORE">
-			select vote_seq.nextval from dual
-		</selectKey>
-		insert into vote values(
+<insert id="voteInsert" parameterType="VoteDTO">
+	<selectKey keyProperty="vote_id" resultType="long" order="BEFORE">
+		select vote_seq.nextval from dual
+	</selectKey>
+	insert into vote values(
+		#{vote_id},
+		#{vote_title},
+		#{vote_content},
+		#{vote_end}
+	)
+</insert>
+
+<insert id="voteItemInsert">
+	<foreach collection="vote_item_names" item="vote_item_name" separator=";" open="BEGIN" close="; END;">
+		insert into vote_item values(
+			vote_item_seq.nextval,
 			#{vote_id},
-			#{vote_title},
-			#{vote_content},
-			#{vote_end}
+			#{vote_item_name}
 		)
-	</insert>
-	
-	<insert id="voteItemInsert">
-		<foreach collection="vote_item_names" item="vote_item_name" separator=";" open="BEGIN" close="; END;">
-			insert into vote_item values(
-				vote_item_seq.nextval,
-				#{vote_id},
-				#{vote_item_name}
-			)
-		</foreach>
-	</insert>
+	</foreach>
+</insert>
 
-	<delete id="voteDelete">
-		delete vote where vote_id=#{vote_id}
-	</delete>
+<delete id="voteDelete">
+	delete vote where vote_id=#{vote_id}
+</delete>
 
-	<resultMap type="VoteInfoDTO" id="voteInfo">
-		<result column="vote_id"		property="vote_id"/>
-		<result column="vote_title"		property="vote_title"/>
-		<result column="vote_content"	property="vote_content"/>
-		<result column="vote_end"		property="vote_end"/>
-		<collection column="vote_id" property="vote_items" javaType="List" ofType="VoteInfoDTO" select="voteItemList">
+<resultMap type="VoteInfoDTO" id="voteInfo">
+	<result column="vote_id"		property="vote_id"/>
+	<result column="vote_title"		property="vote_title"/>
+	<result column="vote_content"	property="vote_content"/>
+	<result column="vote_end"		property="vote_end"/>
+	<collection column="vote_id" property="vote_items" javaType="List" ofType="VoteItemDTO">
+		<id		column="vote_item_id"	property="vote_item_id"></id>
+		<result column="vote_item_name"	property="vote_item_name"></result>
+		<collection column="vote_item_id" property="vote_members" javaType="List" ofType="VoteMemberDTO">
+			<id column="team_member_id"	property="team_member_id"></id>
 		</collection>
-	</resultMap>
+	</collection>
+</resultMap>
 
-	<select id="voteInfo" resultMap="voteInfo">
-		select vote_id, vote_title, vote_content, vote_end
-		    from vote
-		    where vote_id = #{vote_id}
-	</select>
+<select id="voteInfo" resultMap="voteInfo">
+	select v.vote_id, v.vote_title, v.vote_content, v.vote_end,
+		vi.vote_item_id, vi.vote_item_name, vi.vote_item_name,
+		vm.team_member_id
+	    from vote v
+	    join vote_item vi
+	    on v.vote_id = vi.vote_id
+	    left outer join vote_member vm
+	    on vm.vote_item_id in vi.vote_item_id
+	    where v.vote_id = #{vote_id}
+</select>
 
-	<select id="voteItemList" resultType="VoteItemDTO">
-		select vote_item_id, vote_item_name from vote_item where vote_id=#{vote_id}
-	</select>
+<select id="voteCheck">
+	select count(*)
+	from vote_member
+	where vote_item_id in
+	        (select vote_item_id from vote_item where vote_id = #{vote_id})
+		and team_member_id=#{team_member_id}
+</select>
 
-	<select id="voteMemberList" resultType="VoteMemberDTO">
-	select vm.vote_item_id, vm.team_member_id, tm.tm_nickname
-		from vote_member vm
-		join team_member tm
-		on vm.team_member_id = tm.team_member_id
-		where vm.vote_item_id in
-			(select vote_item_id from vote_item where vote_id=#{vote_id})
-	</select>
+<insert id="voteMemberInsert">
+	insert into vote_member values(#{vote_item_id}, #{team_member_id})
+</insert>
 
 </mapper>
