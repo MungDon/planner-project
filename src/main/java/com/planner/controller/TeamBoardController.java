@@ -67,7 +67,7 @@ public class TeamBoardController {
 			}
 		}
 		List<TeamBoardListDTO> notice_list = null;
-		if (!category.equals("공지사항")) {
+		if (!category.equals("공지사항") && search.length() == 0) {
 			notice_list = tbService.tblist(team_id, "공지사항", "NO", "", 1, 10);
 		}
 		int pageBlock = 10;

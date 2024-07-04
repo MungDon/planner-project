@@ -35,15 +35,18 @@
 				<!-- 별명 -->
 				<td class="list_td">
 					<!-- 나타나 있음 -->
-					<div th:attr="id='nameT' + ${friendDTO.friend_id}"
+					<input type="text" maxlength="16" style="width: 90px;"
+						 th:attr="id='nameI' + ${friendDTO.friend_id}"
+						 th:value="${friendDTO.friend_nickname}" class="nameI"	disabled/>
+	<!-- 				<div th:attr="id='nameT' + ${friendDTO.friend_id}"
 					 th:text="${friendDTO.friend_nickname}" class="nameT">
 					</div>
-					<!-- 숨겨져 있음 -->
+					숨겨져 있음
 					<div>
 						<input type="text" maxlength="16" style="display: none; width: 90px;"
 						 th:attr="id='nameI' + ${friendDTO.friend_id}"
-						 th:value="${friendDTO.friend_nickname}"	/>
-					</div>
+						 th:value="${friendDTO.friend_nickname}" class="nameI"	/>
+					</div> -->
 				</td>
 				<td class="list_tdBtn">
 					<form action="/friend/nickname" method="post" th:attr="id='nickForm' + ${friendDTO.friend_id}">

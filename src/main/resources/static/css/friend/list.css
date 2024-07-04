@@ -47,11 +47,17 @@
 	width: 30%;
 }
 
-.nameT {
-	width: 120px;
+.nameI:disabled {
+	background-color: white;
+	border: none;
+	margin: 2px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.nameI {
+	text-align: center;
 }
 
 .list_td {
