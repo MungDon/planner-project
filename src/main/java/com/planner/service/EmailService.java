@@ -79,9 +79,7 @@ public class EmailService {
 	//인증 번호 검증
 	@Transactional(readOnly = true)
 	public int authCodeChk(String toEmail, String authCode) {
-		int result = 0;
-		result = emailMapper.authCodeChk(toEmail, authCode);
-		return result;
+		return emailMapper.authCodeChk(toEmail, authCode);
 	}
 
 	// 스케쥴러로 정기적으로 잉여데이터 전부다 삭제

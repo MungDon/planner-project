@@ -5,6 +5,7 @@
 <title>비번 변경</title>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
+	<link rel="stylesheet" type="text/css" href="/css/member/pw_change.css"	/>
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
@@ -12,11 +13,13 @@
 <header th:replace="~{/fragments/header :: header}"></header>
 	<main class="pwChangeMain">
 		<div class="pwChangeBox">
+			<span class="pwChangeText">비밀번호 변경을 위해<br/> 정보를 입력하세요.</span>
 			<input type="hidden" id="member_id" th:value="${member_id}">
 			<input type="password" id="newPassword" placeholder="새로운 비밀번호를 입력하세요."> 
 			<input type="password" id="newPassword2" placeholder="비밀번호재입력 하세요.">
-			<div ></div> 
-			<button type="button" class="pwChangeBtn">변경</button>
+			<div class="changeBtnBox">
+				<button type="button" class="pwChangeBtn">변경 완료</button>
+			</div> 
 		</div>
 	</main>
 	<script src="/js/common.js"></script>

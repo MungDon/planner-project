@@ -1,0 +1,56 @@
+@charset "UTF-8";
+.pwChangeMain {
+	margin-top: 100px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	display: flex;
+}
+
+.pwChangeBox {
+	background-color:white;
+	width: 400px;
+	border: 1px solid #ddd;
+	border-radius: 20px;
+	padding: 50px;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0px 0px 10px 1px #a8c9ff;
+}
+
+.pwChangeBox>input {
+	font-size: 20px;
+	width: 100%;
+	margin: 20px 0 20px 0;
+	border-style: none;
+	border-bottom: 2px solid #ddd;
+}
+
+.pwChangeBox>input:focus {
+	outline: none;
+	border-bottom: 2px solid skyblue;
+}
+
+.pwChangeBox>input::placeholder {
+	font-size: 15px;
+}
+
+.pwChangeText {
+	color: gray;
+	font-weight: bold;
+	font-size: 27px;
+	margin-bottom: 20px;
+}
+
+.pwChangeBtn {
+	width: 100%;
+	font-size: 15px;
+	font-weight: bold;
+	color: gray;
+	margin-top: 50px;
+	height: 45px;
+	border: 2px solid gray;
+	border-radius: 10px;
+	background-color: white;
+}
