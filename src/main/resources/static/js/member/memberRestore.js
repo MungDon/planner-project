@@ -5,6 +5,8 @@ $(function() {
 		if ($(this).is(":checked")) {// 체크 되었을 때
 			$("#oauthTypeBox").css("display", "block");
 			$("#currentPassword").css("display", "none");
+			$("#currentPassword").val("");
+			
 		} else {					// 체크 해제 되었을 때
 			$("#oauthTypeBox").css("display", "none");
 			$("#currentPassword").css("display", "block");
