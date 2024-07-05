@@ -88,19 +88,21 @@ public class MemberService {
 	}
 
 	/* 비번체크 */
-	public int passwordChk(String currnetPw, ResMemberDetail member) {
-		int result = 0;
-
+	public boolean isPasswordValid(String currnetPw, ResMemberDetail member) {
+		if(CommonUtils.isEmpty(member)) {
+			return false;
+		}
+		
 		// 소셜로그인일때
-		if (member != null && !member.getOauth_id().equals("none") && CommonUtils.isEmpty(currnetPw)) {
-			return result = 1;
+		if (!member.getOauth_id().equals("none") && CommonUtils.isEmpty(currnetPw)) {
+			return true;
 		}
 
 		// 일반로그인일때
-		if (member != null && passwordEncoder.matches(currnetPw, member.getMember_password())) {
-			return result = 1;
+		if (passwordEncoder.matches(currnetPw, member.getMember_password())) {
+			return true;
 		}
-		return result;
+		return false;
 	}
 
 	/* 회원 탈퇴 */
@@ -136,9 +138,8 @@ public class MemberService {
 		if (CommonUtils.isEmpty(memberDetail)) {
 			throw new RestCustomException(ErrorCode.NO_ACCOUNT);
 		}
-		// 비번일치한지 안한지 검사
-		int pwChk = passwordChk(req.getCurrentPassword(), memberDetail);
-		if (pwChk != 1) {
+		
+		if (isPasswordValid(req.getCurrentPassword(), memberDetail)) {
 			throw new RestCustomException(ErrorCode.NO_ACCOUNT);
 		}
 		// member_status 별 숫자 코드 반환
@@ -150,16 +151,15 @@ public class MemberService {
 	/* 회원체크 */
 	@Transactional
 	public boolean isMember(String email) {
-		boolean result = true;
 		ResMemberDetail user = memberMapper.findByEmail(email);
-		if (user == null) {
-			result = false;
+		if (CommonUtils.isEmpty(user)) {
+			return false;
 		}
 		// 탈퇴한 회원이면 예외 발생
-		if (user != null && user.getMember_status().equals(MemberStatus.DELETE.getCode())) {
+		if (user.getMember_status().equals(MemberStatus.DELETE.getCode())) {
 			throw new CustomException(ErrorCode.WITHDRAWN_MEMBER);
 		}
-		return result;
+		return true;
 	}
 
 	/* 이메일 인증시 회원검사 */

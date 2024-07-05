@@ -111,8 +111,8 @@ public class MemberController {
 	@ResponseBody
 	public ResponseEntity<String> passwordChk(@RequestParam(value = "currentPw") String currentPw,
 			@UserData ResMemberDetail member) {
-		int result = memberService.passwordChk(currentPw, member);
-		if (result == 1) {
+		boolean isPasswordValid = memberService.isPasswordValid(currentPw, member);
+		if (isPasswordValid) {
 			return ResponseEntity.ok("성공");
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("실패");
