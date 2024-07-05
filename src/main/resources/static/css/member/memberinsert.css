@@ -126,7 +126,7 @@
 }
 	
 .signChkModal,.authCodeModal {
-	position: absolute;
+	position: fixed;
 	display: none;
 	justify-content: center;
 	top: 0;
@@ -137,7 +137,7 @@
 }
 
 .modalBody{
-	position: absolute;
+	position: relative;
 	width: 500px;
 	top: 50%;
 	left: 50%;

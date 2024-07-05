@@ -46,7 +46,6 @@
 				member_reg,
 				member_status,
 				member_role,
-				oauth_type,
 				oauth_id
 				) values (
 				NEXTVAL('member_seq'),
@@ -59,7 +58,6 @@
 				sysdate,
 				'B',
 				#{member_role},
-				'none',
 				'none'
 			)
 	</insert>

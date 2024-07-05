@@ -4,7 +4,8 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
    	<title>회원수정</title>
-   	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
+   	<link rel="stylesheet" type="text/css" href="/css/header.css"/>
+   	<link rel="stylesheet" type="text/css" href="/css/member/update.css"/>
    	<meta name="_csrf" th:content="${_csrf.token}"/>
 	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
@@ -41,5 +42,6 @@
 			</div>
 		</form>
 	</main>
+	<script src="/js/member/member_update.js"></script>
 </body>
 </html>

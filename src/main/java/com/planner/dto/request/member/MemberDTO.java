@@ -3,6 +3,10 @@ package com.planner.dto.request.member;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.planner.enums.MemberRole;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,4 +27,8 @@ public class MemberDTO {
 	private String friend_request_status;	// 친구신청 상태 리스트 (요청 : R, 친구 : F)
 	private String member_role;					// 회원권한
 
+	public void setUserDefaults(PasswordEncoder passwordEncoder) {
+		this.member_role = MemberRole.USER.getType();
+		this.member_password = passwordEncoder.encode(this.member_password);
+	}
 }

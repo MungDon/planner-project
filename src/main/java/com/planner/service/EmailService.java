@@ -39,6 +39,7 @@ public class EmailService {
 
 	//현재 이메일로 인증받았던 이전 인증코드들 삭제
 	// 해당이메일의 기존 인증기록이 남아있으면 이전 코드도 인증이 되어버리기때문에 인증코드 생성전에 삭제
+	@Transactional
 	private void deletePrevEmailAuthCode(String toEmail) {
 		int isExists = emailMapper.isExists(toEmail);
 		if(isExists >=1) {
@@ -47,6 +48,7 @@ public class EmailService {
 	}
 	
 	// 이메일 인증 코드 생성
+	@Transactional
 	private String createAuthCode(String toEmail) {
 		StringBuilder authCode = new StringBuilder();
 		Random ramdom = new Random();
@@ -78,8 +80,11 @@ public class EmailService {
 	
 	//인증 번호 검증
 	@Transactional(readOnly = true)
-	public int authCodeChk(String toEmail, String authCode) {
-		return emailMapper.authCodeChk(toEmail, authCode);
+	public void authCodeChk(String toEmail, String authCode) {
+		int result = emailMapper.authCodeChk(toEmail, authCode);
+		if (result != 1) {
+			throw new RestCustomException(ErrorCode.FAIL_AUTHENTICATION);
+		}
 	}
 
 	// 스케쥴러로 정기적으로 잉여데이터 전부다 삭제

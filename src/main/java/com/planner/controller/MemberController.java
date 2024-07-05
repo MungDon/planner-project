@@ -3,8 +3,6 @@ package com.planner.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import org.mybatis.spring.MyBatisSystemException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -30,7 +28,6 @@ import com.planner.enums.Masking;
 import com.planner.enums.MemberStatus;
 import com.planner.exception.CustomException;
 import com.planner.exception.ErrorCode;
-import com.planner.exception.RestCustomException;
 import com.planner.service.EmailService;
 import com.planner.service.FriendService;
 import com.planner.service.MemberService;
@@ -80,17 +77,10 @@ public class MemberController {
 	@ResponseBody
 	public ResponseEntity<Long> authCodeChk(@RequestParam(value = "toEmail") String toEmail,
 			@RequestParam(value = "authCode") String authCode) {
-		int result = 0;
-		ResMemberDetail member = null;
-		try {
-			member = memberService.memberDetail(toEmail);
-		}catch(MyBatisSystemException e){
-			member = memberService.formMember(toEmail);
-		}
-		result = emailService.authCodeChk(toEmail, authCode);
-		if (result != 1) {
-			throw new RestCustomException(ErrorCode.FAIL_AUTHENTICATION);
-		}
+		// TODO - 리팩토링 대상
+		ResMemberDetail member = memberService.formMember(toEmail);
+		emailService.authCodeChk(toEmail, authCode);
+
 		if (member != null) {
 			return ResponseEntity.ok(member.getMember_id());
 		}
@@ -111,11 +101,8 @@ public class MemberController {
 	@ResponseBody
 	public ResponseEntity<String> passwordChk(@RequestParam(value = "currentPw") String currentPw,
 			@UserData ResMemberDetail member) {
-		boolean isPasswordValid = memberService.isPasswordValid(currentPw, member);
-		if (isPasswordValid) {
-			return ResponseEntity.ok("성공");
-		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("실패");
+		memberService.isPasswordValid(currentPw, member);
+		return ResponseEntity.ok("성공");
 	}
 
 	/* 비밀번호 찾기 */
@@ -180,15 +167,10 @@ public class MemberController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/auth/myInfo")
 	public String myInfo(@UserData ResMemberDetail detail, Model model) {
-		ResMemberDetail memberDTO = null;
+		ResMemberDetail memberDTO = memberService.findMemberByLoginType(detail.getOauth_type(),
+				detail.getMember_email());
 		String gender;
 
-		if (detail.getOauth_id().equals("none")) {
-			memberDTO = memberService.memberDetail(detail.getMember_email()); // 나의 객체
-		}
-		if (!detail.getOauth_id().equals("none")) {
-			memberDTO = memberService.memberDetailForSocial(detail.getMember_email(), detail.getOauth_type());
-		}
 		gender = Gender.findNameByCode(detail.getMember_gender());
 
 		model.addAttribute("memberDTO", memberDTO);
@@ -200,24 +182,24 @@ public class MemberController {
 //	회원정보
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/auth/info/{member_id}")
-	public String memberInfo(@PathVariable(value = "member_id") Long member_id,
-					   		 @UserData ResMemberDetail detail, Model model) {
+	public String memberInfo(@PathVariable(value = "member_id") Long member_id, @UserData ResMemberDetail detail,
+			Model model) {
 		String gender;
 		String name;
 		int receive_count = 0;
-		
+
 		MemberDTO memberDTO = memberService.info(member_id, detail);
 		gender = Gender.findNameByCode(memberDTO.getMember_gender());
-		receive_count = friendService.receiveRequestCount(detail.getMember_email());	// 받은 친구신청 수
-		
+		receive_count = friendService.receiveRequestCount(detail.getMember_email()); // 받은 친구신청 수
+
 		name = Masking.maskAs(memberDTO.getMember_name(), Masking.NAME);
-		model.addAttribute("name", name);		// 마스킹 처리
-		
+		model.addAttribute("name", name); // 마스킹 처리
+
 		model.addAttribute("receive_count", receive_count);
 		model.addAttribute("memberDTO", memberDTO);
 		model.addAttribute("gender", gender);
-		
-		return "/member/member_info"; 
+
+		return "/member/member_info";
 	}
 
 	/* 회원정보 수정 폼 */
@@ -268,8 +250,8 @@ public class MemberController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/auth/search")
 	public String search(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
-				   	     @RequestParam(name = "keyword", defaultValue = "!@#$%^&*()") String keyword,		// 키워드 기본값 특수문자로 초기 화면 없애기
-				   	     @UserData ResMemberDetail detail, Model model) {
+			@RequestParam(name = "keyword", defaultValue = "!@#$%^&*()") String keyword, // 키워드 기본값 특수문자로 초기 화면 없애기
+			@UserData ResMemberDetail detail, Model model) {
 //		페이징 처리
 		int pageSize = 10;
 		int currentPage = pageNum;
@@ -277,47 +259,46 @@ public class MemberController {
 		int end = currentPage * pageSize;
 		int count = 0;
 		String gender;
-		
+
 		List<MemberDTO> list = memberService.search(detail.getMember_email(), keyword, start, end);
 		for (MemberDTO memberDTO : list) {
 			gender = Gender.findNameByCode(memberDTO.getMember_gender());
-			
+
 			model.addAttribute("gender", gender);
 		}
-		
+
 		if (list.size() > 0) {
 			count = memberService.searchCount(detail.getMember_id(), keyword);
 		}
-		
+
 		int pageCount = count / pageSize + (count % pageSize == 0 ? 0 : 1);
-		int startPage = (int)((currentPage - 1) / 10) * 10 + 1;
+		int startPage = (int) ((currentPage - 1) / 10) * 10 + 1;
 		int pageBlock = 10;
 		int endPage = startPage + pageBlock - 1;
-		
+
 		if (endPage >= pageCount) {
 			endPage = pageCount;
 		}
-		
+
 		model.addAttribute("count", count);
 		model.addAttribute("pageCount", pageCount);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("pageNum", pageNum);
-		
-		model.addAttribute("keyword", keyword);					// 키워드
-		
-		model.addAttribute("list", list);						// 친구신청 리스트 (친구신청 상태 담겨있음)
-		model.addAttribute("friendRoles", FriendRole.values());	// FriendRole 상태 권한설정
-		
+
+		model.addAttribute("keyword", keyword); // 키워드
+
+		model.addAttribute("list", list); // 친구신청 리스트 (친구신청 상태 담겨있음)
+		model.addAttribute("friendRoles", FriendRole.values()); // FriendRole 상태 권한설정
+
 		model.addAttribute("status", detail.getMember_status());
-		
-		int receive_count = friendService.receiveRequestCount(detail.getMember_email());	// 받은 친구신청 수
+
+		int receive_count = friendService.receiveRequestCount(detail.getMember_email()); // 받은 친구신청 수
 		model.addAttribute("receive_count", receive_count);
-		
-		model.addAttribute("NAME", Masking.NAME);		// 타임리프로 마스킹 처리를 하기위해 넘겨줌
-		
+
+		model.addAttribute("NAME", Masking.NAME); // 타임리프로 마스킹 처리를 하기위해 넘겨줌
+
 		return "member/member_search";
 	}
-	
 
 }
