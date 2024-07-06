@@ -75,7 +75,7 @@
             , member_email = #{member_email}
         </if>
 		WHERE
-			oauth_id = #{oauth_id}
+			member_id = #{member_id}
 	</update>
 	
 	<!-- 회원 수정 -->
@@ -105,21 +105,23 @@
 		WHERE oauth_id = #{oauthId}
 	</select>
 	
-	<!-- 내 정보 -->
-	<select id="findByEmail" resultType="ResMemberDetail">
-		SELECT * 
-		FROM member
-		WHERE
-			member_email = #{member_email}
-	</select>
 	
-		<!-- 내 정보 -->
+		<!-- 일반로그인회원 정보 -->
 	<select id="formMember" resultType="ResMemberDetail">
 		SELECT * 
 		FROM member
 		WHERE
 			member_email = #{member_email}
 			AND oauth_id = 'none'
+	</select>
+	
+		<!-- 소셜로그인회원 정보 -->
+	<select id="socialMember" resultType="ResMemberDetail">
+		SELECT * 
+		FROM member
+		WHERE
+			member_email = #{member_email}
+			AND oauth_id != 'none'
 	</select>
 	
 	<!-- 회원이메일, 소셜로그인 타입으로 유저 정보 가져오기 -->

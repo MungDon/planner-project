@@ -47,7 +47,7 @@ public class UserDataResolver implements HandlerMethodArgumentResolver{
 			return member;
 		}else if(principal instanceof User) {
 			User user = (User)principal;
-			ResMemberDetail member = memberService.memberDetail(user.getUsername());
+			ResMemberDetail member = memberService.formMember(user.getUsername());
 			return member;
 		}
 		

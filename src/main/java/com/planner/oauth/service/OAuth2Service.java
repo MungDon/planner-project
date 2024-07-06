@@ -12,6 +12,7 @@ import com.planner.exception.ErrorCode;
 import com.planner.mapper.MemberMapper;
 import com.planner.service.MemberService;
 import com.planner.util.CommonUtils;
+import com.planner.util.UserData;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,11 +47,10 @@ public class OAuth2Service {
 	
 	/*소셜로 받아오지못한 회원정보 저장*/
 	@Transactional
-	public void fetchAdditionalUserInfo(ReqOAuth2Signup req, OAuth2UserPrincipal principal) {
+	public void fetchAdditionalUserInfo(ReqOAuth2Signup req) {
 		if(!CommonUtils.isEmpty(req.getMember_email())) {
-			memberService.isMember(req.getMember_email());
+			memberService.memberValidate(req.getMember_email(),false);
 		}
-		req.setOauth_id(principal.getOAuthId());
 		req.setMember_status(MemberStatus.BASIC.getCode());
 		memberMapper.fetchAdditionalUserInfo(req);
 	}

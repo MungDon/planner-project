@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.planner.exception.ErrorCode;
 import com.planner.exception.RestCustomException;
 import com.planner.mapper.EmailMapper;
+import com.planner.util.CommonUtils;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -82,9 +83,7 @@ public class EmailService {
 	@Transactional(readOnly = true)
 	public void authCodeChk(String toEmail, String authCode) {
 		int result = emailMapper.authCodeChk(toEmail, authCode);
-		if (result != 1) {
-			throw new RestCustomException(ErrorCode.FAIL_AUTHENTICATION);
-		}
+		CommonUtils.RestResultSuccessful(result, ErrorCode.FAIL_AUTHENTICATION);
 	}
 
 	// 스케쥴러로 정기적으로 잉여데이터 전부다 삭제

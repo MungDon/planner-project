@@ -3,6 +3,10 @@ package com.planner.util;
 import java.util.Collection;
 import java.util.Map;
 
+import com.planner.enums.ErrorType;
+import com.planner.exception.CustomException;
+import com.planner.exception.ErrorCode;
+import com.planner.exception.RestCustomException;
 import com.planner.oauth.CookieUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +42,17 @@ public class CommonUtils {
 	        return true;
 	    }
 		return false;
+	}
+	
+	public static void ResultSuccessful(int result, ErrorCode errorCode) {
+		if(result != 1) {
+			throw new CustomException(errorCode);
+		}
+	}
+	public static void RestResultSuccessful(int result,ErrorCode errorCode) {
+		if(result != 1) {
+			throw new RestCustomException(errorCode);
+		}
 	}
 	
 }

@@ -3,6 +3,7 @@ package com.planner.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,7 @@ import com.planner.util.UserData;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -46,7 +48,7 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final FriendService friendService;
-	private final EmailService emailService;
+	private final EmailService emailService;  
 
 	// 회원가입 Get
 	@GetMapping("/anon/insert")
@@ -56,7 +58,7 @@ public class MemberController {
 
 	// 회원가입 Post
 	@PostMapping("/anon/insert")
-	public String memberInsert(MemberDTO memberDTO, RedirectAttributes rttr) {
+	public String memberInsert(@Valid MemberDTO memberDTO, RedirectAttributes rttr) {
 		int result = memberService.memberInsert(memberDTO);
 		rttr.addFlashAttribute("result", result);
 		return "redirect:/planner/main";
@@ -67,7 +69,7 @@ public class MemberController {
 	@ResponseBody
 	public ResponseEntity<String> emailChk(@RequestParam(value = "toEmail") String toEmail,
 			@RequestParam(value = "type") String type) throws MessagingException, UnsupportedEncodingException {
-		memberService.memberChk(toEmail, type);
+		memberService.memberChk(toEmail,type);
 		emailService.sendAuthCode(toEmail);
 		return ResponseEntity.ok("ok");
 	}
@@ -77,14 +79,13 @@ public class MemberController {
 	@ResponseBody
 	public ResponseEntity<Long> authCodeChk(@RequestParam(value = "toEmail") String toEmail,
 			@RequestParam(value = "authCode") String authCode) {
-		// TODO - 리팩토링 대상
 		ResMemberDetail member = memberService.formMember(toEmail);
 		emailService.authCodeChk(toEmail, authCode);
 
-		if (member != null) {
+		if (!CommonUtils.isEmpty(member)) {
 			return ResponseEntity.ok(member.getMember_id());
 		}
-		return ResponseEntity.ok(1L);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	/* 비밀번호 확인 폼 */
@@ -99,8 +100,7 @@ public class MemberController {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/auth/pw/chk")
 	@ResponseBody
-	public ResponseEntity<String> passwordChk(@RequestParam(value = "currentPw") String currentPw,
-			@UserData ResMemberDetail member) {
+	public ResponseEntity<String> passwordChk(@RequestParam(value = "currentPw") String currentPw,@UserData ResMemberDetail member) {
 		memberService.isPasswordValid(currentPw, member);
 		return ResponseEntity.ok("성공");
 	}
@@ -124,7 +124,7 @@ public class MemberController {
 	/* 비밀번호 변경 */
 	@PostMapping("/anon/pw/change")
 	@ResponseBody
-	public ResponseEntity<String> pwChange(ReqChangePassword req) {
+	public ResponseEntity<String> pwChange(@Valid ReqChangePassword req) {
 		if (req.getNewPassword().equals(req.getNewPassword2())) {
 			memberService.changePassword(req);
 		}
@@ -213,7 +213,7 @@ public class MemberController {
 	/* 회원정보 수정 */
 	@PreAuthorize("isAuthenticated()")
 	@PutMapping("/auth/update")
-	public String memberUpdate(ReqMemberUpdate req) {
+	public String memberUpdate(@Valid ReqMemberUpdate req) {
 		memberService.memberUpdate(req);
 		return "redirect:/member/auth/myInfo";
 	}
@@ -237,7 +237,7 @@ public class MemberController {
 	/* 회원 복구 */
 	@PostMapping("/anon/restore")
 	@ResponseBody
-	public ResponseEntity<Integer> memberRestore(ReqMemberRestore req) {
+	public ResponseEntity<Integer> memberRestore(@Valid ReqMemberRestore req) {
 		int result = memberService.memberRestore(req);
 		return ResponseEntity.ok(result);
 	}

@@ -39,24 +39,15 @@ public class MemberService {
 	// 회원가입
 	@Transactional
 	public int memberInsert(MemberDTO memberDTO) {
-		isMember(memberDTO.getMember_email());
+		memberValidate(memberDTO.getMember_email(), false);
 		memberDTO.setUserDefaults(passwordEncoder);
 		return memberMapper.memberInsert(memberDTO);
 	}
 
-	/* @UserData */
-	@Transactional(readOnly = true)
-	public ResMemberDetail memberDetail(String member_email) {
-		ResMemberDetail detail = memberMapper.findByEmail(member_email);
-		return detail;
-	}
-
-
 	/* 일반로그인회원 정보가져오기 */
 	@Transactional(readOnly = true)
 	public ResMemberDetail formMember(String toEmail) {
-		ResMemberDetail detail = memberMapper.formMember(toEmail);
-		return detail;
+		return memberMapper.formMember(toEmail);
 	}
 
 	/* 회원 정보 수정 */
@@ -65,16 +56,20 @@ public class MemberService {
 		memberMapper.memberUpdate(req);
 	}
 
+	
+	/*로그인시 회원상태코드에 따른 예외*/
+	private void memberStatusToException(HttpServletRequest request, HttpServletResponse response,ErrorCode errorCode) {
+		CommonUtils.removeCookiesAndSession(request, response);
+		throw new CustomException(errorCode);
+	}
+	
 	/* 로그인시 회원 상태 코드 체크 */
-	@Transactional(readOnly = true)
 	public void memberStatusChk(String statusCode, HttpServletRequest request, HttpServletResponse response) {
 		if (statusCode.equals(MemberStatus.DELETE.getCode())) {
-			CommonUtils.removeCookiesAndSession(request, response);
-			throw new CustomException(ErrorCode.WITHDRAWN_MEMBER);
+			memberStatusToException(request,response,ErrorCode.WITHDRAWN_MEMBER);
 		}
 		if (statusCode.equals(MemberStatus.RESTORE.getCode())) {
-			CommonUtils.removeCookiesAndSession(request, response);
-			throw new CustomException(ErrorCode.ACCOUNT_RESTORE_PENDING);
+			memberStatusToException(request, response, ErrorCode.ACCOUNT_RESTORE_PENDING);
 		}
 	}
 
@@ -100,13 +95,13 @@ public class MemberService {
 	}
 
 	/* 회원복구시 회원 상태코드별 반환 예외 */
-	private void throwForStatus(String status) {
-		// TODO- enum으로 고치기
+	private void throwForStatus(String statusCode) {
+		String status = MemberStatus.codeToStatus(statusCode);
 		switch (status) {
-		case "R": // 이미 신청상태
+		case "복구신청":
 			throw new RestCustomException(ErrorCode.REQUEST_DUPLICATE);
-		case "B": // 신청대상아님
-		case "N":
+		case "가입": 
+		case "탈퇴":
 			throw new RestCustomException(ErrorCode.INELIGIBLE_REQUEST);
 		}
 	}
@@ -132,41 +127,46 @@ public class MemberService {
 		return memberMapper.changeMemberStatus(memberDetail.getMember_id(), MemberStatus.RESTORE.getCode());
 	}
 
+	/*회원정보.*/
+	@Transactional(readOnly = true)
+	private ResMemberDetail findSocialOrFormMember(String email) {
+	    ResMemberDetail user = memberMapper.socialMember(email);
+	    if (user == null) {
+	        user = memberMapper.formMember(email);
+	    }
+	    return user;
+	}
+	
 	/* 회원체크 */
-	@Transactional
-	public void isMember(String email) {
-		ResMemberDetail user = memberMapper.findByEmail(email);
-		if (!CommonUtils.isEmpty(user)) {
+	@Transactional(readOnly = true)
+	public void memberValidate(String email,boolean shouldBeMember) {
+		ResMemberDetail user = findSocialOrFormMember(email);
+		
+		// 회원이아니여야하는데 회원정보가 있을때
+		if (!shouldBeMember && !CommonUtils.isEmpty(user)) {
 			throw new CustomException(ErrorCode.ID_DUPLICATE);
 		}
+		
+		//회원이여야하는데 회원정보가 없을때
+		if (shouldBeMember && CommonUtils.isEmpty(user)) {
+			throw new CustomException(ErrorCode.NO_ACCOUNT);
+		}
+		
 		// 탈퇴한 회원이면 예외 발생
 		if (user.getMember_status().equals(MemberStatus.DELETE.getCode())) {
 			throw new CustomException(ErrorCode.WITHDRAWN_MEMBER);
 		}
 	}
-
-	/* 이메일 인증시 회원검사 */
+	
+	/* 이메일 인증시 타입별 회원검사 */
 	@Transactional(readOnly = true)
 	public void memberChk(String toEmail, String type) {
-		if (type.equals("findPw")) {
-			ResMemberDetail memberDetail = memberMapper.formMember(toEmail);
-
-			if (CommonUtils.isEmpty(memberDetail)) {
-				throw new RestCustomException(ErrorCode.NO_ACCOUNT);
+			switch(type) {
+				case "insert" ->
+				memberValidate(toEmail,false);
+				case "findPw" ->
+				memberValidate(toEmail,true);
 			}
-
-			String status = memberDetail.getMember_status();
-			if (status.equals(MemberStatus.DELETE.getCode()) || status.equals(MemberStatus.RESTORE.getCode())) {
-				throw new RestCustomException(ErrorCode.INELIGIBLE_REQUEST);
-			}
-		}
-
-		// 회원가입페이지에서 넘어올때
-		if (type.equals("insert")) {
-			// TODO- 여기 리팩토링해야됌
-			ResMemberDetail memberDetail = memberMapper.formMember(toEmail);
-			throw new RestCustomException(ErrorCode.ID_DUPLICATE);
-		}
 	}
 
 	/* 비밀번호 변경 */
@@ -174,9 +174,7 @@ public class MemberService {
 	public void changePassword(ReqChangePassword req) {
 		req.setNewPassword(passwordEncoder.encode(req.getNewPassword()));
 		int result = memberMapper.changePassword(req);
-		if (result != 1) {
-			throw new RestCustomException(ErrorCode.FAIL_CHANGE_PASSWORD);
-		}
+		CommonUtils.RestResultSuccessful(result, ErrorCode.FAIL_CHANGE_PASSWORD);
 	}
 
 	/*
