@@ -46,8 +46,8 @@ public class MemberService {
 
 	/* 일반로그인회원 정보가져오기 */
 	@Transactional(readOnly = true)
-	public ResMemberDetail formMember(String toEmail) {
-		return memberMapper.formMember(toEmail);
+	public ResMemberDetail formMember(String member_email) {
+		return memberMapper.formMember(member_email);
 	}
 
 	/* 회원 정보 수정 */
@@ -56,17 +56,17 @@ public class MemberService {
 		memberMapper.memberUpdate(req);
 	}
 
-	
-	/*로그인시 회원상태코드에 따른 예외*/
-	private void memberStatusToException(HttpServletRequest request, HttpServletResponse response,ErrorCode errorCode) {
+	/* 로그인시 회원상태코드에 따른 예외 */
+	private void memberStatusToException(HttpServletRequest request, HttpServletResponse response,
+			ErrorCode errorCode) {
 		CommonUtils.removeCookiesAndSession(request, response);
 		throw new CustomException(errorCode);
 	}
-	
+
 	/* 로그인시 회원 상태 코드 체크 */
 	public void memberStatusChk(String statusCode, HttpServletRequest request, HttpServletResponse response) {
 		if (statusCode.equals(MemberStatus.DELETE.getCode())) {
-			memberStatusToException(request,response,ErrorCode.WITHDRAWN_MEMBER);
+			memberStatusToException(request, response, ErrorCode.WITHDRAWN_MEMBER);
 		}
 		if (statusCode.equals(MemberStatus.RESTORE.getCode())) {
 			memberStatusToException(request, response, ErrorCode.ACCOUNT_RESTORE_PENDING);
@@ -100,7 +100,7 @@ public class MemberService {
 		switch (status) {
 		case "복구신청":
 			throw new RestCustomException(ErrorCode.REQUEST_DUPLICATE);
-		case "가입": 
+		case "가입":
 		case "탈퇴":
 			throw new RestCustomException(ErrorCode.INELIGIBLE_REQUEST);
 		}
@@ -127,46 +127,56 @@ public class MemberService {
 		return memberMapper.changeMemberStatus(memberDetail.getMember_id(), MemberStatus.RESTORE.getCode());
 	}
 
-	/*회원정보.*/
+	/* 회원정보. */
 	@Transactional(readOnly = true)
 	private ResMemberDetail findSocialOrFormMember(String email) {
-	    ResMemberDetail user = memberMapper.socialMember(email);
-	    if (user == null) {
-	        user = memberMapper.formMember(email);
-	    }
-	    return user;
+		ResMemberDetail user = memberMapper.socialMember(email);
+		if (user == null) {
+			user = memberMapper.formMember(email);
+		}
+		return user;
 	}
-	
+
 	/* 회원체크 */
 	@Transactional(readOnly = true)
-	public void memberValidate(String email,boolean shouldBeMember) {
+	public void memberValidate(String email, boolean shouldBeMember) {
 		ResMemberDetail user = findSocialOrFormMember(email);
-		
+
 		// 회원이아니여야하는데 회원정보가 있을때
 		if (!shouldBeMember && !CommonUtils.isEmpty(user)) {
 			throw new CustomException(ErrorCode.ID_DUPLICATE);
 		}
-		
-		//회원이여야하는데 회원정보가 없을때
+
+		// 회원이여야하는데 회원정보가 없을때
 		if (shouldBeMember && CommonUtils.isEmpty(user)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
 		}
-		
+
 		// 탈퇴한 회원이면 예외 발생
 		if (user.getMember_status().equals(MemberStatus.DELETE.getCode())) {
 			throw new CustomException(ErrorCode.WITHDRAWN_MEMBER);
+		}
+	}
+
+	/*비번 찾기시 소셜로그인 회원이면 되돌리기*/
+	@Transactional(readOnly = true)
+	public void isSocialMember(String member_email) {
+		ResMemberDetail user = memberMapper.socialMember(member_email);
+		if(!CommonUtils.isEmpty(user)) {
+			throw new RestCustomException(ErrorCode.SOCIAL_LOGIN_USER);
 		}
 	}
 	
 	/* 이메일 인증시 타입별 회원검사 */
 	@Transactional(readOnly = true)
 	public void memberChk(String toEmail, String type) {
-			switch(type) {
-				case "insert" ->
-				memberValidate(toEmail,false);
-				case "findPw" ->
-				memberValidate(toEmail,true);
+		switch (type) {
+			case "insert" -> memberValidate(toEmail, false);
+			case "findPw" -> {
+				isSocialMember(toEmail);
+				memberValidate(toEmail, true);
 			}
+		}
 	}
 
 	/* 비밀번호 변경 */

@@ -6,39 +6,23 @@
    	<title>회원수정</title>
    	<link rel="stylesheet" type="text/css" href="/css/header.css"/>
    	<link rel="stylesheet" type="text/css" href="/css/member/update.css"/>
-   	<meta name="_csrf" th:content="${_csrf.token}"/>
-	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <header th:replace="~{/fragments/header :: header}"></header>
 	<main class="updateMain">
-		<h2>회원정보수정</h2>
-		<form class="updateForm" action="/member/auth/update" th:method="put">
+		<form class="updateForm" action="/member/auth/update" th:method="put" onsubmit="return validateUpdateForm()">
+		<span class="updateText">회원정보수정</span>
 			<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
 			<input type="hidden" name="member_id" th:value="${detail.member_id}">
-			<table class="updateTable">
-				<tr class="u_tr2">
-					<th class="u_th2">회원명</th>
-					<td class="u_td2">
+					회원명
 						<input type="text" th:value="${detail.member_name}" name="member_name" required="required" >
-					</td>
-				</tr>
-				<tr class="u_tr3">
-					<th class="u_th3">생일</th>
-					<td class="u_td3">
+					생년월일
 						<input type="date" th:value="${detail.member_birth}" name="member_birth" required="required">
-					</td>
-				</tr>
-				<tr class="u_tr4">
-					<th class="u_th4">휴대폰번호</th>
-					<td class="u_td4">
+					휴대폰번호
 						<input type="text" th:value="${detail.member_phone}" name="member_phone" required="required" placeholder="- 빼고 입력해주세요">
-					</td>
-				</tr>
-			</table>
 			<div class="btns">
-				<button type="submit">저장</button>
-				<button type="button" onclick="location.href='/member/auth/myInfo'">수정 취소</button>
+			<button class="saveBtn" type="submit">저장</button>
+				<button type="button" class="cancelBtn" onclick="location.href='/member/auth/myInfo'">수정 취소</button>
 			</div>
 		</form>
 	</main>

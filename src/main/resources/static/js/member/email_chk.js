@@ -71,7 +71,9 @@ $(function() { // $(document).ready(function(){}); 와 같음
 				authCode: authCode
 			},
 			successFn: (data) => {
+			console.log(data);
 				if (!isNull(data)) {
+					
 					alert("인증되었습니다.");
 					closeModal("authCodeModal");
 					if (type === "findPw") {

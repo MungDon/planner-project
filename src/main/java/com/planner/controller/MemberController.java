@@ -81,11 +81,10 @@ public class MemberController {
 			@RequestParam(value = "authCode") String authCode) {
 		ResMemberDetail member = memberService.formMember(toEmail);
 		emailService.authCodeChk(toEmail, authCode);
-
 		if (!CommonUtils.isEmpty(member)) {
 			return ResponseEntity.ok(member.getMember_id());
 		}
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		return ResponseEntity.ok(1L); // 성공체크용으로 의미없는 값
 	}
 
 	/* 비밀번호 확인 폼 */
