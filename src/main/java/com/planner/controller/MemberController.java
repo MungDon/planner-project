@@ -45,7 +45,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
-
+//TODO - 이메일 체크 JS 까지 서윗알러트 바꿈
 	private final MemberService memberService;
 	private final FriendService friendService;
 	private final EmailService emailService;
