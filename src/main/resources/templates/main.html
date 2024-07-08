@@ -3,49 +3,55 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-<!-- <title>Insert title here</title> -->
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <link rel="stylesheet" type="text/css" href="/css/header.css">
 <link rel="stylesheet" type="text/css" href="/css/main.css">
 <link rel="stylesheet" type="text/css" href="/css/calendar/calendar.css">
 <link rel="stylesheet" type="text/css" href="/css/map/kakaomap.css">
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	<header th:replace="~{/fragments/header :: header}"></header>
 	<main class="mainCon">
-		
-		<div class="">
-		
+		<input type="hidden" id="result" th:value="${result}">
+		<div class="myeongUnBox">
+			
 		</div>
-		<div class="todayBox">
-			<span class="todayText">오늘의 일과</span>
-			<div class="todaySchedule" th:each="schedule ,loop : ${todaySchedule}">
-				<div>
-					<span class="headText" th:text="${loop.index+1}+'번 일과!'"></span>
-				</div>
-				<div>
+		<div class="middle">
+			<div class="noticeBox">
+				<h1>공지사항</h1>
+			</div>
+			<div class="todayBox">
+				<span class="todayText">오늘의 일과</span>
+				<div class="todaySchedule" th:each="schedule ,loop : ${todaySchedule}" th:classappend="${loop.count != todaySchedule.size()} ? 'line'">
+					<div class="top">
+						<span class="headText" th:text="${loop.count}+'.'"></span>
+						<button class="deleteBtn" type="button" th:value="${schedule.schedule_id}">X</button>
+					</div>
 					<span class="head">일정 제목</span>
-					<span th:text="${schedule.schedule_title}"></span>
-				</div>
-				<div>
+					<span class="scheduleContent" th:text="${schedule.schedule_title}"></span>
+					
 					<span class="head">내용</span>
-					<span th:text="${schedule.schedule_content}"></span>
+					<span class="scheduleContent" th:text="${schedule.schedule_content}"></span>
+					
+					<span th:if="${schedule.place !=''}" class="head">장소명</span>
+					<span th:if="${schedule.place !=''}" class="scheduleContent" th:text="${schedule.place}"></span>
+					
+					<span th:if="${schedule.address !=''}" class="head">주소</span>
+					<span th:if="${schedule.address !=''}" class="scheduleContent" th:text="${schedule.address}"></span>
 				</div>
-				<div>
-					<span class="head">장소명</span>
-					<span th:text="${schedule.place}"></span>
-				</div>
-				<div>
-					<span class="head">주소</span>
-					<span th:text="${schedule.address}"></span>
+				<div class="addScheduleBtnBox">
+					<button class="addScheduleBtn" type="button">일정 추가하기</button>
 				</div>
 			</div>
 		</div>
 	</main>
 	
-	<script th:if="${result} == 1">
-		alert('가입이 완료되었습니다.');
-	</script>
+	<script src="/js/common.js"></script>
+	<script src="/js/main.js"></script>
 	<script th:src="@{/js/calendar/calendar.js}"></script>
 </body>
 </html>

@@ -13,7 +13,8 @@ const API_LIST = {
 	DELETE_MEMBER : "/member/auth/delete",
 	PASSWORD_CHK : "/member/auth/pw/chk",
 	MEMBER_RESTORE : "/member/anon/restore",
-	CHANGE_PASSWORD : "/member/anon/pw/change"
+	CHANGE_PASSWORD : "/member/anon/pw/change",
+	DELETE_SCHEDULE :"/planner/schedule/del"
 }
 
 // 단순 페이지 이동 url 상수
@@ -21,7 +22,8 @@ const PAGE_LIST = {
 	MAIN_PAGE : "/planner/main",
 	CHANGE_PASSWORD_FORM : "/member/anon/pw/change/",
 	MEMBER_UPDATE_FORM : "/member/auth/update",
-	LOGIN_PAGE : "/member/anon/login"
+	LOGIN_PAGE : "/member/anon/login",
+	CALENDAR_PAGE : "/planner/calendar"
 };
 // CSRF 토큰
 let csrfToken = $("meta[name='_csrf']").attr("content");

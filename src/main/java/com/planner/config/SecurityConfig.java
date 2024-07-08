@@ -48,16 +48,16 @@ public class SecurityConfig {
           .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB 기능 비활성화
           .authorizeHttpRequests((requests) -> requests
         		  .requestMatchers(new AntPathRequestMatcher("/intro/**")).permitAll()					// "/planner/main" 은 모든권한의 접속을 허용함
-                  .requestMatchers(new AntPathRequestMatcher("/planner/**")).hasAnyRole("USER","SUPER_ADMIN")					// "/planner/main" 은 모든권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/planner/main")).permitAll()				// "/planner/main" 은 모든권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/member/anon/**")).permitAll() 			// "/member/anon/**" 은 모든권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/oauth2/**")).permitAll()						// "/oauth2/**" 은 모든 권한의 접속을 허용함
+                  .requestMatchers(new AntPathRequestMatcher("/planner/**")).hasAnyRole("USER","SUPER_ADMIN")					// "/planner/main" 은 모든권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/friend/**")).hasAnyRole("USER","SUPER_ADMIN")			// "/oauth2/**" 은 모든 권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/member/auth/**")).hasAnyRole("USER","SUPER_ADMIN")	// "/member/auth/**" 은 USER 권한을 가진 사용자만 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/team/**")).hasAnyRole("USER","SUPER_ADMIN")
                   .requestMatchers(new AntPathRequestMatcher("/vote/**")).hasAnyRole("USER","SUPER_ADMIN")	
                   .requestMatchers(new AntPathRequestMatcher("/reply/**")).hasAnyRole("USER","SUPER_ADMIN")	
-                  .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAnyRole("USER","SUPER_ADMIN")
+                  .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("SUPER_ADMIN")
                   .anyRequest().authenticated()
           )
           .oauth2Login(configure ->															// OAuth2 인증 로그인( 소셜 ) 정의

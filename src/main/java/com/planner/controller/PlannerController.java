@@ -42,7 +42,6 @@ public class PlannerController {
 			LocalDate today = LocalDate.now();
 			 DateTimeFormatter todayFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
 			String todayProvide = today.format(todayFormat);
-			log.info(todayProvide);
 			List<ScheduleDTO> todaySchedule = scheduleService.schedule_select(detail.getMember_id(), todayProvide);
 			model.addAttribute("todaySchedule", todaySchedule);
 			model.addAttribute("member", detail);
