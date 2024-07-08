@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.planner.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.planner.oauth.handler.CustomAccessDeniedHandler;
 import com.planner.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.planner.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.planner.oauth.service.CustomOAuth2UserService;
@@ -27,6 +28,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;	// 소셜로그인 사용자 정의 객체 생성을 위한 클래스
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;		// 소셜로그인 성공 시 작동하는 클래스(핸들러)
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;		// 소셜로그인 실패 시 작동하는 클래스(핸들러)
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;	// redirectURl, state, mode 등 담아놓는 쿠키 생성하는 클래스
 
 	@Bean
@@ -46,16 +48,16 @@ public class SecurityConfig {
           .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB 기능 비활성화
           .authorizeHttpRequests((requests) -> requests
         		  .requestMatchers(new AntPathRequestMatcher("/intro/**")).permitAll()					// "/planner/main" 은 모든권한의 접속을 허용함
-                  .requestMatchers(new AntPathRequestMatcher("/planner/**")).hasRole("USER")					// "/planner/main" 은 모든권한의 접속을 허용함
+                  .requestMatchers(new AntPathRequestMatcher("/planner/**")).hasAnyRole("USER","SUPER_ADMIN")					// "/planner/main" 은 모든권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/planner/main")).permitAll()				// "/planner/main" 은 모든권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/member/anon/**")).permitAll() 			// "/member/anon/**" 은 모든권한의 접속을 허용함
                   .requestMatchers(new AntPathRequestMatcher("/oauth2/**")).permitAll()						// "/oauth2/**" 은 모든 권한의 접속을 허용함
-                  .requestMatchers(new AntPathRequestMatcher("/friend/**")).hasRole("USER")				// "/oauth2/**" 은 모든 권한의 접속을 허용함
-                  .requestMatchers(new AntPathRequestMatcher("/member/auth/**")).hasRole("USER")	// "/member/auth/**" 은 USER 권한을 가진 사용자만 접속을 허용함
-                  .requestMatchers(new AntPathRequestMatcher("/team/**")).hasRole("USER")	
-                  .requestMatchers(new AntPathRequestMatcher("/vote/**")).hasRole("USER")	
-                  .requestMatchers(new AntPathRequestMatcher("/reply/**")).hasRole("USER")	
-                  .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")	
+                  .requestMatchers(new AntPathRequestMatcher("/friend/**")).hasAnyRole("USER","SUPER_ADMIN")			// "/oauth2/**" 은 모든 권한의 접속을 허용함
+                  .requestMatchers(new AntPathRequestMatcher("/member/auth/**")).hasAnyRole("USER","SUPER_ADMIN")	// "/member/auth/**" 은 USER 권한을 가진 사용자만 접속을 허용함
+                  .requestMatchers(new AntPathRequestMatcher("/team/**")).hasAnyRole("USER","SUPER_ADMIN")
+                  .requestMatchers(new AntPathRequestMatcher("/vote/**")).hasAnyRole("USER","SUPER_ADMIN")	
+                  .requestMatchers(new AntPathRequestMatcher("/reply/**")).hasAnyRole("USER","SUPER_ADMIN")	
+                  .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAnyRole("USER","SUPER_ADMIN")
                   .anyRequest().authenticated()
           )
           .oauth2Login(configure ->															// OAuth2 인증 로그인( 소셜 ) 정의
@@ -76,8 +78,10 @@ public class SecurityConfig {
           .logout((logout)->logout																							// 로그아웃 정의
 					.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout")) 	// 로그아웃 URL 
 					.logoutSuccessUrl("/planner/main")																// 로그아웃 성공시 리다이렉트 URL 
-					.invalidateHttpSession(true))	;																		// 세션 삭제
-			
+					.invalidateHttpSession(true))
+          .exceptionHandling((exception)-> exception.accessDeniedHandler(customAccessDeniedHandler))
+          ;																		// 세션 삭제
+		
 		return http.build();
 	}
 

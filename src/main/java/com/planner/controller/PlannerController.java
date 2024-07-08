@@ -1,7 +1,7 @@
 package com.planner.controller;
 
-
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -24,29 +24,31 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequiredArgsConstructor
 public class PlannerController {
-	
+
 	private final ScheduleService scheduleService;
-	
+
 	@GetMapping("/intro")
 	public String intro() {
 		return "intro";
 	}
-	
+
 	@GetMapping("/planner/main")
-	public String main(@UserData ResMemberDetail detail,HttpServletRequest request,HttpServletResponse response,Model model) {
-		if(!CommonUtils.isEmpty(detail)) {
-			if(detail.getMember_status().equals(MemberStatus.NOT_DONE.getCode())) {
+	public String main(@UserData ResMemberDetail detail, HttpServletRequest request, HttpServletResponse response,
+			Model model) {
+		if (!CommonUtils.isEmpty(detail)) {
+			if (detail.getMember_status().equals(MemberStatus.NOT_DONE.getCode())) {
 				return "redirect:/oauth2/auth/signup";
 			}
-		String today = LocalDate.now().toString();
-		log.info(today);
-		List<ScheduleDTO> todaySchedule = scheduleService.schedule_select(detail.getMember_id(), today);
-		model.addAttribute("todaySchedule", todaySchedule);
-		model.addAttribute("member", detail);
-		return "main";
+			LocalDate today = LocalDate.now();
+			 DateTimeFormatter todayFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
+			String todayProvide = today.format(todayFormat);
+			log.info(todayProvide);
+			List<ScheduleDTO> todaySchedule = scheduleService.schedule_select(detail.getMember_id(), todayProvide);
+			model.addAttribute("todaySchedule", todaySchedule);
+			model.addAttribute("member", detail);
+			return "main";
 		}
-		return"redirect:/member/anon/login";
+		return "redirect:/member/anon/login";
 	}
-	
+
 }
- 

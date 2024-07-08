@@ -1,4 +1,42 @@
 @charset "UTF-8";
-.cal{
-	margin-top : 30px;	
+
+.mainCon {
+	margin-top: 30px;
+	display: flex;
+	align-content: center;
+	justify-content: center;
 }
+
+.todayBox {
+	border: 1px solid #ddd;
+	border-radius: 20px;
+	padding: 50px;
+	display: flex;
+	flex-direction: column;
+}
+
+.todayText {
+	color: gray;
+	font-weight: bold;
+	font-size: 27px;
+	margin-bottom: 20px;
+}
+
+.headText {
+	color: darkgray;
+	font-weight: bold;
+	font-size: 20px;
+	margin-bottom: 20px;
+}
+
+.head {
+	color: gray;
+	font-weight: bold;
+}
+
+.todaySchedule {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 10px;
+}
+

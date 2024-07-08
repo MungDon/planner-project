@@ -70,15 +70,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 			return UriComponentsBuilder.fromUriString(TokenRedirect.LOGIN_SUCCESS_URL.getUrlText()).build()
 					.toUriString();
 			
-		} else if ("unlink".equalsIgnoreCase(mode)) {
-
-			String accessToken = principal.userInfo().getAccessToken();
-			OAuth2Provider provider = principal.userInfo().getProdriver();
-
-			oAuth2UserUnlinkManager.unlink(provider, accessToken);
-
-			return UriComponentsBuilder.fromUriString(TokenRedirect.LOGOUT_URL.getUrlText()).build().toString();
-		}
+		} 
 
 		log.error("로그인실패");
 		return UriComponentsBuilder.fromUriString(TokenRedirect.LOGIN_FAILED_URL.getUrlText())

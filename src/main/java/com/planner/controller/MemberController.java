@@ -3,7 +3,6 @@ package com.planner.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -26,6 +25,7 @@ import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.FriendRole;
 import com.planner.enums.Gender;
 import com.planner.enums.Masking;
+import com.planner.enums.MemberRole;
 import com.planner.enums.MemberStatus;
 import com.planner.exception.CustomException;
 import com.planner.exception.ErrorCode;
@@ -48,7 +48,7 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final FriendService friendService;
-	private final EmailService emailService;  
+	private final EmailService emailService;
 
 	// 회원가입 Get
 	@GetMapping("/anon/insert")
@@ -69,7 +69,7 @@ public class MemberController {
 	@ResponseBody
 	public ResponseEntity<String> emailChk(@RequestParam(value = "toEmail") String toEmail,
 			@RequestParam(value = "type") String type) throws MessagingException, UnsupportedEncodingException {
-		memberService.memberChk(toEmail,type);
+		memberService.memberChk(toEmail, type);
 		emailService.sendAuthCode(toEmail);
 		return ResponseEntity.ok("ok");
 	}
@@ -99,7 +99,8 @@ public class MemberController {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/auth/pw/chk")
 	@ResponseBody
-	public ResponseEntity<String> passwordChk(@RequestParam(value = "currentPw") String currentPw,@UserData ResMemberDetail member) {
+	public ResponseEntity<String> passwordChk(@RequestParam(value = "currentPw") String currentPw,
+			@UserData ResMemberDetail member) {
 		memberService.isPasswordValid(currentPw, member);
 		return ResponseEntity.ok("성공");
 	}
@@ -145,6 +146,9 @@ public class MemberController {
 	@GetMapping("/auth")
 	public String memberStatusChk(@UserData ResMemberDetail detail, HttpServletRequest request,
 			HttpServletResponse response) {
+		if (MemberRole.SUPER_ADMIN.getType().equals(detail.getMember_role())) {
+			return "redirect:/admin/main";
+		}
 		memberService.memberStatusChk(detail.getMember_status(), request, response);
 		return "redirect:/planner/main";
 	}

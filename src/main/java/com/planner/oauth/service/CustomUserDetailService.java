@@ -32,7 +32,11 @@ public class CustomUserDetailService implements UserDetailsService {
         //이메일 체크
         MemberDTO member = memberMapper.findByUser(member_email);
         if(member != null) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(MemberRole.USER.getType()));
+        	if(MemberRole.SUPER_ADMIN.getType().equals(member.getMember_role())) {
+        		grantedAuthorities.add(new SimpleGrantedAuthority(MemberRole.SUPER_ADMIN.getType()));
+        	}else {
+            	grantedAuthorities.add(new SimpleGrantedAuthority(MemberRole.USER.getType()));
+        	}
             User user =  new User(member.getMember_email(), member.getMember_password(), grantedAuthorities);
             return user;
         } else {

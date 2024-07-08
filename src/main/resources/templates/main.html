@@ -6,17 +6,43 @@
 <!-- <title>Insert title here</title> -->
 <link rel="stylesheet" type="text/css" href="/css/header.css">
 <link rel="stylesheet" type="text/css" href="/css/main.css">
-<meta name="_csrf" th:content="${_csrf.token}" />
-<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 <link rel="stylesheet" type="text/css" href="/css/calendar/calendar.css">
 <link rel="stylesheet" type="text/css" href="/css/map/kakaomap.css">
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f0705776345a6b686de0b391cfcd66b8&libraries=services"></script>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	<header th:replace="~{/fragments/header :: header}"></header>
-	<div class="cal"></div>
-	<div th:replace="~{calendar :: calendar}" ></div>
+	<main class="mainCon">
+		
+		<div class="">
+		
+		</div>
+		<div class="todayBox">
+			<span class="todayText">오늘의 일과</span>
+			<div class="todaySchedule" th:each="schedule ,loop : ${todaySchedule}">
+				<div>
+					<span class="headText" th:text="${loop.index+1}+'번 일과!'"></span>
+				</div>
+				<div>
+					<span class="head">일정 제목</span>
+					<span th:text="${schedule.schedule_title}"></span>
+				</div>
+				<div>
+					<span class="head">내용</span>
+					<span th:text="${schedule.schedule_content}"></span>
+				</div>
+				<div>
+					<span class="head">장소명</span>
+					<span th:text="${schedule.place}"></span>
+				</div>
+				<div>
+					<span class="head">주소</span>
+					<span th:text="${schedule.address}"></span>
+				</div>
+			</div>
+		</div>
+	</main>
+	
 	<script th:if="${result} == 1">
 		alert('가입이 완료되었습니다.');
 	</script>

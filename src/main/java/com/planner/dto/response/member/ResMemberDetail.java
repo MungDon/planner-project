@@ -27,4 +27,6 @@ public class ResMemberDetail {
 	
 	private String oauth_type;			// 소셜로그인 타입
 	
+	private String member_role;		// 회원권한
+	
 }
