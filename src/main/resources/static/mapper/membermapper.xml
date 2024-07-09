@@ -18,7 +18,7 @@
 			member_role,
 			member_reg
 		)	VALUES	(
-			NEXTVAL('member_seq'),
+			member_seq.NEXTVAL,
 			'2020-02-01',
 			'none',
 			'none',
@@ -29,7 +29,7 @@
 			#{member_status},
 			#{oauth_type},
 			#{member_role},
-			now()
+			sysdate
 		)
 	</insert>
 		<!--member_seq.NEXTVAL ,nextval('member_seq'),now(), sysdate -->
@@ -48,7 +48,7 @@
 				member_role,
 				oauth_id
 				) values (
-				NEXTVAL('member_seq'),
+				member_seq.NEXTVAL,
 				#{member_password},
 				#{member_name},
 				#{member_birth},

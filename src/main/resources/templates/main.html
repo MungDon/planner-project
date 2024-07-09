@@ -37,11 +37,11 @@
 					<span class="head">내용</span>
 					<span class="scheduleContent" th:text="${schedule.schedule_content}"></span>
 					
-					<span th:if="${schedule.place !=''}" class="head">장소명</span>
-					<span th:if="${schedule.place !=''}" class="scheduleContent" th:text="${schedule.place}"></span>
+					<span th:if="${#strings.isEmpty(schedule.place)}" class="head">장소명</span>
+					<span th:if="${#strings.isEmpty(schedule.place)}" class="scheduleContent" th:text="${schedule.place}"></span>
 					
-					<span th:if="${schedule.address !=''}" class="head">주소</span>
-					<span th:if="${schedule.address !=''}" class="scheduleContent" th:text="${schedule.address}"></span>
+					<span th:if="${#strings.isEmpty(schedule.address)}" class="head">주소</span>
+					<span th:if="${#strings.isEmpty(schedule.address)}" class="scheduleContent" th:text="${schedule.address}"></span>
 				</div>
 				<div class="addScheduleBtnBox">
 					<button class="addScheduleBtn" type="button">일정 추가하기</button>

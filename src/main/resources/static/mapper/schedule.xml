@@ -6,13 +6,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="schedule_insert" parameterType="ScheduleDTO" useGeneratedKeys="true" keyProperty="schedule_id"  keyColumn="schedule_id">
 		insert into schedule (schedule_id, member_id, schedule_title, schedule_content, schedule_start, schedule_end)
-		values(nextval('schedule_seq'),#{member_id} ,#{schedule_title}, #{schedule_content}, #{schedule_start, jdbcType=TIMESTAMP}, #{schedule_end, jdbcType=TIMESTAMP})
+		values(schedule_seq.nextval,#{member_id} ,#{schedule_title}, #{schedule_content}, #{schedule_start, jdbcType=TIMESTAMP}, #{schedule_end, jdbcType=TIMESTAMP})
 	</insert>
 	
 	<select id="schedule_select" resultType="ScheduleDTO">
 	SELECT S.*, M.place, M.address
-		FROM schedule as S
-		left outer join map as M
+		FROM schedule S
+		left outer join map M
 		on S.schedule_id = M.schedule_id
 		WHERE S.member_id = #{member_id} and to_char(schedule_start, 'yyyyMMdd') = #{date}
         ORDER BY S.schedule_start ASC, S.schedule_end ASC, S.schedule_id ASC
