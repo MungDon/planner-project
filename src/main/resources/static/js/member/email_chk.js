@@ -19,9 +19,11 @@ $(function() { // $(document).ready(function(){}); 와 같음
 				text: "이메일을 입력해주세요",
 				icon: "warning",
 				confirmButtonText: "확인"
-			}).then(() => {
-				return;
+			}).then(() =>{
+				$(window).off('beforeunload');
+				location.reload();
 			});
+			return;
 		}
 		const ajaxObj = {
 			url: API_LIST.EMAIL_SEND,
@@ -77,10 +79,11 @@ $(function() { // $(document).ready(function(){}); 와 같음
 				text: "인증코드를 입력해주세요",
 				icon: "warning",
 				confirmButtonText: "확인"
-			}).then(() => {
-				return;
 			});
+			return;
+
 		}
+		console.log("혹시 넘어감?");
 		const ajaxObj = {
 			url: API_LIST.AUTH_CODE_CHK,
 			method: "post",

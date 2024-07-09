@@ -27,7 +27,8 @@ import com.planner.util.UserData;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -141,10 +142,13 @@ public class MemberService {
 	@Transactional(readOnly = true)
 	public void memberValidate(String email, boolean shouldBeMember) {
 		ResMemberDetail user = findSocialOrFormMember(email);
-
+		log.info("MV에서걸림");
+		//TODO - 비동기 , 동기 요청 구분메서드 만ㄷ르어야됌
 		// 회원이아니여야하는데 회원정보가 있을때
 		if (!shouldBeMember && !CommonUtils.isEmpty(user)) {
+			log.info("이메일중복");
 			throw new CustomException(ErrorCode.ID_DUPLICATE);
+//			throw new RestCustomException(ErrorCode.ID_DUPLICATE);
 		}
 
 		// 회원이여야하는데 회원정보가 없을때
