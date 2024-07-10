@@ -25,7 +25,7 @@ const keywordCheck = () => {
 	let keywordInput = document.getElementById('keywordInput');
 	keywordInput.value = keywordInput.value.trim();
 	if (keywordInput.value.length < 3) {
-		alert('최소 3글자 이상 입력하세요.');
+		swalCall("경고","최소 3글자 이상 입력하세요.","warning");
 		return false;
 	}
 	return true;

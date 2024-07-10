@@ -1,29 +1,38 @@
 $(function() {
-	$(document).ready( () => {
+	$(document).ready(() => {
 		const status = $("#status").val();
 		if (status === null || status != 'B') {
-			alert('권한이없습니다');
-			window.location.href = PAGE_LIST.MAIN_PAGE;
+			const thenFn = () => {
+				location.href = PAGE_LIST.MAIN_PAGE;
+			};
+			swalCall("경고", "권한이없습니다.", "warning", thenFn);
 		}
 	});
+
 	$(document).on("click", ".userDeleteBtn", () => {
-		if (!confirm('정말 회원탈퇴를 하시겠습니까?')) {
-			return false;
-		}
-		
-		const ajaxObj = {
-			url : API_LIST.DELETE_MEMBER,
-			method : "delete",
-			successFn : () => {
-				alert("탈퇴되었습니다");
-				location.href = PAGE_LIST.MAIN_PAGE;
-			},
-			errorFn : () => {
-				alert("탈퇴실패");
-				location.href = PAGE_LIST.MAIN_PAGE;
-			} 
-		}; 
-		ajaxCall(ajaxObj);
+		const thenFn = () => {
+			if (result.isDenied) {
+				return;
+			}
+			const ajaxObj = {
+				url: API_LIST.DELETE_MEMBER,
+				method: "delete",
+				successFn: () => {
+					const thenFn = () => {
+						location.href = PAGE_LIST.MAIN_PAGE;
+					};
+					swalCall("성공", "탈퇴되었습니다", "success", thenFn);
+				},
+				errorFn: () => {
+					const thenFn = () => {
+						location.href = PAGE_LIST.MAIN_PAGE;
+					};
+					swalCall("에러", "탈퇴실패", "error", thenFn);
+				}
+			};
+			ajaxCall(ajaxObj);
+		};
+		swalCall("회원탈퇴", "정말 회원탈퇴를 하시겠습니까?", "question", thenFn, "예", true);
 	});
 });
 

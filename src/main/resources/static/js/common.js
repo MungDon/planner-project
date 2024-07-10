@@ -8,22 +8,22 @@ const isNull = (chkData) => {
 
 // ajaxCall에서 사용할 api 주소를 상수로 관리
 const API_LIST = {
-	EMAIL_SEND : "/member/anon/email/send",
-	AUTH_CODE_CHK : "/member/anon/code/chk",
-	DELETE_MEMBER : "/member/auth/delete",
-	PASSWORD_CHK : "/member/auth/pw/chk",
-	MEMBER_RESTORE : "/member/anon/restore",
-	CHANGE_PASSWORD : "/member/anon/pw/change",
-	DELETE_SCHEDULE :"/planner/schedule/del"
+	EMAIL_SEND: "/member/anon/email/send",
+	AUTH_CODE_CHK: "/member/anon/code/chk",
+	DELETE_MEMBER: "/member/auth/delete",
+	PASSWORD_CHK: "/member/auth/pw/chk",
+	MEMBER_RESTORE: "/member/anon/restore",
+	CHANGE_PASSWORD: "/member/anon/pw/change",
+	DELETE_SCHEDULE: "/planner/schedule/del"
 }
 
 // 단순 페이지 이동 url 상수
 const PAGE_LIST = {
-	MAIN_PAGE : "/planner/main",
-	CHANGE_PASSWORD_FORM : "/member/anon/pw/change/",
-	MEMBER_UPDATE_FORM : "/member/auth/update",
-	LOGIN_PAGE : "/member/anon/login",
-	CALENDAR_PAGE : "/planner/calendar"
+	MAIN_PAGE: "/planner/main",
+	CHANGE_PASSWORD_FORM: "/member/anon/pw/change/",
+	MEMBER_UPDATE_FORM: "/member/auth/update",
+	LOGIN_PAGE: "/member/anon/login",
+	CALENDAR_PAGE: "/planner/calendar"
 };
 // CSRF 토큰
 let csrfToken = $("meta[name='_csrf']").attr("content");
@@ -35,7 +35,7 @@ const defaultErrorFn = (errorResponse) => {
 	alert(response.message);
 };
 // AJAX 공통			// 구조 분해할당
-const ajaxCall = ({ url, method, successFn, param=null, errorFn = defaultErrorFn}) => {
+const ajaxCall = ({ url, method, successFn, param = null, errorFn = defaultErrorFn }) => {
 	$.ajax({
 		url: url,
 		method: method,
@@ -53,6 +53,22 @@ const ajaxCall = ({ url, method, successFn, param=null, errorFn = defaultErrorFn
 			if (typeof errorFn == "function") {
 				errorFn(xhr);
 			}
+		}
+	});
+};
+
+/*스윗 알러트 공통*/
+const swalCall = (title, text, icon, thenFn, confirmButtonText = "확인", showCancelButton = false, cancelButtonText = "아니요") => {
+	Swal.fire({
+		title: title,
+		text: text,
+		icon: icon,
+		confirmButtonText: confirmButtonText,
+		showCancelButton: showCancelButton,
+		cancelButtonText: cancelButtonText
+	}).then((result) => {
+		if (typeof thenFn == "function") {
+			thenFn(result);
 		}
 	});
 };

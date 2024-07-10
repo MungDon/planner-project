@@ -2,13 +2,7 @@ $(function() {
 	$(document).on("click", ".pwChkBtn", () => {
 		const url = $(".pwChkBtn").val();
 		const currentPw = $("#pw").val();
-		// 회원탈퇴일시에 confirm으로 물어보기
-		if (url === 'delete') {
-			if (!confirm('정말 탈퇴하시겠습니까?')) {
-				return false;
-			}
-		}
-		console.log(url);
+
 		const ajaxObj = {
 			url: API_LIST.PASSWORD_CHK,
 			method: "post",
@@ -23,24 +17,34 @@ $(function() {
 					if (url === 'update') {
 						location.href = PAGE_LIST.MEMBER_UPDATE_FORM;
 					} else {
-						const success_ajaxObj = {
-							url: API_LIST.DELETE_MEMBER,
-							method: "delete",
-							successFn: () => {
-								alert("탈퇴되었습니다.");
-								location.href = PAGE_LIST.MAIN_PAGE;
-							},
-							errorFn: () => {
-								alert("탈퇴실패.");
-								location.href = PAGE_LIST.MAIN_PAGE;
+						const thenFn = () => {
+							if (result.isDenied) {
+								return;
 							}
+							const success_ajaxObj = {
+								url: API_LIST.DELETE_MEMBER,
+								method: "delete",
+								successFn: () => {
+									const thenFn = () => {
+										location.href = PAGE_LIST.MAIN_PAGE;
+									};
+									swalCall("성공", "탈퇴되었습니다.", "success", thenFn);
+								},
+								errorFn: () => {
+									const thenFn = () => {
+										location.href = PAGE_LIST.MAIN_PAGE;
+									};
+									swalCall("실패","탈퇴실패.","error",thenFn);
+								}
+							};
+							ajaxCall(success_ajaxObj);
 						};
-						ajaxCall(success_ajaxObj);
+						swalCall("회원탈퇴", "정말 회원탈퇴를 하시겠습니까?", "question", thenFn, "예", true);
 					}
 				}
 			},
 			errorFn: () => {
-				alert('현재 비밀번호가 틀렸습니다.');
+				swalCall("경고","현재 비밀번호가 틀렸습니다.","warning");
 			}
 		};
 		ajaxCall(ajaxObj);

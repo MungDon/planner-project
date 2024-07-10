@@ -25,32 +25,32 @@ const validateInsert = () => {
 	const passwordRegex = /^(?=(.*[a-z]){5,})(?=.*[!@])(?=.*\d).{7,}$/;
 	if (!genderSelected) {
 		// 라디오 버튼 중 하나도 선택되지 않은 경우 경고 메시지 표시 및 폼 제출 방지
-		alert('성별을 선택해 주세요.');
+		swalCall("경고","성별을 선택해 주세요.","warning");
 		return false;
 	}
 	if (phone.value.length !== 11) {
-		alert("전화번호가 알맞게 입력되었는지 확인해주세요.");
+		swalCall("경고","전화번호가 알맞게 입력되었는지 확인해주세요.","warning");
 		return false;
 	}
 	if (name.value.trim().length === 1) {
-		alert("이름은 두 글자 이상이어야합니다.");
+		swalCall("경고","이름은 두 글자 이상이어야합니다.","warning");
 		return false;
 	}
 	if (pw !== pw2) {
-		alert("비밀번호와 비밀번호 재확인의 입력 값이 다릅니다.");
+		swalCall("경고","비밀번호와 비밀번호 재확인의 입력 값이 다릅니다.","warning");
 		return false;
 	}
 
 	if (!signChk.checked) {
-		alert("개인정보 수집에 동의해주세요.");
+		swalCall("경고","개인정보 수집에 동의해주세요.","warning");
 		return false;
 	}
 	if (!emailChkBox.checked) {
-		alert("이메일 인증은 필수입니다.");
+		swalCall("경고","이메일 인증은 필수입니다.","warning");
 		return false;
 	}
 	if (birthDate.value > getTodayDate()) {
-		alert("만 9세 이상만 가입 가능합니다.");
+		swalCall("경고","만 9세 이상만 가입 가능합니다.","warning");
 		return false;
 	}
 	if (!passwordRegex.test(pw)) {
