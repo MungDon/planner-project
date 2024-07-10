@@ -36,11 +36,12 @@ public class MemberService {
 	private final MemberMapper memberMapper;
 	private final FriendMapper friendMapper;
 	private final PasswordEncoder passwordEncoder;
-
+	private static final boolean MEMBER = true;
+	private static final boolean NON_MEMBER = false;
+	
 	// 회원가입
 	@Transactional
 	public int memberInsert(MemberDTO memberDTO) {
-		memberValidate(memberDTO.getMember_email(), false);
 		memberDTO.setUserDefaults(passwordEncoder);
 		return memberMapper.memberInsert(memberDTO);
 	}
@@ -76,17 +77,9 @@ public class MemberService {
 
 	/* 비번체크 */
 	public void isPasswordValid(String currnetPw, ResMemberDetail member) {
-		if (CommonUtils.isEmpty(member)) {
-			throw new RestCustomException(ErrorCode.NO_ACCOUNT);
-		}
-
-		if (member.getOauth_id().equals("none") && !CommonUtils.isEmpty(currnetPw)) {
-			throw new RestCustomException(ErrorCode.NO_ACCOUNT);
-		}
-
-		if (!passwordEncoder.matches(currnetPw, member.getMember_password())) {
-			throw new RestCustomException(ErrorCode.NO_ACCOUNT);
-		}
+		CommonUtils.throwRestCustomExceptionIf(CommonUtils.isEmpty(member), ErrorCode.NO_ACCOUNT);
+		CommonUtils.throwRestCustomExceptionIf(member.getOauth_id().equals("none") && !CommonUtils.isEmpty(currnetPw), ErrorCode.NO_ACCOUNT);
+		CommonUtils.throwRestCustomExceptionIf(!passwordEncoder.matches(currnetPw, member.getMember_password()), ErrorCode.NO_ACCOUNT);
 	}
 
 	/* 회원 탈퇴 */
@@ -119,12 +112,15 @@ public class MemberService {
 	/* 회원 복구 */
 	@Transactional
 	public int memberRestore(ReqMemberRestore req) {
+		// 복구시 입력정보로 회원정보 가져오기
 		ResMemberDetail memberDetail = findMemberByLoginType(req.getOauth_type(), req.getCurrentEmail());
-		if (CommonUtils.isEmpty(memberDetail)) {
-			throw new RestCustomException(ErrorCode.NO_ACCOUNT);
-		}
+		// 회원아니면 예외
+		CommonUtils.throwRestCustomExceptionIf(CommonUtils.isEmpty(memberDetail), ErrorCode.NO_ACCOUNT);
+		// 비번확인(일반로그인이용할경우)
 		isPasswordValid(req.getCurrentPassword(), memberDetail);
+		// 회원상태에 따른 예외
 		throwForStatus(memberDetail.getMember_status());
+		// 성공하면 복구신청상태로변경
 		return memberMapper.changeMemberStatus(memberDetail.getMember_id(), MemberStatus.RESTORE.getCode());
 	}
 
@@ -132,7 +128,7 @@ public class MemberService {
 	@Transactional(readOnly = true)
 	private ResMemberDetail findSocialOrFormMember(String email) {
 		ResMemberDetail user = memberMapper.socialMember(email);
-		if (user == null) {
+		if (CommonUtils.isEmpty(user)) {
 			user = memberMapper.formMember(email);
 		}
 		return user;
@@ -140,45 +136,32 @@ public class MemberService {
 
 	/* 회원체크 */
 	@Transactional(readOnly = true)
-	public void memberValidate(String email, boolean shouldBeMember) {
+	private void memberValidate(String email, boolean shouldBeMember) {
 		ResMemberDetail user = findSocialOrFormMember(email);
-		log.info("MV에서걸림");
-		//TODO - 비동기 , 동기 요청 구분메서드 만ㄷ르어야됌
-		// 회원이아니여야하는데 회원정보가 있을때
-		if (!shouldBeMember && !CommonUtils.isEmpty(user)) {
-			log.info("이메일중복");
-			throw new CustomException(ErrorCode.ID_DUPLICATE);
-//			throw new RestCustomException(ErrorCode.ID_DUPLICATE);
-		}
-
-		// 회원이여야하는데 회원정보가 없을때
-		if (shouldBeMember && CommonUtils.isEmpty(user)) {
-			throw new CustomException(ErrorCode.NO_ACCOUNT);
-		}
-
+		// 회원이 아니여야하는데 회원일때
+		CommonUtils.throwRestCustomExceptionIf(!shouldBeMember && !CommonUtils.isEmpty(user), ErrorCode.ID_DUPLICATE);
+		// 회원이여야하는데 회원이아닐때
+		CommonUtils.throwRestCustomExceptionIf(shouldBeMember && CommonUtils.isEmpty(user),ErrorCode.NO_ACCOUNT);
 		// 탈퇴한 회원이면 예외 발생
-		if (user.getMember_status().equals(MemberStatus.DELETE.getCode())) {
-			throw new CustomException(ErrorCode.WITHDRAWN_MEMBER);
-		}
+		CommonUtils.throwRestCustomExceptionIf(user.getMember_status().equals(MemberStatus.DELETE.getCode()), ErrorCode.WITHDRAWN_MEMBER);
+
 	}
 
 	/*비번 찾기시 소셜로그인 회원이면 되돌리기*/
 	@Transactional(readOnly = true)
-	public void isSocialMember(String member_email) {
+	private void isSocialMember(String member_email) {
 		ResMemberDetail user = memberMapper.socialMember(member_email);
-		if(!CommonUtils.isEmpty(user)) {
-			throw new RestCustomException(ErrorCode.SOCIAL_LOGIN_USER);
-		}
+		CommonUtils.throwRestCustomExceptionIf(!CommonUtils.isEmpty(user), ErrorCode.SOCIAL_LOGIN_USER);
 	}
 	
 	/* 이메일 인증시 타입별 회원검사 */
 	@Transactional(readOnly = true)
 	public void memberChk(String toEmail, String type) {
 		switch (type) {
-			case "insert" -> memberValidate(toEmail, false);
+			case "insert" -> memberValidate(toEmail, NON_MEMBER);
 			case "findPw" -> {
 				isSocialMember(toEmail);
-				memberValidate(toEmail, true);
+				memberValidate(toEmail, MEMBER);
 			}
 		}
 	}
@@ -188,7 +171,7 @@ public class MemberService {
 	public void changePassword(ReqChangePassword req) {
 		req.setNewPassword(passwordEncoder.encode(req.getNewPassword()));
 		int result = memberMapper.changePassword(req);
-		CommonUtils.RestResultSuccessful(result, ErrorCode.FAIL_CHANGE_PASSWORD);
+		CommonUtils.throwRestCustomExceptionIf(result != 1, ErrorCode.FAIL_CHANGE_PASSWORD);
 	}
 
 	/*

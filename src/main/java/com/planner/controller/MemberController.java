@@ -71,7 +71,6 @@ public class MemberController {
 	@ResponseBody
 	public ResponseEntity<String> emailChk(@RequestParam(value = "toEmail") String toEmail,
 			@RequestParam(value = "type") String type) throws MessagingException, UnsupportedEncodingException {
-		
 		memberService.memberChk(toEmail, type);
 		emailService.sendAuthCode(toEmail);
 		return ResponseEntity.ok("ok");

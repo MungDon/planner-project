@@ -59,9 +59,7 @@ public class EmailService {
 		deletePrevEmailAuthCode(toEmail); 				// 이전 기록삭제
 		
 		int result = emailMapper.saveAuthCode(toEmail, authCode.toString()); // 인증코드저장
-		if(result != 1) {
-			throw new RestCustomException(ErrorCode.FAIL_CREATE_AUTHCODE);
-		}
+		CommonUtils.throwRestCustomExceptionIf(result !=1,  ErrorCode.FAIL_CREATE_AUTHCODE);
 		return authCode.toString();
 	}
 
@@ -83,7 +81,7 @@ public class EmailService {
 	@Transactional(readOnly = true)
 	public void authCodeChk(String toEmail, String authCode) {
 		int result = emailMapper.authCodeChk(toEmail, authCode);
-		CommonUtils.RestResultSuccessful(result, ErrorCode.FAIL_AUTHENTICATION);
+		CommonUtils.throwRestCustomExceptionIf(result !=1,  ErrorCode.FAIL_AUTHENTICATION);
 	}
 
 	// 스케쥴러로 정기적으로 잉여데이터 전부다 삭제

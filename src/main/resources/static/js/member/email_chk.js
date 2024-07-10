@@ -19,9 +19,10 @@ $(function() { // $(document).ready(function(){}); 와 같음
 				text: "이메일을 입력해주세요",
 				icon: "warning",
 				confirmButtonText: "확인"
-			}).then(() =>{
-				$(window).off('beforeunload');
-				location.reload();
+			}).then(() => {
+				$("#email").focus();
+				$(".emailChkBtn").prop("disabled", false);
+				$("#email").attr("readonly", false);
 			});
 			return;
 		}
@@ -65,6 +66,7 @@ $(function() { // $(document).ready(function(){}); 와 같음
 
 	$(".Xbtn").click(() => {
 		$(".emailChkBtn").prop("disabled", false);
+		$("#email").attr("readonly", false);
 	});
 
 	// 인증 완료 버튼 눌렀을시
@@ -83,7 +85,6 @@ $(function() { // $(document).ready(function(){}); 와 같음
 			return;
 
 		}
-		console.log("혹시 넘어감?");
 		const ajaxObj = {
 			url: API_LIST.AUTH_CODE_CHK,
 			method: "post",

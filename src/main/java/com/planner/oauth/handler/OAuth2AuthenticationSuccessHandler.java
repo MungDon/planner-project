@@ -13,7 +13,6 @@ import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.oauth.TokenRedirect;
 import com.planner.oauth.service.OAuth2Service;
 import com.planner.oauth.service.OAuth2UserPrincipal;
-import com.planner.oauth.user.OAuth2UserUnlinkManager;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-	private final OAuth2UserUnlinkManager oAuth2UserUnlinkManager;
 	private final OAuth2Service oAuth2Service;
 
 	@Override
