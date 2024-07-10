@@ -5,7 +5,7 @@ $(function() {
 			const thenFn = () => {
 				window.location.href = PAGE_LIST.MAIN_PAGE;
 			};
-			swalCall("경고", "권한이없습니다", "warning");
-		}
+			swalCall("경고", "권한이없습니다", "warning", thenFn);
+   		}
 	});
 });

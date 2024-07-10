@@ -3,9 +3,13 @@
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-<link rel="stylesheet" type="text/css" href="/css/member/oauth2insert.css">
-<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<link rel="stylesheet" type="text/css" href="/css/member/oauth2insert.css">
+	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 <header th:replace="~{/fragments/header :: header}"></header>
@@ -14,12 +18,20 @@
 				<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
 				<input type="hidden" id="member" th:value="${member}"/>
 				<input type="hidden" name="member_id" th:value="${member.member_id}"/>
+				<input type="hidden" id="type" value="insert">
 				
 				<span class="joinText">회원가입을 위해<br> 정보를 입력해주세요</span>
-				
-				<label th:if="${member != null && member.getMember_email()=='none'}" for="member_email">이메일</label>
-				<input type="email" th:if="${member != null && member.getMember_email()=='none'}" id="member_email" name="member_email">
-				
+				<div th:if="${member != null && member.getMember_email()=='none'}" class="forKakaoUser">
+					<div class="emailText">
+						<label for="email">이메일(아이디)</label><input type="checkbox" id="emailChkBox"><span class="authChkText">인증여부</span>
+					</div>
+					<label  for="member_email">이메일</label>
+					<input type="email" id="member_email" name="member_email">
+									<!-- 이메일 인증 버튼 -->
+					<div class="emailChkBtnBox">
+						<button type="button" class="emailChkBtn" id="emailChkBtn">이메일 인증</button>
+					</div>
+				</div>
 				<label for="birth">생년월일</label>
 				<input type="date" name="member_birth" id="birth" required="required"	/>
 				
@@ -54,7 +66,30 @@
 					</div>
 				</div>
 			</div>
+			
+				<!-- 인증코드 입력 모달 -->
+			<div class="authCodeModal" id="authCodeModal">
+				<div class="modalBody">
+					<div class="Modaltop">
+						<button type="button" class="Xbtn" onclick="closeModal('authCodeModal')">X</button>
+					</div>
+					<div class="modalMain">
+						<div class="inputCodeCon" id="inputCodeBox">
+							<span class="authText">인증번호를 입력해주세요.</span>
+							<div class="inputCodeBox">
+								<input type="text" name="inputCode" id="inputCode">
+							</div>
+							<div class="authCodeBtns">
+								<button type="button" class="codeChkBtn">인증완료</button>
+								<button type="button" class="resendBtn">인증번호 재전송</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</main>
+		<script src="/js/common.js"></script>
+		<script src="/js/member/email_chk.js"></script>
 		<script src="/js/modal.js"></script>
 		<script type="text/javascript" src="/js/member/oauth2_insert.js"></script>
 </body>
