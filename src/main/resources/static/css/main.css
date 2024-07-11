@@ -25,25 +25,23 @@
 .noticeBox {
 	width: 40%;
 	border: 1px solid #ddd;
-	border-radius:10px;
-	padding: 50px;
+	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
 	border: 1px solid #ddd;
 }
 
 .todayBox {
-	background-color: #246b37;
+	background-color: rgba(250, 250, 230, 0.3);
+	border-style: none;
 	border-radius: 10px;
-	width : 40%;
-	padding: 50px;
+	width: 20%;
 	display: flex;
 	flex-direction: column;
-	border-style: none;
 }
 
-
 .todaySchedule {
+	margin-top: 10px;
 	padding: 10px;
 	border-style: hidden;
 	display: flex;
@@ -55,9 +53,15 @@
 	width: 100%;
 }
 
-.todayText {
-	align-self: center; 
-	color : white;
+.todayTextBox,.noticeTextBox {
+	border-radius: 10px 10px 0 0;
+	text-align: center;
+	width: 100%;
+	background-color: bisque;
+}
+
+.todayText,.noticeText{
+	color: white;
 	font-weight: bold;
 	font-size: 35px;
 	margin-bottom: 20px;
@@ -65,20 +69,29 @@
 }
 
 .headText {
-	color: white;
+	color: gray;
 	font-weight: bold;
 	font-size: 20px;
 }
 
+.head, .scheduleContent {
+	padding-left: 10px;
+}
+
 .head {
-	font-size: 13px;
-	color: white;
+	font-size: 15px;
+	color: rgb(100,100,100);
 	font-weight: bold;
+}
+
+.title {
+	display: flex;
+	flex-direction: column;
 }
 
 .scheduleContent {
 	font-size: 20px;
-	color: white;
+	color: gray;
 }
 
 .top {
@@ -89,13 +102,15 @@
 	height: 20px;
 	margin-bottom: 10px;
 }
-.line{
-	border-bottom:2px dashed white;
+
+.line {
+	border-bottom: 2px dashed #ddd;
 }
+
 .deleteBtn {
 	border-style: none;
-	background-color: #246b37;
-	color: white;
+	background-color: rgba(20, 250, 230, 0);
+	color:  rgb(180,180,180);
 	font-size: 20px;
 	cursor: pointer;
 	transition: 0.25s ease;
@@ -105,22 +120,27 @@
 	color: red;
 	font-size: 25px;
 }
-.addScheduleBtnBox{
+
+.addScheduleBtnBox {
 	text-align: right;
 }
+
 .addScheduleBtn {
+	margin: 15px;
 	cursor: pointer;
 	width: 50%;
 	font-size: 15px;
 	font-weight: bold;
-	color: white;
+	color:  rgb(180,180,180);
 	margin-top: 30px;
 	height: 45px;
-	border: 2px solid white;
+	border: 2px solid rgb(180,180,180);
 	border-radius: 10px;
-	background-color: #246b37;
-}
-.addScheduleBtn:hover {
 	background-color: white;
-	color :  #246b37;
+}
+
+.addScheduleBtn:hover {
+	border: 2px solid bisque;
+	background-color: white;
+	color: bisque;
 }

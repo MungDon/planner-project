@@ -1,6 +1,7 @@
 package com.planner.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -132,7 +133,7 @@ public class MemberController {
 		}
 		return ResponseEntity.ok("ok");
 	}
-
+	
 	// 로그인
 	@GetMapping("/anon/login")
 	public String memberLogin(@UserData ResMemberDetail detail, HttpServletRequest request,

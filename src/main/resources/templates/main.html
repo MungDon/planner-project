@@ -22,23 +22,30 @@
 		</div>
 		<div class="middle">
 			<div class="noticeBox">
-				<h1>공지사항</h1>
+				<div class="noticeTextBox">
+					<span class="noticeText">공지사항</span>
+				</div>
 			</div>
 			<div class="todayBox">
-				<span class="todayText">오늘의 일과</span>
+				<div class="todayTextBox">
+					<span class="todayText">오늘의 일과</span>
+				</div>
 				<div class="todaySchedule" th:each="schedule ,loop : ${todaySchedule}" th:classappend="${loop.count != todaySchedule.size()} ? 'line'">
 					<div class="top">
-						<span class="headText" th:text="${loop.count}+'.'"></span>
+						<div class="title">
+							<span class="head">일정</span>
+							<span class="scheduleContent" th:text="${schedule.schedule_title}"></span>
+						</div>
 						<button class="deleteBtn" type="button" th:value="${schedule.schedule_id}">X</button>
 					</div>
-					<span class="head">일정 제목</span>
-					<span class="scheduleContent" th:text="${schedule.schedule_title}"></span>
-					
 					<span class="head">내용</span>
 					<span class="scheduleContent" th:text="${schedule.schedule_content}"></span>
 					
-					<span th:if="${#strings.isEmpty(schedule.place)}" class="head">장소명</span>
-					<span th:if="${#strings.isEmpty(schedule.place)}" class="scheduleContent" th:text="${schedule.place}"></span>
+					<span class="head">시간</span>
+					<span class="scheduleContent" th:text="${#temporals.format(schedule.schedule_start,'HH:mm') }"></span>
+					
+					<span th:if="${!#strings.isEmpty(schedule.place)}" class="head">장소</span>
+					<span th:if="${!#strings.isEmpty(schedule.place)}" class="scheduleContent" th:text="${schedule.place}"></span>
 					
 					<span th:if="${#strings.isEmpty(schedule.address)}" class="head">주소</span>
 					<span th:if="${#strings.isEmpty(schedule.address)}" class="scheduleContent" th:text="${schedule.address}"></span>

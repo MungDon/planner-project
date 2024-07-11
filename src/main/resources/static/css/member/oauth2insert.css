@@ -16,7 +16,7 @@
 	box-shadow: 0px 0px 10px 1px #a8c9ff;
 }
 
-.oauth2Form>input {
+.oauth2Form>input,.forKakaoUser>input {
 	font-size: 20px;
 	width: 100%;
 	margin: 15px 0 15px 0;
@@ -32,8 +32,19 @@
 .oauth2Form>input::placeholder {
 	font-size: 15px;
 }
+#inputCode:focus {
+	outline: none;
+	border-bottom: 2px solid skyblue;
+}
+#inputCode{
+	font-size: 20px;
+	width: 100%;
+	margin: 15px 0 15px 0;
+	border-style: none;
+	border-bottom: 2px solid #ddd;
+}
 
-.oauth2Form>label {
+.oauth2Form>label,.emailText{
 	font-size: 15px;
 	color: gray;
 }
@@ -71,16 +82,33 @@
 	border-radius: 10px;
 	background-color: white;
 }
-
-.joinText {
+.emailChkBtn,.codeChkBtn,.resendBtn{
+	width: 30%;
+	font-size: 15px;
+	font-weight: bold;
+	color: gray;
+	height: 45px;
+	border: 2px solid gray;
+	border-radius: 10px;
+	background-color: white;
+}
+.joinText,.authText {
 	color: gray;
 	font-weight: bold;
 	font-size: 27px;
 	margin-bottom: 20px;
 }
+.authChkText{
+	font-size: 13px;
+	color: darkgray;
+}
+.emailText{
+	display: flex;
+	flex-direction: row;
+}
 
-.signChkModal {
-	position: absolute;
+.signChkModal,.authCodeModal {
+	position: fixed;
 	display: none;
 	justify-content: center;
 	top: 0;
@@ -90,8 +118,8 @@
 	background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modalBody {
-	position: absolute;
+.modalBody{
+	position: relative;
 	width: 500px;
 	top: 50%;
 	left: 50%;
@@ -100,17 +128,21 @@
 	background: #ffffff;
 	border-radius: 20px;
 	top: 50%;
-	width: 500px
 }
-
 .Modaltop, .btns {
 	width: 100%;
 	text-align: right;
 }
-
-.modalMain {
+.emailChkBtnBox{
+	width: 100%;
 	display: flex;
-	flex-direction: column; align-items : center;
+	flex-direction: row;
+	justify-content: flex-end;
+}
+.modalMain {
+	width : 100%;
+	display: flex;
+	flex-direction: column; 
 	justify-content: center;
 	align-items: center;
 }
@@ -131,4 +163,34 @@
 	font-size: 25px;
 	font-weight: bold;
 	cursor: pointer;
+}
+.inputCodeCon{
+	display: flex;
+	flex-direction : column;
+	width : 100%;
+}
+
+.inputCodeBox{
+	margin : 10px 0 10px 0;
+}
+
+.authCodeBtns{
+	display: flex;
+	align-items : center;
+	justify-content :flex-end;
+	flex-direction: row;
+	width: 100%;
+}
+.resendBtn{
+	margin-left: 10px;
+}
+.disabled-checkbox { /*disabled custom chk*/
+    pointer-events: none; /* 클릭 막기 */
+    background-color: #07ed4c;
+    border: 1px solid #ccc;
+}
+.disabled-uncheck{ /*disabled custom unchk*/
+    pointer-events: none; /* 클릭 막기 */
+    background-color: white;
+    border: 1px solid #ccc;
 }
