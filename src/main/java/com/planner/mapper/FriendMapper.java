@@ -73,4 +73,8 @@ public interface FriendMapper {
 	
 //	친구삭제
 	public void friendDelete(@Param("friend_id") Long friend_id);
+	
+//	친구상태 찾기
+	public String friendStatus(@Param("member_receive_id") Long member_receive_id,
+			  				   @Param("member_send_id") Long member_send_id);
 }

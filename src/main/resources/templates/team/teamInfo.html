@@ -3,26 +3,28 @@
 <head>
 	<meta charset="UTF-8"/>
 	<title>그룹 정보</title>
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamInfo.css">
+	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
 <h2 th:if="${dto} == null" th:text="${msg}"></h2>
-<table th:if="${dto} != null" th:object="${dto}">
+<table th:if="${dto} != null" th:object="${dto}" id="info">
 	<tr>
-		<td>그룹명</td>
-		<td th:text="*{team_name}"></td>
+		<td class="td120">그룹명</td>
+		<td class="td350"><span th:text="*{team_name}"></span></td>
 	</tr>
 	<tr>
 		<td>그룹 소개</td>
-		<td th:text="*{team_explain}"></td>
+		<td><div th:text="*{team_explain}" class="enter-br"></div></td>
 	</tr>
 	<tr>
 		<td>그룹장 이메일</td>
-		<td th:text="*{member_email}"></td>
+		<td><span th:text="*{member_email}"></span></td>
 	</tr>
-	<!-- 그룹 인원 수 출력? -->
 	<tr>
 		<td>이미지</td>
 		<td>
@@ -32,9 +34,9 @@
 	</tr>
 	<tr>
 		<td colspan="2" align="right">
-			<!-- 그룹 인원 목록 링크? -->
 			<button th:if="${tm_grade} != null AND ${tm_grade} != 'WAIT'" type="button" th:onclick="|window.location='/team/member/tmlist?team_id=*{team_id}'|">구성원 목록</button>
 			<th:block th:if="${tm_grade == 'TEAM_MASTER'}">
+				<!--/* 그룹장한테만 출력 */-->
 				<button type="button" th:onclick="|window.location='/team/update?team_id=*{team_id}'|">수정하기</button>
 				<button type="button" id="check_delete">그룹삭제</button>
 			</th:block>

@@ -4,9 +4,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.planner.mapper.TeamMemberMapper">
 
-
 <select id="teamMemberGrade" resultType="String">
 	select tm_grade from team_member where team_id=#{team_id} and member_id=#{member_id}
+</select>
+
+<select id="nickCheck" resultType="int">
+	select count(*) from team_member
+	where team_id=#{team_id}
+	and tm_nickname=#{tm_nickname}
 </select>
 
 <insert id="insertTeamMember" parameterType="TeamMemberDTO">

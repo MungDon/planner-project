@@ -4,6 +4,7 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="/css/friend/button.css"	/>
 	<link rel="stylesheet" type="text/css" href="/css/member/search.css"	/>
+	<link rel="stylesheet" type="text/css" href="/css/friend/friendBar.css"	/>
 	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
 	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 	<meta name="_csrf" th:content="${_csrf.token}"/>
@@ -18,16 +19,16 @@
 			<span class="title_text">Search</span>
 			<form action="/member/auth/search" method="get" id="keywordForm" onsubmit="return keywordCheck()">	<!-- Enter Key 로 서밋 방지 -->
 				<input type="text" name="keyword" id="keywordInput" maxlength="20" style="font-size: 18px; color: gray; font-style: oblique;"	/>
-				<button type="submit" id="keywordBtn">검색</button>
+				<button type="submit" id="keywordBtn" class="custom-btn btn-kw"><span>검색</span></button>
 			</form>
 		</div>
 			<div th:if="${#lists.isEmpty(list) && keyword != '!@#$%^&*()'}" align="center">
 				<h2>검색 결과가 없습니다.</h2>
 			</div>
-		<div th:if="${count != 0}">
-			<table class="searchTable">
+		<div th:if="${count != 0}" class="searchTable">
+			<table>
 				<tr class="search_sub_tr">
-					<th class="search_td1">이메일</th>
+					<th class="search_tr1">이메일</th>
 					<th class="search_td2">이름</th>
 					<th class="search_td3">성별</th>
 				</tr>
@@ -47,15 +48,22 @@
 						</div>
 					</td>
 					<td class="search_td2" th:text="${@friendRoleUtils.getMemberMaskingName(memberDTO.member_name, NAME)}"></td>
-					<td class="search_td3" th:text="${gender}"></td>
+					<td class="search_td3" th:text="${@friendRoleUtils.getMemberGender(memberDTO.member_gender)}"></td>
 					<td class="search_td4">
-						<div th:if="${memberDTO.friend_request_status != 'R' and memberDTO.friend_request_status != 'F'}">	<!-- 친구 요청상태 이거나 친구 이거나 -->
-							<button type="button" th:value="${memberDTO.member_id}" class="addBtn">친구추가</button>
+						<div th:if="${friendB == null && friendC == null && memberDTO.friend_request_status == null && memberDTO.friend_request_status != 'F'}" class="status_box">	<!-- 친구 요청상태 이거나 친구 이거나 -->
+							<button type="button" th:value="${memberDTO.member_id}" class="custom-btn btn-add"><span>친구추가</span></button>
 						</div>
-						<div>
+						<div th:if="${memberDTO.friend_request_status == 'R' and memberDTO.friend_request_status != 'F'}" class="status_box">
+							<button type="button" th:value="${memberDTO.member_id}" class="custom-btn btn-access"><span>요청수락</span></button>
+						</div>
+						<div th:if="${memberDTO.friend_request_status == 'S' and memberDTO.friend_request_status != 'F'}" class="status_box">
 							<span class="fr-status" th:text="${@friendRoleUtils.getFriendRoleName(memberDTO.friend_request_status)}"></span>
 						</div>
-					</td>
+						<div th:if="${memberDTO.friend_request_status == 'F'}" class="status_box">
+							<span class="fr-status" th:text="${@friendRoleUtils.getFriendRoleName(memberDTO.friend_request_status)}"></span>
+						</div>
+<!-- 					</td> -->
+<!-- 					<td> [[${memberDTO.member_id}]] [[${memberDTO.friend_request_status}]] </td> -->
 				</tr>
 				<tr class="search_tr">
 					<td colspan="4">
@@ -79,7 +87,9 @@
 				</tr>
 			</table>
 		</div>
+		<input type="hidden" th:value="${receive_count}" id="re_count"	/>
 	</main>
 	<script type="text/javascript" src="/js/member/memberSearch.js"></script>
+	<script type="text/javascript" src="/js/header.js"></script>
 </body>
 </html>

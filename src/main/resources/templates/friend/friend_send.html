@@ -5,6 +5,7 @@
 	<link rel="stylesheet" href="/css/friend/button.css" type="text/css"	/>
 	<link rel="stylesheet" href="/css/friend/receive.css" type="text/css"	/>
 	<link rel="stylesheet" href="/css/header.css" type="text/css"	/>
+	<link rel="stylesheet" href="/css/friend/friendBar.css" type="text/css"	/>
 </head>
 <body>
 	<header th:replace="~{/fragments/header :: header}"></header>
@@ -31,7 +32,7 @@
 				</td>
 				<td class="receive_td3">
 					<form action="/friend/requestDelete" method="post">
-						<button type="submit" class="addBtn">취소</button>
+						<button type="submit" class="custom-btn btn-kw"><span>취소</span></button>
 						<input type="hidden" name="member_receive_id" th:value="${friendRequestDTO.member_receive_id}"	/>
 						<input type="hidden" name="delete_who" value="receive"	/>		<!-- 나에게 요청을 받은 삭제 대상을 구분짓는 숨김요소 -->
 						<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
@@ -41,5 +42,6 @@
 		</table>
 	</main>
 	<script type="text/javascript" src="/js/friend/friendRequest.js"></script>
+	<script type="text/javascript" src="/js/header.js"></script>
 </body>
 </html>

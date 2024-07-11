@@ -3,24 +3,30 @@
 <head>
 	<meta charset="UTF-8"/>
 	<title>그룹 정보 수정</title>
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
+	<link rel="stylesheet" type="text/css" href="/css/team/teamInfo.css">
+	<link rel="stylesheet" type="text/css" href="/css/team/teamUpdate.css">
 	<script type="text/javascript" src="/js/team/teamUpdate.js" defer></script>
+	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
+<h2 class="text-center">그룹 정보 수정</h2>
 <form th:action="@{|/team/update?team_id=${dto.team_id}|}" method="post" id="team_form" enctype="multipart/form-data" onsubmit="return imgcheck()">
-<table th:if="${dto} != null" th:object="${dto}">
+<table th:if="${dto} != null" th:object="${dto}" id="info">
 	<tr>
-		<td><label for="team_name">그룹 이름</label></td>
+		<td class="td120"><label for="team_name">그룹 이름</label></td>
 		<td>
-			<input type="text" th:field="*{team_name}" maxlength="50" required>
+			<input type="text" th:field="*{team_name}" maxlength="50" placeholder="2글자 이상 50글자 이하" required>
 			<button type="button" id="overlap_btn">중복검사</button>
-			<p id="overlap" style="display:none;"></p>
+			<span id="overlap" style="display:none;"></span>
 		</td>
 	</tr>
 	<tr>
 		<td><label for="team_explain">그룹 소개</label></td>
-		<td><textarea th:field="*{team_explain}" cols="42" rows="7" maxlength="333"></textarea></td>
+		<td><textarea th:field="*{team_explain}" cols="42" rows="7" maxlength="333" placeholder="최대 333글자"></textarea></td>
 	</tr>
 	<tr>
 		<td>이미지</td>
@@ -37,13 +43,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td><label for="team_image">그룹 이미지</label></td>
-		<td><input type="file" name="team_image" id="team_image" accept=".jpg, .jpeg, .png, .gif, .wbmp, .bmp, .tif, .tiff"></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td>
-			<span style="font-size:0.8em; color:gray;">이미지는 100x100 사이즈를 권장합니다.<br>움직이는 이미지는 지원하지 않습니다.</span>
+		<td><label for="team_image">이미지 변경</label></td>
+		<td><input type="file" name="team_image" id="team_image" accept=".jpg, .jpeg, .png, .gif, .wbmp, .bmp, .tif, .tiff">
+			<br><span style="font-size:0.8em; color:gray;">이미지는 100x100 사이즈를 권장합니다.<br>움직이는 이미지는 지원하지 않습니다.</span>
 		</td>
 	</tr>
 	<tr>

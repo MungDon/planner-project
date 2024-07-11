@@ -6,7 +6,7 @@
 }
 
 .receive_table {
-	width: 500px;
+	width: 600px;
 	border: 2px solid #ddd;
 	border-radius: 20px;
 	padding: 20px;
@@ -34,6 +34,11 @@
 	
 }
 
+.receive_tr1 {
+	padding: 0 0 10px;
+	width: 120px;
+}
+
 .receive_td1 {
 	width: 120px;
 	text-align: center;
@@ -51,13 +56,15 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	text-align: center;
+	padding: 0 0 10px;
 }
 .receive_td3 {
-	width: 60px;
+	width: 40px;
 /* 	text-align: center; */
 	display: flex;
 	align-items: center;
 /* 	justify-content: center; */
+	padding: 0 0 10px;
 }
 
 .receive_title {

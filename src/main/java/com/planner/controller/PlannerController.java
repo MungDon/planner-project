@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PlannerController {
 
 	private final ScheduleService scheduleService;
-
+	private final static Long NO_TEAM = -1L;
 	@GetMapping("/intro")
 	public String intro() {
 		return "intro";
@@ -42,7 +42,7 @@ public class PlannerController {
 			LocalDate today = LocalDate.now();
 			 DateTimeFormatter todayFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
 			String todayProvide = today.format(todayFormat);
-			List<ScheduleDTO> todaySchedule = scheduleService.schedule_select(detail.getMember_id(), todayProvide);
+			List<ScheduleDTO> todaySchedule = scheduleService.schedule_select(detail.getMember_id(), todayProvide, NO_TEAM);
 			model.addAttribute("todaySchedule", todaySchedule);
 			model.addAttribute("member", detail);
 			return "main";

@@ -2,13 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<meta charset="UTF-8"/>
+	<meta name="team_id" th:content="${dto.team_id}">
 	<title>그룹 참가</title>
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
+	<link rel="stylesheet" type="text/css" href="/css/team/member/tminsert.css">
+	<script type="text/javascript" src="/js/team/member/tminsert.js" defer></script>
+	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
 <th:block th:if="${dto} != null">
-<table th:object="${dto}">
+<form id="tminsert_form" th:action="@{/team/member/insert}" method="post">
+<table th:object="${dto}" id="tmi-table">
 	<tr>
 		<td>그룹명</td>
 		<td th:text="*{team_name}"></td>
@@ -21,22 +28,32 @@
 		<td>이미지</td>
 		<td>
 			<img th:if="*{team_image} != null" th:src="'/team/img?img='+*{team_image}" th:alt="*{team_name}+' 그룹의 이미지'">
-			<img th:if="*{team_image} == null" src="/images/team_default.jpg" alt="기본이미지"></img>
+			<img th:if="*{team_image} == null" src="/images/team_default.png" alt="기본이미지"></img>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="hidden" name="team_id" th:value="${dto.team_id}">
+			<label for="nickname">별명</label>
+		</td>
+		<td>
+			<input type="text" name="tm_nickname" id="tm_nickname" th:value="${member_name}" placeholder="그룹내 별명 중복 금지" required>
+			<button type="button" id="nick_check">중복검사</button>
+			<button type="submit" id="submit_btn" disabled>참가</button>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="text-center">
+			<span id="check_msg" style="color:red;">중복검사가 필요합니다.</span>
 		</td>
 	</tr>
 </table>
-<hr>
-<form th:action="@{/team/member/insert}" method="post">
-	<!-- 합치면 바꿔야댐. 로그인 정보에서 member_id 가져올 수 있도록. -->
-	<input type="hidden" name="team_id" th:value="${dto.team_id}">
-	<label for="nickname">별명</label>
-	<input type="text" name="nickname" id="nickname" th:value="${member_name}" required> <br>
-	<button type="submit">참가</button>	
 </form>
 </th:block>
 </div> <!-- main-container 끝 -->
 
 <th:block th:if="${overlap} != null">
+<!--/* 이미 가입신청, 혹은 가입된 상태의 그룹이면 */-->
 <input type="hidden" id="overlap" th:value="${overlap}">
 <script>
 	msg = document.getElementById("overlap").value;
@@ -44,5 +61,15 @@
 	location.href="/team/main";
 </script>
 </th:block>
+
+<th:block th:if="${nick} != null">
+<!--/* 중복검사 하고 가입신청했는데도 닉네임 중복인 상황이 나온다면 */-->
+<input type="hidden" id="nick" th:value="${nick}">
+<script>
+	msg = document.getElementById("nick").value;
+	alert("["+msg+"] 은(는) 이미 사용중인 별명입니다.");
+</script>
+</th:block>
+
 </body>
 </html>

@@ -9,12 +9,15 @@
 	<meta name="team_board_id" th:content="${dto.team_board_id}">
 	<meta name="vote_id" th:content="${dto.vote_id}">
 	<title th:text="${dto.tb_title}"></title>
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/board/tbview.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="/js/team/board/tbview.js" defer></script>
+	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
 <span th:text="${dto.tb_category}"></span>
 <h2 id="title" th:text="${dto.tb_title}"></h2>
@@ -26,13 +29,30 @@
 	</span>
 </div>
 <hr>
+
 <div id="content">
-<div id="board_content" th:utext="${dto.tb_content}"></div>
-<div id="schedule" th:if="${dto.schedule_id}">
+	<!--/* 게시글 내용 출력 */-->
+	<div id="board_content" th:utext="${dto.tb_content}"></div>
+	
 	<!--/* 일정 출력 */-->
-</div>
-<div id="vote" th:if="${dto.vote_id}">
-</div>
+	<div id="schedule" class="optional_content float-clear" th:if="${dto.schedule_id}" th:object="${scheduleDTO}">
+		<b th:text="*{schedule_title}"></b>
+		<p class="float-right">
+		기간 : 
+		<span th:text="*{#temporals.format(schedule_start, 'yyyy-MM-dd HH:mm')}"></span><b> ~ </b>
+		<span th:text="*{#temporals.format(schedule_end, 'yyyy-MM-dd HH:mm')}"></span>
+		</p>
+		<br>
+		<pre th:utext="*{schedule_content}"></pre>
+		
+		<div style="width:max-content; margin-left: 10px;">
+			<div th:text="*{address}"style="margin-top:5px; text-align: left;"></div>
+			<div th:text="*{place}"style="margin-left: 30px;text-align: right;"></div>
+		</div>
+	</div>
+	
+	<!--/* 투표 출력 */-->
+	<div id="vote" class="optional_content" th:if="${dto.vote_id}"></div>
 </div>
 <div class="float-clear">
 	<span>
@@ -47,8 +67,10 @@
 </div>
 <hr color="darkgray">
 <div id="reply_box">
+	<!--/* 댓글 출력 영역 */-->
 	<div id="reply_list">
 	</div>
+	<!--/* 댓글 작성 영역 */-->
 	<form id="reply_form" class="reply_form" onsubmit="return false;">
 		<input type="hidden" name="team_board_id" th:value="${dto.team_board_id}">
 		<input type="hidden" name="team_id" th:value="${dto.team_id}">
@@ -56,6 +78,7 @@
 	</form>
 </div>
 
+<!--/* 게시글 삭제 modal */-->
 <div th:if="${dto.team_member_id == team_member_id} or ${#strings.contains(tm_grade, 'MASTER')}" id="modal">
 	<div id="modal_body">
 		<h2>게시글을 삭제하시겠습니까?</h2>

@@ -20,6 +20,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.planner.dto.request.team.MyTeamListDTO;
@@ -39,12 +40,14 @@ public class TeamService {
 
 	private final TeamMapper teamMapper;
 	private final TeamMemberMapper tmMapper;
+	// upload 폴더 경로
 	private final String uploadPath = new File("").getAbsolutePath() +"\\src\\main\\resources\\static\\upload\\";
+	// 지원하는 이미지 확장자 리스트
 	private final List<String> exts = Arrays.asList(ImageIO.getReaderFormatNames()); 
 
-	// 그룹 이름 중복 검사. 중복이면 false
+	/** 그룹 이름 중복 검사. 중복이면 true */
 	public boolean teamNameOverlap(String team_name) {
-		return teamMapper.teamNameOverlap(team_name) == 1 ? false : true;
+		return teamMapper.teamNameOverlap(team_name) == 1 ? true : false;
 	}
 
 	// 그룹 이미지 리사이즈 후 저장
@@ -94,11 +97,12 @@ public class TeamService {
 	}
 
 	// 그룹 생성
+	@Transactional
 	public long teamCreate(ResMemberDetail detail, String team_name, String team_explain, MultipartFile team_image) {
-		TeamDTO dto = new TeamDTO();
-		dto.setTeam_name(team_name);
-		dto.setTeam_explain(team_explain);
-		dto.setTeam_image("");
+		TeamDTO dto = TeamDTO.builder()
+						.team_name(team_name)
+						.team_explain(team_explain)
+						.build();
 		boolean imgResult = this.setImg(dto, team_image);
 		if(!imgResult) { // team_image가 검사를 통과 못했으면
 			return -1;
@@ -106,14 +110,19 @@ public class TeamService {
 
 		teamMapper.teamInsert(dto); // team 생성
 
-		TeamMemberDTO tmdto = new TeamMemberDTO();
-
-		tmdto.setMember_id(detail.getMember_id()); 
-		tmdto.setTeam_id(dto.getTeam_id());
-		tmdto.setTm_grade(TM_Grade.ROLE_TEAM_MASTER.getValue()); // enums의 TM_Grade 확인
-		tmdto.setTm_nickname(detail.getMember_name());
+		TeamMemberDTO tmdto = TeamMemberDTO.builder()
+								.member_id(detail.getMember_id())
+								.team_id(dto.getTeam_id())
+								.tm_nickname(detail.getMember_name())
+								.tm_grade(TM_Grade.ROLE_TEAM_MASTER.getValue())
+								.build();
 		// team을 생성한 member를 해당 team의 team_member로 추가
-		tmMapper.insertTeamMember(tmdto);
+		try {
+			// 그룹 내에서 닉네임 중복일 때 예외 발생하는데, 그룹 생성시에는 중복일 수 없음.
+			tmMapper.insertTeamMember(tmdto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return dto.getTeam_id();
 	}
@@ -151,8 +160,12 @@ public class TeamService {
 	public void teamInfoUpdate(long team_id, String team_name, String team_explain,
 								MultipartFile team_image, String delimg) {
 		TeamDTO dto = teamMapper.teamInfo(team_id);
-		dto.setTeam_name(team_name);
-		dto.setTeam_explain(team_explain);
+		dto = TeamDTO.builder()
+				.team_id(team_id)
+				.team_name(team_name)
+				.team_explain(team_explain)
+				.team_image(dto.getTeam_image())
+				.build();
 		boolean del = delimg.equals("delimg"); // 기존 이미지 제거 체크했으면 true
 		boolean newImg = !team_image.isEmpty(); // 교체할 이미지 있으면 true
 		if(del || newImg) { // 기존 이미지를 제거, 혹은 교체시

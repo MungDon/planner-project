@@ -2,6 +2,7 @@
 <body>
 <span><b>댓글</b> : <span th:text="${replyList.size}" id="reply_count"></span> 개</span>
 <th:block th:each="reply : ${replyList}">
+<!--/* 댓글들 출력 */-->
 	<div th:object="${reply}" th:id=*{reply_id} class="float-clear reply" th:classappend="*{reply_id != reply_group} ? group : ''">
 		<p>작성자 : <span th:text="*{tm_nickname}" th:data-team_member_id="*{team_member_id}" class="team_member"></span><span class="float-right" th:text="*{#temporals.format(reply_reg, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
 		<button th:if="${#strings.contains(tm_grade, 'MASTER')} or ${team_member_id} == *{team_member_id}" class="float-right re-del-btn" th:data-reply_id="*{reply_id}">삭제</button>

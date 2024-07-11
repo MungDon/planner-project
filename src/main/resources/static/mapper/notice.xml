@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.planner.mapper.NoticeMapper">
+	<insert id="noticeInsert" parameterType="NoticeDTO">
+		insert into notice values (
+			notice_seq.nextval,
+			#{notice_title},
+			#{notice_content}
+		)
+	</insert>
+	<select id="noticeSelect" resultType="NoticeDTO">
+		select * from
+		(select n.*, rownum as rn
+			from notice n
+			order by notice_id desc)
+		where rn between #{start} and #{end}
+		order by rn desc
+	</select>
+	
+	<select id="noticeAllSelect" resultType="int">
+		select count(*) from notice 
+	</select>
+	
+	<select id="noticeContent" resultType="NoticeDTO">
+		select * from notice where notice_id = #{notice_id}
+	</select>
+	
+	
+	<update id="noticeUpdate" parameterType="NoticeDTO">
+		update notice z
+		set	notice_title = #{notice_title} ,
+			notice_content = #{notice_content}
+			where notice_id = #{notice_id}
+	</update>
+	
+	<delete id="noticeDelete" parameterType="Long">
+		delete notice 
+		where notice_id = #{notice_id}
+	</delete>
+</mapper>

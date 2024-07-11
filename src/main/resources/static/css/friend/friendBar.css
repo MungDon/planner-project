@@ -1,0 +1,15 @@
+.friend_nav a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.friend_menu {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.fr-container {
+	max-width: 1400px;
+	width: calc(90% - 40px);
+	margin: auto;
+}

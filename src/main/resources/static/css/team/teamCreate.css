@@ -1,0 +1,30 @@
+h2{
+	margin-bottom:10px;
+}
+#team_form table{
+	margin:0 auto;
+}
+#team_form td{
+	padding:2px;
+}
+#team_form td:first-child{
+	width:90px;
+}
+#team_form td:nth-child(2){
+	width:430px;
+}
+#team_form td button{
+	padding:2px 5px;
+	vertical-align: bottom;
+}
+#team_name{
+	width:350px;
+	height:26px;
+	padding:2px;
+}
+#team_explain{
+	width:350px;
+	height:150px;
+	padding:5px;
+	resize:none;
+}

@@ -1,16 +1,63 @@
+.center-block{
+	margin:0 auto;
+}
 #team-banner img{
 	height:50px;
 }
-#pageBox a, b{
-	padding:0 2px;
-	margin:2px 1px;
+#team-banner-title{
+	display:inline-block;
+	transform:translateY(-15px);
 }
-#pageBox a{
-	text-decoration: none;
+#under-team-banner{
+	display:flex;
+	justify-content: space-between;
+	padding:3px;
+	margin:3px 0;
 }
-#pageBox a:hover{
-	background-color:darkgray;
-	color:white;
+#write-btn{
+	margin-top:20px;
+	height:24px;
+	width:48px;
+}
+#board-table{
+	width:800px;
+}
+#board-table thead{
+	background-color:khaki;
+}
+#board-table tr{
+	height:28px;
+}
+#board-table th:first-child{
+	width:80px;
+}
+#board-table td:first-child{
+	text-align:center;
+}
+#board-table th:nth-child(2){
+	width:85px;
+}
+#board-table td:nth-child(2){
+	padding-right:10px;
+	text-align:right;
+}
+#board-table td:nth-child(3) a{
+	color:cornflowerblue;
+}
+#board-table td:nth-child(3) a:hover{
+	color:red;
+}
+#board-table th:nth-child(4){
+	width:130px;
+}
+#board-table td:nth-child(4){
+	text-align:center;
+}
+#board-table th:last-child{
+	width:90px;
+}
+#board-table td:last-child{
+	text-align:center;
 }
 .reply_count {
 	color:gray;
@@ -22,6 +69,37 @@
 .fold{
 	display:none;
 }
-td span img{
+.fold-hover:hover{
+	color:slateblue;
+}
+#board-table td span img{
 	vertical-align:bottom;
+}
+#pageBox{
+	width:800px;
+	margin-top:5px;
+	padding:5px 0;
+	border-top:1px dashed slategray;
+}
+#pageBox a{
+	padding:2px 3px;
+	text-decoration: none;
+}
+#pageBox a:hover{
+	background-color:darkgray;
+	border-radius:7px;
+	color:white;
+}
+#listForm{
+	width:max-content;
+}
+#so{
+	padding:2px;
+}
+#search{
+	padding:2px;
+}
+#search_btn{
+	padding:1px 3px;
+	vertical-align: bottom;
 }

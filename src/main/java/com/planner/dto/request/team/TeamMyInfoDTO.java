@@ -2,9 +2,9 @@ package com.planner.dto.request.team;
 
 import java.time.LocalDateTime;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class TeamMyInfoDTO {
 	private Long team_id;
 	private String team_name;

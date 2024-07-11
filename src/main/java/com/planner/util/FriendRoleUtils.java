@@ -1,6 +1,7 @@
 package com.planner.util;
 
 import com.planner.enums.FriendRole;
+import com.planner.enums.Gender;
 import com.planner.enums.Masking;
 
 public class FriendRoleUtils {
@@ -10,5 +11,9 @@ public class FriendRoleUtils {
 	
 	public static String getMemberMaskingName(String value, Masking masking) {
 		return Masking.maskAs(value, masking);
+	}
+	
+	public static String getMemberGender(String code) {
+		return Gender.findNameByCode(code);
 	}
 }

@@ -2,9 +2,11 @@ package com.planner.dto.request.team;
 
 import java.time.LocalDateTime;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
-@Data
+@Builder
+@Getter
 public class TeamMemberDTO {
 	private Long team_member_id;
 	private Long member_id;

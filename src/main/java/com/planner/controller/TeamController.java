@@ -47,10 +47,10 @@ public class TeamController {
 	@ResponseBody
 	public int teamNameOverlap(@RequestParam("team_name") String team_name) {
 		boolean result = teamService.teamNameOverlap(team_name);
-		if(result) { // 중복 아니면
-			return 1;
-		}else { // 중복이면
+		if(result) { // 중복임
 			return -1;
+		}else { // 중복아님
+			return 1;
 		}
 	}
 
@@ -66,7 +66,7 @@ public class TeamController {
 							@ModelAttribute("team_name") String team_name, @ModelAttribute("team_explain") String team_explain,
 							@RequestParam("team_image") MultipartFile team_image) {
 		boolean result = teamService.teamNameOverlap(team_name);
-		if(!result) { // 중복이면
+		if(result) { // 중복이면
 			model.addAttribute("msg", "중복된 그룹 이름입니다.");
 			return "/team/teamCreate";
 		}
@@ -75,7 +75,7 @@ public class TeamController {
 			model.addAttribute("msg", "지원하지 않는 형식의 이미지입니다.");
 			return "/team/teamCreate";
 		}
-		
+
 		return "redirect:/team/info?team_id="+team_id;
 	}
 
@@ -114,14 +114,16 @@ public class TeamController {
 		String tm_grade = tmService.teamMemberGrade(team_id, detail.getMember_id());
 		if(TM_Grade.ROLE_TEAM_MASTER.getValue().equals(tm_grade)) {
 			boolean result = teamService.teamNameOverlap(team_name);
-			if(result) {
+			if(result) { // 해당 team_name으로 검색된게 있음
 				TeamDTO dto = teamService.teamInfo(team_id);
-				model.addAttribute("dto", dto);
-				model.addAttribute("msg", "중복된 그룹 이름입니다.");
-				return "/team/teamUpdate";
-			}else {
-				teamService.teamInfoUpdate(team_id, team_name, team_explain, team_image, delimg);
+				if(!dto.getTeam_name().equals(team_name)) { // team_name 변경하려던게 중복이면.
+					model.addAttribute("dto", dto);
+					model.addAttribute("msg", "중복된 그룹 이름입니다.");
+					return "/team/teamUpdate";
+				}
 			}
+			teamService.teamInfoUpdate(team_id, team_name, team_explain, team_image, delimg);
+			
 		}
 		return "redirect:/team/info?team_id="+team_id;
 	}

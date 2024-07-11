@@ -1,9 +1,9 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/member/memberinsert.css">
-	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
 	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<meta name="_csrf" th:content="${_csrf.token}"/>
 	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -101,6 +101,7 @@
 		</main>
 		
 		<!-- 스크립트 -->
+		<script type="text/javascript" src="/js/header.js"></script>
 		<script src="/js/modal.js"></script>
 		<script src="/js/member/email_chk.js"></script>
 		<script src="/js/common.js"></script>

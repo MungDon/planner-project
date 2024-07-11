@@ -1,0 +1,29 @@
+#tm_nickname:disabled{
+	border:none;
+	background: none;
+	color:black;
+	font-size:1em;
+	margin:0;
+}
+#tm_nickname{
+	padding:1px;
+	font-size:1em;
+	margin:-2px;
+}
+#info_update{
+	width:400px;
+	transform:translateX(80px);
+	margin:0 auto;
+}
+#info_update > tr, td{
+	height:30px;
+}
+#info_update td:first-child{
+	width:120px;
+}
+#info_update button{
+	padding:2px 5px;
+}
+#nick_check{
+	margin-left:5px;
+}

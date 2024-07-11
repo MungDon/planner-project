@@ -1,8 +1,8 @@
 package com.planner.dto.request.team;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class TeamInfoDTO {
 	private Long team_id;
 	private String team_name;

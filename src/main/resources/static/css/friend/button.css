@@ -1,115 +1,86 @@
-/* member_search.html */
-/* 검색버튼 */
-#keywordBtn {
-    background-color: gray;
-    color: ghostwhite;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 0 2px 2px darkgray;
-    min-height: 10px;
-    min-width: 30px;
-}
-/* 마우스 올렸을 때 */
-#keywordBtn:hover {
-	background-color: #a2a2a2;
-	transition: 0.7s;
+.custom-btn {
+	width: 60px;
+	height: 20px;
+	color: #fff;
+	border-radius: 5px;
+	padding: 10px 25px;
+	font-family: 'Lato', sans-serif;
+	font-weight: 500;
+	background: transparent;
 	cursor: pointer;
-}
-/* TAB 으로 포커스 되었을 때 */
-#keywordBtn:focus {
-	outline-color: transparent;
-	outline-style: solid;
-	box-shadow: 0 0 0 2px #696969;
-	transition: 0.7s;
-}
-/* 마우스 클릭을 위해 잡거나 누르고있을 때 */
-#keywordBtn:active {
-	background-color: #454545;
+	transition: all 0.3s ease;
+	display: inline-block;
+	box-shadow: inset
+				2px 2px 2px 0px rgba(255,255,255,.5),
+				7px 7px 20px 0px rgba(0,0,0,.1),
+				4px 4px 5px 0px rgba(0,0,0,.1);
+	outline: none;
 }
 
-/* ----------------------------------------------------- */
-/* member_info, friend_receive, friend_send, friend_list */
-/* 친구추가 버튼 */
-.addBtn {
-	background-color: lightgray;
-    color: gray;
-    border: none;
-    border-radius: 2px;
-    box-shadow: 0 0 2px 2px silver;
-    min-height: 10px;
-    min-width: 40px;
+/* 검색 버튼 */
+.btn-kw {
+	width: 40px;
+	background-color: #89d8d3;
+	background-image: linear-gradient(315deg, #89d8d3 0%, #cfcfcf 74%);
+	line-height: 18px;
+	padding: 0;
+	border: none;
 }
-/* 마우스 올렸을 때 */
-.addBtn:hover {
-	background-color: silver;
-	transition: 0.7s;
-	cursor: pointer;
+.btn-kw:hover {
+	background-color: #89d8d3;
+	background-image: linear-gradient(315deg, #89d8d3 0%, silver 74%);
 }
-/* TAB 으로 포커스 되었을 때 */
-.addBtn:focus {
-	outline-color: transparent;
-	outline-style: solid;
-	box-shadow: 0 0 0 2px darkgray;
-	transition: 0.7s;
+
+/* 친구추가, 수락 버튼 */
+.btn-add, .btn-access {
+	background-color: #4dccc6;
+	background-image: linear-gradient(315deg, #4dccc6 0%, #96e4df 74%);
+	line-height: 18px;
+	padding: 0;
+	border: none;
 }
-/* 마우스 클릭을 위해 잡거나 누르고있을 때 */
-.addBtn:active {
-	background-color: #696969;
+.btn-add:hover, .btn-access:hover {
+	background-color: #89d8d3;
+	background-image: linear-gradient(315deg, #89d8d3 0%, silver 74%);
 }
+.btn-add span, .btn-kw span, .btn-access span {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+/* 수락 버튼 */
+.btn-access {
+	background-color: #a5a5a5;
+	background-image: linear-gradient(315deg, #a5a5a5 0%, #b4b1d6 74%);
+	line-height: 18px;
+	padding: 0;
+	border: none;
+}
+
 /* 비활성화된 버튼 */
-.addBtn:disabled {
+.custom-btn:disabled {
 	pointer-events: none;
 	opacity: 0;
 	transition: 1.2s;
 }
 
-/* ----------------------------------------------------- */
-/* friend_list.html */
-/* 별명 변경 버튼 / 서밋 버튼 */
-.hideBtn, .submitBtn {
-	background-color: lightgray;
-    color: gray;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 0 2px 2px silver;
-    min-height: 20px;
-    min-width: 24px;
+/* 목록, 친구삭제 버튼 */
+.btn-list, #deleteBtn {
+	width: 80px;
+	height: 30px;
+	background-color: #80d0b4;
+	background-image: linear-gradient(315deg, #80d0b4 0%, #cfcfcf 74%);
+	line-height: 18px;
+	padding: 0;
+	border: none;
 }
-/* 마우스 올렸을 때 */
-.hideBtn:hover, .submitBtn:hover {
-	background-color: silver;
-	transition: 0.7s;
-	cursor: pointer;
+.btn-list:hover, #deleteBtn:hover {
+	background-color: #89d8d3;
+	background-image: linear-gradient(315deg, #89d8d3 0%, silver 74%);
 }
-/* TAB 으로 포커스 되었을 때 */
-.hideBtn:focus, .submitBtn:focus {
-	outline-color: transparent;
-	outline-style: solid;
-	box-shadow: 0 0 0 2px darkgray;
-	transition: 0.7s;
-}
-/* 마우스 클릭을 위해 잡거나 누르고있을 때 */
-.hideBtn:active, .submitBtn:active {
-	background-color: #696969;
-}
-/* 비활성화된 버튼 */
-.hideBtn:disabled, .submitBtn:disabled {
-	background-color: gray;
-	transition: 1.2s;
-	cursor: not-allowed;
-}
-
-/* 목록/삭제 버튼 */
-.listBtn, #deleteBtn {
-	font-size: 16px;
-	font-weight: bold;
-	color: gray;
-	height: 35px;
-	border: 2px solid gray;
-	border-radius: 10px;
-	background-color: white;
-}
-/* 마우스 올렸을 때 */
-.listBtn:hover, #deleteBtn:hover {
-	cursor: pointer;
+.btn-list span, #deleteBtn span, .btn-access span {
+	display: block;
+	width: 100%;
+	height: 100%;
 }

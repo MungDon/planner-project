@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+    table {
+        border: 1px solid black;
+        width: 500px;
+        border-collapse: collapse;
+        margin: 0 auto;
+    }
+    .noticeTitle{
+        padding: 8px;
+        text-align: center;
+    }
+    .noticeContent {
+        border: 1px solid black;
+        padding: 12px;
+        text-align: center;
+        width: 80%; /* td 요소의 너비를 80%로 설정 */
+        height: 200px; /* td 요소의 높이를 200px로 설정 */
+    }
+</style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td class="noticeTitle" th:text="${noticeDTO.notice_title}" id="noticeTitel"></td>
+        </tr>
+        <tr>
+            <td class="noticeContent"th:text="${noticeDTO.notice_content}" id="noticeContent"></td>
+        </tr>
+    </table>
+    <input type="hidden" th:value="${noticeDTO.notice_id}" id="noticeNumber"/>
+    <a th:href="@{|/admin/noticeUpdateForm/${noticeDTO.notice_id}|}"><button type="button">글 수정</button></a>
+    <a th:href="@{|/admin/noticeDelete/${noticeDTO.notice_id}|}"><button type="button">글삭제</button></a>
+    <script th:src="@{/js/admin/notice.js}"></script>
+</body>
+</html>

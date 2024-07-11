@@ -37,13 +37,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test='searchOption != null and !"".equals(searchOption) and searchOption neq "NO"'>
 			<if test='searchOption.equals("TC")'>
 			and (tb_title like '%'||#{search}||'%'
-				or DBMS_LOB.instr(tb_content, #{search}) > 0)
+				or team_board_id in 
+			        (select team_board_id from
+			            (select team_board_id,<![CDATA[REGEXP_REPLACE(tb_content,'<[^>]*>','')]]> as tbc from team_board)
+			                where DBMS_LOB.instr(tbc, #{search}) > 0))
 			</if>
 			<if test='searchOption eq "T"'>
 			and tb_title like '%'||#{search}||'%'
 			</if>
 			<if test="searchOption=='C'.toString()">
-			and DBMS_LOB.instr(tb_content, #{search}) > 0
+			and team_board_id in 
+		        (select team_board_id from
+		            (select team_board_id,<![CDATA[REGEXP_REPLACE(tb_content,'<[^>]*>','')]]> as tbc from team_board)
+		                where DBMS_LOB.instr(tbc, #{search}) > 0)
 			</if>
 			<if test='searchOption eq "W"'>
 			and team_member_id in
@@ -73,13 +79,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<if test='searchOption != null and !"".equals(searchOption) and searchOption neq "NO"'>
 					<if test='searchOption.equals("TC")'>
 					and (tb_title like '%'||#{search}||'%'
-						or DBMS_LOB.instr(tb_content, #{search}) > 0 )
+						or team_board_id in 
+					        (select team_board_id from
+					            (select team_board_id,<![CDATA[REGEXP_REPLACE(tb_content,'<[^>]*>','')]]> as tbc from team_board)
+					                where DBMS_LOB.instr(tbc, #{search}) > 0))
 					</if>
 					<if test='searchOption eq "T"'>
 					and tb_title like '%'||#{search}||'%'
 					</if>
 					<if test="searchOption=='C'.toString()">
-					DBMS_LOB.instr(tb_content, #{search}) > 0
+					and team_board_id in 
+					        (select team_board_id from
+					            (select team_board_id,<![CDATA[REGEXP_REPLACE(tb_content,'<[^>]*>','')]]> as tbc from team_board)
+					                where DBMS_LOB.instr(tbc, #{search}) > 0)
 					</if>
 					<if test='searchOption eq "W"'>
 					and tm.tm_nickname like '%'||#{search}||'%'

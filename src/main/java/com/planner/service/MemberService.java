@@ -182,69 +182,58 @@ public class MemberService {
 	public Long findByMemberId(String member_email) {
 		return memberMapper.findByMemberId(member_email);
 	}
-
+	
 //	회원정보
 	public MemberDTO info(Long member_id, @UserData ResMemberDetail detail) {
 		MemberDTO memberDTO = new MemberDTO();
 		List<FriendRequestDTO> frReceiveList;
 		List<FriendRequestDTO> frSendList;
-
+		
 		frReceiveList = friendMapper.receiveRequestList(detail.getMember_id());
 		frSendList = friendMapper.sendRequestList(detail.getMember_id());
-
-		for (FriendRequestDTO frDTO : frReceiveList) { // 친구신청 받은 경우
-			if (frDTO.getMember_send_id().equals(member_id)
-					&& frDTO.getMember_receive_id().equals(detail.getMember_id())) {
-				memberDTO = memberMapper.findByMemberSeq(member_id); // member_id : 받은신청 경로에서 온 회원시퀀스
+		
+		for(FriendRequestDTO frDTO : frReceiveList) {					// 친구신청 받은 경우
+			if (frDTO.getMember_send_id().equals(member_id) && frDTO.getMember_receive_id().equals(detail.getMember_id())) {
+				memberDTO = memberMapper.findByMemberSeq(member_id);	// member_id : 받은신청 경로에서 온 회원시퀀스
 				memberDTO.setFriend_request_status("send");
-
+				
 				return memberDTO;
 			}
 		}
-
-		for (FriendRequestDTO frDTO : frSendList) { // 친구신청 보낸 경우
-			if (frDTO.getMember_send_id().equals(detail.getMember_id())
-					&& frDTO.getMember_receive_id().equals(member_id)) {
-				memberDTO = memberMapper.findByMemberSeq(member_id); // member_id : 보낸신청 경로에서 온 회원시퀀스
+		
+		for (FriendRequestDTO frDTO : frSendList) {						// 친구신청 보낸 경우
+			if (frDTO.getMember_send_id().equals(detail.getMember_id()) && frDTO.getMember_receive_id().equals(member_id)) {
+				memberDTO = memberMapper.findByMemberSeq(member_id);	// member_id : 보낸신청 경로에서 온 회원시퀀스
 				memberDTO.setFriend_request_status("receive");
-
+				
 				return memberDTO;
 			}
 		}
 		if (CommonUtils.isEmpty(memberDTO.getFriend_request_status())) {// 커스텀 널 체크
 			memberDTO = memberMapper.findByMemberSeq(member_id);
-			memberDTO.setFriend_request_status("search"); // member_id : 친구찾기 경로에서 온 회원시퀀스
-
+			memberDTO.setFriend_request_status("search");				// member_id : 친구찾기 경로에서 온 회원시퀀스
+			
 			return memberDTO;
-		} else {
+		}else {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
 		}
 	}
-
+	
 //	회원 검색
-	public List<MemberDTO> search(String member_email, String keyword, int start, int end) {
+	public List<MemberDTO> search(String member_email, String keyword, int start, int end){
 		if (CommonUtils.isEmpty(member_email)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
 		}
-
+		
 		Long myId = memberMapper.findByMemberId(member_email);
 		List<MemberDTO> list = memberMapper.search(myId, keyword, start, end);
-		List<MemberDTO> sendIdList = memberMapper.findBySendId(myId, keyword);
-
-		if (!sendIdList.isEmpty()) {
-			list.removeAll(sendIdList); // 보낸사람 기준 여러명에게 보낸 만큼 중복되어 나오는 데이터 삭제
-		}
-		for (MemberDTO memberDTO : list) { // 리스트에서 신청상태를 표시하기 위해 set
-			String status = friendMapper.friendRequestStatus(memberDTO.getMember_id(), myId);
-			memberDTO.setFriend_request_status(status);
-		}
 		return list;
 	}
-
+	
 //	전체회원 수
 	public int searchCount(Long member_id, String keyword) {
 		int count = memberMapper.searchCount(member_id, keyword);
-
+		
 		return count;
 	}
 }

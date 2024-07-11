@@ -32,7 +32,8 @@ public class ReplyController {
 
 	private final ReplyService replyService;
 	private final TeamMemberService tmService;
-	
+
+	// 댓글 작성
 	@PostMapping("/insert")
 	@ResponseBody
 	public int replyInsert(ReplyDTO dto, @UserData ResMemberDetail detail,
@@ -41,7 +42,8 @@ public class ReplyController {
 		dto.setTeam_member_id(tmService.teamMemberId(team_id, detail.getMember_id()));
 		return replyService.replyInsert(dto);
 	}
-	
+
+	// 댓글 목록 읽기
 	@GetMapping("/list")
 	public String replyList(Model model, @RequestParam("team_board_id")long team_board_id,
 							@RequestParam("team_id")long team_id, @UserData ResMemberDetail detail) {
@@ -55,14 +57,16 @@ public class ReplyController {
 		}
 		return "/team/board/reply";
 	}
-	
+
+	// 댓글 삭제
 	@DeleteMapping("/delete")
 	@ResponseBody()
 	public String replyDelete(@RequestParam("reply_id")long reply_id) {
 		replyService.replyDelete(reply_id);
 		return HttpStatus.OK.toString();
 	}
-	
+
+	// 댓글 수정
 	@PatchMapping("/modify")
 	@ResponseBody()
 	public String replyModify(@RequestParam("reply_content")String reply_content,

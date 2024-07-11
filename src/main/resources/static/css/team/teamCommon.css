@@ -7,6 +7,10 @@
 	margin:0 auto;
 	padding:20px 0px;
 }
+#main-container table{
+	border-collapse: collapse;
+}
+/* 드래그 방지 */
 .nodrag{
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -27,6 +31,9 @@
 .text-center{
 	text-align:center;
 }
+.text-right{
+	text-align:right;
+}
 .font-big{
 	font-size:1.3em;
 }
@@ -45,6 +52,12 @@
 .font-lsblue{
 	color:lightskyblue;
 }
+.font-bold{
+	font-weight:bold;
+}
 .pointer{
 	cursor:pointer;
+}
+.dpn{
+	display:none;
 }

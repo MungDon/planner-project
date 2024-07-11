@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<meta charset="UTF-8"/>
-	<title>게시글 작성</title>
+	<title>게시글 수정</title>
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 	<link rel="stylesheet" type="text/css" href="/css/tema/board/tbwrite.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/board/summernote-lite.min.css">
@@ -10,8 +11,10 @@
 	<script type="text/javascript" src="/js/team/board/summernote-lite.min.js"></script>
 	<script type="text/javascript" src="/js/team/board/summernote-ko-KR.min.js"></script>
 	<script type="text/javascript" src="/js/team/board/tbmodify.js" defer></script>
+	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
 <form id="boardform" method="post" th:action="@{modify}" onsubmit="return false">
 	<input type="hidden" name="team_board_id" th:value="${dto.team_board_id}">
@@ -27,8 +30,6 @@
 	<input type="text" name="tb_title" id="tb_title" th:value="${dto?.tb_title}" placeholder="제목을 입력해 주세요." maxlength="50">
     <div id="summernote"></div>
     <input type="hidden" name="tb_content">
-
-    <!--/* TODO 투표, 일정 있으면 출력하기? */-->
 
     <div id="btns">
 	    <button type="button" class="btn" id="btn_save">저장</button>

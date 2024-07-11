@@ -5,86 +5,90 @@
 	<link rel="stylesheet" type="text/css" href="/css/friend/button.css"	/>
 	<link rel="stylesheet" type="text/css" href="/css/friend/list.css"	/>
 	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
+	<link rel="stylesheet" type="text/css" href="/css/friend/friendBar.css"	/>
 </head>
 <body>
 	<header th:replace="~{/fragments/header :: header}"></header>
 	<div th:replace="~{fragments/friendBar :: friendHeader}"></div>
 	<main class="listMain">
-		<table class="list_table">	<!-- 이 페이지에서는 정/역 방향 설정 완료 my_id=나, friend_id=친구 -->
-			<tr>
-				<th class="list_title" colspan="6">
-					<span>친구목록</span>
-				</th>
-			</tr>
-			<tr class="receive_sub_tr">
-				<th class="list_th1" colspan="2">친구이메일</th>
-				<th class="list_th2" colspan="2">친구별명</th>
-				<th class="list_th3" colspan="2">친구메모</th>
-			</tr>
-			<tr th:each="friendDTO : ${friendList}" class="list_tr">
-				<!-- 이메일 -->
-				<td class="list_td" colspan="2">
-					<form action="/friend/info" method="get" th:attr="id='infoForm' + ${friendDTO.friend_id}">
-						<a onclick="infoForm()" class="infoA" th:attr="data-info='infoForm' + ${friendDTO.friend_id}" href="javascript:void(0);">
-							[[${friendDTO.member_email}]]
-						</a>
-						<input type="hidden" name="friend_id" th:value="${friendDTO.friend_id}"			/>
-						<input type="hidden" name="friend_status" th:value="${friendDTO.friend_status}"			/>
-					</form>
-				</td>
-				<!-- 별명 -->
-				<td class="list_td">
-					<!-- 나타나 있음 -->
-					<input type="text" maxlength="16" style="width: 90px;"
-						 th:attr="id='nameI' + ${friendDTO.friend_id}"
-						 th:value="${friendDTO.friend_nickname}" class="nameI"	disabled/>
-	<!-- 				<div th:attr="id='nameT' + ${friendDTO.friend_id}"
-					 th:text="${friendDTO.friend_nickname}" class="nameT">
-					</div>
-					숨겨져 있음
-					<div>
+		<div class="list_table">
+			<table>	<!-- 이 페이지에서는 정/역 방향 설정 완료 my_id=나, friend_id=친구 -->
+				<tr>
+					<th class="list_title" colspan="6">
+						<span>친구목록</span>
+					</th>
+				</tr>
+				<tr class="receive_sub_tr">
+					<th class="list_th1" colspan="2">친구이메일</th>
+					<th class="list_th2" colspan="2">친구별명</th>
+					<th class="list_th3" colspan="2">친구메모</th>
+				</tr>
+				<tr th:each="friendDTO : ${friendList}" class="list_tr">
+					<!-- 이메일 -->
+					<td class="list_td" colspan="2">
+						<form action="/friend/info" method="get" th:attr="id='infoForm' + ${friendDTO.friend_id}">
+							<a onclick="infoForm()" class="infoA" th:attr="data-info='infoForm' + ${friendDTO.friend_id}" href="javascript:void(0);">
+								[[${friendDTO.member_email}]]
+							</a>
+							<input type="hidden" name="friend_id" th:value="${friendDTO.friend_id}"			/>
+							<input type="hidden" name="friend_status" th:value="${friendDTO.friend_status}"			/>
+						</form>
+					</td>
+				   <!-- 별명 -->
+					<td class="list_td">
+						<!-- 나타나 있음 -->
+						<input type="text" maxlength="16" style="width: 90px;"
+						th:attr="id='nameI' + ${friendDTO.friend_id}"
+						th:value="${friendDTO.friend_nickname}" class="nameI"   disabled/>
+						<!--             <div th:attr="id='nameT' + ${friendDTO.friend_id}"
+						th:text="${friendDTO.friend_nickname}" class="nameT">
+						</div>
+						숨겨져 있음
+						<div>
 						<input type="text" maxlength="16" style="display: none; width: 90px;"
-						 th:attr="id='nameI' + ${friendDTO.friend_id}"
-						 th:value="${friendDTO.friend_nickname}" class="nameI"	/>
-					</div> -->
-				</td>
-				<td class="list_tdBtn">
-					<form action="/friend/nickname" method="post" th:attr="id='nickForm' + ${friendDTO.friend_id}">
-						<input type="hidden" name="friend_id" th:value="${friendDTO.friend_id}"	/>
-						<input type="hidden" name="friend_status" th:value="${friendDTO.friend_status}"	/>
-						<input type="hidden" name="friend_my_nickname" th:value="${friendDTO.friend_my_nickname}"	/>
-						<!-- 텍스트박스에 입력된 밸류 가져와서 서밋 (텍스트박스가 form 밖에있음) -->
-						<input type="hidden" name="friend_nickname"
-						 th:attr="id='nameH' + ${friendDTO.friend_id}"	/>
-						<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
+						th:attr="id='nameI' + ${friendDTO.friend_id}"
+						th:value="${friendDTO.friend_nickname}" class="nameI"   />
+						</div> -->
+					</td>
+					<td class="list_tdBtn">
+						<form action="/friend/nickname" method="post" th:attr="id='nickForm' + ${friendDTO.friend_id}">
+							<input type="hidden" name="friend_id" th:value="${friendDTO.friend_id}"	/>
+							<input type="hidden" name="friend_status" th:value="${friendDTO.friend_status}"	/>
+							<input type="hidden" name="friend_my_nickname" th:value="${friendDTO.friend_my_nickname}"	/>
+							<!-- 텍스트박스에 입력된 밸류 가져와서 서밋 (텍스트박스가 form 밖에있음) -->
+							<input type="hidden" name="friend_nickname"
+							 th:attr="id='nameH' + ${friendDTO.friend_id}"	/>
+							<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
+							
+							<!-- 서밋 버튼 -->
+							<button type="button" style="display: none;"
+							 th:attr="id='submitBtn' + ${friendDTO.friend_id}" class="submitBtn custom-btn btn-kw">
+								<span>변경</span>
+							</button>
+						</form>
 						
-						<!-- 서밋 버튼 -->
-						<button type="button" style="display: none;"
-						 th:attr="id='submitBtn' + ${friendDTO.friend_id}" class="submitBtn">
-							변경
+						<!-- 숨김 버튼 / 클릭 시 인풋박스, 서밋버튼 나타냄 / 텍스트, 클릭한 버튼 숨김-->
+						<button class="hideBtn custom-btn btn-kw" type="button"
+						 th:attr="data-hide='nameT' + ${friendDTO.friend_id},
+						 data-show='nameI' + ${friendDTO.friend_id},
+						 data-submit='submitBtn' + ${friendDTO.friend_id},
+						 data-hidden='nameH' + ${friendDTO.friend_id},
+						 data-nick='nickForm' + ${friendDTO.friend_id}">
+							<span>변경</span>
 						</button>
-					</form>
-					
-					<!-- 숨김 버튼 / 클릭 시 인풋박스, 서밋버튼 나타냄 / 텍스트, 클릭한 버튼 숨김-->
-					<button class="hideBtn" type="button"
-					 th:attr="data-hide='nameT' + ${friendDTO.friend_id},
-					 data-show='nameI' + ${friendDTO.friend_id},
-					 data-submit='submitBtn' + ${friendDTO.friend_id},
-					 data-hidden='nameH' + ${friendDTO.friend_id},
-					 data-nick='nickForm' + ${friendDTO.friend_id}">
-						변경
-					 ㅠ    </button>
-				</td>
-				<!-- 메모 -->
-				<td colspan="2" class="list_td">
-					<div th:attr="id='memoT' + ${friendDTO.friend_id}"
-					 th:text="${friendDTO.friend_memo}" class="memoT">
-					</div>
-				</td>
-                  			</tr>
-		</table>
+					</td>
+					<!-- 메모 -->
+					<td colspan="2" class="list_td">
+						<div th:attr="id='memoT' + ${friendDTO.friend_id}"
+						 th:text="${friendDTO.friend_memo}" class="memoT">
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</main>
 	<!-- 반복문으로 꺼낸 숨김버튼에 속성을 부여함 / 이메일 클릭 시 친구정보로 직접 서밋 -->
 	<script type="text/javascript" src="/js/friend/friendList.js"></script>
+	<script type="text/javascript" src="/js/header.js"></script>
 </body>
 </html>

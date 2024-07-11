@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-m
 			friend_request_seq.NEXTVAL,
 			#{member_receive_id},
 			#{member_send_id},
-			'R'
+			'S'
 		)
 	</insert>
 	
@@ -86,7 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-m
 		left outer join friend_request fr
 		on m.member_id = fr.member_send_id
 		where fr.member_receive_id = #{member_receive_id}
-		and friend_request_status = 'R'
+		and friend_request_status = 'S'
 		and member_status = 'B'
 	</select>
 	
@@ -97,7 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-m
 		left outer join friend_request fr
 		on m.member_id = fr.member_send_id
 		where fr.member_receive_id = #{member_receive_id}
-		and friend_request_status = 'R'
+		and friend_request_status = 'S'
 		and member_status = 'B'
 	</select>
 	
@@ -108,7 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-m
 		left outer join friend_request fr
 		on m.member_id = fr.member_receive_id
 		where fr.member_send_id = #{member_send_id}
-		and friend_request_status = 'R'
+		and friend_request_status = 'S'
 		and member_status = 'B'
 	</select>
 	
@@ -221,4 +221,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-m
 		from friend
 		where friend_id = #{friend_id}
 	</delete>
+	
+	<!-- 친구상태 찾기 -->
+	<select id="friendStatus" resultType="String">
+		select friend_request_status
+		from friend_request
+		where member_receive_id = #{member_receive_id}
+		and member_send_id = #{member_send_id}
+	</select>
 </mapper>

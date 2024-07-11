@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+    table {
+        border: 1px solid black;
+        width: 500px;
+        border-collapse: collapse;
+        margin: 0 auto;
+    }
+    td {
+        border: 1px solid black;
+        padding: 12px;
+        text-align: center;
+        width: 80%; /* td 요소의 너비를 80%로 설정 */
+        font-size: 14px; /* 기본 폰트 사이즈 설정 */
+    }
+    td.content {
+        height: 200px; /* td 요소의 높이를 200px로 설정 */
+    }
+    td.title {
+        font-size: 12px; /* 타이틀 폰트 사이즈를 작게 설정 */
+    }
+    textarea[name="notice_content"] {
+        width: calc(100% - 24px); /* textarea의 너비를 계산하여 설정 */
+        height: 180px; /* textarea의 높이를 직접 설정 */
+        resize: none; /* textarea 크기 조정 비활성화 */
+    }
+    input[name="notice_title"] {
+        width: calc(100% - 24px); /* input의 너비를 계산하여 설정 */
+        height: 80px; /* input의 높이를 직접 설정 */
+        padding: 6px; /* 내용의 패딩을 조정 */
+        box-sizing: border-box; /* 패딩을 포함한 전체 너비/높이 설정 */
+    }
+</style>
+</head>
+<body>
+<form th:action="@{/admin/noticeUpdatePro}" method="post">
+    <table>
+        <tr>
+        	<td class="title">제목:
+        		<input type="text" name="notice_title" th:value="${noticeDTO.notice_title}"/>
+			    <input type="hidden" name="notice_id"th:value="${noticeDTO.notice_id}"/>
+        	</td>
+        </tr>
+        <tr>
+        	<td class="content">내용:<textarea name="notice_content" th:text="${noticeDTO.notice_content}"></textarea></td>
+	    </tr>
+    </table>
+    	<button type="submit">수정 완료</button>
+</form>
+</body>
+</html>

@@ -50,7 +50,6 @@ function getReply(){
 			team_board_id:team_board_id
 		},
 		success:function(result){
-			// 댓글 목록
 			$("#reply_list").html(result);
 		}
 	})
@@ -84,11 +83,13 @@ $(document).on("click", ".re-mod-btn", function(){
 	modify_div.append('<button type="button" class="modify-btn">수정</button><button type="button" class="cancel-btn">취소</button>');
 	modify_div.insertAfter($("#"+reply_id));
 	$("#"+reply_id).css('display', 'none');
+	
 	// 수정 취소 버튼
 	$(".cancel-btn").on("click", function(){
 		$("#"+reply_id).css('display', 'block');
 		modify_div.remove();
 	});
+	
 	// 수정 확인 버튼
 	$(".modify-btn").on("click", function(){
 		let modify_area = $("#"+reply_id+"+.modify textarea");

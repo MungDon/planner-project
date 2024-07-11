@@ -97,20 +97,20 @@ public class FriendService {
 	}
 	
 //	친구수락 (+친구상태 업데이트)
-	public void friendAccept(@UserData ResMemberDetail detail, Long member_send_id) {
+	public void friendAccept(Long member_receive_id, Long member_send_id) {
 		if (CommonUtils.isEmpty(member_send_id)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
 		}
-		MemberDTO memberMyDTO = memberMapper.findByMemberSeq(detail.getMember_id());// 나의 객체
+		MemberDTO memberMyDTO = memberMapper.findByMemberSeq(member_receive_id);	// 나의 객체
 		MemberDTO memberFriendDTO = memberMapper.findByMemberSeq(member_send_id);	// 친구 객체
 		FriendDTO friendDTO = new FriendDTO();
 		
-		friendDTO.setMember_my_id(detail.getMember_id());
+		friendDTO.setMember_my_id(member_receive_id);
 		friendDTO.setMember_friend_id(member_send_id);
 		friendDTO.setFriend_my_nickname(memberMyDTO.getMember_name());				// 나의 이름
 		friendDTO.setFriend_nickname(memberFriendDTO.getMember_name());				// 친구 이름
 		
-		friendMapper.friendAccept(detail.getMember_id(), member_send_id);			// 친구 상태 업데이트 메서드
+		friendMapper.friendAccept(member_receive_id, member_send_id);			// 친구 상태 업데이트 메서드
 		friendMapper.friendAdd(friendDTO);											// 친구 테이블에 추가 메서드
 	}
 	
@@ -243,5 +243,10 @@ public class FriendService {
 		Long member_send_id = member_friend_id;
 		friendMapper.friendDelete(friend_id);
 		friendMapper.requestDelete(member_receive_id, member_send_id);
+	}
+	
+//	친구상태 찾기
+	public String friendStatus(Long member_receive_id, Long member_send_id) {
+		return friendMapper.friendStatus(member_receive_id, member_send_id);
 	}
 }

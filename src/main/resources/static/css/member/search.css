@@ -45,16 +45,19 @@
 
 
 .searchTable {
-	width: 500px;
+	width: 600px;
 	border: 2px solid #ddd;
 	border-radius: 20px;
-	padding: 30px;
+	padding: 20px;
 	box-shadow: 0px 0px 10px 1px lightgray;
 }
-
+.searchTable table{
+	margin: 0 auto;
+}
 .search_sub_tr {
 	font-size: 18px;
 	color: darkgray;
+	padding-bottom: 10px;
 }
 
 .search_tr {
@@ -62,7 +65,9 @@
 	color: gray;
 	height: 1.8em;
 }
-
+.search_tr1 {
+	padding: 0 0 10px;
+}
 .search_td1 {
 	width: 160px;
 	line-height: 1.2;
@@ -109,4 +114,9 @@
 	font-style: oblique;
 	font-size: 14px;
 	color: #949494;
+}
+.status_box {
+	width: 100%;
+	display: flex;
+	justify-content: center;
 }

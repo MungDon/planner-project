@@ -5,7 +5,7 @@ const overlap = document.getElementById("overlap");
 const submit_btn = document.getElementById("submit_btn");
 const img = document.getElementById('team_image');
 const fileFormat = /(jpg|jpeg|png|bmp|wbmp|gif|tif|tiff)/; // 허용할 이미지 확장자
-const maxSize = 2*1024*1024;	// 최대 크기 2MB
+const maxSize = 1*1024*1024;	// 최대 크기 2MB
 const pass_msg = "사용 가능한 그룹 이름입니다.";
 const overlap_msg = "이미 사용중인 그룹 이름입니다.";
 
@@ -46,7 +46,7 @@ submit_btn.addEventListener("click", function(){
  				return;
  			}
  			if(img.files[0].size > maxSize){
- 				alert('2MB 이하의 이미지를 사용해 주세요.');
+ 				alert('1MB 이하의 이미지를 사용해 주세요.');
  				return;
  			}
  		}

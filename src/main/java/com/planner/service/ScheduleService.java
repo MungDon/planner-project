@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.planner.dto.request.schedule.MapDTO;
 import com.planner.dto.request.schedule.ScheduleDTO;
+import com.planner.dto.request.schedule.ScheduleSearchDTO;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.mapper.MapRepository;
 import com.planner.mapper.ScheduleMapper;
@@ -27,8 +28,8 @@ public class ScheduleService {
 		mapRepository.MapInsert(mapDTO);
 	}
 	
-	public List<ScheduleDTO> schedule_select(Long member_id, String date) {
-		return scheduleMapper.schedule_select(member_id, date);
+	public List<ScheduleDTO> schedule_select(Long member_id, String date, Long team_id) {
+		return scheduleMapper.schedule_select(member_id, date, team_id);
 	}
 	
 	public void schedule_update(ScheduleDTO scheduleDTO, MapDTO mapDTO) {
@@ -41,6 +42,13 @@ public class ScheduleService {
 		return scheduleMapper.schedule_delete(schedule_id);
 	}
 	
+	public List<ScheduleDTO> schedule_search(ScheduleSearchDTO dto){
+		return scheduleMapper.schedule_search(dto);
+	};
+	
+	public ScheduleDTO schedule_select_one(Long schedule_id) {
+		return scheduleMapper.schedule_select_one(schedule_id);
+	}
 	
 	
 }

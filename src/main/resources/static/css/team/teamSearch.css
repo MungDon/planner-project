@@ -1,11 +1,30 @@
+#team-search{
+	margin-bottom:5px;
+	line-height:1.6;
+}
+#team-search select{
+	height:24px;
+	text-align:center;
+	padding:2px;
+}
+#team-search input{
+	height:24px;
+	padding:2px;
+}
+#team-search button{
+	padding:1px 3px;
+	vertical-align:bottom;
+}
 .team{
 	width:590px;
-	height:120px;
-	margin:3px;
+	height:110px;
+	margin:4px 2px;
+	padding:1px;
 	cursor:pointer;
+	border: 1px darkgray solid;
 }
 .team img{
-	padding-top:10px;
+	padding-top:5px;
 }
 .team .thead{
 	width:90px;
@@ -17,7 +36,20 @@
 	width:max-content;
 	margin:10px auto;
 }
+#pagebar a{
+	padding:2px 3px;
+	text-decoration: none;
+}
+#pagebar a:hover{
+	background-color:darkgray;
+	border-radius:7px;
+	color:white;
+}
 .explain{
 	height:65px;
 	overflow:hidden;
+}
+tr:not(tr:last-child) td{
+	padding:0 1px;
+	border-bottom:1px solid lightgray;
 }

@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--/* 게시글 작성시 검색된 일정 출력하는 양식 */-->
+<table id="search-table">
+	<tr>
+		<th width="150px">제목
+		<th width="250px">내용
+		<th width="130px">시작 / 끝
+		<th width="40px">
+	<tr th:each="dto : ${list}" th:data-scid="${dto.schedule_id}">
+		<td><div th:text="${dto.schedule_title}" class="over-hide"></div></td>
+		<td><div th:utext="${dto.schedule_content}" class="over-hide"></div></td>
+		<td>
+			<span th:text="${#temporals.format(dto.schedule_start, 'yyyy-MM-dd HH:mm')}"></span> <br>
+			<span th:text="${#temporals.format(dto.schedule_end, 'yyyy-MM-dd HH:mm')}"></span>
+		<td><button type="button" class="cal_add">추가</button>
+</table>
+
+</body>
+</html>

@@ -47,10 +47,10 @@
 	width: 30%;
 }
 
-.nameI:disabled {
-	background-color: white;
+.nameI:disabled{
 	border: none;
 	margin: 2px;
+	background-color: white;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -58,6 +58,7 @@
 
 .nameI {
 	text-align: center;
+	font-size: 14px;
 }
 
 .list_td {

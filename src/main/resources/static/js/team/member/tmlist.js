@@ -54,7 +54,7 @@ modify_grade.forEach(e => {
 	e.addEventListener("click", function(){
 		let tr = e.closest("tr");
 		let tm_grade = tr.querySelector("select").selectedOptions[0].value;
-		if(tm_grade == 'TEAM_MASTER'){
+		if(tm_grade == 'TEAM_MASTER'){ // 그룹장 양도인 경우 한번 더 확인
 			let give = confirm("그룹장을 양도하시겠습니까?");
 			if(!give){
 				return;
@@ -161,7 +161,7 @@ accept.forEach(e => {
 				alert("오류 발생");
 			}
 		})
-		.catch(e => {
+		.catch(() => {
 			alert("오류 발생");
 		})
 		;

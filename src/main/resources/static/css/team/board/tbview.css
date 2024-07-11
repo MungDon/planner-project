@@ -84,15 +84,20 @@ button.float-right{
 	white-space: pre-wrap;
 	word-break: break-all;
 }
-#vote{
+.optional_content{
 	width:800px;
 	margin:5px auto;
 	padding:5px;
 	border:1px solid rgba(0, 0, 0, 0.2);
 }
-.dpn{
-	display:none;
-}
 .team_member{
 	cursor:pointer;
+}
+#schedule pre{
+	margin-top:4px;
+	margin-left:10px;
+	width:400px;
+	white-space:pre-wrap;
+	font-size: 14px;
+	font-family: Malgun Gothic;
 }

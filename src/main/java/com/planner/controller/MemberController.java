@@ -256,54 +256,81 @@ public class MemberController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/auth/search")
 	public String search(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
-			@RequestParam(name = "keyword", defaultValue = "!@#$%^&*()") String keyword, // 키워드 기본값 특수문자로 초기 화면 없애기
-			@UserData ResMemberDetail detail, Model model) {
+				   	     @RequestParam(name = "keyword", defaultValue = "!@#$%^&*()") String keyword,		// 키워드 기본값 특수문자로 초기 화면 없애기
+				   	     @UserData ResMemberDetail detail, Model model) {
 //		페이징 처리
 		int pageSize = 10;
 		int currentPage = pageNum;
 		int start = (currentPage - 1) * pageSize + 1;
 		int end = currentPage * pageSize;
 		int count = 0;
-		String gender;
-
+		
 		List<MemberDTO> list = memberService.search(detail.getMember_email(), keyword, start, end);
 		for (MemberDTO memberDTO : list) {
-			gender = Gender.findNameByCode(memberDTO.getMember_gender());
-
-			model.addAttribute("gender", gender);
+			String statusB = "";
+			String statusC = "";
+			
+			/* 친구 신청 상태 */
+			if (friendService.friendRequestStatus(memberDTO.getMember_id(), detail.getMember_id()) != null) {
+				statusB = friendService.friendRequestStatus(memberDTO.getMember_id(), detail.getMember_id());
+			}else if (friendService.friendRequestStatus(detail.getMember_id(), memberDTO.getMember_id()) != null) {
+				statusC = friendService.friendRequestStatus(detail.getMember_id(), memberDTO.getMember_id());
+			}
+			if (statusB.equals("S") && statusC.equals("S")) {
+				memberDTO.setFriend_request_status("");
+			}else if (statusB.equals("S")) {
+				memberDTO.setFriend_request_status("S");
+			}else if (statusC.equals("S")){
+				memberDTO.setFriend_request_status("R");
+			}
+			
+			/* 친구 상태 */
+			if (friendService.friendStatus(detail.getMember_id(), memberDTO.getMember_id()) != null &&
+				friendService.friendStatus(detail.getMember_id(), memberDTO.getMember_id()).equals("F")) {			// 내가 보낸 경우
+				memberDTO.setFriend_request_status("F");
+			}else if (friendService.friendStatus(memberDTO.getMember_id(), detail.getMember_id()) != null &&
+					  friendService.friendStatus(memberDTO.getMember_id(), detail.getMember_id()).equals("F")) {	// 내가 받은 경우
+				memberDTO.setFriend_request_status("F");
+			}
 		}
-
+		
 		if (list.size() > 0) {
 			count = memberService.searchCount(detail.getMember_id(), keyword);
 		}
-
+		
 		int pageCount = count / pageSize + (count % pageSize == 0 ? 0 : 1);
-		int startPage = (int) ((currentPage - 1) / 10) * 10 + 1;
+		int startPage = (int)((currentPage - 1) / 10) * 10 + 1;
 		int pageBlock = 10;
 		int endPage = startPage + pageBlock - 1;
-
+		
 		if (endPage >= pageCount) {
 			endPage = pageCount;
 		}
-
+		
+		if (keyword.length() < 3) {
+			return "redirect:/member/auth/search";
+		}
+		
 		model.addAttribute("count", count);
 		model.addAttribute("pageCount", pageCount);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("pageNum", pageNum);
-
-		model.addAttribute("keyword", keyword); // 키워드
-
-		model.addAttribute("list", list); // 친구신청 리스트 (친구신청 상태 담겨있음)
-		model.addAttribute("friendRoles", FriendRole.values()); // FriendRole 상태 권한설정
-
+		
+		model.addAttribute("keyword", keyword);					// 키워드
+		
+		model.addAttribute("list", list);						// 친구신청 리스트 (친구신청 상태 담겨있음)
+		model.addAttribute("friendRoles", FriendRole.values());	// FriendRole 상태 권한설정
+		
 		model.addAttribute("status", detail.getMember_status());
-
-		int receive_count = friendService.receiveRequestCount(detail.getMember_email()); // 받은 친구신청 수
+		
+		int receive_count = friendService.receiveRequestCount(detail.getMember_email());	// 받은 친구신청 수
 		model.addAttribute("receive_count", receive_count);
-
-		model.addAttribute("NAME", Masking.NAME); // 타임리프로 마스킹 처리를 하기위해 넘겨줌
-
+		
+		model.addAttribute("NAME", Masking.NAME);		// 타임리프로 마스킹 처리를 하기위해 넘겨줌
+		
+		model.addAttribute("detail", detail);
+		
 		return "member/member_search";
 	}
 

@@ -30,6 +30,7 @@ public class VoteController {
 	private final VoteService voteService;
 	private final TeamMemberService tmService;
 
+	// 투표 정보 출력
 	@PostMapping("/info")
 	public String voteInfo(Model model, @UserData ResMemberDetail detail, 
 							@RequestParam("vote_id") Long vote_id,
@@ -55,6 +56,7 @@ public class VoteController {
 		return "/team/board/vote";
 	}
 
+	// 투표했을 때 vote_member에 추가
 	@PostMapping("/memberinsert")
 	@ResponseBody
 	public int voteMemberInsert(@RequestBody VoteMemberInsertDTO dto) {

@@ -1,0 +1,15 @@
+#team_name{
+	width:350px;
+	height:26px;
+	padding:2px;
+}
+#team_explain{
+	width:350px;
+	height:150px;
+	padding:5px;
+	resize:none;
+}
+#info td button{
+	padding:2px 5px;
+	vertical-align: bottom;
+}

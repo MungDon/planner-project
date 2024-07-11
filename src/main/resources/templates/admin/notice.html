@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+</head>
+<body>
+    <p>
+        총 게시글 : <span th:text="${noticeListCount}"></span>
+    </p>
+
+    <div>
+        페이지 당 게시글:
+        <select id="ps" name="ps" onchange="location.href='/admin/notice?ps=' + this.value">
+            <option value="10" th:selected="${ps == 10}">10</option>
+            <option value="20" th:selected="${ps == 20}">20</option>
+            <option value="30" th:selected="${ps == 30}">30</option>
+        </select>
+    </div>
+
+    <table border="1" width="200">
+        <tr th:each="noticeDTO : ${noticeList}">
+            <td>
+                <a th:href="@{|/admin/noticeContent/${noticeDTO.notice_id}|}">
+                    <span th:text="${noticeDTO.notice_title}"></span>
+                </a>
+            </td>
+        </tr>
+    </table>
+    <div id="pageBox" th:if="${noticeListCount > 0}">
+        <a th:if="${pageNum > 1}" th:href="@{|/admin/notice?ps=${ps}&pageNum=${pageNum - 1}|}">이전</a>
+        <th:block th:each="pnum : ${#numbers.sequence(startPage, endPage)}">
+            <a th:if="${pnum != pageNum}" th:href="@{|/admin/notice?ps=${ps}&pageNum=${pnum}|}" th:text="${pnum}"></a>
+            <b th:if="${pnum == pageNum}" th:text="${pageNum}"></b>
+        </th:block>
+        <a th:if="${endPage < totalPage}" th:href="@{|/admin/notice?ps=${ps}&pageNum=${pageNum + 1}|}">다음</a>
+    </div>
+
+    <button type="button" onclick="location.href='/admin/noticeWrite'">글 작성</button>
+</body>
+</html>

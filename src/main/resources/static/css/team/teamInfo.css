@@ -32,3 +32,26 @@
 	position: absolute;
 	top:70px;
 }
+.enter-br{
+	white-space: pre-wrap;
+}
+.td120{
+	width:120px;
+}
+.td350{
+	width:350px;
+}
+#info{
+	width:max-content;
+	margin:0 auto;
+}
+#info > tr, td{
+	padding:5px 2px;
+}
+#info tr:not(tr:last-child) td{
+	border-bottom: 1px solid gray;
+}
+#info td button{
+	padding:2px 5px;
+	vertical-align: bottom;
+}

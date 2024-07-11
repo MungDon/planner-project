@@ -4,7 +4,7 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <link rel="stylesheet" type="text/css" href="/css/member/login.css">
-<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
+<link rel="stylesheet" type="text/css" href="/css/header.css"/>
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
@@ -27,6 +27,7 @@
 			<a class="kakaoBtn" href="/oauth2/authorization/kakao?mode=login"><img src="/images/kakao.webp" class="kakaoLogo"></a>
 		</div>
 	</main>
+	<script type="text/javascript" src="/js/header.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 </html>

@@ -1,4 +1,107 @@
 const boardform = document.getElementById('boardform');
+const modal = document.getElementById('modal');
+const modal_close = document.getElementById('modal_close');
+const so = document.getElementById('so');
+const cal_title = document.querySelector('input[name="cal_title"]');
+const cal_date = document.querySelector('input[name="cal_date"]');
+const cal_search = document.getElementById('cal_search');
+// 글삭제 modal창 on
+function calendar_btn(){
+	modal.style.display = 'block';
+}
+// 글삭제 modal창 off
+modal_close.addEventListener('click', function(){
+	modal.style.display = 'none';
+})
+
+// 에디터 일정 버튼
+var schedule_btn = function (context) {
+	var ui = $.summernote.ui;
+
+	// create button
+	var button = ui.button({
+		contents: '<i class="fa fa-child"/> 일정',
+		click: function () {
+			context.invoke(calendar_btn());
+		}
+	});
+	return button.render();
+}
+
+// 검색 옵션 바꿀때.
+so.addEventListener("change", function(){
+	if(so.value == 'T'){
+		cal_title.style.display = 'inline-block';
+		cal_date.style.display = 'none';
+	}else{
+		cal_title.style.display = 'none';
+		cal_date.style.display = 'inline-block';
+	}
+});
+
+// 일정 검색
+function cal_search_function(){
+	let data = {};
+	if(so.value == 'T'){ // 제목 검색일 때
+		if(cal_title.value.trim().length < 2){
+			alert('검색은 최소 2글자 이상입니다.');
+			return;
+		}
+		data = {
+			team_id:boardform.team_id.value,
+			so:so.value,
+			cal_title:cal_title.value
+		}
+	}else{ // 시작, 종료 날짜 검색일 때
+		if(cal_date.value.length == 0){
+			alert('날짜를 입력 해주세요.');
+			return;
+		}
+		data = {
+			team_id:boardform.team_id.value,
+			so:so.value,
+			cal_date:cal_date.value
+		}
+	}
+	$.ajax({
+		type:'get',
+		url:'/team/planner/search',
+		data : data,
+		success:function(result){
+			$("#modal_result").html(result);
+		}
+	});
+}
+// 일정 검색 버튼
+cal_search.addEventListener("click", cal_search_function);
+// 일정 제목 검색일 때 엔터눌러서 검색
+cal_title.addEventListener("keydown", function(e){
+	if(e.keyCode == 13){
+		cal_search_function();
+	}
+});
+
+// scSearch 검색 후 추가 버튼
+$(document).on("click", ".cal_add", function(){
+	boardform.schedule_id.disabled = false;
+	boardform.schedule_id.value = $(this).closest("tr").data("scid")
+	$("#cal_print").html(
+		'<span>선택된 일정</span>' + 
+		'<button type="button" id="cal_del"> X </button> </br>'+
+		'<span>'+$(this).closest("tr").children("td:eq(0)").text()+'</span>' + 
+		'<p class="float-right">'+$(this).closest("tr").children("td:eq(2)").html()+'</p>'+
+		'<pre>'+$(this).closest("tr").children("td:eq(1)").text()+'</pre>'
+	);
+	$('#cal_print').show();
+	modal.style.display = 'none';
+});
+
+// 추가된 일정 제거
+$(document).on("click", '#cal_del', function(){
+	$('#cal_print').hide();
+	$('#cal_print').html('');
+	boardform.schedule_id.disabled = true;
+});
 
 // 투표 활성화, 비활성화
 function vote_toggle(){
@@ -17,6 +120,7 @@ function vote_toggle(){
 		$("#vote_end").val(min.toISOString().substring(0, 17)+'00'); // 초단위 제거
 	}
 }
+
 // 투표 항목 추가
 $("#new_item").on("click", function(){
 	if($(".vote_item").length < 10){ // 항목 개수 제한
@@ -36,7 +140,7 @@ $(document).on("click", ".del_item", function(){
 	$(".new_item").get( $(".del_item").index(this) ).remove();
 	this.remove();
 });
-// 투표 버튼
+// 에디터 투표 버튼
 var vote_btn = function (context) {
 	var ui = $.summernote.ui;
 
@@ -45,20 +149,6 @@ var vote_btn = function (context) {
 		contents: '<i/>투표',
 		click: function () {
 			context.invoke(vote_toggle());
-		}
-	});
-	return button.render();
-}
-
-// 일정 버튼
-var schedule_btn = function (context) {
-	var ui = $.summernote.ui;
-
-	// create button
-	var button = ui.button({
-		contents: '<i class="fa fa-child"/> 일정',
-		click: function () {
-			context.invoke(alert('미구현'));
 		}
 	});
 	return button.render();
@@ -102,7 +192,7 @@ function isEmpty(str_code){
 // 투표 종료 시간 검사
 function timecheck(){
 	let vote_end = $("#vote_end");
-	let min = new Date(Date.now() + 39300000); // 현재시간 + 9시간(UTC+9) + 55분
+	let min = new Date(Date.now() + 35700000); // 현재시간 + 9시간(UTC+9) + 55분
 	let max = new Date(Date.now() + 637500000); // 현재시간 + 9시간(UTC+9) + 7일 5분 
 	if(vote_end.val() < min.toISOString()){
 		alert("투표 종료 시간은 최소 1시간 이후입니다.");
@@ -119,7 +209,7 @@ function timecheck(){
 // 투표 종료 시간 변경할 때 검사
 $("#vote_end").change( timecheck );
 
-// submit (유효성 검사 포함 (내용이 있는지 없는지))
+// submit (유효성 검사 포함)
 document.getElementById('btn_save').onclick = function(){
 	let title = document.getElementById('tb_title').value;
 	let content = document.querySelector('.note-editable').innerHTML
@@ -132,7 +222,7 @@ document.getElementById('btn_save').onclick = function(){
 		// 투표 유효성 검사
 		if($("#vote").css("display") == "block"){
 			vote_check = timecheck();
-			$("#vote input").each(function(){
+			$("#vote input").each(function(){ // 제목, 항목 비어있으면 안됨
 				if($.trim($(this).val()) == 0){
 					alert('투표 제목 또는 항목을 입력해 주세요.');
 					vote_check = false;
@@ -156,4 +246,13 @@ document.getElementById('btn_reset').addEventListener("click", function(){
 	$(".del_item").remove();
 	$("#vote_content").attr("disabled", true); 
 	$("#vote input").attr("disabled", true);
+	$("#modal_result").html('');
+	$('#cal_print').hide();
+	$('#cal_print').html('');
+	so.value='T';
+	cal_title.style.display = 'inline-block';
+	cal_date.style.display = 'none';
+	cal_title.value = '';
+	cal_date.value = '';
+	boardform.schedule_id.disabled = true;
 });

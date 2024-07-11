@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.planner.dto.request.schedule.ScheduleDTO;
 import com.planner.dto.request.team.TeamDTO;
 import com.planner.dto.request.team.board.TeamBoardDTO;
 import com.planner.dto.request.team.board.TeamBoardListDTO;
@@ -19,6 +21,7 @@ import com.planner.dto.request.team.board.TeamBoardUpdateDTO;
 import com.planner.dto.request.team.vote.VoteDTO;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.TM_Grade;
+import com.planner.service.ScheduleService;
 import com.planner.service.TeamBoardService;
 import com.planner.service.TeamMemberService;
 import com.planner.service.TeamService;
@@ -37,6 +40,7 @@ public class TeamBoardController {
 	private final TeamMemberService tmService;
 	private final TeamBoardService tbService;
 	private final VoteService voteService;
+	private final ScheduleService scheduleService;
 
 	// 게시글 목록
 	@GetMapping("/list")
@@ -48,7 +52,8 @@ public class TeamBoardController {
 			@RequestParam(name = "so", defaultValue = "NO") String searchOption,
 			@RequestParam(name = "search", defaultValue = "") String search) {
 		String tm_grade = tmService.teamMemberGrade(team_id, detail.getMember_id());
-		if(tm_grade == null || TM_Grade.ROLE_TEAM_WAIT.getValue().equals(tm_grade)) {
+		if(tm_grade == null || TM_Grade.ROLE_WAIT.getValue().equals(tm_grade)) {
+			// 그룹 가입한 사람 아니면 redirect
 			return "redirect:/team/main";
 		}
 		// 검색어 유효성 검사
@@ -56,9 +61,9 @@ public class TeamBoardController {
 			return "redirect:/team/board/list?team_id="+team_id;
 		}
 		TeamDTO teamDTO = teamService.teamInfo(team_id);
-		int tbCountAll = tbService.tbCountAll(team_id);
 		int tbCount = tbService.tbCount(team_id, category, searchOption, search);
 		List<TeamBoardListDTO> list = null;
+		// 검색된 게시글이 있으면
 		if (tbCount > 0) {
 			list = tbService.tblist(team_id, category, searchOption, search, pageNum, pageSize);
 			// 페이지 번호 정상적인지 검사
@@ -68,6 +73,7 @@ public class TeamBoardController {
 		}
 		List<TeamBoardListDTO> notice_list = null;
 		if (!category.equals("공지사항") && search.length() == 0) {
+			// 최신 공지사항 10개까지 상단에 따로 표시
 			notice_list = tbService.tblist(team_id, "공지사항", "NO", "", 1, 10);
 		}
 		int pageBlock = 10;
@@ -82,7 +88,6 @@ public class TeamBoardController {
 		model.addAttribute("teamDTO", teamDTO);
 		model.addAttribute("list", list);
 		model.addAttribute("notice_list", notice_list);
-		model.addAttribute("tbCountAll", tbCountAll);
 		model.addAttribute("tbCount", tbCount);
 		model.addAttribute("ca", category);
 		model.addAttribute("pageBlock", pageBlock);
@@ -101,7 +106,7 @@ public class TeamBoardController {
 	public String tbwrite(Model model, @ModelAttribute("team_id") Long team_id,
 						@UserData ResMemberDetail detail) {
 		String tm_grade = tmService.teamMemberGrade(team_id, detail.getMember_id());
-		if(tm_grade == null || TM_Grade.ROLE_TEAM_WAIT.getValue().equals(tm_grade)) {
+		if(tm_grade == null || TM_Grade.ROLE_WAIT.getValue().equals(tm_grade)) {
 			return "redirect:/team/main";
 		}
 		model.addAttribute("tm_grade", tm_grade);
@@ -110,6 +115,7 @@ public class TeamBoardController {
 
 	// 게시글 작성
 	@PostMapping("/write")
+	@Transactional
 	public String tbwrite(TeamBoardDTO dto, VoteDTO vdto, @UserData ResMemberDetail detail,
 			@RequestParam(name = "vote_item_name", defaultValue = "") List<String> vote_item_names) {
 		voteService.voteInsert(vdto);
@@ -133,10 +139,15 @@ public class TeamBoardController {
 			return "redirect:/team/main";
 		}
 		String tm_grade = tmService.teamMemberGrade(dto.getTeam_id(), detail.getMember_id());
-		if(tm_grade == null || TM_Grade.ROLE_TEAM_WAIT.getValue().equals(tm_grade)) {
+		if(tm_grade == null || TM_Grade.ROLE_WAIT.getValue().equals(tm_grade)) {
 			return "redirect:/team/main";
 		}
 		long team_member_id = tmService.teamMemberId(dto.getTeam_id(), detail.getMember_id());
+		if(dto.getSchedule_id() != null) {
+			// 게시글에 일정이 있다면 추가. 투표는 있으면 스크립트로 요청함.
+			ScheduleDTO scheduleDTO = scheduleService.schedule_select_one(dto.getSchedule_id());
+			model.addAttribute("scheduleDTO", scheduleDTO);
+		}
 		model.addAttribute("dto", dto);
 		model.addAttribute("tm_grade", tm_grade);
 		model.addAttribute("team_member_id", team_member_id);
@@ -155,8 +166,11 @@ public class TeamBoardController {
 		TeamBoardDTO dto = tbService.teamBoardView(team_board_id);
 		long team_member_id = tmService.teamMemberId(dto.getTeam_id(), detail.getMember_id());
 		if(dto.getTeam_member_id() != team_member_id) {
+			// 작성자 아니면 게시글 수정 못하게 접근 차단
 			return "redirect:/team/board/list?team_id="+team_id;
 		}
+		// grade 보내는 이유는 공지사항 때문임.
+		// TODO 수정할점. 공지사항 작성 후 grade가 user로 내려간 경우 처리.
 		String tm_grade = tmService.teamMemberGrade(dto.getTeam_id(), detail.getMember_id());
 		model.addAttribute("dto", dto);
 		model.addAttribute("tm_grade", tm_grade);
@@ -179,6 +193,7 @@ public class TeamBoardController {
 	public String tbdelete(@RequestParam("team_id") Long team_id, @RequestParam("tb_id") Long team_board_id,
 			@RequestParam(name = "vote_id", defaultValue = "-1") Long vote_id) {
 		if(vote_id != -1) {
+			// 투표 있으면 투표 먼저 삭제
 			voteService.voteDelete(vote_id);
 		}
 		tbService.teamBoardDelete(team_board_id);

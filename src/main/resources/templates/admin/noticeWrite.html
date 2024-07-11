@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form th:action="@{/admin/notice}" method="post"> 
+		공지사항 제목:<input type="text" name="notice_title" required>				<br/>
+		공지사항 내용:<textarea name="notice_content" required></textarea>			<br/>
+		<button type="submit">글 작성</button>
+	</form>
+</body>
+</html>

@@ -4,11 +4,16 @@
 	<meta charset="UTF-8"/>
 	<title>그룹 생성</title>
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
+	<link rel="stylesheet" type="text/css" href="/css/team/teamCreate.css">
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<script type="text/javascript" src="/js/team/teamCreate.js" defer></script>
+	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
 <!-- th:action으로 해야 csrf 자동생성됨. 그냥 action쓰면 자동생성 안됨. -->
+<h2 class="text-center">그룹 생성</h2>
 <form th:action="@{/team/create}" method="post" id="team_form" enctype="multipart/form-data" onsubmit="return false">
 <table>
 	<tr>
@@ -21,7 +26,7 @@
 	</tr>
 	<tr>
 		<td><label for="team_explain">그룹 소개</label></td>
-		<td><textarea name="team_explain" id="team_explain" cols="42" rows="7" maxlength="333"></textarea></td>
+		<td><textarea name="team_explain" id="team_explain" cols="42" rows="7" maxlength="333" placeholder="최대 333글자"></textarea></td>
 	</tr>
 	<tr>
 		<td><label for="team_image">그룹 이미지</label></td>
@@ -34,7 +39,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2" align="right">
+		<td colspan="2" class="text-center">
 			<button type="reset">리셋</button>
 			<button type="button" id="submit_btn">생성</button>
 		</td>

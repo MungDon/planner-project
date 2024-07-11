@@ -6,16 +6,27 @@
 	<meta name="_csrf_header" th:content="${_csrf.headerName}">
 	<meta name="_csrf_token" th:content="${_csrf.token}">
 	<title>그룹 회원 목록</title>
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
+	<link rel="stylesheet" type="text/css" href="/css/team/member/tmlist.css">
 	<script type="text/javascript" src="/js/team/member/tmlist.js" defer></script>
+	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
-<p>
-	그룹 회원 : <span th:text="${#lists.size(tmlist)} - ${wait_count}" id="member_count"></span>명 <br>
+<div class="linespace">
+<p class="text-center font-big">
+	<b th:text="${team_name}"></b> <!--/* 그룹 이름 */-->
+	그룹의 회원 목록
+</p>
+<p class="text-center">
+	그룹 회원 : <span th:text="${#lists.size(tmlist)} - ${wait_count}" id="member_count"></span>명
+	&nbsp;/&nbsp;
 	가입 대기 : <span th:text="${wait_count}" id="wait_count"></span>명
 </p>
-<div class="nodrag" id="grades">
+</div>
+<div class="nodrag text-center" id="grades">
 	<label for="TEAM_MASTER">그룹장</label>
 	<input type="checkbox" id="TEAM_MASTER" checked>
 	<label for="TEAM_SUB_MASTER">부그룹장</label>
@@ -25,19 +36,21 @@
 	<label for="WAIT">가입대기</label>
 	<input type="checkbox" id="WAIT" checked>
 </div>
-<table>
+<table id="tm-table" class="text-center">
 	<tr>
-		<th>회원번호</th>
-		<th>별명</th>
-		<th>등급</th>
-		<th>가입일자</th>
-		<th></th>
+		<th style="width:70px;">회원번호</th>
+		<th style="width:120px;">별명</th>
+		<th style="width:165px;">등급</th>
+		<th style="width:105px;">가입일자</th>
+		<th style="width:85px;"></th>
 	</tr>
 	<tr th:each="dto : ${tmlist}" th:id="${dto.member_id}" th:class="${dto.tm_grade}">
 		<td th:text="${dto.member_id}"></td>
+		<!--/* 그룹에서 회원의 별명 출력. 클릭시 팀에서 해당 회원의 정보 페이지로 이동 */-->
 		<td><span th:text="${dto.tm_nickname}" class="tmlink pointer font-lsblue"></span></td>
 		<td>
 			<span th:text="${dto.tm_grade}" class="grade_span"></span>
+			<!--/* 그룹장인 경우, tm_grade 수정을 위한 select 숨겨둠 */-->
 			<select th:if="${tm_grade} == 'TEAM_MASTER' and ${dto.tm_grade} != 'TEAM_MASTER' and ${dto.tm_grade} != 'WAIT'"
 				class="grade_select" style="display:none;">
 				<option value="TEAM_MASTER">TEAM_MASTER
@@ -46,7 +59,8 @@
 			</select>
 		</td>
 		<td th:text="${#temporals.format(dto.tm_reg, 'yyyy-MM-dd')}"></td>
-		<td th:if="${tm_grade} == 'TEAM_MASTER' and ${dto.tm_grade} != 'TEAM_MASTER' and ${dto.tm_grade} != 'WAIT'">
+		<td class="btn-td" th:if="${tm_grade} == 'TEAM_MASTER' and ${dto.tm_grade} != 'TEAM_MASTER' and ${dto.tm_grade} != 'WAIT'">
+			<!--/* 추방, grade 수정은 그룹장만 가능함 */-->
 			<div class="btn_basic">
 				<button type="button" class="modify">수정</button>
 				<button type="button" class="kick">추방</button>
@@ -57,6 +71,7 @@
 			</div>
 		</td>
 		<td th:if="${#strings.contains(tm_grade, 'MASTER')} and ${dto.tm_grade} == 'WAIT'">
+			<!--/* 그룹장, 부그룹장은 가입 신청에 대해 승인, 거절 가능함 */-->
 			<button type="button" class="accept">가입승인</button>
 			<button type="button" class="kick wait">가입거절</button>
 		</td>

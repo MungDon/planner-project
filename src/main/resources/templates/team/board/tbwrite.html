@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8"/>
 	<title>게시글 작성</title>
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/board/tbwrite.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/board/summernote-lite.min.css">
@@ -10,12 +11,16 @@
 	<script type="text/javascript" src="/js/team/board/summernote-lite.min.js"></script>
 	<script type="text/javascript" src="/js/team/board/summernote-ko-KR.min.js"></script>
 	<script type="text/javascript" src="/js/team/board/tbwrite.js" defer></script>
+	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
+
 <form id="boardform" method="post" th:action="@{write}" onsubmit="return false">
 	<input type="hidden" name="team_id" th:value="${team_id}">
 	<input type="hidden" name="team_board_id" th:value="${dto?.team_board_id}">
+
 	<!--/*
 		${dto} ? ${dto.tb_title} : '' -> dto가 있으면 dto.tb_title 없으면 ''
 			${dto != null} ? ... 해도 됨.
@@ -24,6 +29,7 @@
 		${data?} -> data가 있으면 data 출력
 		${data} ?: '' -> data가 있으면 data, 없으면 '' 출력
 	*/-->
+
 	<span id="ca">
 		<span>카테고리 : </span>
 		<select name="tb_category" th:with="ca=${dto?.tb_category}">
@@ -33,9 +39,17 @@
 		</select>
 	</span>
 	<input type="text" name="tb_title" id="tb_title" th:value="${dto?.tb_title}" placeholder="제목을 입력해 주세요." maxlength="50">
+	<!--/* 에디터 영역 */-->
     <div id="summernote"></div>
+
     <input type="hidden" name="tb_content">
-    
+   	<input type="hidden" name="schedule_id" disabled>
+
+	<!--/* 선택한 일정 출력 */-->   	
+    <div id="cal_print">
+    </div>
+
+    <!--/* 투표 영역 */-->
     <div id="vote" style="display:none;">
 	    <div id="head">
 	    	<label for="vote_title">제목</label>
@@ -58,6 +72,28 @@
 	    <button type="button" class="btn" id="btn_reset">리셋</button>
     </div>
 </form>
+
+<!--/* 일정 검색 modal창 */-->
+<div id="modal">
+	<div id="modal_body">
+		<div id="modal_search">
+			<select id="so" name="so">
+				<option value="T" selected>제목
+				<option value="S">시작
+				<option value="E">종료
+			</select>
+			<input type="text" name="cal_title" maxlength="50" style="width: 111.33px; height: 21.33px" placeholder="일정 검색">
+			<input type="date" name="cal_date" style="display:none;">
+			<button type="button" id="cal_search">검색</button>
+		</div>
+		<div id="modal_result">
+		</div>
+		<div id="modal_btns">
+			<button type="button" id="modal_close">닫기</button>
+		</div>
+	</div>
+</div>
+
 </div> <!-- main-container 끝 -->
 </body>
 </html>

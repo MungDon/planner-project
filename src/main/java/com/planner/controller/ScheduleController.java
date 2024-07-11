@@ -46,20 +46,15 @@ public class ScheduleController {
 			   						MapLikeDTO MapLikedto,@UserData ResMemberDetail detail) {
 	      List<ScheduleDTO> list = null;
 	      Long	id = detail.getMember_id();
-	      list = scheduleService.schedule_select(id, date);
+	      list = scheduleService.schedule_select(id, date, -1L);
 	      MapLikedto.setMember_id(detail.getMember_id());
 	      ArrayList<MapLikeDTO> mapLikeList = mapLikeService.MapLikeSelect(id);
-	      
 	      model.addAttribute("mapLikeList", mapLikeList);
 	      model.addAttribute("date", date);
 	      model.addAttribute("list", list);
 	      return "schedule";
 	   }
 	
-	/*
-	@UserData ResMemberDetail detail
-	detail.getmember_id
-	*/
 	
 	// 글 쓰기
 	@PostMapping("schedule")
@@ -75,7 +70,6 @@ public class ScheduleController {
 	@DeleteMapping("schedule/del")
 	public void  scheduleDel(@RequestParam("schedule_id") Long schedule_id) {
 		scheduleService.schedule_delete(schedule_id);
-//		return "redirect:/planner/calendar";
 	}
 	
 	// 글수정

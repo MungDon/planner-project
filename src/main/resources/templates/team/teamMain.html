@@ -3,11 +3,14 @@
 <head>
 	<meta charset="UTF-8"/>
 	<title>그룹 페이지</title>
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamMain.css">
 	<script type="text/javascript" src="/js/team/teamMain.js" defer></script>
+	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
 <body>
+<header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
 <h1>그룹 메인</h1>
 <div class="float-clear">
@@ -16,6 +19,7 @@
 		<hr style="border-top:2px dashed gray; margin:0px 5px;">
 		<p><a href="/team/search">그룹찾기</a></p>
 	</div>
+	<!--/* 가입 대기중이거나 가입한 그룹 출력 */-->
 	<div class="float-left team-item " th:each="dto : ${teamList}">
 		<p th:text="${dto.team_name}" class="font-big text-center team-name"></p>
 		<div class="float-left text-center">
@@ -27,8 +31,9 @@
 			<span class="font-blue pointer" data-link="member/info">내 정보</span>
 			<span class="font-blue pointer" data-link="info">그룹 정보</span>
 			<th:block th:if="${dto.tm_grade} != 'WAIT'">
-			<span class="font-blue pointer" data-link="calendar">그룹 일정</span>
-			<span class="font-blue pointer" data-link="board/list">그룹 게시판</span>
+				<!--/* 가입 대기중일 때 표시 안하는 부분 */-->
+				<span class="font-blue pointer" data-link="planner/calendar">그룹 일정</span>
+				<span class="font-blue pointer" data-link="board/list">그룹 게시판</span>
 			</th:block>
 		</div>
 	</div>

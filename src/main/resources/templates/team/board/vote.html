@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
+<!--/* 투표 정보 */-->
 <div id="vote_info">
 	<h3 th:if="${end}" align="center">마감된 투표입니다</h3>
 	<p class="float-right">
@@ -11,6 +12,7 @@
 </div>
 <hr style="margin:5px 0;">
 
+<!--/* 투표 항목들 */-->
 <div id="vote_items" th:if="${voted} == 0 AND !${end}">
 <div th:each="item : ${dto.vote_items}">
 	<input type="radio" name="vote_item_id" th:value="${item.vote_item_id}" th:id="|vote${item.vote_item_id}|">
@@ -20,6 +22,7 @@
 <button type="button" class="toggle_result">결과보기</button>
 </div>
 
+<!--/* 투표 결과 */-->
 <div id="vote_result" th:classappend="${voted} == 0 AND !${end} ? dpn">
 <p>총 투표 인원 : <span th:text="${total_vote}"></span>명</p>
 <div th:each="item : ${dto.vote_items}">

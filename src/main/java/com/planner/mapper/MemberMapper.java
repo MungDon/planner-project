@@ -57,7 +57,6 @@ public interface MemberMapper {
 	
 //	회원 시퀀스로 이메일 찾기
 	public String findByMemberEmail(Long member_id);	// 친구 이메일 찾을 때 사용
-	// findMemberEmailByMemberId(Long member_id);
 	
 //	회원 검색
 	public List<MemberDTO> search(@Param("member_id") Long member_id, @Param("keyword") String keyword,

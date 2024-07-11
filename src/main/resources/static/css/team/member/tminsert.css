@@ -1,0 +1,18 @@
+#tmi-table{
+	margin:0 auto;
+	line-height:1.6;
+}
+#tmi-table td:first-child{
+	width:80px;
+}
+#tmi-table tr:last-child{
+	height:35px;
+}
+#tmi-table button{
+	padding:2px 5px;
+	vertical-align:bottom;
+}
+#tmi-table input{
+	height:26px;
+	padding:1px;
+}

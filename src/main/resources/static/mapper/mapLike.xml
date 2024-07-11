@@ -23,6 +23,6 @@
 		and map_number in
 		<foreach collection="map_numbers" item="map_number" open="(" close=")" separator=",">
 			#{map_number}
-		</foreach>z
+		</foreach>
 	</delete>
 </mapper>
