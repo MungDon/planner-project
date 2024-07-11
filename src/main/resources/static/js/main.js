@@ -26,29 +26,28 @@ $(".addScheduleBtn").click(() => {
 $(".deleteBtn").click((event) => {
 	const schedule_id = $(event.target).val();
 	const thenFn = (result) => {
-		if (result.isDenied) {
-			return;
+		if (result.isConfirmed) {
+			const ajaxObj = {
+				url: API_LIST.DELETE_SCHEDULE,
+				method: "delete",
+				param: {
+					schedule_id: schedule_id
+				},
+				successFn: () => {
+					const thenFn = () => {
+						location.reload();
+					};
+					swalCall("성공", "삭제 성공!", "success", thenFn);
+				},
+				errorFn: () => {
+					const thenFn = () => {
+						location.href = PAGE_LIST.MAIN_PAGE;
+					};
+					swalCall("경고", "삭제 실패!", "error", thenFn);
+				}
+			};
+			ajaxCall(ajaxObj);
 		}
-		const ajaxObj = {
-			url: API_LIST.DELETE_SCHEDULE,
-			method: "delete",
-			param: {
-				schedule_id: schedule_id
-			},
-			successFn: () => {
-				const thenFn = () => {
-					location.reload();
-				};
-				swalCall("성공", "삭제 성공!", "success", thenFn);
-			},
-			errorFn: () => {
-				const thenFn = () => {
-					location.href = PAGE_LIST.MAIN_PAGE;
-				};
-				swalCall("경고", "삭제 실패!", "error", thenFn);
-			}
-		};
-		ajaxCall(ajaxObj);
 	};
 	swalCall("일정 삭제", "일정을 삭제하시겠습니까?", "question", thenFn, "예", true);
 });
