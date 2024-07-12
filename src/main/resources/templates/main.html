@@ -28,32 +28,28 @@
 			</div>
 			<div class="todayBox">
 				<div class="todayTextBox">
-					<span class="todayText">오늘의 일과</span>
+					<span class="todayText" th:text="${#strings.substring(todayInfo.currentDate, todayInfo.currentDate.length() - 2)+todayInfo.today}"></span>
 				</div>
-				<div class="todaySchedule" th:each="schedule ,loop : ${todaySchedule}"  th:if="${loop.index < 2}" th:classappend="${loop.count < 2} ? 'line'">
-					<div class="top">
-						<div class="title">
-							<span class="head">일정</span>
-							<span class="scheduleContent" th:text="${schedule.schedule_title}"></span>
-						</div>
-						<button class="deleteBtn" type="button" th:value="${schedule.schedule_id}">X</button>
-					</div>
-					<span class="head">내용</span>
-					<span class="scheduleContent" th:text="${schedule.schedule_content}"></span>
-					
-					<span class="head">시간</span>
-					<span class="scheduleContent" th:text="${#temporals.format(schedule.schedule_start,'HH:mm') }"></span>
-					
-					<span th:if="${!#strings.isEmpty(schedule.place)}" class="head">장소</span>
-					<span th:if="${!#strings.isEmpty(schedule.place)}" class="scheduleContent" th:text="${schedule.place}"></span>
-					
-					<span th:if="${#strings.isEmpty(schedule.address)}" class="head">주소</span>
-					<span th:if="${#strings.isEmpty(schedule.address)}" class="scheduleContent" th:text="${schedule.address}"></span>
-				</div>
-					<a class="more" href="/planner/calendar" th:if="${todaySchedule.size() > 2}">..더보기</a>
 				<div class="addScheduleBtnBox">
 					<button class="addScheduleBtn" type="button">일정 추가하기</button>
 				</div>
+				<div class="todaySchedule" th:each="schedule ,loop : ${todaySchedule}"  th:if="${loop.index < 2}">
+					<div class="titleBox">
+						<span class="title" th:text="${schedule.schedule_title}"></span>
+						<button class="deleteBtn" type="button" th:value="${schedule.schedule_id}">X</button>
+					</div>
+					<span class="time" th:text="${#temporals.format(schedule.schedule_start,'HH:mm')+'~'+#temporals.format(schedule.schedule_end,'HH:mm')}"></span>
+					<hr color="#ddd" class="line">
+					<span class="scheduleContent" th:text="${schedule.schedule_content}"></span>
+					<div class="locationBox">
+						<img src="/images/location.png" class="location">	
+						<div>				
+							<span th:if="${!#strings.isEmpty(schedule.place)}" class="address" th:text="${schedule.place}"></span><br>
+							<span th:if="${!#strings.isEmpty(schedule.address)}" class="address" th:text="${schedule.address}"></span>
+						</div>
+					</div>
+				</div>
+					<a class="more" href="/planner/calendar" th:if="${todaySchedule.size() > 2}">..더보기</a>
 			</div>
 		</div>
 	</main>

@@ -17,7 +17,7 @@
 	padding: 50px;
 	display: flex;
 	flex-direction: column;
-	box-shadow: 0px 0px 10px 1px #a8c9ff;
+	box-shadow: 5px 5px 2px #ddd;
 }
 /* input */
 .insertForm>input {

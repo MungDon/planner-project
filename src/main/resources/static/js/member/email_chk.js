@@ -57,11 +57,13 @@ $(".emailChkBtn").click(() => {
 // 인증번호 재선송 버튼 클릭 시
 $(".resendBtn").click(() => {
 	const toEmail = $("#email").val();
+	$(".resendBtn").prop("disabled", true);
 	const type = $("#type").val();
 	sendEmail(toEmail, type);
 });
 
 $(".Xbtn").click(() => {
+	$(".resendBtn").prop("disabled", false);
 	$(".emailChkBtn").prop("disabled", false);
 	$("#email").attr("readonly", false);
 });
@@ -72,6 +74,7 @@ $(".codeChkBtn").click(() => {
 	const authCode = $("#inputCode").val();
 	const type = $("#type").val();
 	$(".emailChkBtn").prop("disabled", false);
+	$(".resendBtn").prop("disabled", false);
 	if (isNull(authCode)) {
 		swalCall("경고", "인증코드를 입력해주세요", "warning");
 		return;

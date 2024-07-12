@@ -24,87 +24,50 @@
 
 .noticeBox {
 	width: 40%;
-	border: 1px solid #ddd;
-	border-radius: 10px;
+	background-color : #F8F9FA;
+	border-style :none;
+	border-radius: 20px;
+	padding: 30px;
 	display: flex;
 	flex-direction: column;
-	border: 1px solid #ddd;
 }
 
 .todayBox {
-	background-color: rgba(250, 250, 230, 0.3);
-	border-style: none;
-	border-radius: 10px;
 	width: 20%;
+	background-color : #F8F9FA;
+	border-style :none;
+	border-radius: 20px;
+	padding: 30px;
 	display: flex;
 	flex-direction: column;
 }
 
 .todaySchedule {
-	margin-top: 10px;
-	padding: 10px;
+	border-radius: 20px;
+	background-color : white;
+	padding: 20px;
 	border-style: hidden;
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 4px;
+	margin: 10px 0;
+	box-shadow: 5px 5px 3px #ddd;
 }
 
 .img {
 	width: 100%;
 }
 
-.todayTextBox,.noticeTextBox {
-	border-radius: 10px 10px 0 0;
-	text-align: center;
-	width: 100%;
-	background-color: bisque;
-}
-
 .todayText,.noticeText{
-	color: white;
+	color: gray;
 	font-weight: bold;
 	font-size: 35px;
 	margin-bottom: 20px;
-	color: white;
-}
-
-.headText {
-	color: gray;
-	font-weight: bold;
-	font-size: 20px;
-}
-
-.head, .scheduleContent {
-	padding-left: 10px;
-}
-
-.head {
-	font-size: 15px;
-	color: rgb(100,100,100);
-	font-weight: bold;
-}
-
-.title {
-	display: flex;
-	flex-direction: column;
 }
 
 .scheduleContent {
+	padding-left: 10px;
 	font-size: 20px;
-	color: gray;
-}
-
-.top {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	width: 100%;
-	height: 20px;
-	margin-bottom: 10px;
-}
-
-.line {
-	border-bottom: 2px dashed #ddd;
+	color:#C0C6D1;
 }
 
 .deleteBtn {
@@ -113,12 +76,10 @@
 	color:  rgb(180,180,180);
 	font-size: 20px;
 	cursor: pointer;
-	transition: 0.25s ease;
 }
 
 .deleteBtn:hover {
 	color: red;
-	font-size: 25px;
 }
 
 .addScheduleBtnBox {
@@ -126,26 +87,51 @@
 }
 
 .addScheduleBtn {
-	margin: 15px;
 	cursor: pointer;
-	width: 50%;
+	width: 100%;
 	font-size: 15px;
 	font-weight: bold;
-	color:  rgb(180,180,180);
+	color:  #8D94A2;
 	margin-top: 30px;
 	height: 45px;
-	border: 2px solid rgb(180,180,180);
+	border-style : none;
 	border-radius: 10px;
-	background-color: white;
+	background-color:#E9ECEF;
 }
-
-.addScheduleBtn:hover {
-	border: 2px solid bisque;
-	background-color: white;
-	color: bisque;
+.titleBox{
+	align-items : center;
+	justify-content : space-between;
+	display: flex;
+}
+.title{
+	font-size : 17px;
+	font-weight : bold;
+	color : #888D92;
 }
 .more{
 	margin-left : 20px;
 	text-decoration: none;
 	color : rgb(150,150,150);
+}
+.line{
+	color : #ddd;
+	margin : 10px 0;
+}
+.time{
+	font-weight :600;
+	color :#495057;
+	align-self  : center;
+	font-size: 35px;
+}
+.locationBox{
+	margin-top : 20px;
+	display: flex;
+}
+.location{
+	width: 10%;
+}
+.address{
+	font-weight : bold;
+	font-size: 15px;
+	color : darkgray;
 }

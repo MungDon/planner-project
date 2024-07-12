@@ -2,11 +2,13 @@ package com.planner.controller;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.planner.dto.request.schedule.ScheduleDTO;
+import com.planner.dto.request.schedule.TodayInfo;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.MemberStatus;
 import com.planner.service.ScheduleService;
@@ -24,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PlannerController {
 
 	private final ScheduleService scheduleService;
+
 	private final static Long NO_TEAM = -1L;
 	
 	
@@ -39,10 +42,12 @@ public class PlannerController {
 			if (detail.getMember_status().equals(MemberStatus.NOT_DONE.getCode())) {
 				return "redirect:/oauth2/auth/signup";
 			}
-			String currentDate = CommonUtils.getCurrentDate();
-			List<ScheduleDTO> todaySchedule = scheduleService.schedule_select(detail.getMember_id(), currentDate, NO_TEAM);
+			TodayInfo todayInfo = CommonUtils.getTodayInfo();
+			List<ScheduleDTO> todaySchedule = scheduleService.schedule_select(detail.getMember_id(), todayInfo.getCurrentDate(), NO_TEAM);
+			model.addAttribute("todayInfo", todayInfo);
 			model.addAttribute("todaySchedule", todaySchedule);
 			model.addAttribute("member", detail);
+	    
 			return "main";
 		}
 		return "redirect:/member/anon/login";
