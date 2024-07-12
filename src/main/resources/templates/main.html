@@ -30,7 +30,7 @@
 				<div class="todayTextBox">
 					<span class="todayText">오늘의 일과</span>
 				</div>
-				<div class="todaySchedule" th:each="schedule ,loop : ${todaySchedule}" th:classappend="${loop.count != todaySchedule.size()} ? 'line'">
+				<div class="todaySchedule" th:each="schedule ,loop : ${todaySchedule}"  th:if="${loop.index < 2}" th:classappend="${loop.count < 2} ? 'line'">
 					<div class="top">
 						<div class="title">
 							<span class="head">일정</span>
@@ -50,6 +50,7 @@
 					<span th:if="${#strings.isEmpty(schedule.address)}" class="head">주소</span>
 					<span th:if="${#strings.isEmpty(schedule.address)}" class="scheduleContent" th:text="${schedule.address}"></span>
 				</div>
+					<a class="more" href="/planner/calendar" th:if="${todaySchedule.size() > 2}">..더보기</a>
 				<div class="addScheduleBtnBox">
 					<button class="addScheduleBtn" type="button">일정 추가하기</button>
 				</div>

@@ -1,0 +1,54 @@
+@charset "UTF-8";
+
+.pwChkMain *{
+	margin:revert;
+}
+.pwChkMain {
+	margin-top: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.pwChkBox {
+	border: 1px solid #ddd;
+	border-radius: 20px;
+	padding: 50px;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0px 0px 10px 1px #a8c9ff;
+}
+/* input */
+.pwChkBox>input {
+	font-size: 20px;
+	width: 100%;
+	margin: 15px 0 15px 0;
+	border-style: none;
+	border-bottom: 2px solid #ddd;
+}
+
+.pwChkBox>input:focus {
+	outline: none;
+	border-bottom: 2px solid skyblue;
+}
+
+.pwChkBox>input::placeholder {
+	font-size: 15px;
+}
+.pwChkText{
+	color: gray;
+	font-weight: bold;
+	font-size: 27px;
+	margin-bottom: 20px;
+}
+/* btn */
+.pwChkBtn {
+	width: 100%;
+	font-size: 15px;
+	font-weight: bold;
+	color: gray;
+	margin-top: 30px;
+	height: 45px;
+	border: 2px solid gray;
+	border-radius: 10px;
+	background-color: white;
+}

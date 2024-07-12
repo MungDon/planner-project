@@ -11,8 +11,8 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.planner.handler.CustomAccessDeniedHandler;
 import com.planner.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.planner.oauth.handler.CustomAccessDeniedHandler;
 import com.planner.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.planner.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.planner.oauth.service.CustomOAuth2UserService;
@@ -64,14 +64,14 @@ public class SecurityConfig {
           configure.loginPage("/member/anon/login")								// 스프링 소셜로그인 페이지가 아닌 사용자 정의 로그인 페이지 지정
           		  .authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))// OAuth2 인증 엔드포인트 설정
                   .userInfoEndpoint(config -> config.userService(customOAuth2UserService)) /// OAuth2 사용자 정보 엔드포인트 설정
-                  .successHandler(oAuth2AuthenticationSuccessHandler)	// OAuth2 로그인 성공 핸들러 설정
-                  .failureHandler(oAuth2AuthenticationFailureHandler)		// OAuth2 로그인 실패 핸들러 설정
+                  .successHandler(oAuth2AuthenticationSuccessHandler)		// OAuth2 로그인 성공 핸들러 설정
+                  .failureHandler(oAuth2AuthenticationFailureHandler)			// OAuth2 로그인 실패 핸들러 설정
   )	
           .formLogin((formLogin) -> formLogin											// 폼(일반) 로그인 정의
 					.loginPage("/member/anon/login")									// 로그인페이지 설정
 					.usernameParameter("member_email")							// 시큐리티 Username 사용자정의
 					.passwordParameter("member_password") 						//시큐리티 password 사용자정의
-					.failureUrl("/member/anon/fail")									// 로그인 실패시 URL
+					.failureUrl("/member/anon/fail")										// 로그인 실패시 URL
 					.defaultSuccessUrl("/member/auth",true))						// 로그인 성공시 URL 	
           			
           

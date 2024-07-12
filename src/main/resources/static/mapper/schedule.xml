@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="team_id != -1">
 			S.team_id = #{team_id}
 		</if>
-		and to_char(schedule_start, 'yyyyMMdd') = #{date}
+		and #{date} between to_char(schedule_start, 'yyyyMMdd') and to_char(schedule_end, 'yyyyMMdd')
         ORDER BY S.schedule_start ASC, S.schedule_end ASC, S.schedule_id ASC
 	</select>
 	

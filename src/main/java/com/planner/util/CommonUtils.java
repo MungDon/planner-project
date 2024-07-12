@@ -1,5 +1,7 @@
 package com.planner.util;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Map;
 
@@ -56,5 +58,13 @@ public class CommonUtils {
 		if(conditionalStatement) {
 			throw new RestCustomException(errorCode);
 		}
+	}
+	
+	/*오늘 날짜 가져오기*/
+	public static String getCurrentDate() {
+		LocalDate today = LocalDate.now();
+		 DateTimeFormatter todayFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
+		String todayProvide = today.format(todayFormat);
+		return todayProvide;
 	}
 }

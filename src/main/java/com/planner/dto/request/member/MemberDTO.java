@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.planner.enums.MemberRole;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public class MemberDTO {
 	@NotBlank(message = "이름은 필수입니다.")
 	private String member_name;				// 이름
 	
-	@NotBlank(message = "생년월일은 필수입니다.")
+	@NotNull(message = "생년월일은 필수입니다.")
 	private LocalDate member_birth;			// 생년월일
 	
 	@NotBlank(message = "이메일은 필수입니다.")

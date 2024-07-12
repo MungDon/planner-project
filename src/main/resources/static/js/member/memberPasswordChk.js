@@ -21,6 +21,7 @@ $(function() {
 							if (result.isDenied) {
 								return;
 							}
+
 							const success_ajaxObj = {
 								url: API_LIST.DELETE_MEMBER,
 								method: "delete",
@@ -34,9 +35,10 @@ $(function() {
 									const thenFn = () => {
 										location.href = PAGE_LIST.MAIN_PAGE;
 									};
-									swalCall("실패","탈퇴실패.","error",thenFn);
+									swalCall("실패", "탈퇴실패.", "error", thenFn);
 								}
 							};
+
 							ajaxCall(success_ajaxObj);
 						};
 						swalCall("회원탈퇴", "정말 회원탈퇴를 하시겠습니까?", "question", thenFn, "예", true);
@@ -44,7 +46,7 @@ $(function() {
 				}
 			},
 			errorFn: () => {
-				swalCall("경고","현재 비밀번호가 틀렸습니다.","warning");
+				swalCall("경고", "현재 비밀번호가 틀렸습니다.", "warning");
 			}
 		};
 		ajaxCall(ajaxObj);

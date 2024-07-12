@@ -1,7 +1,5 @@
 package com.planner.controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -27,6 +25,8 @@ public class PlannerController {
 
 	private final ScheduleService scheduleService;
 	private final static Long NO_TEAM = -1L;
+	
+	
 	@GetMapping("/intro")
 	public String intro() {
 		return "intro";
@@ -39,10 +39,8 @@ public class PlannerController {
 			if (detail.getMember_status().equals(MemberStatus.NOT_DONE.getCode())) {
 				return "redirect:/oauth2/auth/signup";
 			}
-			LocalDate today = LocalDate.now();
-			 DateTimeFormatter todayFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
-			String todayProvide = today.format(todayFormat);
-			List<ScheduleDTO> todaySchedule = scheduleService.schedule_select(detail.getMember_id(), todayProvide, NO_TEAM);
+			String currentDate = CommonUtils.getCurrentDate();
+			List<ScheduleDTO> todaySchedule = scheduleService.schedule_select(detail.getMember_id(), currentDate, NO_TEAM);
 			model.addAttribute("todaySchedule", todaySchedule);
 			model.addAttribute("member", detail);
 			return "main";

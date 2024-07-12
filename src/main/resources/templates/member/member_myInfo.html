@@ -57,7 +57,7 @@
 					<!-- 비밀번호 변경 -->
 					<a class="userPwBtn" href="/member/anon/find/pw" th:if="${memberDTO.oauth_id =='none'}">비밀번호 변경</a>
 					<!-- 일반 로그인 -->
-					<a th:if="${memberDTO.oauth_id =='none'}" class="userDeleteBtn" href="/member/auth/chk?url=delete">회원탈퇴</a>
+					<a th:if="${memberDTO.oauth_id =='none'}" class="userDeleteBtn" href="/member/auth/pw/chk?url=delete">회원탈퇴</a>
 					<!-- 소셜 로그인 -->
 					<button th:if="${memberDTO.oauth_id !='none'}" type="button" class="userDeleteBtn">회원탈퇴</button>
 				</td>

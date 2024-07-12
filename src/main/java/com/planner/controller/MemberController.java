@@ -48,7 +48,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
-//TODO - 이메일 체크 JS 까지 서윗알러트 바꿈
+	
 	private final MemberService memberService;
 	private final FriendService friendService;
 	private final EmailService emailService;
@@ -110,10 +110,8 @@ public class MemberController {
 
 	/* 비밀번호 찾기 */
 	@GetMapping("/anon/find/pw")
-	public String findPwForm(@UserData ResMemberDetail detail, Model model) {
-		if (!CommonUtils.isEmpty(detail)) {
-			model.addAttribute("member_email", detail.getMember_email());
-		}
+	public String findPwForm(HttpServletRequest request, HttpServletResponse response) {
+		CommonUtils.removeCookiesAndSession(request, response);
 		return "/member/member_find_pw";
 	}
 
@@ -146,6 +144,7 @@ public class MemberController {
 	}
 
 	/* 로그인시에 상태코드 검사 */
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/auth")
 	public String memberStatusChk(@UserData ResMemberDetail detail, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -163,7 +162,8 @@ public class MemberController {
 	}
 
 	/* 소셜로그인에서 생긴 쿠키 제거 후 로그아웃 */
-	@GetMapping("/anon/signout")
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/auth/signout")
 	public String signout(HttpServletRequest request, HttpServletResponse response) {
 		CommonUtils.removeCookiesAndSession(request, response);
 		return "redirect:/member/logout";

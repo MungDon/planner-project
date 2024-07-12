@@ -1,21 +1,40 @@
 $(function() {
-	let imgNum = Math.floor((Math.random() * 12)) + 1;
+	let prevImgNum = 0; // 이전 이미지 번호
+	let prevScrollPos = 0;
+
 	const updateImage = () => {
-		let imgNum2 = Math.floor((Math.random() * 12)) + 1;
-		while (imgNum === imgNum2) {
-			imgNum2 = Math.floor((Math.random() * 12)) + 1;
+		let imgNum = Math.floor((Math.random() * 12)) + 1;
+		if (imgNum === prevImgNum) {
+			imgNum = prevImgNum+1;
+			if(imgNum ==13){
+				imgNum = 1;
+			}
 		}
-		$(".myeongUnBox").html(
-			'<img class="img" src="/images/' + imgNum2 + '.png">'
-		);
-		imgNum = imgNum2;
-	}
+		prevImgNum = imgNum;
+
+		// 새 이미지 요소 생성
+		let newImage = $('<img>', {
+			'class': 'img',
+			'src': '/images/' + imgNum + '.png'
+		});
+		// 현재 스크롤 위치 저장
+		prevScrollPos = $(window).scrollTop();
+
+		// 이미지 로드 완료 후 처리
+		newImage.on('load', function() {
+			// 기존 이미지 요소 제거
+			$(".myeongUnBox").empty().append(newImage);
+
+			// 스크롤 위치 조정
+			$(window).scrollTop(prevScrollPos);
+		});
+	};
 
 	// 페이지가 로드될 때 첫 이미지 설정
 	updateImage();
 
-	// 일정 시간마다 업데이트 (예: 5초마다)
-	setInterval(updateImage, 15000); // 5000ms = 5초
+	// 일정 시간마다 업데이트 (예: 15초마다)
+	setInterval(updateImage, 15000); // 15000ms = 15초
 });
 const result = $("#result").val();
 

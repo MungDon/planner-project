@@ -78,7 +78,7 @@ public class MemberService {
 	/* 비번체크 */
 	public void isPasswordValid(String currnetPw, ResMemberDetail member) {
 		CommonUtils.throwRestCustomExceptionIf(CommonUtils.isEmpty(member), ErrorCode.NO_ACCOUNT);
-		CommonUtils.throwRestCustomExceptionIf(member.getOauth_id().equals("none") && !CommonUtils.isEmpty(currnetPw), ErrorCode.NO_ACCOUNT);
+		CommonUtils.throwRestCustomExceptionIf(member.getOauth_id().equals("none") && CommonUtils.isEmpty(currnetPw), ErrorCode.NO_ACCOUNT);
 		CommonUtils.throwRestCustomExceptionIf(!passwordEncoder.matches(currnetPw, member.getMember_password()), ErrorCode.NO_ACCOUNT);
 	}
 
@@ -143,7 +143,7 @@ public class MemberService {
 		// 회원이여야하는데 회원이아닐때
 		CommonUtils.throwRestCustomExceptionIf(shouldBeMember && CommonUtils.isEmpty(user),ErrorCode.NO_ACCOUNT);
 		// 탈퇴한 회원이면 예외 발생
-		CommonUtils.throwRestCustomExceptionIf(user.getMember_status().equals(MemberStatus.DELETE.getCode()), ErrorCode.WITHDRAWN_MEMBER);
+		CommonUtils.throwRestCustomExceptionIf(!CommonUtils.isEmpty(user) && user.getMember_status().equals(MemberStatus.DELETE.getCode()), ErrorCode.WITHDRAWN_MEMBER);
 
 	}
 
