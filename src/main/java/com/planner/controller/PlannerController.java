@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.planner.dto.request.admin.NoticeDTO;
 import com.planner.dto.request.schedule.ScheduleDTO;
 import com.planner.dto.request.schedule.TodayInfo;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.MemberStatus;
+import com.planner.service.NoticeService;
 import com.planner.service.ScheduleService;
 import com.planner.util.CommonUtils;
 import com.planner.util.UserData;
@@ -26,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PlannerController {
 
 	private final ScheduleService scheduleService;
+	private final NoticeService noticeService;
 
 	private final static Long NO_TEAM = -1L;
 	
@@ -44,6 +47,9 @@ public class PlannerController {
 			}
 			TodayInfo todayInfo = CommonUtils.getTodayInfo();
 			List<ScheduleDTO> todaySchedule = scheduleService.schedule_select(detail.getMember_id(), todayInfo.getCurrentDate(), NO_TEAM);
+			List<NoticeDTO> notice = noticeService.noticeSelect(4, 4);
+			model.addAttribute("notice", notice);
+			model.addAttribute("todayInfo", todayInfo);
 			model.addAttribute("todayInfo", todayInfo);
 			model.addAttribute("todaySchedule", todaySchedule);
 			model.addAttribute("member", detail);

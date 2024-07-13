@@ -68,7 +68,7 @@ public class CommonUtils {
 		 DateTimeFormatter todayFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
 		String todayProvide = today.format(todayFormat);
 		
-		DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("E", Locale.ENGLISH);
+		DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("E", Locale.KOREAN);
 		String dayOfWeek = today.format(dayFormatter);
 		
 		TodayInfo todayInfo = TodayInfo.builder()

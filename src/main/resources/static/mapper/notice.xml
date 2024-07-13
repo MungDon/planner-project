@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
     SELECT *
     FROM notice
     ORDER BY notice_id DESC
-    LIMIT #{start} OFFSET #{end};
+    LIMIT #{start}
 	</select>
 	
 	<select id="noticeAllSelect" resultType="int">

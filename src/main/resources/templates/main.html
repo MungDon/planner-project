@@ -24,11 +24,14 @@
 			<div class="noticeBox">
 				<div class="noticeTextBox">
 					<span class="noticeText">공지사항</span>
+					<div class="noticeContent" th:each="notice , loop: ${notice}" th:if="${loop.index < 4}">
+						<span class="noticeTile" th:text="${notice.notice_title}"></span>
+					</div>
 				</div>
 			</div>
 			<div class="todayBox">
 				<div class="todayTextBox">
-					<span class="todayText" th:text="${#strings.substring(todayInfo.currentDate, todayInfo.currentDate.length() - 2)+todayInfo.today}"></span>
+					<span class="todayText" th:text="${#strings.substring(todayInfo.currentDate, todayInfo.currentDate.length() - 2)+'('+todayInfo.today+')'}"></span>
 				</div>
 				<div class="addScheduleBtnBox">
 					<button class="addScheduleBtn" type="button">일정 추가하기</button>

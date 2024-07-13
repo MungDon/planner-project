@@ -42,7 +42,7 @@
 	flex-direction: column;
 }
 
-.todaySchedule {
+.todaySchedule,.noticeContent {
 	border-radius: 20px;
 	background-color : white;
 	padding: 20px;
@@ -128,7 +128,7 @@
 	display: flex;
 }
 .location{
-	width: 10%;
+	width: 15%;
 }
 .address{
 	font-weight : bold;

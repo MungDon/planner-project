@@ -35,5 +35,11 @@ function animatePageTransition() {
     // 예시로 setTimeout을 사용하여 애니메이션 완료 후 isAnimating을 false로 설정
     setTimeout(() => {
         isAnimating = false;
-    }, 500); // 애니메이션 지속 시간에 맞춰 설정 (예시로 1초)
+/*
+        // 페이지가 마지막 페이지일 경우 메인 페이지로 이동
+        if (page === lastPage) {
+            location.href = PAGE_LIST.MAIN_PAGE;
+        }
+*/
+    }, 500); // 애니메이션 지속 시간에 맞춰 설정 (예시로 1초) 현재 .5초
 }
