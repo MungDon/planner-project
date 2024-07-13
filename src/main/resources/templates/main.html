@@ -3,62 +3,94 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-<meta name="_csrf" th:content="${_csrf.token}"/>
-<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 <link rel="stylesheet" type="text/css" href="/css/header.css">
 <link rel="stylesheet" type="text/css" href="/css/main.css">
 <link rel="stylesheet" type="text/css" href="/css/calendar/calendar.css">
 <link rel="stylesheet" type="text/css" href="/css/map/kakaomap.css">
-<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	<header th:replace="~{/fragments/header :: header}"></header>
 	<main class="mainCon">
 		<input type="hidden" id="result" th:value="${result}">
-		<div class="myeongUnBox">
-			
-		</div>
+		<div class="myeongUnBox"></div>
 		<div class="middle">
 			<div class="noticeBox">
 				<div class="noticeTextBox">
 					<span class="noticeText">공지사항</span>
-					<div class="noticeContent" th:each="notice , loop: ${notice}" th:if="${loop.index < 4}">
-						<span class="noticeTile" th:text="${notice.notice_title}"></span>
+					<div class="noticeContent" th:each="notice , loop: ${notice}"
+						th:if="${loop.index < 4}">
+						<span class="noticeTitle" th:text="${notice.notice_title}" th:data-id="${notice.notice_id}"></span>
 					</div>
 				</div>
 			</div>
 			<div class="todayBox">
 				<div class="todayTextBox">
-					<span class="todayText" th:text="${#strings.substring(todayInfo.currentDate, todayInfo.currentDate.length() - 2)+'('+todayInfo.today+')'}"></span>
+					<span class="todayText"
+						th:text="${#strings.substring(todayInfo.currentDate, todayInfo.currentDate.length() - 2)+'('+todayInfo.today+')'}"></span>
 				</div>
 				<div class="addScheduleBtnBox">
 					<button class="addScheduleBtn" type="button">일정 추가하기</button>
 				</div>
-				<div class="todaySchedule" th:each="schedule ,loop : ${todaySchedule}"  th:if="${loop.index < 2}">
+				<div class="todaySchedule"
+					th:each="schedule ,loop : ${todaySchedule}"
+					th:if="${loop.index < 2}">
 					<div class="titleBox">
 						<span class="title" th:text="${schedule.schedule_title}"></span>
-						<button class="deleteBtn" type="button" th:value="${schedule.schedule_id}">X</button>
+						<button class="deleteBtn" type="button"
+							th:value="${schedule.schedule_id}">X</button>
 					</div>
-					<span class="time" th:text="${#temporals.format(schedule.schedule_start,'HH:mm')+'~'+#temporals.format(schedule.schedule_end,'HH:mm')}"></span>
+					<div class="timeBox">
+						<span class="time" th:text="${#temporals.format(schedule.schedule_start,'HH:mm')+'~'+#temporals.format(schedule.schedule_end,'HH:mm')}"></span>
+					</div>
 					<hr color="#ddd" class="line">
-					<span class="scheduleContent" th:text="${schedule.schedule_content}"></span>
+					<span class="scheduleContent"
+						th:text="${schedule.schedule_content}"></span>
 					<div class="locationBox">
-						<img src="/images/location.png" class="location">	
-						<div>				
-							<span th:if="${!#strings.isEmpty(schedule.place)}" class="address" th:text="${schedule.place}"></span><br>
-							<span th:if="${!#strings.isEmpty(schedule.address)}" class="address" th:text="${schedule.address}"></span>
+						<img src="/images/location.png" class="location">
+						<div>
+							<span th:if="${!#strings.isEmpty(schedule.place)}"
+								class="address" th:text="${schedule.place}"></span><br> <span
+								th:if="${!#strings.isEmpty(schedule.address)}" class="address"
+								th:text="${schedule.address}"></span>
 						</div>
 					</div>
 				</div>
-					<a class="more" href="/planner/calendar" th:if="${todaySchedule.size() > 2}">..더보기</a>
+				<a class="more" href="/planner/calendar"
+					th:if="${todaySchedule.size() > 2}">..더보기</a>
+			</div>
+		</div>
+		
+		<!-- 이용약관 모달 -->
+		<div id="noticeModal">
+			<div class="noticeModalBody">
+				<div class="Modaltop">
+					<button type="button" class="Xbtn"
+						onclick="closeModal('noticeModal')">X</button>
+				</div>
+				<div class="modalMain">
+					<div class="noticeDetail">
+					</div>
+				</div>
+				<div class="btns">
+					<button type="button" class="closeBtn"
+						onclick="closeModal('noticeModal')">확인</button>
+				</div>
 			</div>
 		</div>
 	</main>
-	
+
 	<script src="/js/common.js"></script>
 	<script src="/js/main.js"></script>
+	<script src="/js/modal.js"></script>
 	<script type="text/javascript" src="/js/header.js"></script>
 	<script th:src="@{/js/calendar/calendar.js}"></script>
 </body>

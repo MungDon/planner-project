@@ -2,10 +2,14 @@ package com.planner.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.planner.dto.request.admin.NoticeDTO;
 import com.planner.dto.request.schedule.ScheduleDTO;
@@ -59,4 +63,12 @@ public class PlannerController {
 		return "redirect:/member/anon/login";
 	}
 
+	@GetMapping("/notice/detail/{notice_id}")
+	@ResponseBody
+	public ResponseEntity<NoticeDTO> noticeContent(@PathVariable("notice_id") Long notice_id,Model model) {
+		log.info("요청옴?");
+		NoticeDTO noticeDTO = noticeService.noticeContent(notice_id);
+		model.addAttribute("noticeDTO", noticeDTO);
+		return ResponseEntity.ok(noticeDTO);
+	}
 }

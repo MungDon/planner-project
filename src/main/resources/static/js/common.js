@@ -14,7 +14,8 @@ const API_LIST = {
 	PASSWORD_CHK: "/member/auth/pw/chk",
 	MEMBER_RESTORE: "/member/anon/restore",
 	CHANGE_PASSWORD: "/member/anon/pw/change",
-	DELETE_SCHEDULE: "/planner/schedule/del"
+	DELETE_SCHEDULE: "/planner/schedule/del",
+	NOTICE_DETAIL : "/notice/detail/"
 }
 
 // 단순 페이지 이동 url 상수
