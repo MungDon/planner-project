@@ -39,6 +39,7 @@ $(function() { // $(document).ready(function(){}); 와 같음
 					}
 				};
 				swalCall("성공", "인증 코드가 해당 이메일로 전송되었습니다.", "success", thenFn);
+				$(".resendBtn").prop("disabled", false);
 			}
 		}
 		ajaxCall(ajaxObj);

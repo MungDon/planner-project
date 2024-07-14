@@ -123,13 +123,13 @@
 }
 
 .timeBox {
-	width : 100%;
+	width: 100%;
 	display: flex;
 	justify-content: center;
 	font-weight: 600;
 	color: #495057;
 	font-size: 35px;
-	word-break: break-all; 
+	word-break: break-all;
 }
 
 .locationBox {
@@ -179,6 +179,37 @@
 	align-items: center;
 }
 
-.noticeDetailBox{
+.noticeDetailBox {
 	display: flex;
+}
+
+.noticeTitle {
+	font-size: 17px;
+	font-weight: bold;
+	color: #888D92;
+	cursor: pointer;
+}
+
+.noticeDetail {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.notice_title {
+	border-bottom: 2px solid black;
+	justify-content: center;
+	font-weight: 600;
+	color: #495057;
+	font-size: 35px;
+	justify-content: center;
+}
+
+.notice_content {
+	color: #888D92;
+	font-size: 25px;
+}
+
+.Xbtn:hover,.closeBtn:hover {
+	color: red;
 }

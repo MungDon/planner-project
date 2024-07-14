@@ -92,9 +92,7 @@ const renderNoticeDetail = (details) => {
     noticeDetailContainer.innerHTML = ''; // 기존 내용을 지웁니다.
 
         noticeDetailContainer.innerHTML = `
-        	<div class="noticeDetailBox">
         	    <span class='notice_title'>${details.notice_title}</span>
             	<span class='notice_content'>${details.notice_content}</span>
-            </div>
         `;
 }
