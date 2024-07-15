@@ -19,7 +19,8 @@ import com.planner.dto.request.admin.NoticeDTO;
 import com.planner.service.NoticeService;
 
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin")

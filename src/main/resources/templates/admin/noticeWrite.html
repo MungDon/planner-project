@@ -13,12 +13,12 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
 </head>
 <body>
-	<form th:action="@{/admin/notice}" method="post"> 
+	<form th:action="@{/admin/notice}" method="post" id="noticeForm"> 
 		공지사항 제목:<input type="text" name="notice_title" required>				<br/>
 		<div class="post-form">
-			<textarea name="postContent" id="summernote"></textarea>
+			<textarea name="notice_content" id="summernote"></textarea>
 		</div>  
-		<button type="submit">글 작성</button>
+		<button type="button" class="saveBtn">글 작성</button>
 	</form>
 	<script src="/js/common.js"></script>
 	<script src="/js/notice/editor.js"></script>

@@ -1,4 +1,4 @@
-package com.planner.dto.request.notice;
+package com.planner.dto.request.admin;
 
 import lombok.Builder;
 import lombok.Getter;

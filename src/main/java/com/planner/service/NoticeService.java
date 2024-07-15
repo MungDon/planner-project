@@ -2,8 +2,11 @@ package com.planner.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.planner.dto.request.admin.NoticeDTO;
-import com.planner.dto.request.notice.ReqNoticeImg;
+import com.planner.dto.request.admin.ReqNoticeImg;
 import com.planner.exception.ErrorCode;
 import com.planner.mapper.NoticeMapper;
 import com.planner.util.CommonUtils;
@@ -29,9 +32,38 @@ public class NoticeService {
 	
 	@Transactional
 	public int noticeInsert(NoticeDTO noticeDTO) {
-		return noticeMapper.noticeInsert(noticeDTO);
+		 int result =  noticeMapper.noticeInsert(noticeDTO);
+		 insertHotelSid(noticeDTO.getNotice_id());
+		return result;
+	}
+	/*이미지 테이블에 공지사항 시퀀스 삽입*/
+	private void insertHotelSid(Long notice_id) {
+		// 저장된 소개글 내용중 이미지 파일명만 가져옴
+		List<String> imgFileNames = extractImgFileName(notice_id);
+		for(String imgFileName : imgFileNames) {
+			noticeMapper.insertNoticeId(imgFileName, notice_id);
+		}
 	}
 	
+	private List<String> extractImgFileName(Long notice_id) {
+	    String content = noticeMapper.findContentBynoticeId(notice_id);
+	    List<String> imgFileNames = new ArrayList<>();
+
+	    // 이미지 태그에서 src 속성 값에서 파일명 추출
+	    String imgPattern = "<img[^>]+src\\s*=\\s*\"([^\">]+)\"";
+	    Pattern pattern = Pattern.compile(imgPattern);
+	    Matcher matcher = pattern.matcher(content);
+
+	    while (matcher.find()) {
+	        String src = matcher.group(1); // img 태그의 src 속성 값
+	        // 파일명 추출: 마지막 '/' 이후의 문자열
+	        String fileName = src.substring(src.lastIndexOf('/') + 1);
+	        imgFileNames.add(fileName);
+	    }
+
+	    return imgFileNames;
+	}
+	   
 	@Transactional(readOnly = true)
 	public List<NoticeDTO> noticeSelect( int pageNum, int pageSize){
 		int start = (pageNum - 1)*pageSize + 1;

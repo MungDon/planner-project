@@ -96,4 +96,11 @@ $(function() {
 		};
 		ajaxCall(ajaxObj);
 	};
+	
+	$(".saveBtn").click(()=>{
+		const noticeForm = $("#noticeForm");
+		const editorContent= $(".note-editable").html();
+		noticeForm.find('textarea[name="notice_content"]').val(editorContent);
+		noticeForm.submit();
+	});
 });

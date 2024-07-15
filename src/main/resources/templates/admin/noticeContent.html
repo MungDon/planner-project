@@ -29,7 +29,7 @@
             <td class="noticeTitle" th:text="${noticeDTO.notice_title}" id="noticeTitel"></td>
         </tr>
         <tr>
-            <td class="noticeContent"th:text="${noticeDTO.notice_content}" id="noticeContent"></td>
+            <td class="noticeContent"th:utext="${noticeDTO.notice_content}" id="noticeContent"></td>
         </tr>
     </table>
     <input type="hidden" th:value="${noticeDTO.notice_id}" id="noticeNumber"/>

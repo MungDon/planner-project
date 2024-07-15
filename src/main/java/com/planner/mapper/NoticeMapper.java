@@ -6,7 +6,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.planner.dto.request.admin.NoticeDTO;
-import com.planner.dto.request.notice.ReqNoticeImg;
+import com.planner.dto.request.admin.ReqNoticeImg;
+
+import lombok.val;
 
 @Mapper
 public interface NoticeMapper {
@@ -27,4 +29,10 @@ public interface NoticeMapper {
 	
 	/*이미지 삭제*/
 	int deleteImg(@Param(value = "imgName")String imgName);
+	
+	/*이미지 테이블에 공지사항 시퀀스 삽입*/
+	void insertNoticeId(@Param(value = "imgFileName")String imgFileName, @Param(value = "notice_id")Long notice_id);
+	
+	/*등록된 에디터 내용 가져오기*/
+	String findContentBynoticeId(@Param(value = "notice_id")Long notice_id);
 }

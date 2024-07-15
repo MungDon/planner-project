@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.planner.mapper.NoticeMapper">
-	<insert id="noticeInsert" parameterType="NoticeDTO">
+	<insert id="noticeInsert" parameterType="NoticeDTO" useGeneratedKeys="true" keyColumn="notice_id" keyProperty="notice_id">
 		insert into notice values (
-			notice_seq.nextval,
+			nextval('notice_seq'),
 			#{notice_title},
 			#{notice_content}
 		)
@@ -24,6 +24,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 			#{extension}
 		)
 	</insert>
+	
+	<!-- 이미지 테이블에 공지사항 시퀀스 삽입 -->
+	<update id="insertNoticeId">
+		UPDATE 	notice_img
+		SET		notice_id = #{notice_id}
+		WHERE
+			save_name = #{imgFileName}
+	</update>
+	
+	<!-- 등록된 에디터 내용 가져오기 -->
+	<select id="findContentBynoticeId" resultType="String">
+		SELECT	notice_content
+		FROM	notice
+		WHERE	notice_id = #{notice_id}
+	</select>
+	
 	
 	<select id="noticeSelect" resultType="NoticeDTO">
 <!-- 		select b.* from  -->
