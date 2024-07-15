@@ -22,7 +22,7 @@ const validateInsert = () => {
 	const failText = document.getElementById("failText");
 	const pw = document.getElementById('pw').value;
 	const pw2 = document.getElementById('pw2').value
-	const passwordRegex = /^(?=.*[a-z]{5,})(?=.*[!@])(?=.*\d).{7,}$/;
+	const passwordRegex = /^(?=.*[a-z]{5,})(?=.*[!@])(?=.*\\d).{7,}$/;
 	if (!genderSelected) {
 		// 라디오 버튼 중 하나도 선택되지 않은 경우 경고 메시지 표시 및 폼 제출 방지
 		swalCall("경고", "성별을 선택해 주세요.", "warning");

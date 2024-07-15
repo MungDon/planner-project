@@ -9,13 +9,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 			#{notice_content}
 		)
 	</insert>
+	
+	<!-- 공지사항 이미지저장 -->
+	<insert id="saveImg" parameterType="ReqNoticeImg">
+		INSERT INTO notice_img(
+			notice_img_id,
+			original_name,
+			save_name,
+			extension
+		)	VALUES	(
+			nextval('notice_img_seq'),
+			#{originalName},
+			#{saveName},
+			#{extension}
+		)
+	</insert>
+	
 	<select id="noticeSelect" resultType="NoticeDTO">
-		select b.* from 
-		(select n.*, rownum as rn
-			from notice n
-			order by notice_id desc) b
-		where rn between #{start} and #{end}
-		order by rn desc -->
+<!-- 		select b.* from  -->
+<!-- 		(select n.*, rownum as rn -->
+<!-- 			from notice n -->
+<!-- 			order by notice_id desc) b -->
+<!-- 		where rn between #{start} and #{end} -->
+<!-- 		order by rn desc  -->
+	SELECT b.*
+	FROM (
+	    SELECT n.*, ROW_NUMBER() OVER (ORDER BY notice_id DESC) AS rn
+	    FROM notice n
+	) b
+	WHERE b.rn BETWEEN #{start} AND #{end}
+	ORDER BY b.rn DESC;
 	</select>
 	
 	<select id="noticeAllSelect" resultType="int">
@@ -37,5 +60,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 	<delete id="noticeDelete" parameterType="Long">
 		delete notice 
 		where notice_id = #{notice_id}
+	</delete>
+	
+	<!-- 이미지 삭제 -->
+	<delete id="deleteImg">
+		DELETE 
+		FROM	notice_img
+		WHERE
+			save_name = #{imgName}
 	</delete>
 </mapper>

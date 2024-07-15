@@ -1,14 +1,19 @@
 package com.planner.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.planner.dto.request.admin.NoticeDTO;
 import com.planner.service.NoticeService;
@@ -86,5 +91,21 @@ public class NoticeCotroller {
 	public String noticeDelete(@PathVariable("notice_id") Long notice_id) {
 		noticeService.noticeDelete(notice_id);
 		return "redirect:/admin/notice" ;
+	}
+	
+	/*이미지 업로드*/
+	@PostMapping("/upload/img")
+	@ResponseBody
+	public String imgUpload(@RequestParam(value = "file")MultipartFile multipartFile) throws IllegalStateException, IOException {
+		String imageName = noticeService.imgUpload(multipartFile);
+		return imageName;
+	}
+	
+	/*이미지 삭제*/
+	@DeleteMapping("/img/delete")
+	@ResponseBody
+	public ResponseEntity<String> deleteImg(@RequestParam(value = "imgName")String imgName){
+		noticeService.deleteImg(imgName);
+		return ResponseEntity.ok("ok");
 	}
 }

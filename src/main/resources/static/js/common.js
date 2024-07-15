@@ -15,7 +15,8 @@ const API_LIST = {
 	MEMBER_RESTORE: "/member/anon/restore",
 	CHANGE_PASSWORD: "/member/anon/pw/change",
 	DELETE_SCHEDULE: "/planner/schedule/del",
-	NOTICE_DETAIL : "/notice/detail/"
+	NOTICE_DETAIL : "/notice/detail/",
+	DELETE_NOTICE_IMG : "/admin/img/delete"
 }
 
 // 단순 페이지 이동 url 상수
@@ -60,6 +61,7 @@ const ajaxCall = ({ url, method, successFn, param = null, errorFn = defaultError
 
 /*스윗 알러트 공통*/
 const swalCall = (title, text, icon, thenFn, confirmButtonText = "확인", showCancelButton = false, cancelButtonText = "아니요") => {
+	
 	Swal.fire({
 		title: title,
 		html: text,

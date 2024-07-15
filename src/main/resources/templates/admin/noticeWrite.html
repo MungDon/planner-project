@@ -2,13 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="/css/team/board/summernote-lite.min.css">
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/team/board/summernote-lite.min.js"></script>
+	<script type="text/javascript" src="/js/team/board/summernote-ko-KR.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
 </head>
 <body>
 	<form th:action="@{/admin/notice}" method="post"> 
 		공지사항 제목:<input type="text" name="notice_title" required>				<br/>
-		공지사항 내용:<textarea name="notice_content" required></textarea>			<br/>
+		<div class="post-form">
+			<textarea name="postContent" id="summernote"></textarea>
+		</div>  
 		<button type="submit">글 작성</button>
 	</form>
+	<script src="/js/common.js"></script>
+	<script src="/js/notice/editor.js"></script>
 </body>
 </html>

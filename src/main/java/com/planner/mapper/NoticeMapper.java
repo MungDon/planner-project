@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.planner.dto.request.admin.NoticeDTO;
+import com.planner.dto.request.notice.ReqNoticeImg;
 
 @Mapper
 public interface NoticeMapper {
@@ -20,4 +21,10 @@ public interface NoticeMapper {
 	public int noticeUpdate(NoticeDTO dto);
 	
 	public int noticeDelete(Long notice_id);
+	
+	/*이미지 저장*/
+	void saveImg(ReqNoticeImg req);
+	
+	/*이미지 삭제*/
+	int deleteImg(@Param(value = "imgName")String imgName);
 }

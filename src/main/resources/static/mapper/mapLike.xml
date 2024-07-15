@@ -6,7 +6,7 @@
 
 	<insert id="MapLikeInsert" parameterType="MapLikeDTO">
 		insert into mapLike values(
-		mapLike_seq.NEXTVAL,
+		NEXTVAL('mapLike_seq'),
 		#{member_id},
 		#{map_title},
 		#{map_address}

@@ -10,9 +10,16 @@ const closeModal = (modalId) => {
 	modal.style.display = "none";
 }
 
-/*const modalOutSideEvent = (modalId) => {
+const modalOutSideEvent = (event) => {
+	const modalId = event.target;
 	closeModal(modalId);
 };
-$("#signModal").click(()=>{
-	modalOutSideEvent($(this));
-});*/
+$("#signModal").click((event) => {
+	modalOutSideEvent(event);
+});
+$("#authCodeModal").click((event) => {
+	modalOutSideEvent(event);
+});
+$("#noticeModal").click((event) => {
+	modalOutSideEvent(event);
+});

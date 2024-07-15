@@ -18,7 +18,7 @@
 			member_role,
 			member_reg
 		)	VALUES	(
-			member_seq.nextval,
+			nextval('member_seq'),
 			'2020-02-01',
 			'none',
 			'none',
@@ -29,7 +29,7 @@
 			#{member_status},
 			#{oauth_type},
 			#{member_role},
-			sysdate
+			now()
 		)
 	</insert>
 		<!--member_seq.NEXTVAL ,nextval('member_seq'),now(), sysdate -->
@@ -48,14 +48,14 @@
 				member_role,
 				oauth_id
 				) values (
-				member_seq.NEXTVAL,
+				nextval('member_seq'),
 				#{member_password},
 				#{member_name},
 				#{member_birth},
 				#{member_email},
 				#{member_phone},
 				#{member_gender},
-				sysdate,
+				now(),
 				'B',
 				#{member_role},
 				'none'
@@ -149,6 +149,7 @@
 			oauth_type = #{oauth_type}
 	</select>
 	
+	<!-- 계정 갯수 -->
 	<select id="accountCount">
 		SELECT 	count(*)
 		FROM	member
@@ -156,6 +157,7 @@
 			member_email = #{toEmail}
 	</select>
 	
+	<!-- 비번변경 -->
 	<update id="changePassword" parameterType="ReqChangePassword">
 		UPDATE 	member 
 		SET		member_password = #{newPassword}
