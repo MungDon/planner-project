@@ -168,7 +168,7 @@
 	padding: 20px;
 	background: #ffffff;
 	border-radius: 20px;
-	top: 50%;
+	height: 800PX;
 }
 
 .modalMain {
@@ -210,6 +210,6 @@
 	font-size: 25px;
 }
 
-.Xbtn:hover,.closeBtn:hover {
+.Xbtn:hover, .closeBtn:hover {
 	color: red;
 }

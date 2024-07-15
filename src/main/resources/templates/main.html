@@ -14,8 +14,7 @@
 	rel="stylesheet">
 <script
 	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	<header th:replace="~{/fragments/header :: header}"></header>
@@ -54,7 +53,7 @@
 					<span class="scheduleContent"
 						th:text="${schedule.schedule_content}"></span>
 					<div class="locationBox">
-						<img src="/images/location.png" class="location">
+						<img th:if="${!#strings.isEmpty(schedule.place)}" src="/images/location.png" class="location">
 						<div>
 							<span th:if="${!#strings.isEmpty(schedule.place)}"
 								class="address" th:text="${schedule.place}"></span><br> <span
@@ -72,16 +71,11 @@
 		<div id="noticeModal">
 			<div class="noticeModalBody">
 				<div class="Modaltop">
-					<button type="button" class="Xbtn"
-						onclick="closeModal('noticeModal')">X</button>
+					<button type="button" class="Xbtn" onclick="closeModal('noticeModal')">X</button>
 				</div>
 				<div class="modalMain">
 					<div class="noticeDetail">
 					</div>
-				</div>
-				<div class="btns">
-					<button type="button" class="closeBtn"
-						onclick="closeModal('noticeModal')">닫기</button>
 				</div>
 			</div>
 		</div>

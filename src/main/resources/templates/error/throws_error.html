@@ -3,29 +3,33 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 <title>Insert title here</title>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	<input type="hidden" id="errorMsg" th:value="${errorMessage}">
 	<input type="hidden" id="deleteMember" th:value="${deleteMember}">
+	<script src="/js/common.js"></script>
 	<script>
 		const errorMsg = document.getElementById("errorMsg").value;
 		const deleteMember = document.getElementById("deleteMember").value;
-		console.log(errorMsg);
-		if (errorMsg != null && errorMsg != "") {
-			Swal.fire({
-				  title: "경고",
-				  text: errorMsg,
-				  icon: "error",
-				  confirmButtonText:"확인"
-				}).then(() => {
-					history.go(-1);
-				});
-			if (errorMsg === deleteMember) {
-				location.href = "/member/anon/login";
+		if (errorMsg === deleteMember) {
+			const thenFn = (result) =>{
+				if(result.isConfirmed){
+					location.href = "/member/anon/login";
+				}
 			}
+			swalCall("경고",errorMsg,"error",thenFn);
+		}
+		if (errorMsg != null && errorMsg != "") {
+			const thenFn = () =>{
+				history.go(-1);
+			}
+			swalCall("경고",errorMsg,"error",thenFn);
 		}
 	</script>
 

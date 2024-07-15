@@ -3,16 +3,19 @@
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
+	<title>로그인</title>
 <link rel="stylesheet" type="text/css" href="/css/member/login.css">
 <link rel="stylesheet" type="text/css" href="/css/header.css"/>
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
 </head>
 <body>
 <header th:replace="~{/fragments/header :: header}"></header>
 		<main class="loginMain">
 		<form class="loginForm" method="post">
-		<h1>Planner</h1>
+		<h1 class="mainLogo">PLANDAS</h1>
 			<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
 			<input type="email" name="member_email" id="email" placeholder="이메일을 입력하세요"	/>
 			<input type="password" name="member_password" id="pw" placeholder="비밀번호를 입력하세요"/>

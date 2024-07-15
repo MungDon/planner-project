@@ -17,7 +17,7 @@ $(function() {
 					if (url === 'update') {
 						location.href = PAGE_LIST.MEMBER_UPDATE_FORM;
 					} else {
-						const thenFn = () => {
+						const thenFn = (result) => {
 							if (result.isDenied) {
 								return;
 							}

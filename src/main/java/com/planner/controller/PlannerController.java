@@ -51,13 +51,12 @@ public class PlannerController {
 			}
 			TodayInfo todayInfo = CommonUtils.getTodayInfo();
 			List<ScheduleDTO> todaySchedule = scheduleService.schedule_select(detail.getMember_id(), todayInfo.getCurrentDate(), NO_TEAM);
-			List<NoticeDTO> notice = noticeService.noticeSelect(4, 4);
+			List<NoticeDTO> notice = noticeService.noticeSelect(1,10);
 			model.addAttribute("notice", notice);
 			model.addAttribute("todayInfo", todayInfo);
 			model.addAttribute("todayInfo", todayInfo);
 			model.addAttribute("todaySchedule", todaySchedule);
 			model.addAttribute("member", detail);
-	    
 			return "main";
 		}
 		return "redirect:/member/anon/login";

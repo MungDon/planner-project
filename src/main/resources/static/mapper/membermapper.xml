@@ -18,7 +18,7 @@
 			member_role,
 			member_reg
 		)	VALUES	(
-			nextval('member_seq'),
+			member_seq.nextval,
 			'2020-02-01',
 			'none',
 			'none',
@@ -29,7 +29,7 @@
 			#{member_status},
 			#{oauth_type},
 			#{member_role},
-			now()
+			sysdate
 		)
 	</insert>
 		<!--member_seq.NEXTVAL ,nextval('member_seq'),now(), sysdate -->
@@ -48,14 +48,14 @@
 				member_role,
 				oauth_id
 				) values (
-				nextval('member_seq'),
+				member_seq.NEXTVAL,
 				#{member_password},
 				#{member_name},
 				#{member_birth},
 				#{member_email},
 				#{member_phone},
 				#{member_gender},
-				now(),
+				sysdate,
 				'B',
 				#{member_role},
 				'none'
@@ -89,6 +89,21 @@
 			member_id = #{member_id}
 	</update>
 	
+<!-- 	<delete id="" > -->
+<!-- 		DELETE  -->
+<!-- 		FROM 	friend -->
+<!-- 		WHERE 	 -->
+<!-- 	</delete> -->
+	
+	<select id="isTeamMaster" resultType="int">
+		select count(*)
+		from team
+		where team_id in 
+    	(select team_id
+    	from team_member
+   	 	where member_id = #{member_id}
+    	and tm_grade='TEAM_MASTER')
+	</select>
 	<!-- 회원 상태변경 -->
 	<update id="changeMemberStatus">
 		UPDATE member

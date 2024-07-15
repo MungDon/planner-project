@@ -20,10 +20,11 @@ public class MemberDTO {
 	private Long member_id;						// 회원 시퀀스
 	
 	@NotBlank(message = "비밀번호는 필수입니다.")
-	@Pattern(regexp = "^(?=(.*[a-z]){5,})(?=.*[!@])(?=.*\\d).{7,}$",message = "비밀번호는 최소 5개의 영어 소문자와 하나 이상의 특수기호(!, @), 숫자를 포함해야하고 7글자 이상이어야합니다.")
+	@Pattern(regexp = "^(?=.*[a-z]{5,})(?=.*[!@])(?=.*\\d).{7,}$",message = "비밀번호는 최소 5개의 영어 소문자와 하나 이상의 특수기호(!, @), 숫자를 포함해야하고 7글자 이상이어야합니다.")
 	private String member_password;			// 비밀번호
 	
 	@NotBlank(message = "이름은 필수입니다.")
+	@Pattern(regexp = "^[가-힣]+$",message = "한글이름만 작성해주세요. 영어일경우 발음대로 적으세요")
 	private String member_name;				// 이름
 	
 	@NotNull(message = "생년월일은 필수입니다.")
@@ -34,7 +35,7 @@ public class MemberDTO {
 	private String member_email;					// 이메일
 	
 	@NotBlank(message = "전화번호는 필수입니다.")
-	@Size(min = 11,max = 11, message = "전화번호를 올바르게 입력하세요")
+	@Pattern(regexp = "^([0-9]{11})$",message = "전화번호는 숫자만 입력가능합니다.")
 	private String member_phone;				// 전화번호
 	
 	@NotBlank(message = "성별은 필수입니다.")

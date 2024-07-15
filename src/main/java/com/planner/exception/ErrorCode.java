@@ -21,8 +21,10 @@ public enum ErrorCode {
 	FAIL_CREATE_AUTHCODE(HttpStatus.INTERNAL_SERVER_ERROR,"인증코드 발급이 실패하였습니다."),
 	FAIL_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR,"이메일 전송 실패."),
 	FAIL_AUTHENTICATION(HttpStatus.BAD_REQUEST,"인증실패"),
+	FAIL_CODE_AUTHENTICATION(HttpStatus.BAD_REQUEST,"이메일 코드 인증이 안되어있습니다. 경찰에 신고할게요"),
 	FAIL_CHANGE_PASSWORD(HttpStatus.INTERNAL_SERVER_ERROR,"비밀번호 변경실패, 운영자에게 문의해주세요"),
-	SOCIAL_LOGIN_USER(HttpStatus.CONFLICT,"소셜 로그인으로 가입하였습니다. 로그인해주세요.");
+	SOCIAL_LOGIN_USER(HttpStatus.CONFLICT,"소셜 로그인으로 가입하였습니다. 로그인해주세요."),
+	GROUP_LEADER_CANNOT_WITHDRAW(HttpStatus.CONFLICT,"탈퇴를 위해 그룹장은 먼저 그룹을 삭제해주세요");
 	
 	private final  HttpStatus status; // http 상태코드
 	private final String message;	// 에러 메세지

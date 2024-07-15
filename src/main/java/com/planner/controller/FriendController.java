@@ -17,15 +17,19 @@ import com.planner.dto.request.member.MemberDTO;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.Gender;
 import com.planner.enums.Masking;
+import com.planner.exception.CustomException;
+import com.planner.exception.ErrorCode;
 import com.planner.service.FriendService;
 import com.planner.util.CommonUtils;
 import com.planner.util.UserData;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/friend")
+@Slf4j
 public class FriendController {
 
 	private final FriendService friendService;
@@ -183,15 +187,19 @@ public class FriendController {
 							 @RequestParam(name = "member_id", defaultValue = "") Long member_id) {
 		String phone;
 		String gender;
-		
+		log.error("친구"+friend_id);
 		if (CommonUtils.isEmpty(friend_id)) {
 			friend_id = friendService.findByFriendSeq(member_id, detail.getMember_id());	// 친구 시퀀스 찾는 메서드
 			if (CommonUtils.isEmpty(friend_id)) {
 				friend_id = friendService.findByFriendSeq(detail.getMember_id(), member_id);
+//				if(CommonUtils.isEmpty(friend_id)) {
+//					return "redirect:";
+//				}
 				friend_status = "B";
 			}
 		}
-		
+	
+		log.error("친구상태"+friend_status);
 		FriendDTO friendDTO = friendService.friendInfo(friend_id, friend_status);			// 친구정보 메서드
 		for (MemberDTO memberDTO : friendDTO.getMemberInfo()) {
 			gender = Gender.findNameByCode(memberDTO.getMember_gender());

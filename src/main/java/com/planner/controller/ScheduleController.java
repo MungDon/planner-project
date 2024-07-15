@@ -39,8 +39,6 @@ public class ScheduleController {
 	}
 	
 	//일정 보기
-
-	
 	@GetMapping("schedule")
 	   public String right(ScheduleDTO scheduleDTO, Model model, @RequestParam("date") String date,
 			   						MapLikeDTO MapLikedto,@UserData ResMemberDetail detail) {

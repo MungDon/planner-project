@@ -33,7 +33,7 @@ let csrfHeader = $("meta[name='_csrf_header']").attr("content");
 // ajaxCall 호출시 errorFn을 안넘겨 줄때 디폴트로 넣어줄 유틸 함수
 const defaultErrorFn = (errorResponse) => {
 	const response = errorResponse.responseJSON;
-	alert(response.message);
+	swalCall("경고",response.message,"error");
 };
 // AJAX 공통			// 구조 분해할당
 const ajaxCall = ({ url, method, successFn, param = null, errorFn = defaultErrorFn }) => {
@@ -62,7 +62,7 @@ const ajaxCall = ({ url, method, successFn, param = null, errorFn = defaultError
 const swalCall = (title, text, icon, thenFn, confirmButtonText = "확인", showCancelButton = false, cancelButtonText = "아니요") => {
 	Swal.fire({
 		title: title,
-		text: text,
+		html: text,
 		icon: icon,
 		confirmButtonText: confirmButtonText,
 		showCancelButton: showCancelButton,

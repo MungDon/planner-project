@@ -26,7 +26,7 @@
 	<tr>
 		<td><label for="tm_nickname">별명</label>
 			<!--/* 한 페이지에서 정보 출력, 수정 전환 */-->
-		<td><input th:field="${dto.tm_nickname}" placeholder="그룹내 별명 중복 금지" disabled>
+		<td><input th:field="${dto.tm_nickname}" placeholder="그룹내 별명 중복 금지" maxlength="16" disabled>
 		<td><button id="nick_check" type="button" class="dpn">중복검사</button>
 	<tr class="dpn">
 		<td colspan="2">

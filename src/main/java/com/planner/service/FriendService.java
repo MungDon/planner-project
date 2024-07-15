@@ -209,6 +209,7 @@ public class FriendService {
 			frndDTO = friendMapper.findByFriendId(friend_id);
 			if (friend_status.equals("B")) {			// 정방향 배치일 때
 				friendDTO = friendMapper.friendInfo(frndDTO);
+				CommonUtils.throwCustomExceptionIf(CommonUtils.isEmpty(friendDTO), ErrorCode.NO_ACCOUNT);
 				friendDTO.setMember_my_id(frndDTO.getMember_my_id());
 				friendDTO.setMember_friend_id(frndDTO.getMember_friend_id());
 				friendDTO.setFriend_status("B");
@@ -223,6 +224,7 @@ public class FriendService {
 				friendDTO.setMember_friend_id(member_my_id);
 				
 				friendDTO = friendMapper.friendInfoC(frndDTO);
+				CommonUtils.throwCustomExceptionIf(CommonUtils.isEmpty(friendDTO), ErrorCode.WITHDRAWN_MEMBER);
 				friendDTO.setFriend_status("C");
 				
 				return friendDTO;			// 역방향일 경우 join 문 변경됨 / on f.member_my_id = m.member_id

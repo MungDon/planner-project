@@ -40,73 +40,77 @@ $(function() { // $(document).ready(function(){}); 와 같음
 				};
 				swalCall("성공", "인증 코드가 해당 이메일로 전송되었습니다.", "success", thenFn);
 				$(".resendBtn").prop("disabled", false);
+			}, errorFn: (errorResponse) => {
+				const response = errorResponse.responseJSON;
+				swalCall("경고", response.message, "error");
+				$(".emailChkBtn").prop("disabled", false);
+				$("#email").attr("readonly", false);
 			}
 		}
 		ajaxCall(ajaxObj);
 	};
 
 
-// 이메일 인증 버튼 클릭시
-$(".emailChkBtn").click(() => {
-	const toEmail = $("#email").val();
-	const type = $("#type").val();
-	$(".emailChkBtn").prop("disabled", true);
-	$("#email").attr("readonly", true);
-	sendEmail(toEmail, type, "authCodeModal");
-});
+	// 이메일 인증 버튼 클릭시
+	$(".emailChkBtn").click(() => {
+		const toEmail = $("#email").val();
+		const type = $("#type").val();
+		$(".emailChkBtn").prop("disabled", true);
+		$("#email").attr("readonly", true);
+		sendEmail(toEmail, type, "authCodeModal");
+	});
 
-// 인증번호 재선송 버튼 클릭 시
-$(".resendBtn").click(() => {
-	const toEmail = $("#email").val();
-	$(".resendBtn").prop("disabled", true);
-	const type = $("#type").val();
-	sendEmail(toEmail, type);
-});
+	// 인증번호 재선송 버튼 클릭 시
+	$(".resendBtn").click(() => {
+		const toEmail = $("#email").val();
+		$(".resendBtn").prop("disabled", true);
+		const type = $("#type").val();
+		sendEmail(toEmail, type);
+	});
 
-$(".Xbtn").click(() => {
-	$(".resendBtn").prop("disabled", false);
-	$(".emailChkBtn").prop("disabled", false);
-	$("#email").attr("readonly", false);
-});
+	$(".Xbtn").click(() => {
+		$(".resendBtn").prop("disabled", false);
+		$(".emailChkBtn").prop("disabled", false);
+		$("#email").attr("readonly", false);
+	});
 
-// 인증 완료 버튼 눌렀을시
-$(".codeChkBtn").click(() => {
-	const toEmail = $("#email").val();
-	const authCode = $("#inputCode").val();
-	const type = $("#type").val();
-	$(".emailChkBtn").prop("disabled", false);
-	$(".resendBtn").prop("disabled", false);
-	if (isNull(authCode)) {
-		swalCall("경고", "인증코드를 입력해주세요", "warning");
-		return;
+	// 인증 완료 버튼 눌렀을시
+	$(".codeChkBtn").click(() => {
+		const toEmail = $("#email").val();
+		const authCode = $("#inputCode").val();
+		const type = $("#type").val();
+		$(".resendBtn").prop("disabled", false);
+		if (isNull(authCode)) {
+			swalCall("경고", "인증코드를 입력해주세요", "warning");
+			return;
 
-	}
-	const ajaxObj = {
-		url: API_LIST.AUTH_CODE_CHK,
-		method: "post",
-		param: {
-			toEmail: toEmail,
-			authCode: authCode
-		},
-		successFn: (data) => {
-			console.log(data);
-			if (!isNull(data)) {
-				const thenFn = () => {
-					closeModal("authCodeModal");
-					if (type === "findPw") {
-						const thenFn = () => {
-							$(window).off('beforeunload');
-							location.href = PAGE_LIST.CHANGE_PASSWORD_FORM + data;
-						};
-						swalCall("정보", "보안을위해 비밀번호 변경 페이지로 이동됩니다.", "info", thenFn);
-					}
-					$("#emailChkBox").prop("checked", true);
-					$("#emailChkBox").addClass("disabled-checkbox");
-				};
-				swalCall("성공", "인증되었습니다.", "success", thenFn);
-			}
 		}
-	};
-	ajaxCall(ajaxObj);
-});
+		const ajaxObj = {
+			url: API_LIST.AUTH_CODE_CHK,
+			method: "post",
+			param: {
+				toEmail: toEmail,
+				authCode: authCode
+			},
+			successFn: (data) => {
+				console.log(data);
+				if (!isNull(data)) {
+					const thenFn = () => {
+						closeModal("authCodeModal");
+						if (type === "findPw") {
+							const thenFn = () => {
+								$(window).off('beforeunload');
+								location.href = PAGE_LIST.CHANGE_PASSWORD_FORM + data;
+							};
+							swalCall("정보", "보안을위해 비밀번호 변경 페이지로 이동됩니다.", "info", thenFn);
+						}
+						$("#emailChkBox").prop("checked", true);
+						$("#emailChkBox").addClass("disabled-checkbox");
+					};
+					swalCall("성공", "인증되었습니다.", "success", thenFn);
+				}
+			}
+		};
+		ajaxCall(ajaxObj);
+	});
 });

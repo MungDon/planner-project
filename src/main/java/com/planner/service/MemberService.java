@@ -14,11 +14,13 @@ import com.planner.dto.request.member.ReqChangePassword;
 import com.planner.dto.request.member.ReqMemberRestore;
 import com.planner.dto.request.member.ReqMemberUpdate;
 import com.planner.dto.response.member.ResMemberDetail;
+import com.planner.enums.CodeStatus;
 import com.planner.enums.MemberRole;
 import com.planner.enums.MemberStatus;
 import com.planner.exception.CustomException;
 import com.planner.exception.ErrorCode;
 import com.planner.exception.RestCustomException;
+import com.planner.mapper.EmailMapper;
 import com.planner.mapper.FriendMapper;
 import com.planner.mapper.MemberMapper;
 import com.planner.util.CommonUtils;
@@ -34,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 
 	private final MemberMapper memberMapper;
+	private final EmailMapper emailMapper;
 	private final FriendMapper friendMapper;
 	private final PasswordEncoder passwordEncoder;
 	private static final boolean MEMBER = true;
@@ -42,6 +45,8 @@ public class MemberService {
 	// 회원가입
 	@Transactional
 	public int memberInsert(MemberDTO memberDTO) {
+		String emailAuthStatus = emailMapper.findStatusByToEmail(memberDTO.getMember_email());
+		CommonUtils.throwCustomExceptionIf(CommonUtils.isEmpty(emailAuthStatus)||emailAuthStatus.equals(CodeStatus.CODE_UNCHECKED.getStatus()), ErrorCode.FAIL_CODE_AUTHENTICATION);
 		memberDTO.setUserDefaults(passwordEncoder);
 		return memberMapper.memberInsert(memberDTO);
 	}
@@ -68,6 +73,7 @@ public class MemberService {
 	/* 로그인시 회원 상태 코드 체크 */
 	public void memberStatusChk(String statusCode, HttpServletRequest request, HttpServletResponse response) {
 		if (statusCode.equals(MemberStatus.DELETE.getCode())) {
+			log.info("여기옴?");
 			memberStatusToException(request, response, ErrorCode.WITHDRAWN_MEMBER);
 		}
 		if (statusCode.equals(MemberStatus.RESTORE.getCode())) {
@@ -85,6 +91,8 @@ public class MemberService {
 	/* 회원 탈퇴 */
 	@Transactional
 	public void memberDelete(Long member_id) {
+		int isTeamMaster = memberMapper.isTeamMaster(member_id);
+		CommonUtils.throwRestCustomExceptionIf(isTeamMaster!=0, ErrorCode.GROUP_LEADER_CANNOT_WITHDRAW);
 		memberMapper.changeMemberStatus(member_id, MemberStatus.DELETE.getCode());
 	}
 
@@ -95,7 +103,7 @@ public class MemberService {
 		case "복구신청":
 			throw new RestCustomException(ErrorCode.REQUEST_DUPLICATE);
 		case "가입":
-		case "탈퇴":
+		case "가입미완료":
 			throw new RestCustomException(ErrorCode.INELIGIBLE_REQUEST);
 		}
 	}

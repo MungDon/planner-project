@@ -148,10 +148,10 @@ public class MemberController {
 	@GetMapping("/auth")
 	public String memberStatusChk(@UserData ResMemberDetail detail, HttpServletRequest request,
 			HttpServletResponse response) {
+		memberService.memberStatusChk(detail.getMember_status(), request, response);
 		if (MemberRole.SUPER_ADMIN.getType().equals(detail.getMember_role())) {
 			return "redirect:/admin/main";
 		}
-		memberService.memberStatusChk(detail.getMember_status(), request, response);
 		return "redirect:/planner/main";
 	}
 

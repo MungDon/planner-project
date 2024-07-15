@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import jakarta.mail.MessagingException;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -21,6 +22,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(CustomException.class) // CustomException 클래스를 value 값으로 설정
 	public String handleCustomException(CustomException e,Model model) { 
+		log.info("여기옴?에러"+e.getErrorCode().getMessage());
 		model.addAttribute("errorMessage", e.getErrorCode().getMessage());
 		model.addAttribute("deleteMember",ErrorCode.WITHDRAWN_MEMBER.getMessage());
 		return "/error/throws_error";

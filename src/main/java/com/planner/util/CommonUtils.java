@@ -55,10 +55,16 @@ public class CommonUtils {
 		return false;
 	}
 
-	/*조건문에 따라 예외 발생*/
+	/*조건문에 따라 예외 발생(비동기)*/
 	public static void throwRestCustomExceptionIf(boolean conditionalStatement, ErrorCode errorCode) {
 		if(conditionalStatement) {
 			throw new RestCustomException(errorCode);
+		}
+	}
+	/*조건문에 따라 예외 발생(동기)*/
+	public static void throwCustomExceptionIf(boolean conditionalStatement, ErrorCode errorCode) {
+		if(conditionalStatement) {
+			throw new CustomException(errorCode);
 		}
 	}
 	

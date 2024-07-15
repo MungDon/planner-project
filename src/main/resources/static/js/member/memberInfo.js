@@ -25,7 +25,7 @@ $(function() {
 						const thenFn = () => {
 							location.href = PAGE_LIST.MAIN_PAGE;
 						};
-						swalCall("에러", "탈퇴실패", "error", thenFn);
+						swalCall("에러", "탈퇴 못함 수구", "error", thenFn);
 					}
 				};
 				ajaxCall(ajaxObj);
@@ -40,7 +40,9 @@ const sendDeleteBtn = document.getElementById('sendDeleteBtn');
 const sendDelete = document.getElementById('sendDelete');
 const sendDeleteH = document.getElementById('sendDeleteH');
 const requestForm = document.getElementById('requestForm');
-sendDeleteBtn.addEventListener('click', () => {
-	sendDelete.value = sendDeleteH.value;
-	requestForm.submit();
-});
+if(sendDeleteBtn !== null){
+	sendDeleteBtn.addEventListener('click', () => {
+		sendDelete.value = sendDeleteH.value;
+		requestForm.submit();
+	});
+}

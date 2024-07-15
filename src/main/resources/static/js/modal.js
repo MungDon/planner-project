@@ -9,3 +9,10 @@ const closeModal = (modalId) => {
 	const modal = document.getElementById(modalId);
 	modal.style.display = "none";
 }
+
+/*const modalOutSideEvent = (modalId) => {
+	closeModal(modalId);
+};
+$("#signModal").click(()=>{
+	modalOutSideEvent($(this));
+});*/

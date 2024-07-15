@@ -40,6 +40,10 @@ public interface MemberMapper {
 	/* 회원 상태변경 */
 	int changeMemberStatus(@Param(value = "member_id") Long member_id,
 			@Param(value = "member_status") String member_status);
+	
+	/*탈퇴시 그룹장인지 체크*/
+	int isTeamMaster(@Param(value = "member_id")Long Member_id);
+	
 	/*회원 비밀번호 변경*/
 	int changePassword(ReqChangePassword req);
 	

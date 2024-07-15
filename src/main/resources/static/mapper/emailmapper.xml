@@ -7,11 +7,15 @@
 		INSERT INTO email(
 			email_id,
 			to_email,
-			auth_code
+			auth_code,
+			chk_status,
+			code_reg
 		) VALUES (
-			nextval('email_seq'),
+			email_seq.nextval,
 			#{toEmail},
-			#{authCode}
+			#{authCode},
+			#{codeStatus},
+			sysdate
 		)
 	</insert>
 	
@@ -30,6 +34,20 @@
 		WHERE
 			to_email = #{toEmail}
 	</select>
+	
+	<!-- 인증상태 가져오기 -->
+	<select id="findStatusByToEmail" resultType="String">
+		SELECT 	chk_status 
+		FROM 	email
+		WHERE
+			to_email = #{toEmail}
+	</select>
+	
+	<!-- 인증 확인 상태변경 -->
+	<update id="updateCodeChk">
+		UPDATE email
+		set chk_status = #{codeStatus}
+	</update>
 	
 	<!-- 인증기록 삭제 -->
 	<delete id="deleteEmailAuthCode">
