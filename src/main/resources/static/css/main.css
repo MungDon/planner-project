@@ -203,13 +203,18 @@
 	color: #495057;
 	font-size: 35px;
 	justify-content: center;
+	padding:5px 10px;
 }
 
 .notice_content {
-	color: #888D92;
-	font-size: 25px;
+	padding: 10px 15px;	
 }
-
+.notice_content img{
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-use-select: none;
+	user-select: none;
+}
 .Xbtn:hover, .closeBtn:hover {
 	color: red;
 }

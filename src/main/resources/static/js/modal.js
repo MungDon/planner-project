@@ -11,15 +11,27 @@ const closeModal = (modalId) => {
 }
 
 const modalOutSideEvent = (event) => {
-	const modalId = event.target;
+	const modalId = event.target.id;
 	closeModal(modalId);
 };
 $("#signModal").click((event) => {
 	modalOutSideEvent(event);
 });
 $("#authCodeModal").click((event) => {
+	$(".resendBtn").prop("disabled", false);
+	$(".emailChkBtn").prop("disabled", false);
+	$("#email").attr("readonly", false);
 	modalOutSideEvent(event);
 });
 $("#noticeModal").click((event) => {
 	modalOutSideEvent(event);
+});
+
+// 모달 내부 클릭 이벤트 방지
+$('.modalBody').on('click', (event) => {
+	event.stopPropagation();
+});
+// 모달 내부 클릭 이벤트 방지
+$('.noticeModalBody').on('click', (event) => {
+	event.stopPropagation();
 });

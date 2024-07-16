@@ -12,7 +12,7 @@ public class ReqChangePassword {
 	private Long member_id; // 회원시퀀스
 	
 	@NotBlank(message = "비밀번호는 필수입니다.")
-	@Pattern(regexp = "^(?=(.*[a-z]){5,})(?=.*[!@])(?=.*\\d).{7,}$",message = "비밀번호는 최소 5개의 영어 소문자와 하나 이상의 특수기호(!, @), 숫자를 포함해야하고 7글자 이상이어야합니다.")
+	@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{4,12}$",message = "비밀번호는 최소 4자에서 12자까지, 영문자, 숫자 및 특수 문자를 포함해야합니다.")
 	private String newPassword;		// 새로운 비밀번호
 	
 	@NotBlank(message = "비밀번호는 재확인은 필수입니다.")

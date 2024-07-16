@@ -29,6 +29,8 @@ $(function() {
 					}
 				};
 				ajaxCall(ajaxObj);
+			} else{
+				return;
 			}
 		};
 		swalCall("회원탈퇴", "정말 회원탈퇴를 하시겠습니까?", "question", thenFn, "예", true);

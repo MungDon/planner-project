@@ -22,7 +22,7 @@ const validateInsert = () => {
 	const failText = document.getElementById("failText");
 	const pw = document.getElementById('pw').value;
 	const pw2 = document.getElementById('pw2').value
-	const passwordRegex = /^(?=.*[a-z]{5,})(?=.*[!@])(?=.*\\d).{7,}$/;
+	const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{4,12}$/;
 	if (!genderSelected) {
 		// 라디오 버튼 중 하나도 선택되지 않은 경우 경고 메시지 표시 및 폼 제출 방지
 		swalCall("경고", "성별을 선택해 주세요.", "warning");
@@ -62,7 +62,7 @@ const validateInsert = () => {
 		return false;
 	}
 	if (!passwordRegex.test(pw)) {
-		failText.innerHTML = '비밀번호는 최소 5개의 영어 소문자와 하나 이상의 특수기호(!, @), 숫자를 포함해야하고 7글자 이상이어야합니다.';
+		failText.innerHTML = '비밀번호는 최소 4자에서 12자까지, 영문자, 숫자 및 특수 문자를 포함해야합니다.';
 		return false;
 	}
 	return true;

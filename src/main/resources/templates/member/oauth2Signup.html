@@ -22,7 +22,7 @@
 				<input type="hidden" id="type" value="insert">
 				
 				<span class="joinText">회원가입을 위해<br> 정보를 입력해주세요</span>
-				<div th:if="${member != null && member.member_status =='N'}" class="forKakaoUser">
+				<div th:if="${member != null && member.oauth_id =='none'}" class="forKakaoUser">
 					<div class="emailText">
 						<label for="email">이메일(아이디)</label><input type="checkbox" id="emailChkBox"><span class="authChkText">인증여부</span>
 					</div>
@@ -48,7 +48,7 @@
 					</div>
 				</div>	
 				<div class="signChkBox">
-					<input type="checkbox" id="signChk">개인정보 수집 및 이용에 동의합니다.<a href="#" onclick="openModal()">[이용약관]</a>
+					<input type="checkbox" id="signChk">개인정보 수집 및 이용에 동의합니다.<a href="#" class="terms" onclick="openModal('signModal')">[이용약관]</a>
 				</div>
 				<button type="submit" class="joinBtn">회원가입</button>
 			</form>
@@ -68,7 +68,7 @@
 				</div>
 			</div>
 			
-				<!-- 인증코드 입력 모달 -->
+				<!-- 인증코드 입력 모달 -->c
 			<div class="authCodeModal" id="authCodeModal">
 				<div class="modalBody">
 					<div class="Modaltop">

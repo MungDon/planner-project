@@ -88,6 +88,10 @@ public class NoticeService {
 	
 	@Transactional
 	public int noticeDelete(Long notice_id) {
+		List<String> imgNames = extractImgFileName(notice_id);
+		for(String imgName : imgNames) {
+			noticeMapper.deleteImg(imgName);
+		}
 		return noticeMapper.noticeDelete(notice_id);
 	}
 	

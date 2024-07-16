@@ -10,6 +10,10 @@ $(function() { // $(document).ready(function(){}); 와 같음
 	$(".insertForm").on("submit", () => {
 		$(window).off('beforeunload');
 	});
+	// 폼 제출 시 플래그 설정
+	$(".oauth2Form").on("submit", () => {
+		$(window).off('beforeunload');
+	});
 
 
 

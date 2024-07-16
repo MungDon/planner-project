@@ -158,8 +158,9 @@ public class MemberService {
 	/*비번 찾기시 소셜로그인 회원이면 되돌리기*/
 	@Transactional(readOnly = true)
 	private void isSocialMember(String member_email) {
-		ResMemberDetail user = memberMapper.socialMember(member_email);
-		CommonUtils.throwRestCustomExceptionIf(!CommonUtils.isEmpty(user), ErrorCode.SOCIAL_LOGIN_USER);
+		ResMemberDetail socialMember = memberMapper.socialMember(member_email);
+		ResMemberDetail formMember = memberMapper.formMember(member_email);
+		CommonUtils.throwRestCustomExceptionIf(!CommonUtils.isEmpty(socialMember)&&CommonUtils.isEmpty(formMember), ErrorCode.SOCIAL_LOGIN_USER);
 	}
 	
 	/* 이메일 인증시 타입별 회원검사 */

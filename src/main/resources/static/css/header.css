@@ -15,6 +15,10 @@ a {
     padding:0;
     font-size:100%;
     text-decoration:none;
+    
+}
+a:link{
+	color:#ddd;
 }
 .pointer{
 	cursor:pointer !important;

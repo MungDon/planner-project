@@ -77,7 +77,6 @@ $(".noticeTitle").click((event) => {
 		url : API_LIST.NOTICE_DETAIL + notice_id,
 		method : "get",
 		successFn : (result) => {
-			console.log(result);
 			renderNoticeDetail(result);
 			openModal("noticeModal");
 		},
@@ -92,7 +91,10 @@ const renderNoticeDetail = (details) => {
     noticeDetailContainer.innerHTML = ''; // 기존 내용을 지웁니다.
 
         noticeDetailContainer.innerHTML = `
-        	    <span class='notice_title'>${details.notice_title}</span>
-            	<span class='notice_content'>${details.notice_content}</span>
+        	    <div class='notice_title'>${details.notice_title}</div>
         `;
+        let con = document.createElement("div");
+        con.classList.add("notice_content")
+        con.innerHTML = details.notice_content;
+        noticeDetailContainer.append(con);
 }

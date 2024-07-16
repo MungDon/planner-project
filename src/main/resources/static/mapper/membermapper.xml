@@ -18,7 +18,7 @@
 			member_role,
 			member_reg
 		)	VALUES	(
-			nextval('member_seq'),
+			member_seq.nextval,
 			'2020-02-01',
 			'none',
 			'none',
@@ -29,7 +29,7 @@
 			#{member_status},
 			#{oauth_type},
 			#{member_role},
-			now()
+			sysdate
 		)
 	</insert>
 		<!--member_seq.NEXTVAL ,nextval('member_seq'),now(), sysdate -->
@@ -48,14 +48,14 @@
 				member_role,
 				oauth_id
 				) values (
-				nextval('member_seq'),
+				member_seq.nextval,
 				#{member_password},
 				#{member_name},
 				#{member_birth},
 				#{member_email},
 				#{member_phone},
 				#{member_gender},
-				now(),
+				sysdate,
 				'B',
 				#{member_role},
 				'none'
@@ -88,7 +88,8 @@
 		WHERE
 			member_id = #{member_id}
 	</update>
-	
+		
+	<!-- 회원탈퇴시 친구삭제 -->
 <!-- 	<delete id="" > -->
 <!-- 		DELETE  -->
 <!-- 		FROM 	friend -->

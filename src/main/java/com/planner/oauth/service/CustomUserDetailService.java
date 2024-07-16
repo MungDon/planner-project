@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.planner.dto.request.member.MemberDTO;
+import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.enums.MemberRole;
 import com.planner.mapper.MemberMapper;
 
@@ -30,7 +31,7 @@ public class CustomUserDetailService implements UserDetailsService {
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
         //이메일 체크
-        MemberDTO member = memberMapper.findByUser(member_email);
+        ResMemberDetail member = memberMapper.formMember(member_email);
         if(member != null) {
         	if(MemberRole.SUPER_ADMIN.getType().equals(member.getMember_role())) {
         		grantedAuthorities.add(new SimpleGrantedAuthority(MemberRole.SUPER_ADMIN.getType()));
