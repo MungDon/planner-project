@@ -54,7 +54,6 @@ public class PlannerController {
 			List<NoticeDTO> notice = noticeService.noticeSelect(1,10);
 			model.addAttribute("notice", notice);
 			model.addAttribute("todayInfo", todayInfo);
-			model.addAttribute("todayInfo", todayInfo);
 			model.addAttribute("todaySchedule", todaySchedule);
 			model.addAttribute("member", detail);
 			return "main";
@@ -65,7 +64,6 @@ public class PlannerController {
 	@GetMapping("/notice/detail/{notice_id}")
 	@ResponseBody
 	public ResponseEntity<NoticeDTO> noticeContent(@PathVariable("notice_id") Long notice_id,Model model) {
-		log.info("요청옴?");
 		NoticeDTO noticeDTO = noticeService.noticeContent(notice_id);
 		model.addAttribute("noticeDTO", noticeDTO);
 		return ResponseEntity.ok(noticeDTO);

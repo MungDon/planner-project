@@ -13,7 +13,7 @@
 	<div th:replace="~{fragments/friendBar :: friendHeader}"></div>
 	<main class="listMain">
 		<div class="list_table">
-			<table >	<!-- 이 페이지에서는 정/역 방향 설정 완료 my_id=나, friend_id=친구 -->
+			<table>	<!-- 이 페이지에서는 정/역 방향 설정 완료 my_id=나, friend_id=친구 -->
 				<tr>
 					<th class="list_title" colspan="6">
 						<span>친구목록</span>
@@ -52,7 +52,7 @@
 							<input type="hidden" name="friend_id" th:value="${friendDTO.friend_id}"	/>
 							<input type="hidden" name="friend_status" th:value="${friendDTO.friend_status}"	/>
 							<div th:if="${friendDTO.friend_status == 'C'}">
-								<input type="hidden" name="friend_my_nickname" th:value="${friendDTO.friend_nickname}"	/>
+								<input type="hidden" name="friend_my_nickname" th:value="${friendDTO.friend_my_nickname}"	/>
 								<!-- 텍스트박스에 입력된 밸류 가져와서 서밋 (텍스트박스가 form 밖에있음) -->
 								<input type="hidden" name="friend_nickname"
 								 th:attr="id='nameH' + ${friendDTO.friend_id}"	/>
@@ -94,7 +94,7 @@
 					<div th:if="${friendDTO.friend_status == 'C'}">
 						<td colspan="2" class="memo_td">
 							<div th:attr="id='memoT' + ${friendDTO.friend_id}"
-							 th:text="${friendDTO.friend_my_memo}" class="memoT">
+							 th:text="${friendDTO.friend_memo}" class="memoT">
 							</div>
 						</td>
 					</div>

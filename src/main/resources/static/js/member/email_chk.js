@@ -19,13 +19,13 @@ $(function() { // $(document).ready(function(){}); 와 같음
 
 	// 이메일 전송요청
 	const sendEmail = (toEmail, type, modalId = null) => {
-		if (isNull(toEmail)) {
+		if (isNull(toEmail) || toEmail.length > 30) {
 			const thenFn = () => {
 				$("#email").focus();
 				$(".emailChkBtn").prop("disabled", false);
 				$("#email").attr("readonly", false);
 			};
-			swalCall("경고", "이메일을 입력하세요", "warning", thenFn);
+			swalCall("경고", "이메일을 바르게 입력하세요", "warning", thenFn);
 			return;
 		}
 

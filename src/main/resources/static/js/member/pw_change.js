@@ -4,7 +4,7 @@ $(function() {
 		const member_id = $("#member_id").val();
 		const newPassword = $("#newPassword").val();
 		const newPassword2 = $("#newPassword2").val();
-		const passwordRegex = /^(?=(.*[a-z]){5,})(?=.*[!@])(?=.*\d).{7,}$/;
+		const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{4,12}$/;
 		if (isNull(member_id)) {
 			const thenFn = () => {
 				location.href = PAGE_LIST.MAIN_PAGE;
@@ -20,10 +20,9 @@ $(function() {
 				return;
 			}
 			if (!passwordRegex.test(newPassword)) {
-				$("#failText").text('비밀번호는 최소 5개의 영어 소문자와 하나 이상의 특수기호(!, @), 숫자를 포함해야하고 7글자 이상이어야합니다.');
+				$("#failText").text('비밀번호는 최소 4자에서 12자까지, 영문자, 숫자 및 특수 문자를 포함해야합니다.');
 				return;
 			}
-			console.log("왜안됌2");
 
 			const ajaxObj = {
 				url: API_LIST.CHANGE_PASSWORD,

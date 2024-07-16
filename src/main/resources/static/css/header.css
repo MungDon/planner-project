@@ -6,7 +6,9 @@
 	margin: 0;
 	padding: 0;
 }
-
+a{
+	text-decoration: none;
+}
 .header {
     font-family: 'Noto Sans KR', sans-serif;
 }
@@ -115,10 +117,9 @@ html.m-menu-scroll, html.m-menu-scroll > body {
 /* 상단 로고 */
 .header > .header-inner > .logo {
     position:absolute;
-    top:30%;
+    top:19px;
     left:50%;
     transform:translatex(-50%);
-    width:128px;
 }
 
 .header > .header-inner > .search > a > span {
@@ -323,13 +324,12 @@ html.m-menu-scroll, html.m-menu-scroll > body {
     left:0;
     width:100%;
     height:64px;
-    background-color:bisque;
+    background-color:aliceblue;
     text-align:center;
     z-index:500;
 }
 
 .m-header > .logo {
-    width:82px;
     display:inline-block;
     margin-top: 19px;
 }

@@ -60,9 +60,8 @@ input[name="notice_title"] {
 	<form th:action="@{/admin/noticeUpdatePro}" method="post"
 		id="noticeForm">
 
-		<input type="text" name="notice_title"
-			th:value="${noticeDTO.notice_title}" /> <input type="hidden"
-			name="notice_id" th:value="${noticeDTO.notice_id}" />
+		<input type="text" name="notice_title"th:value="${noticeDTO.notice_title}" required="required"/> 
+		<input type="hidden" name="notice_id" th:value="${noticeDTO.notice_id}" />
 		<div class="post-form">
 			<textarea name="notice_content" id="summernote"
 				th:text="${noticeDTO.notice_content}"></textarea>

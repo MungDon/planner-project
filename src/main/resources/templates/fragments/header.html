@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <header class="nodrag" th:fragment="header">
-	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 <!-- 헤더 -->
 <div class="header">
     <div class="header-inner">
         <a href="/planner/main" class="logo img-box block">
-			<img src="/images/pencil-solid.svg" width="30px" height="30px" alt="planner" />
+			<img src="/images/plandas.png" width="30px" height="30px" alt="planner" />
         </a>
         <nav class="top-menu-bar row line-height-0">
             <ul class="row">
@@ -21,7 +21,7 @@
 		  		<li class="cell menu-2" sec:authorize="isAuthenticated()">
                     <a href="javascript:void(0);">그룹</a>
 		  			<ul>
-		  				<li><a href="/team/main" class="delay-1">그룹 메인</a></li>
+		  				<li><a href="/team/main" class="delay-1">그룹 목록</a></li>
 		  				<li><a href="/team/create" class="delay-2">그룹 생성</a></li>
 		  				<li><a href="/team/search" class="delay-3">그룹 찾기</a></li>
 		  			</ul>
@@ -47,9 +47,6 @@
                     </ul>
                     <div class="sub-menu-height sub-menu-height-4"></div>
 		  		</li>
-				<li class="cell menu-4" sec:authorize="isAnonymous()">
-					<a href="/member/anon/login">로그인</a>
-				</li>
 		  	</ul>
             <div class="sub-menu-bg"></div>
         </nav>
@@ -59,10 +56,7 @@
 <!-- 모바일 헤더 -->
 <div class="m-header">
 	<a href="/planner/main" class="logo img-box block">
-		<img src="/images/pencil-solid.svg" width="30px" height="30px" alt="planner">
-	</a>
-	<a href="/member/anon/login" sec:authorize="isAnonymous()">
-    	<img src="/images/login.svg" width="30px" height="30px" alt="login">
+		<img src="/images/plandas.png" width="30px" height="30px" alt="planner" />
 	</a>
 	<a href="/member/auth/myInfo" sec:authorize="isAuthenticated()" class="search img-box block myinfo">
 		<img sec:authorize="isAuthenticated()" src="/images/myinfo.svg" width="20px" height="30px" alt="myinfo">
@@ -87,7 +81,7 @@
             <li class="delay-2">
                 <a href="javascript:void(0);">그룹<span class="cell-right"><i class="fas fa-chevron-down"></i></span></a>
                 <ul>
-                    <li><a href="/team/main">그룹 메인</a></li>
+                    <li><a href="/team/main">그룹 목록</a></li>
                     <li><a href="/team/create">그룹 생성</a></li>
                     <li><a href="/team/search">그룹 찾기</a></li>
                 </ul>

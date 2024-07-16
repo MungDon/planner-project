@@ -110,8 +110,7 @@ public class MemberController {
 
 	/* 비밀번호 찾기 */
 	@GetMapping("/anon/find/pw")
-	public String findPwForm(HttpServletRequest request, HttpServletResponse response) {
-		CommonUtils.removeCookiesAndSession(request, response);
+	public String findPwForm() {
 		return "/member/member_find_pw";
 	}
 
@@ -125,10 +124,11 @@ public class MemberController {
 	/* 비밀번호 변경 */
 	@PostMapping("/anon/pw/change")
 	@ResponseBody
-	public ResponseEntity<String> pwChange(@Valid ReqChangePassword req) {
+	public ResponseEntity<String> pwChange(@Valid ReqChangePassword req,HttpServletRequest request, HttpServletResponse response) {
 		if (req.getNewPassword().equals(req.getNewPassword2())) {
 			memberService.changePassword(req);
 		}
+		CommonUtils.removeCookiesAndSession(request, response);
 		return ResponseEntity.ok("ok");
 	}
 	
@@ -136,6 +136,9 @@ public class MemberController {
 	@GetMapping("/anon/login")
 	public String memberLogin(@UserData ResMemberDetail detail, HttpServletRequest request,
 			HttpServletResponse response) {
+		if(!CommonUtils.isEmpty(detail)) {
+			return "redirect:/planner/main";
+		}
 		if (detail != null && detail.getMember_status().equals(MemberStatus.NOT_DONE.getCode())) {
 			CommonUtils.removeCookiesAndSession(request, response);
 			return "redirect:/member/anon/login";
