@@ -2,9 +2,11 @@ package com.planner.dto.request.team.board;
 
 import java.time.LocalDateTime;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class ReplyDTO {
 	private Long reply_id;
 	private Long team_board_id;

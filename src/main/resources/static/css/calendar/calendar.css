@@ -5,7 +5,11 @@
 	flex-wrap: wrap;
 	justify-content: center;
 }
-
+#schedule_count_div{
+	text-align:center;
+	height:0;
+	transform:translateY(-40px);
+}
 /* /planner/calendar 의 달력 css. */
 .calendar {
 	display: grid;
@@ -14,8 +18,8 @@
 	border-radius: 10px;
 	width: 700px;
 	min-height: 190px;
-	height: 250px;
-	margin: 10% 10px 0% 0%;
+	height: 450px;
+	margin: 120px 10px 0 0;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-use-select: none;
@@ -45,11 +49,17 @@
 }
 
 .day {
-	width: 24px;
-	height: 30px;
+	width: 90px;
+	height: 70px;
 	cursor: pointer;
+	overflow:hidden;
 }
-
+.small-gray{
+	color:dimgray;
+	font-size:10px;
+	white-space: nowrap;
+	overflow:hidden;
+}
 /* 토요일 */
 .weekdays div:nth-child(7n) {
 	color: #046582; /* 파란색 */

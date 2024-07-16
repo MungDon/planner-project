@@ -1,10 +1,8 @@
 package com.planner.dto.request.friend;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
 @Getter
 @Setter
 public class FriendRequestDTO {

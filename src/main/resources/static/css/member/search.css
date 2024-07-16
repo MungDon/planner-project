@@ -14,6 +14,9 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	white-space: nowrap;
+    overflow: hidden;
+    width: 400px;
 }
 
 .title_text {
@@ -54,10 +57,15 @@
 .searchTable table{
 	margin: 0 auto;
 }
+
+.searchTable a {
+	text-decoration:none;
+	color: blueviolet;
+}
+
 .search_sub_tr {
 	font-size: 18px;
 	color: darkgray;
-	padding-bottom: 10px;
 }
 
 .search_tr {
@@ -70,7 +78,6 @@
 }
 .search_td1 {
 	width: 160px;
-	line-height: 1.2;
 	text-align: center;
 	overflow: hidden;
 	word-wrap: break-word;
@@ -94,10 +101,9 @@
 
 .search_td4 {
 	width: 80px;
-/* width: 60px; */
-/* 	text-align: center; */
 	display: flex;
 	align-items: center;
+    margin-top: 5px;
 }
 
 .paging {

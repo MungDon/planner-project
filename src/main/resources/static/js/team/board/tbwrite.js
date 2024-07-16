@@ -237,6 +237,13 @@ document.getElementById('btn_save').onclick = function(){
 	}
 }
 
+$(document).on("change", 'input[name="vote_item_name"]', function(){
+	if($(this).val().length > 50){
+		alert("투표 항목은 최대 50글자입니다.");
+		$(this).val($(this).val().substring(0, 50));
+	}
+});
+
 // 리셋 버튼
 document.getElementById('btn_reset').addEventListener("click", function(){
 	boardform.reset();

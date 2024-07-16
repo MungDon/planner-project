@@ -3,9 +3,9 @@ package com.planner.dto.request.team.vote;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class VoteInfoDTO {
 	private long vote_id;
 	private String vote_title;

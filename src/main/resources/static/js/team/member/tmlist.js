@@ -104,33 +104,64 @@ modify_cancel.forEach(e => {
 kick.forEach(e => {
 	e.addEventListener("click", function(){
 		let tr = e.closest("tr");
-		let member_id = tr.id;
-		let data = new FormData();
-		data.append('team_id', team_id);
-		data.append('member_id', member_id);
-		let del_request = new Request("/team/member/kick", {
-			method:'DELETE',
-			headers:headers,
-			body:data
-		});
-		fetch(del_request)
-		.then(response => {
-			if(response.ok){
-				if(this.className.includes("wait")){
-					tr.remove();
-					wait_count.innerText = wait_count.innerText - 1;
-				}else{
-					tr.remove();
-					member_count.innerText = member_count.innerText - 1;
-				}
-			}else{
-				alert("오류 발생");
+		let nick = tr.querySelectorAll("td")[1].querySelector("span").innerText;
+		let alert_text;
+		let confirm_text;
+		if(e.classList.contains("wait")){
+			alert_text = " 회원의 가입을 <br>거절하시겠습니까?";
+			confirm_text = "가입을 거절했습니다.";
+		}else{
+			alert_text = " 회원을 그룹에서 <br>추방하시겠습니까?";
+			confirm_text = "그룹에서 추방했습니다.";
+		}
+		Swal.fire({
+			title: nick + alert_text,
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "예",
+			cancelButtonText:"아니오"
+		}).then((result) => {
+			if (result.isConfirmed) {
+				let member_id = tr.id;
+				let data = new FormData();
+				data.append('team_id', team_id);
+				data.append('member_id', member_id);
+				let del_request = new Request("/team/member/kick", {
+					method:'DELETE',
+					headers:headers,
+					body:data
+				});
+				fetch(del_request)
+				.then(response => {
+					if(response.ok){
+						if(this.className.includes("wait")){
+							tr.remove();
+							wait_count.innerText = wait_count.innerText - 1;
+						}else{
+							tr.remove();
+							member_count.innerText = member_count.innerText - 1;
+						}
+						Swal.fire({
+							title: confirm_text,
+							icon: "success",
+							confirmButtonText: "닫기"
+						});
+					}else{
+						Swal.fire({
+							title: "오류가 발생하였습니다.",
+							icon: "error",
+							confirmButtonText: "닫기"
+						});
+					}
+				})
+				.catch(() => {
+					alert("오류 발생");
+				})
+				;
 			}
-		})
-		.catch(() => {
-			alert("오류 발생");
-		})
-		;
+		});
 	});
 });
 

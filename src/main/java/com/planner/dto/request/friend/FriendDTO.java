@@ -4,11 +4,9 @@ import java.util.List;
 
 import com.planner.dto.request.member.MemberDTO;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
 @Getter
 @Setter
 public class FriendDTO {

@@ -43,7 +43,7 @@ public class VoteController {
 		for(VoteItemDTO item : dto.getVote_items()) {
 			if(voted == 0) {
 				voted = item.getVote_members().stream()
-						.filter(t -> t.getTeam_member_id() == team_member_id)
+						.filter(t -> t == team_member_id)
 						.count();
 			}
 			total_vote += item.getVote_members().size();

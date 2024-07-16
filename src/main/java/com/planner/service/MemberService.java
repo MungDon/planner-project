@@ -187,12 +187,8 @@ public class MemberService {
 	 * 주써잉행=========================================================================
 	 * =>
 	 */
-//	회원 이메일로 시퀀스 찾기
-	public Long findByMemberId(String member_email) {
-		return memberMapper.findByMemberId(member_email);
-	}
-	
 //	회원정보
+	@Transactional(readOnly = true)
 	public MemberDTO info(Long member_id, @UserData ResMemberDetail detail) {
 		MemberDTO memberDTO = new MemberDTO();
 		List<FriendRequestDTO> frReceiveList;
@@ -229,17 +225,18 @@ public class MemberService {
 	}
 	
 //	회원 검색
-	public List<MemberDTO> search(String member_email, String keyword, int start, int end){
-		if (CommonUtils.isEmpty(member_email)) {
+	@Transactional(readOnly = true)
+	public List<MemberDTO> search(Long member_id, String keyword, int start, int end){
+		if (CommonUtils.isEmpty(member_id)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
 		}
 		
-		Long myId = memberMapper.findByMemberId(member_email);
-		List<MemberDTO> list = memberMapper.search(myId, keyword, start, end);
+		List<MemberDTO> list = memberMapper.search(member_id, keyword, start, end);
 		return list;
 	}
 	
 //	전체회원 수
+	@Transactional(readOnly = true)
 	public int searchCount(Long member_id, String keyword) {
 		int count = memberMapper.searchCount(member_id, keyword);
 		

@@ -20,9 +20,6 @@ public interface VoteMapper {
 	public void voteItemInsert(@Param("vote_id")Long vote_id, 
 							@Param("vote_item_names")List<String> vote_item_names);
 
-	// 투표 삭제
-	public void voteDelete(Long vote_id);
-
 	// 투표 정보 읽기
 	public VoteInfoDTO voteInfo(Long vote_id);
 

@@ -2,9 +2,9 @@ package com.planner.dto.request.team.board;
 
 import java.time.LocalDateTime;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class ReplyViewDTO {
 	private long reply_id;
 	private long reply_group;

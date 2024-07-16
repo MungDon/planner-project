@@ -7,9 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ScheduleSearchDTO {
+public class CalendarDTO {
 	private Long team_id;
-	private String so;
-	private String cal_title;
-	private LocalDate cal_date;
+	private Long member_id;
+	private LocalDate start_date;
+	private LocalDate end_date;
 }

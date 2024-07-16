@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.planner.mapper.FriendMapper">
 	<!-- 친구 시퀀스로 객체 찾기 -->
 	<select id="findByFriendId" resultType="FriendDTO">
@@ -143,14 +143,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 	
 	<!-- 친구목록 -->
 	<select id="friendList" resultType="FriendDTO">
-		select f.*
+		select m.member_name, m.member_email,
+		f.FRIEND_ID ,
+		f.member_my_id,
+		f.member_friend_id,
+		f.FRIEND_MY_NICKNAME ,
+		f.FRIEND_NICKNAME ,
+		f.FRIEND_MY_MEMO ,
+		f.FRIEND_MEMO
 		from friend f
 		left outer join member m
-		on f.member_my_id = m.member_id
-		where m.member_status = 'B'
-		and f.member_my_id = #{member_my_id}
-		or f.member_friend_id = #{member_my_id}
+		on m.member_id = f.member_my_id
+		or m.member_id = f.member_friend_id
+		where m.member_id != #{member_my_id}
+		and m.member_status = 'B'
+		and (f.member_friend_id = #{member_my_id}
+		or f.member_my_id = #{member_my_id})
 	</select>
+	
 	
 	<!-- 친구 닉네임 변경 -->
 	<update id="friendNickName" parameterType="friendDTO">

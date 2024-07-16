@@ -12,35 +12,38 @@
 	<header th:replace="~{/fragments/header :: header}"></header>
 	<div th:replace="~{fragments/friendBar :: friendHeader}"></div>
 	<main class="receiveMain">
-		<table class="receive_table">
-			<tr>
-				<th class="receive_title" colspan="3">
-					<span>보낸요청</span>
-				</th>
-			</tr>
-			<tr class="receive_sub_tr">
-				<th class="receive_td1">이메일</th>
-				<th class="receive_td2">이름</th>
-			</tr>
-			<tr th:each="friendRequestDTO : ${sendList}" class="receive_tr">
-				<td class="receive_td1">	<!-- 이메일 클릭 시 회원정보로 이동 -->
-					<a th:href="@{|/member/auth/info/${friendRequestDTO.member_receive_id}|}" class="receive_a">
-						[[${friendRequestDTO.member_email}]]
-					</a>
-				</td>
-				<td class="receive_td2">
-					<span th:text="${@friendRoleUtils.getMemberMaskingName(friendRequestDTO.member_name, NAME)}"></span>
-				</td>
-				<td class="receive_td3">
-					<form action="/friend/requestDelete" method="post">
-						<button type="submit" class="custom-btn btn-kw"><span>취소</span></button>
-						<input type="hidden" name="member_receive_id" th:value="${friendRequestDTO.member_receive_id}"	/>
-						<input type="hidden" name="delete_who" value="receive"	/>		<!-- 나에게 요청을 받은 삭제 대상을 구분짓는 숨김요소 -->
-						<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
-					</form>
-				</td>
-			</tr>
-		</table>
+		<div class="receive_table">
+			<table>
+				<tr>
+					<th class="receive_title" colspan="3">
+						<span>보낸요청</span>
+					</th>
+				</tr>
+				<tr class="receive_sub_tr">
+					<th class="receive_td1">이메일</th>
+					<th class="receive_td2">이름</th>
+					<th class="receive_td3"></th>
+				</tr>
+				<tr th:each="friendRequestDTO : ${sendList}" class="receive_tr">
+					<td class="receive_td1">	<!-- 이메일 클릭 시 회원정보로 이동 -->
+						<a th:href="@{|/member/auth/info/${friendRequestDTO.member_receive_id}|}" class="receive_a">
+							[[${friendRequestDTO.member_email}]]
+						</a>
+					</td>
+					<td class="receive_td2">
+						<div class="td_name" th:text="${@friendRoleUtils.getMemberMaskingName(friendRequestDTO.member_name, NAME)}"></div>
+					</td>
+					<td class="receive_td3">
+						<form action="/friend/requestDelete" method="post">
+							<button type="submit" class="custom-btn btn-kw"><span>취소</span></button>
+							<input type="hidden" name="member_receive_id" th:value="${friendRequestDTO.member_receive_id}"	/>
+							<input type="hidden" name="delete_who" value="receive"	/>		<!-- 나에게 요청을 받은 삭제 대상을 구분짓는 숨김요소 -->
+							<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
+						</form>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</main>
 	<script type="text/javascript" src="/js/friend/friendRequest.js"></script>
 	<script type="text/javascript" src="/js/header.js"></script>

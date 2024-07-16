@@ -11,16 +11,18 @@ const token = $('meta[name="_csrf_token"]').attr("content");
 $(document).on("click", ".team_member", function(){
 	location.href = '/team/member/info?team_id='+team_id+'&team_member_id='+$(this).data("team_member_id");
 })
+
 if(check_delete !== null){
-   // 글삭제 modal창 on
-   check_delete.addEventListener('click', function(){
-      modal.style.display = 'block';
-   })
-   // 글삭제 modal창 off
-   modal_close.addEventListener('click', function(){
-      modal.style.display = 'none';
-   })
+	// 글삭제 modal창 on
+	check_delete.addEventListener('click', function(){
+		modal.style.display = 'block';
+	})
+	// 글삭제 modal창 off
+	modal_close.addEventListener('click', function(){
+		modal.style.display = 'none';
+	})
 }
+
 /*
 	$("선택자").on("click", function(){});
 	$(document).on("click", "선택자", function);

@@ -32,11 +32,6 @@ public class VoteService {
 		}
 	}
 
-	// 투표 삭제(글 삭제시)
-	public void voteDelete(Long vote_id) {
-		voteMapper.voteDelete(vote_id);
-	}
-
 	// 투표 정보 읽기
 	public VoteInfoDTO voteInfo(Long vote_id) {
 		return voteMapper.voteInfo(vote_id);

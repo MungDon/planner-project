@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<title>회원 검색</title>
 	<link rel="stylesheet" type="text/css" href="/css/friend/button.css"	/>
 	<link rel="stylesheet" type="text/css" href="/css/member/search.css"	/>
 	<link rel="stylesheet" type="text/css" href="/css/friend/friendBar.css"	/>
@@ -10,6 +9,7 @@
 	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 	<meta name="_csrf" th:content="${_csrf.token}"/>
 	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 	<header th:replace="~{/fragments/header :: header}"></header>
@@ -19,7 +19,7 @@
 		<div class="search_title">
 			<span class="title_text">Search</span>
 			<form action="/member/auth/search" method="get" id="keywordForm" onsubmit="return keywordCheck()">	<!-- Enter Key 로 서밋 방지 -->
-				<input type="text" name="keyword" id="keywordInput" maxlength="20" placeholder="이메일로 검색해주세요" style="font-size: 18px; color: gray; font-style: oblique;"/>
+				<input type="text" name="keyword" id="keywordInput" maxlength="20" style="font-size: 18px; color: gray; font-style: oblique;"	/>
 				<button type="submit" id="keywordBtn" class="custom-btn btn-kw"><span>검색</span></button>
 			</form>
 		</div>
@@ -29,7 +29,7 @@
 		<div th:if="${count != 0}" class="searchTable">
 			<table>
 				<tr class="search_sub_tr">
-					<th class="search_tr1">이메일</th>
+					<th class="search_td1">이메일</th>
 					<th class="search_td2">이름</th>
 					<th class="search_td3">성별</th>
 				</tr>
@@ -92,5 +92,6 @@
 	</main>
 	<script type="text/javascript" src="/js/member/memberSearch.js"></script>
 	<script type="text/javascript" src="/js/header.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 </body>
 </html>

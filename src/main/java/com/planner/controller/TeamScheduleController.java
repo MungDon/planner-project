@@ -90,6 +90,7 @@ public class TeamScheduleController {
 		return "redirect:/planner/calendar";
 	}
 
+	// 게시판 글작성에서 일정 검색
 	@GetMapping("search")
 	public String scheduleSearch(ScheduleSearchDTO dto, Model model) {
 		List<ScheduleDTO> list = scheduleService.schedule_search(dto);

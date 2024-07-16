@@ -167,8 +167,7 @@
 	</update>
 	
 	<!-- ================== 주성이햄========================= -->
-	
-	<!-- 회원 이메일로 객체 가져오기 -->
+<!-- 회원 이메일로 객체 가져오기 -->
 	<select id="findByUser" resultType="MemberDTO">
 		select *
 		from member
@@ -190,8 +189,15 @@
 	</select>
 	
 	<!-- 회원 시퀀스로 이메일 찾기 (친구 이메일 찾을 때 사용) -->
-	<select id="findByMemberEmail" resultType="String">
+	<select id="findEmailBySeq" resultType="String">
 		select member_email
+		from member
+		where member_id = #{member_id}
+	</select>
+	
+	<!-- 회원 시퀀스로 이메일 찾기 (친구 이메일 찾을 때 사용) -->
+	<select id="findNameBySeq" resultType="String">
+		select member_name
 		from member
 		where member_id = #{member_id}
 	</select>
@@ -208,6 +214,7 @@
 				where member_id != #{member_id}
 				and substr (member_email, 1, instr(member_email, '@') - 1) like '%' || #{keyword} || '%'
 				and member_status = 'B'
+				and member_role = 'ROLE_USER'
 			)m
 			left outer join friend_request fr
 			on m.member_id = fr.member_send_id

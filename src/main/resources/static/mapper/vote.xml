@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</selectKey>
 	insert into vote values(
 		#{vote_id},
+		#{team_board_id},
 		#{vote_title},
 		#{vote_content},
 		#{vote_end}
@@ -26,10 +27,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</foreach>
 </insert>
 
-<delete id="voteDelete">
-	delete vote where vote_id=#{vote_id}
-</delete>
-
 <resultMap type="VoteInfoDTO" id="voteInfo">
 	<result column="vote_id"		property="vote_id"/>
 	<result column="vote_title"		property="vote_title"/>
@@ -38,8 +35,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<collection column="vote_id" property="vote_items" javaType="List" ofType="VoteItemDTO">
 		<id		column="vote_item_id"	property="vote_item_id"></id>
 		<result column="vote_item_name"	property="vote_item_name"></result>
-		<collection column="vote_item_id" property="vote_members" javaType="List" ofType="VoteMemberDTO">
-			<id column="team_member_id"	property="team_member_id"></id>
+		<collection column="vote_item_id" property="vote_members" javaType="List" ofType="Long">
+			<id column="team_member_id"></id>
 		</collection>
 	</collection>
 </resultMap>

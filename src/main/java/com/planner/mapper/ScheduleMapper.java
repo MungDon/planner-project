@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.planner.dto.request.schedule.CalendarDTO;
+import com.planner.dto.request.schedule.CalendarPrintDTO;
 import com.planner.dto.request.schedule.ScheduleDTO;
 import com.planner.dto.request.schedule.ScheduleSearchDTO;
 
@@ -25,8 +27,7 @@ public interface ScheduleMapper {
 	public List<ScheduleDTO> schedule_search(ScheduleSearchDTO dto);
 
 	public ScheduleDTO schedule_select_one(Long schedule_id);
-	
-	
-	
-	
+
+	public List<CalendarPrintDTO> calendarPrint(CalendarDTO dto);
+
 }

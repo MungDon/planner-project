@@ -16,6 +16,11 @@
 	box-shadow: 0px 0px 10px 1px lightgray;
 }
 
+.receive_table a {
+	text-decoration:none;
+	color: blueviolet;
+}
+
 .receive_sub_tr {
 	font-size: 18px;
 	color: darkgray;
@@ -35,13 +40,11 @@
 }
 
 .receive_tr1 {
-	padding: 0 0 10px;
 	width: 120px;
 }
 
 .receive_td1 {
 	width: 120px;
-	text-align: center;
 	overflow: hidden;
 	word-wrap: break-word;
 	display: -webkit-box;
@@ -50,21 +53,23 @@
 }
 
 .receive_td2 {
-/* 	margin-right: 10px; */
-	width: 160px;
+	width: 120px;
+    text-align: center;
+}
+.receive_td2 .td_name {
+	width: 120px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	text-align: center;
 	padding: 0 0 10px;
+	box-sizing: border-box;
 }
+
 .receive_td3 {
 	width: 40px;
-/* 	text-align: center; */
 	display: flex;
 	align-items: center;
-/* 	justify-content: center; */
-	padding: 0 0 10px;
 }
 
 .receive_title {

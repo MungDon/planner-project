@@ -33,7 +33,7 @@
 				<button type="button" th:text="수정하기" class="edit_btn" onClick="enableInputs(this)" style="display: inline-block; margin-left:15px;"></button>
 				<button type="button" th:value="${scheduleDTO.schedule_id}"	class="submit_btn" onClick="editSchedule(this)"	style="display: none; margin-left:15px;">수정하기</button>
 				<button type="reset" th:text="수정취소" class="none_btn"	onclick="resetForm(this)" style="display: none;"></button>
-				<button type="button" th:value="${scheduleDTO.schedule_id}"	class="delete_btn" onClick="deleteScheduel(this)">삭제하기</button>
+				<button type="button" th:value="${scheduleDTO.schedule_id}"	class="delete_btn" onClick="deleteSchedule(this)">삭제하기</button>
 				</th:block>
 			</form>
 		</div>

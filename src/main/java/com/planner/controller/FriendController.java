@@ -24,12 +24,10 @@ import com.planner.util.CommonUtils;
 import com.planner.util.UserData;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/friend")
-@Slf4j
 public class FriendController {
 
 	private final FriendService friendService;
@@ -79,8 +77,8 @@ public class FriendController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/receiveList")
 	public String receiveList(@UserData ResMemberDetail dtail, Model model) {
-		List<FriendRequestDTO> receiveList = friendService.receiveRequestList(dtail.getMember_email());
-		int receive_count = friendService.receiveRequestCount(dtail.getMember_email());	// 받은 친구신청 수
+		List<FriendRequestDTO> receiveList = friendService.receiveRequestList(dtail.getMember_id());
+		int receive_count = friendService.receiveRequestCount(dtail.getMember_id());	// 받은 친구신청 수
 		
 		model.addAttribute("receive_count", receive_count);
 		model.addAttribute("receiveList", receiveList);
@@ -94,8 +92,8 @@ public class FriendController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/sendList")
 	public String sendList(@UserData ResMemberDetail dtail, Model model) {
-		List<FriendRequestDTO> sendList = friendService.sendRequestList(dtail.getMember_email());
-		int receive_count = friendService.receiveRequestCount(dtail.getMember_email());	// 받은 친구신청 수
+		List<FriendRequestDTO> sendList = friendService.sendRequestList(dtail.getMember_id());
+		int receive_count = friendService.receiveRequestCount(dtail.getMember_id());	// 받은 친구신청 수
 		model.addAttribute("receive_count", receive_count);
 		model.addAttribute("sendList", sendList);
 		
@@ -145,8 +143,9 @@ public class FriendController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/list")
 	public String friendList(@UserData ResMemberDetail detail, Model model) {
-		List<FriendDTO> friendList = friendService.friendList(detail.getMember_email());
-		int receive_count = friendService.receiveRequestCount(detail.getMember_email());	// 받은 친구신청 수
+		List<FriendDTO> friendList = friendService.friendList(detail);
+		int receive_count = friendService.receiveRequestCount(detail.getMember_id());	// 받은 친구신청 수
+		
 		model.addAttribute("receive_count", receive_count);
 		model.addAttribute("friendList", friendList);
 		
@@ -173,7 +172,7 @@ public class FriendController {
 			friendService.friendMemo(friendDTO);
 		}
 		
-		int receive_count = friendService.receiveRequestCount(detail.getMember_email());	// 받은 친구신청 수
+		int receive_count = friendService.receiveRequestCount(detail.getMember_id());	// 받은 친구신청 수
 		model.addAttribute("receive_count", receive_count);
 		
 	    return String.format("redirect:/friend/info?friend_id=%d&friend_status=%s", friendDTO.getFriend_id(), friendDTO.getFriend_status());
@@ -187,25 +186,24 @@ public class FriendController {
 							 @RequestParam(name = "member_id", defaultValue = "") Long member_id) {
 		String phone;
 		String gender;
-		log.error("친구"+friend_id);
+		
 		if (CommonUtils.isEmpty(friend_id)) {
 			friend_id = friendService.findByFriendSeq(member_id, detail.getMember_id());	// 친구 시퀀스 찾는 메서드
 			if (CommonUtils.isEmpty(friend_id)) {
 				friend_id = friendService.findByFriendSeq(detail.getMember_id(), member_id);
-//				if(CommonUtils.isEmpty(friend_id)) {
-//					return "redirect:";
-//				}
 				friend_status = "B";
 			}
 		}
-	
-		log.error("친구상태"+friend_status);
+		
 		FriendDTO friendDTO = friendService.friendInfo(friend_id, friend_status);			// 친구정보 메서드
+		if (friendDTO.getMemberInfo() == null) {
+			throw new CustomException(ErrorCode.WITHDRAWN_MEMBER);
+		}
 		for (MemberDTO memberDTO : friendDTO.getMemberInfo()) {
 			gender = Gender.findNameByCode(memberDTO.getMember_gender());
 			model.addAttribute("gender", gender);
 		}
-		int receive_count = friendService.receiveRequestCount(detail.getMember_email());	// 받은 친구신청 수
+		int receive_count = friendService.receiveRequestCount(detail.getMember_id());	// 받은 친구신청 수
 
 		model.addAttribute("friendDTO", friendDTO);
 		model.addAttribute("receive_count", receive_count);

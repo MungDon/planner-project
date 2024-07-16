@@ -196,7 +196,7 @@ public class MemberController {
 
 		MemberDTO memberDTO = memberService.info(member_id, detail);
 		gender = Gender.findNameByCode(memberDTO.getMember_gender());
-		receive_count = friendService.receiveRequestCount(detail.getMember_email()); // 받은 친구신청 수
+		receive_count = friendService.receiveRequestCount(detail.getMember_id()); // 받은 친구신청 수
 
 		name = Masking.maskAs(memberDTO.getMember_name(), Masking.NAME);
 		model.addAttribute("name", name); // 마스킹 처리
@@ -265,7 +265,7 @@ public class MemberController {
 		int end = currentPage * pageSize;
 		int count = 0;
 		
-		List<MemberDTO> list = memberService.search(detail.getMember_email(), keyword, start, end);
+		List<MemberDTO> list = memberService.search(detail.getMember_id(), keyword, start, end);
 		for (MemberDTO memberDTO : list) {
 			String statusB = "";
 			String statusC = "";
@@ -324,7 +324,7 @@ public class MemberController {
 		
 		model.addAttribute("status", detail.getMember_status());
 		
-		int receive_count = friendService.receiveRequestCount(detail.getMember_email());	// 받은 친구신청 수
+		int receive_count = friendService.receiveRequestCount(detail.getMember_id());	// 받은 친구신청 수
 		model.addAttribute("receive_count", receive_count);
 		
 		model.addAttribute("NAME", Masking.NAME);		// 타임리프로 마스킹 처리를 하기위해 넘겨줌
@@ -333,5 +333,4 @@ public class MemberController {
 		
 		return "member/member_search";
 	}
-
 }

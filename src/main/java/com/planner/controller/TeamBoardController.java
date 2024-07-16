@@ -118,10 +118,13 @@ public class TeamBoardController {
 	@Transactional
 	public String tbwrite(TeamBoardDTO dto, VoteDTO vdto, @UserData ResMemberDetail detail,
 			@RequestParam(name = "vote_item_name", defaultValue = "") List<String> vote_item_names) {
-		voteService.voteInsert(vdto);
-		voteService.voteItemInsert(vdto, vote_item_names);
-		dto.setVote_id(vdto.getVote_id());
 		tbService.tbInsert(dto, detail.getMember_id());
+		if(vdto != null) {
+			vdto.setTeam_board_id(dto.getTeam_board_id());
+			voteService.voteInsert(vdto);
+			voteService.voteItemInsert(vdto, vote_item_names);
+			dto.setVote_id(vdto.getVote_id());
+		}
 		return "redirect:/team/board/view?team_id=" + dto.getTeam_id() + "&tb_id=" + dto.getTeam_board_id();
 	}
 
@@ -170,8 +173,10 @@ public class TeamBoardController {
 			return "redirect:/team/board/list?team_id="+team_id;
 		}
 		// grade 보내는 이유는 공지사항 때문임.
-		// TODO 수정할점. 공지사항 작성 후 grade가 user로 내려간 경우 처리.
 		String tm_grade = tmService.teamMemberGrade(dto.getTeam_id(), detail.getMember_id());
+		if(dto.getTb_category().equals("공지사항") && tm_grade.equals(TM_Grade.ROLE_TEAM_USER.getValue())) {
+			dto.setTb_category("일반");
+		}
 		model.addAttribute("dto", dto);
 		model.addAttribute("tm_grade", tm_grade);
 		return "/team/board/tbmodify";
@@ -190,12 +195,7 @@ public class TeamBoardController {
 	// 게시글 삭제
 	@ResponseBody
 	@PostMapping("/delete")
-	public String tbdelete(@RequestParam("team_id") Long team_id, @RequestParam("tb_id") Long team_board_id,
-			@RequestParam(name = "vote_id", defaultValue = "-1") Long vote_id) {
-		if(vote_id != -1) {
-			// 투표 있으면 투표 먼저 삭제
-			voteService.voteDelete(vote_id);
-		}
+	public String tbdelete(@RequestParam("team_id") Long team_id, @RequestParam("tb_id") Long team_board_id) {
 		tbService.teamBoardDelete(team_board_id);
 		return "/team/board/list?team_id=" + team_id;
 	}

@@ -11,6 +11,14 @@
 	border-radius: 20px;
 	padding: 20px;
 	box-shadow: 0px 0px 10px 1px lightgray;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.list_table a {
+	text-decoration:none;
+	color: blueviolet;
 }
 
 .list_title {
@@ -28,7 +36,6 @@
 .list_tr {
 	font-size: 16px;
 	color: gray;
-	height: 1.8em;
 }
 
 .infoA {
@@ -38,13 +45,13 @@
 .list_th1 {
 	padding: 0 0 10px;
 	text-align: center;
-	width: 40%;
+	width: 120px;
 }
 
 .list_th2, .list_th3 {
 	padding: 0 0 10px;
 	text-align: center;
-	width: 30%;
+	width: 100px;
 }
 
 .nameI:disabled{
@@ -59,19 +66,52 @@
 .nameI {
 	text-align: center;
 	font-size: 14px;
+	cursor: text;
 }
 
-.list_td {
+.list_td1 {
+/*	text-align: center;*/
+	width: 120px;
+/*	text-align: center;*/
+	overflow: hidden;
+	word-wrap: break-word;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	margin-top: 1px;
+}
+.list_td1 .infoA {
+/*	vertical-align: middle;*/
+}
+
+.list_tr2 {
+	width: 136px;
 	text-align: center;
 }
+.list_td2 {
+	width: 90px;
+	text-align: right;
+}
+.list_td3 {
+	width: 130px;
+}
+
+.memo_td {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 /* 메모 길이 1줄로 조정 / 뒷부분 .. 표시 */
 .memoT {
-	width: 180px;
+	width: 100px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+    text-align: center;
 }
 
 .list_tdBtn {
-	width: 80px;
+	width: 40px;
 }

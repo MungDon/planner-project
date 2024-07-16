@@ -13,20 +13,20 @@
 	<div th:replace="~{fragments/friendBar :: friendHeader}"></div>
 	<main class="listMain">
 		<div class="list_table">
-			<table>	<!-- 이 페이지에서는 정/역 방향 설정 완료 my_id=나, friend_id=친구 -->
+			<table >	<!-- 이 페이지에서는 정/역 방향 설정 완료 my_id=나, friend_id=친구 -->
 				<tr>
 					<th class="list_title" colspan="6">
 						<span>친구목록</span>
 					</th>
 				</tr>
 				<tr class="receive_sub_tr">
-					<th class="list_th1" colspan="2">친구이메일</th>
-					<th class="list_th2" colspan="2">친구별명</th>
-					<th class="list_th3" colspan="2">친구메모</th>
+					<th class="list_td1" colspan="2">친구이메일</th>
+					<th class="list_tr2" colspan="2">친구별명</th>
+					<th class="list_td3" colspan="2">친구메모</th>
 				</tr>
 				<tr th:each="friendDTO : ${friendList}" class="list_tr">
 					<!-- 이메일 -->
-					<td class="list_td" colspan="2">
+					<td class="list_td1" colspan="2">
 						<form action="/friend/info" method="get" th:attr="id='infoForm' + ${friendDTO.friend_id}">
 							<a onclick="infoForm()" class="infoA" th:attr="data-info='infoForm' + ${friendDTO.friend_id}" href="javascript:void(0);">
 								[[${friendDTO.member_email}]]
@@ -35,30 +35,35 @@
 							<input type="hidden" name="friend_status" th:value="${friendDTO.friend_status}"			/>
 						</form>
 					</td>
-				   <!-- 별명 -->
-					<td class="list_td">
-						<!-- 나타나 있음 -->
+					<!-- 별명 -->
+					<!-- 나타나 있음 -->
+					<td class="list_td" th:if="${friendDTO.friend_nickname == '' || friendDTO.friend_nickname == null}">
+						<input type="text" maxlength="16" style="width: 90px;"
+						th:attr="id='nameI' + ${friendDTO.friend_id}"
+						th:value="${friendDTO.member_name}" class="nameI"   disabled/>
+					</td>
+					<td th:unless="${friendDTO.friend_nickname == '' || friendDTO.friend_nickname == null}">
 						<input type="text" maxlength="16" style="width: 90px;"
 						th:attr="id='nameI' + ${friendDTO.friend_id}"
 						th:value="${friendDTO.friend_nickname}" class="nameI"   disabled/>
-						<!--             <div th:attr="id='nameT' + ${friendDTO.friend_id}"
-						th:text="${friendDTO.friend_nickname}" class="nameT">
-						</div>
-						숨겨져 있음
-						<div>
-						<input type="text" maxlength="16" style="display: none; width: 90px;"
-						th:attr="id='nameI' + ${friendDTO.friend_id}"
-						th:value="${friendDTO.friend_nickname}" class="nameI"   />
-						</div> -->
 					</td>
 					<td class="list_tdBtn">
 						<form action="/friend/nickname" method="post" th:attr="id='nickForm' + ${friendDTO.friend_id}">
 							<input type="hidden" name="friend_id" th:value="${friendDTO.friend_id}"	/>
 							<input type="hidden" name="friend_status" th:value="${friendDTO.friend_status}"	/>
-							<input type="hidden" name="friend_my_nickname" th:value="${friendDTO.friend_my_nickname}"	/>
-							<!-- 텍스트박스에 입력된 밸류 가져와서 서밋 (텍스트박스가 form 밖에있음) -->
-							<input type="hidden" name="friend_nickname"
-							 th:attr="id='nameH' + ${friendDTO.friend_id}"	/>
+							<div th:if="${friendDTO.friend_status == 'C'}">
+								<input type="hidden" name="friend_my_nickname" th:value="${friendDTO.friend_nickname}"	/>
+								<!-- 텍스트박스에 입력된 밸류 가져와서 서밋 (텍스트박스가 form 밖에있음) -->
+								<input type="hidden" name="friend_nickname"
+								 th:attr="id='nameH' + ${friendDTO.friend_id}"	/>
+							</div>
+							<div th:if="${friendDTO.friend_status == 'B'}">
+								<input type="hidden" name="friend_my_nickname" th:value="${friendDTO.friend_my_nickname}"	/>
+								<!-- 텍스트박스에 입력된 밸류 가져와서 서밋 (텍스트박스가 form 밖에있음) -->
+								<input type="hidden" name="friend_nickname"
+								 th:attr="id='nameH' + ${friendDTO.friend_id}"	/>
+							</div>
+							
 							<input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
 							
 							<!-- 서밋 버튼 -->
@@ -79,11 +84,20 @@
 						</button>
 					</td>
 					<!-- 메모 -->
-					<td colspan="2" class="list_td">
-						<div th:attr="id='memoT' + ${friendDTO.friend_id}"
-						 th:text="${friendDTO.friend_memo}" class="memoT">
-						</div>
-					</td>
+					<div th:if="${friendDTO.friend_status == 'B'}">
+						<td colspan="2" class="memo_td">
+							<div th:attr="id='memoT' + ${friendDTO.friend_id}"
+							 th:text="${friendDTO.friend_memo}" class="memoT">
+							</div>
+						</td>
+					</div>
+					<div th:if="${friendDTO.friend_status == 'C'}">
+						<td colspan="2" class="memo_td">
+							<div th:attr="id='memoT' + ${friendDTO.friend_id}"
+							 th:text="${friendDTO.friend_my_memo}" class="memoT">
+							</div>
+						</td>
+					</div>
 				</tr>
 			</table>
 		</div>

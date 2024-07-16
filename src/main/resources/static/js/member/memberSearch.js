@@ -47,7 +47,11 @@ const keywordCheck = () => {
 	let keywordInput = document.getElementById('keywordInput');
 	keywordInput.value = keywordInput.value.trim();
 	if (keywordInput.value.length < 3) {
-		swalCall("경고","최소 3글자 이상 입력하세요.","warning");
+		Swal.fire({
+		  icon: "error",
+		  title: "warning",
+		  text: "최소 3글자 이상 입력하세요.",
+		});
 		return false;
 	}
 	return true;

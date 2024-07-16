@@ -58,6 +58,7 @@ function createCalendar(month, year) {
 	for (let i = 1; i <= lastDateOfMonth; i++) {
 		const day = document.createElement('div');
 		day.classList.add('day');
+		day.dataset.day = i;
 		day.textContent = i;
 		days.appendChild(day);
 
@@ -70,49 +71,91 @@ function createCalendar(month, year) {
 	}
 	$(document).off("click");
 
+	// yyyy-MM-dd 형식으로 달의 시작, 끝
+	let start_date = monthName.dataset.year+'-'+String(monthName.dataset.month).padStart(2, '0')+'-01';
+	let end_date = monthName.dataset.year+'-'+String(monthName.dataset.month).padStart(2, '0')+'-'+lastDateOfMonth;
+
+	let data = {
+		"start_date":start_date,
+		"end_date": end_date,
+		"team_id": team_id
+	};
+	// 출력된 달의 일정 가져오기 (제목, MMdd 형식의 시작, 종료 날짜)
+	$.ajax({
+		url: "/planner/cal-sche",
+		type: "get",
+		data: data,
+		success: function(result) {
+			// 여기서 result 타입은 js Array 객체
+			$("#schedule_count").text(result.length); // 이 달의 일정 개수 표시
+			document.querySelectorAll(".day").forEach(day => {
+				if(!day.classList.contains("blank")){
+					let date = String(monthName.dataset.month).padStart(2, '0') + String(day.innerText).padStart(2, '0');
+					result.forEach( (dto) => {
+						let schedule_title = dto.schedule_title;
+						let schedule_start = dto.schedule_start;
+						let schedule_end = dto.schedule_end;
+						if(date >= schedule_start && date <= schedule_end){
+							let ele = document.createElement("p");
+							ele.classList.add("small-gray");
+							ele.dataset.sc_id = dto.schedule_id;
+							ele.append(schedule_title);
+							day.append(ele);
+						}
+					});
+				}
+			})
+		}
+	});
 	// 날짜 클릭하면.
 	function handleDayClick() {
 		let year = $(".month-name").data("year");
 		let month = $(".month-name").data("month");
-		clickedDate = year + String(month).padStart(2, '0') + String($(this).text()).padStart(2, '0');
-		var clickDate = new Date(year, month - 1, $(this).text());
-		clickDate.setDate(clickDate.getDate() + 1);
-		var clickDateStr = clickDate.toISOString().slice(0, 16);
-
-		var clickDateSec = new Date(year, month - 1, $(this).text());
-		clickDateSec.setDate(clickDateSec.getDate() + 1);
-		clickDateSec.setMinutes(clickDateSec.getMinutes() + 30);
-		var clickDateStr2 = clickDateSec.toISOString().slice(0, 16);
-
-		local_date_start = clickDate.toISOString().slice(0, 16);
-		local_date_end = clickDateSec.toISOString().slice(0, 16);
-		let data = {
-			"date": clickedDate,
-			"team_id": team_id,
-			"tm_grade": tm_grade
-		};
-		$.ajax({
-			url: "schedule",
-			type: "get",
-			data: data,
-			success: function(html) {
-
-				$(".schedule").empty();
-				$(".schedule").append(html);
-
-				// 원래 right 에서 처리 했지만 . 그렇게 되면 오류 뜸.  -> 페이지 로딩시에 date를 받아오지 않기 때문에 일어난 일임.
-				// 따라서 클릭해서 실행 했을 때 ? Date의 값을 받아오면 오류가 생기지 않음. 
-				// 여기 아래는 dateTimeLocal 관련한 스크립트들 
-				let dateElement = document.querySelector('.dateTimeLocal');
-				let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-				dateElement.value = clickDateStr;
-				dateElement.setAttribute("min", date);
-
-				let secondDateElement = document.querySelector('.secondDateTimeLocal');
-				secondDateElement.value = clickDateStr2;
-				secondDateElement.setAttribute("min", clickDateStr);
-			}
-		});
+		clickedDate = year + String(month).padStart(2, '0') + String($(this).data('day')).padStart(2, '0');
+/*		같은 날짜 클릭하면 schedule 없애는거 만들었는데
+		날짜 클릭하다가 다른 달의 날짜 클릭하면 고장나버림
+		if($(".click-date")[0] != null && $(".click-date")[0].innerText === clickedDate){
+			$(".schedule")[0].innerText = '';
+		}else{*/
+			var clickDate = new Date(year, month - 1, $(this).data('day'));
+			clickDate.setDate(clickDate.getDate() + 1);
+			var clickDateStr = clickDate.toISOString().slice(0, 16);
+	
+			var clickDateSec = new Date(year, month - 1, $(this).data('day'));
+			clickDateSec.setDate(clickDateSec.getDate() + 1);
+			clickDateSec.setMinutes(clickDateSec.getMinutes() + 30);
+			var clickDateStr2 = clickDateSec.toISOString().slice(0, 16);
+	
+			local_date_start = clickDate.toISOString().slice(0, 16);
+			local_date_end = clickDateSec.toISOString().slice(0, 16);
+			let data = {
+				"date": clickedDate,
+				"team_id": team_id,
+				"tm_grade": tm_grade
+			};
+			$.ajax({
+				url: "schedule",
+				type: "get",
+				data: data,
+				success: function(html) {
+	
+					$(".schedule").empty();
+					$(".schedule").append(html);
+	
+					// 원래 right 에서 처리 했지만 . 그렇게 되면 오류 뜸.  -> 페이지 로딩시에 date를 받아오지 않기 때문에 일어난 일임.
+					// 따라서 클릭해서 실행 했을 때 ? Date의 값을 받아오면 오류가 생기지 않음. 
+					// 여기 아래는 dateTimeLocal 관련한 스크립트들 
+					let dateElement = document.querySelector('.dateTimeLocal');
+					let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+					dateElement.value = clickDateStr;
+					dateElement.setAttribute("min", date);
+	
+					let secondDateElement = document.querySelector('.secondDateTimeLocal');
+					secondDateElement.value = clickDateStr2;
+					secondDateElement.setAttribute("min", clickDateStr);
+				}
+			});
+		/*}*/
 	}
 	$(document).on("click", ".day", handleDayClick);
 }//createCalendar 끝
@@ -243,10 +286,30 @@ function writeSchedule() {
 			xhr.setRequestHeader(header, token);
 		},
 		success: function() {
+			let count = parseInt($("#schedule_count").text()) + 1;
+			$("#schedule_count").text(count);
 			// 첫 번째 AJAX 요청 성공 시 실행되는 부분
 			$(".schedule").load(window.location.href + "");
-
 			scheduleAjax();
+			//let start_date = $("#form").find('input[name="schedule_start"]').val();
+			//let end_date = $("#form").find('input[name="schedule_end"]').val();
+			
+			let schedule_title = $("#form").find('input[name="schedule_title"]').val();
+			let schedule_start = $("#form").find('input[name="schedule_start"]').val().substring(5,10).replace('-','');
+			let schedule_end = $("#form").find('input[name="schedule_end"]').val().substring(5,10).replace('-','');
+			document.querySelectorAll(".day").forEach(day => {
+				if(!day.classList.contains("blank")){
+					let date = String($(".month-name")[0].dataset.month).padStart(2, '0') + String(day.innerText).padStart(2, '0');
+					if(date >= schedule_start && date <= schedule_end){
+						let ele = document.createElement("p");
+						ele.classList.add("small-gray");
+						// 새 글 작성이라 많이 고치는거 아니면 schedule_id 모름
+						// ele.dataset.sc_id = dto.schedule_id;
+						ele.append(schedule_title);
+						day.append(ele);
+					}
+				}
+			})
 		},
 		error: function(xhr, status, error) {
 			console.error("글 작성시에 오류 발생", status, error);
@@ -255,8 +318,8 @@ function writeSchedule() {
 }
 
 // 삭제 버튼
-function deleteScheduel(btn) {
-	const schedule_id = btn.value;
+function deleteSchedule(btn) {
+	let schedule_id = btn.value;
 	Swal.fire({
 		title: "삭제 하시겠습니까?",
 		icon:"question",
@@ -277,8 +340,12 @@ function deleteScheduel(btn) {
 					xhr.setRequestHeader(header, token);
 				},
 				success: function() {
-					$(".schedule").load(window.location.href + "");
-					scheduleAjax();
+					$("#"+schedule_id).closest("div").remove();
+					$('p[data-sc_id='+schedule_id+']').each(function(){
+						$(this).remove();
+					});
+					let count = parseInt($("#schedule_count").text()) - 1;
+					$("#schedule_count").text(count);
 				}
 			});
 		} else {
@@ -292,7 +359,6 @@ function deleteScheduel(btn) {
 
 // 수정
 function editSchedule(btn) {
-	const schedule_id = btn.value;
 	var form = $(btn).closest('form'); // 클릭된 버튼의 부모 form 요소 선택
 	var formData = form.serialize(); // 해당 form의 데이터 serialize
 
@@ -313,6 +379,25 @@ function editSchedule(btn) {
 		success: function() {
 			$(".schedule").load(window.location.href + "");
 			scheduleAjax();
+			let schedule_id = form.find('input[name="schedule_id"]').val();
+			let schedule_title = form.find('input[name="schedule_title"]').val();
+			let schedule_start = form.find('input[name="schedule_start"]').val().substring(5,10).replace('-','');
+			let schedule_end = form.find('input[name="schedule_end"]').val().substring(5,10).replace('-','');
+			$('p[data-sc_id='+schedule_id+']').each(function(){
+				$(this).remove();
+			});
+			document.querySelectorAll(".day").forEach(day => {
+				if(!day.classList.contains("blank")){
+					let date = String($(".month-name")[0].dataset.month).padStart(2, '0') + String(day.innerText).padStart(2, '0');
+					if(date >= schedule_start && date <= schedule_end){
+						let ele = document.createElement("p");
+						ele.classList.add("small-gray");
+						ele.dataset.sc_id = schedule_id;
+						ele.append(schedule_title);
+						day.append(ele);
+					}
+				}
+			})
 		}
 	});
 }

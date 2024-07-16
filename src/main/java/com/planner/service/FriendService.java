@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.planner.dto.request.friend.FriendDTO;
 import com.planner.dto.request.friend.FriendRequestDTO;
@@ -26,11 +27,13 @@ public class FriendService {
 	private final MemberMapper memberMapper;
 	
 //	시퀀스 받아서 객체 찾기
+	@Transactional(readOnly = true)
 	public FriendRequestDTO findByFriendRequest(Long member_id) {
 		return friendMapper.findByFriendRequest(member_id);
 	}
 	
 //	회원 시퀀스로 친구 시퀀스 찾기
+	@Transactional(readOnly = true)
 	public Long findByFriendSeq(Long member_my_id , Long member_friend_id) {
 		Long friend_id = friendMapper.findByFriendSeq(member_my_id, member_friend_id);
 		
@@ -38,6 +41,7 @@ public class FriendService {
 	}
 	
 //	친구신청 (보냄)
+	@Transactional
 	public void friendRequest(Long member_id, Long myId) {	// member_id : 친구(신청 받은) 시퀀스
 		FriendRequestDTO friendRequestDTO = new FriendRequestDTO();
 		if (CommonUtils.isEmpty(member_id)) {
@@ -51,44 +55,46 @@ public class FriendService {
 	}
 	
 //	친구신청 상태 찾기
+	@Transactional(readOnly = true)
 	public String friendRequestStatus(@Param("member_receive_id") Long member_receive_id,
 							   		  @Param("member_send_id") Long member_send_id) {
 		return friendMapper.friendRequestStatus(member_receive_id, member_send_id);
 	}
 	
 //	(받은)친구신청 갯수
-	public int receiveRequestCount(String member_email) {
-		if (CommonUtils.isEmpty(member_email)) {
+	@Transactional(readOnly = true)
+	public int receiveRequestCount(Long member_id) {
+		if (CommonUtils.isEmpty(member_id)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
 		}
-		Long myId = memberMapper.findByMemberId(member_email);
 		
-		return friendMapper.receiveRequestCount(myId);
+		return friendMapper.receiveRequestCount(member_id);
 	}
 	
 //	(받은)친구신청 리스트
-	public List<FriendRequestDTO> receiveRequestList(String member_email) {
-		if (CommonUtils.isEmpty(member_email)) {
+	@Transactional(readOnly = true)
+	public List<FriendRequestDTO> receiveRequestList(Long member_id) {
+		if (CommonUtils.isEmpty(member_id)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
 		}
-		Long myId = memberMapper.findByMemberId(member_email);
-		List<FriendRequestDTO> list = friendMapper.receiveRequestList(myId);
+		List<FriendRequestDTO> list = friendMapper.receiveRequestList(member_id);
 		
 		return list;
 	}
 	
 //	(보낸)친구신청 리스트
-	public List<FriendRequestDTO> sendRequestList(String member_email) {
-		if (CommonUtils.isEmpty(member_email)) {
+	@Transactional(readOnly = true)
+	public List<FriendRequestDTO> sendRequestList(Long member_id) {
+		if (CommonUtils.isEmpty(member_id)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
 		}
-		Long myId = memberMapper.findByMemberId(member_email);
-		List<FriendRequestDTO> list = friendMapper.sendRequestList(myId);
+		List<FriendRequestDTO> list = friendMapper.sendRequestList(member_id);
 		
 		return list;
 	}
 	
 //	친구신청 취소/거절
+	@Transactional
 	public void requestDelete(Long member_receive_id, Long member_send_id) {
 		if (CommonUtils.isEmpty(member_receive_id) || CommonUtils.isEmpty(member_send_id)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
@@ -97,6 +103,7 @@ public class FriendService {
 	}
 	
 //	친구수락 (+친구상태 업데이트)
+	@Transactional
 	public void friendAccept(Long member_receive_id, Long member_send_id) {
 		if (CommonUtils.isEmpty(member_send_id)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
@@ -115,17 +122,18 @@ public class FriendService {
 	}
 	
 //	친구목록 (myId != member_my_id : 'C' / 나, 친구 위치 바꿔서 set 해줌 / friend_status = 'C')
-	public List<FriendDTO> friendList(String member_email) {
-		if (CommonUtils.isEmpty(member_email)) {
+	@Transactional(readOnly = true)
+	public List<FriendDTO> friendList(ResMemberDetail detail) {
+		if (CommonUtils.isEmpty(detail.getMember_email())) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
 		}
-		long myId = memberMapper.findByMemberId(member_email);
-		List<FriendDTO> list = friendMapper.friendList(myId);
+		List<FriendDTO> list = friendMapper.friendList(detail.getMember_id());
 		
 		for (FriendDTO friendDTO : list) {
-			if (!friendDTO.getMember_my_id().equals(myId)) {		// 'C' 역방향 상태 / 나의 정보와 친구 정보의 위치가 바뀜
+			if (!friendDTO.getMember_my_id().equals(detail.getMember_id())) {		// 'C' 역방향 상태 / 나의 정보와 친구 정보의 위치가 바뀜
 				// 값의 위치를 바꿔주기 위해 변수에 대입
-				String friendEmail = memberMapper.findByMemberEmail(friendDTO.getMember_my_id());	// my_id = 친구 시퀀스
+				String friendEmail = memberMapper.findEmailBySeq(friendDTO.getMember_my_id());	// my_id = 친구 시퀀스
+				String friendName = memberMapper.findNameBySeq(friendDTO.getMember_my_id());
 				Long member_my_id = friendDTO.getMember_my_id();
 				Long member_friend_id = friendDTO.getMember_friend_id();
 				String friend_my_nickname = friendDTO.getFriend_my_nickname();
@@ -140,11 +148,14 @@ public class FriendService {
 				friendDTO.setFriend_nickname(friend_my_nickname);
 				friendDTO.setFriend_my_memo(friend_memo);
 				friendDTO.setFriend_memo(friend_my_memo);
-				friendDTO.setFriend_status("C");			// 바뀐 정보임을 알려주는 변수 	/ DB에 없음
+				friendDTO.setFriend_status("C");			// 바뀐 정보임을 알려주는 변수	/ DB에 없음
 				friendDTO.setMember_email(friendEmail);		// 친구 이메일 				/ DB에 없음
+				friendDTO.setMember_name(friendName);		// 친구 이름 				/ DB에 없음
 			}else {											// 'B' 정방향 상태
-				String friendEmail = memberMapper.findByMemberEmail(friendDTO.getMember_friend_id());
+				String friendEmail = memberMapper.findEmailBySeq(friendDTO.getMember_friend_id());
+				String friendName = memberMapper.findNameBySeq(friendDTO.getMember_friend_id());
 				friendDTO.setMember_email(friendEmail);		// 친구 이메일 				/ DB에 없음
+				friendDTO.setMember_name(friendName);		// 친구 이름					/ DB에 없음
 				friendDTO.setFriend_status("B"); 			// 정방향으로 저장된 정보		/ DB에 없음
 			}
 		}
@@ -152,11 +163,11 @@ public class FriendService {
 	}
 	
 //	친구 닉네임 변경
+	@Transactional
 	public void friendNickName(FriendDTO frndDTO) {
 		if (CommonUtils.isEmpty(frndDTO)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
 		}
-		
 		FriendDTO friendDTO = new FriendDTO();
 		if (frndDTO.getFriend_status().equals("B")) {			// 정방향 배치일 때
 			friendDTO.setFriend_id(frndDTO.getFriend_id());
@@ -174,7 +185,8 @@ public class FriendService {
 		friendMapper.friendNickName(friendDTO);					// 닉네임 변경 메서드
 	}
 	
-//	친구 매모 변경
+//	친구 메모 변경
+	@Transactional
 	public void friendMemo(FriendDTO frndDTO) {
 		if (CommonUtils.isEmpty(frndDTO)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
@@ -198,6 +210,7 @@ public class FriendService {
 	}
 
 //	친구정보
+	@Transactional(readOnly = true)
 	public FriendDTO friendInfo(Long friend_id, String friend_status) {
 		if (CommonUtils.isEmpty(friend_id)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
@@ -209,7 +222,6 @@ public class FriendService {
 			frndDTO = friendMapper.findByFriendId(friend_id);
 			if (friend_status.equals("B")) {			// 정방향 배치일 때
 				friendDTO = friendMapper.friendInfo(frndDTO);
-				CommonUtils.throwCustomExceptionIf(CommonUtils.isEmpty(friendDTO), ErrorCode.NO_ACCOUNT);
 				friendDTO.setMember_my_id(frndDTO.getMember_my_id());
 				friendDTO.setMember_friend_id(frndDTO.getMember_friend_id());
 				friendDTO.setFriend_status("B");
@@ -224,7 +236,6 @@ public class FriendService {
 				friendDTO.setMember_friend_id(member_my_id);
 				
 				friendDTO = friendMapper.friendInfoC(frndDTO);
-				CommonUtils.throwCustomExceptionIf(CommonUtils.isEmpty(friendDTO), ErrorCode.WITHDRAWN_MEMBER);
 				friendDTO.setFriend_status("C");
 				
 				return friendDTO;			// 역방향일 경우 join 문 변경됨 / on f.member_my_id = m.member_id
@@ -236,6 +247,7 @@ public class FriendService {
 	}
 	
 //	친구삭제
+	@Transactional
 	public void friendDelete(Long friend_id, Long member_my_id, Long member_friend_id) {
 		if (CommonUtils.isEmpty(member_my_id) || CommonUtils.isEmpty(member_friend_id)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
@@ -248,6 +260,7 @@ public class FriendService {
 	}
 	
 //	친구상태 찾기
+	@Transactional(readOnly = true)
 	public String friendStatus(Long member_receive_id, Long member_send_id) {
 		return friendMapper.friendStatus(member_receive_id, member_send_id);
 	}

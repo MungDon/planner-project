@@ -2,9 +2,9 @@ package com.planner.dto.request.team.vote;
 
 import java.time.LocalDateTime;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class VoteMemberInsertDTO {
 	private Long vote_id;
 	private Long vote_item_id;

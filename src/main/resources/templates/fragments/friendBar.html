@@ -6,7 +6,7 @@
 		<div class="fr-container">
 			<ul class="friend_menu">
 				<li>
-					<a sec:authorize="isAuthenticated()" href="/member/auth/search">친구찾기</a>
+					<a sec:authorize="isAuthenticated()" href="/member/auth/search">회원검색</a>
 					<a sec:authorize="isAuthenticated()" href="/friend/receiveList">받은요청</a><span th:if="${receive_count > 0}" th:utext="'('+ ${receive_count}+')'" style="font-size: 12px;"></span>
 					<a sec:authorize="isAuthenticated()" href="/friend/sendList">보낸요청</a>
 					<a sec:authorize="isAuthenticated()" href="/friend/list">친구목록</a>

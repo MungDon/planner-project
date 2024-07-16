@@ -64,15 +64,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			(select
 			    tb.team_board_id,
 			    tb.team_member_id,
-			    tb.vote_id,
 			    tb.schedule_id,
 			    tb.tb_category,
 			    tb.tb_title,
 			    tb.tb_reg,
+			    v.vote_id,
 			    tm.tm_nickname
-			    from team_board tb, team_member tm
-			    where tb.team_member_id = tm.team_member_id
-			    and tb.team_id=#{team_id}
+			    from team_board tb
+			    join team_member tm
+			    	on tb.team_member_id = tm.team_member_id
+			    left outer join vote v
+			    	on tb.team_board_id = v.team_board_id
+			    where tb.team_id=#{team_id}
     			<if test='category!="전체"'>
 				and tb.tb_category = #{category}
 				</if>
@@ -114,13 +117,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</selectKey>
 	insert into team_board values(
 		#{team_board_id}, #{team_id}, #{team_member_id}, 
-		#{vote_id, jdbcType=BIGINT}, #{schedule_id, jdbcType=BIGINT},
-		#{tb_category}, #{tb_title}, #{tb_content}, sysdate)
+		#{schedule_id, jdbcType=BIGINT}, #{tb_category},
+		#{tb_title}, #{tb_content}, sysdate)
 </insert>
 
 <select id="teamBoardView" resultMap="boardMap">
-	select tb.*, tm.tm_nickname from team_board tb, team_member tm 
-		where tb.team_board_id=#{team_board_id} and tb.team_member_id = tm.team_member_id
+	select tb.*, tm.tm_nickname, v.vote_id
+	from team_board tb
+    join team_member tm
+    	on tb.team_member_id = tm.team_member_id
+	left outer join vote v
+    	on tb.team_board_id = v.team_board_id
+	where tb.team_board_id=#{team_board_id}
 </select>
 
 <update id="teamBoardUpdate" parameterType="TeamBoardUpdateDTO">
@@ -137,8 +145,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </update>
 
 <delete id="teamBoardDelete">
-	delete team_board where
-		team_board_id=#{team_board_id}
+	delete team_board
+	where team_board_id=#{team_board_id}
 </delete>
 
 </mapper>

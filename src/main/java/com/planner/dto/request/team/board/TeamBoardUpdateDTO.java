@@ -1,8 +1,10 @@
 package com.planner.dto.request.team.board;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class TeamBoardUpdateDTO {
 	private Long team_board_id;
 	private String tb_category;
