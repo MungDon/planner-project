@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
+body {
+     font-family: "Noto Sans KR", sans-serif;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #1A1C20;
+    overflow-x: hidden;
+    transition: width 0.5s;
+    padding-top: 60px;
+    white-space: nowrap;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    font-weight : bold;
+    color: white;
+    display: block;
+    transition: opacity 0.5s;
+}
+
+.sidenav a:hover {
+    color: #A9CFE2;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+    margin-left: 0; /* Initially set margin-left to 0 */
+}
+
+.sidenav-open #main {
+    margin-left: 250px; /* When sidenav is open, set margin-left to 250px */
+}

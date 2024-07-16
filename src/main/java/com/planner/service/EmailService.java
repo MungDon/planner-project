@@ -79,7 +79,7 @@ public class EmailService {
 	}
 	
 	//인증 번호 검증
-	@Transactional(readOnly = true)
+	@Transactional
 	public void authCodeChk(String toEmail, String authCode) {
 		int result = emailMapper.authCodeChk(toEmail, authCode);
 		CommonUtils.throwRestCustomExceptionIf(result !=1,  ErrorCode.FAIL_AUTHENTICATION);

@@ -35,4 +35,10 @@ public interface NoticeMapper {
 	
 	/*등록된 에디터 내용 가져오기*/
 	String findContentBynoticeId(@Param(value = "notice_id")Long notice_id);
+	
+	/*잉여 이미지 데이터 전부 가져오기*/
+	List<String>ImagesWithoutNoticeId();
+	
+	/*잉여 데이터 전부 삭제*/
+	void deleteImagesWithoutNoticeId();
 }

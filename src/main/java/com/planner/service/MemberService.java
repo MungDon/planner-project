@@ -23,6 +23,7 @@ import com.planner.exception.RestCustomException;
 import com.planner.mapper.EmailMapper;
 import com.planner.mapper.FriendMapper;
 import com.planner.mapper.MemberMapper;
+import com.planner.mapper.TeamMemberMapper;
 import com.planner.util.CommonUtils;
 import com.planner.util.UserData;
 
@@ -39,6 +40,7 @@ public class MemberService {
 	private final EmailMapper emailMapper;
 	private final FriendMapper friendMapper;
 	private final PasswordEncoder passwordEncoder;
+	private final TeamMemberMapper teamMemberMapper;
 	private static final boolean MEMBER = true;
 	private static final boolean NON_MEMBER = false;
 	
@@ -93,6 +95,7 @@ public class MemberService {
 	public void memberDelete(Long member_id) {
 		int isTeamMaster = memberMapper.isTeamMaster(member_id);
 		CommonUtils.throwRestCustomExceptionIf(isTeamMaster!=0, ErrorCode.GROUP_LEADER_CANNOT_WITHDRAW);
+		teamMemberMapper.deleteMember(member_id);
 		memberMapper.changeMemberStatus(member_id, MemberStatus.DELETE.getCode());
 	}
 

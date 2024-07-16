@@ -4,10 +4,14 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <title>관리자 메인 페이지</title>
-<link rel="stylesheet" type="text/css" href="/css/header.css">
-<link rel="stylesheet" type="text/css" href="/css/main.css">
+<link rel="stylesheet" type="text/css" href="/css/admin_main.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-	<header th:replace="~{/fragments/adminHeader :: adminHeader}"></header>
+	<aside th:replace="~{/fragments/adminAside :: adminAside}"></aside>
+	<main id="main">
+	 <span style="font-size:30px;cursor:pointer" onclick="toggleNav()">&#9776; ADMIN</span>
+	</main>
+<script src="/js/notice/admin_main.js"></script>
 </body>
 </html>

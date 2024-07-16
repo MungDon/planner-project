@@ -129,4 +129,14 @@ public class NoticeService {
 		int result = noticeMapper.deleteImg(imgName);
 		CommonUtils.throwRestCustomExceptionIf(result != 1, ErrorCode.DB_DELETE_FAILED);
 	}
+	
+	/*잉여 이미지 데이터 삭제(스케줄러)*/
+	@Transactional
+	public void deleteImagesWithoutNoticeId() {
+		List<String> imgNames = noticeMapper.ImagesWithoutNoticeId();
+		for(String imgName : imgNames) {
+			deleteImg(imgName);
+		}
+		noticeMapper.deleteImagesWithoutNoticeId();
+	}
 }	

@@ -51,4 +51,7 @@ public interface TeamMemberMapper {
 	// team_member_id 검색
 	public long myTeamMemberId(@Param("team_id")long team_id, @Param("member_id")long member_id);
 
+	
+	/*회원탈퇴관련*/
+	void deleteMember(@Param(value = "member_id")Long Member_id);
 }

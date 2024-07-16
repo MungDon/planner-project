@@ -37,7 +37,7 @@ const defaultErrorFn = (errorResponse) => {
 	swalCall("경고",response.message,"error");
 };
 // AJAX 공통			// 구조 분해할당
-const ajaxCall = ({ url, method, successFn, param = null, errorFn = defaultErrorFn }) => {
+const ajaxCall = ({url, method, successFn, param = null, errorFn = defaultErrorFn }) => {
 	$.ajax({
 		url: url,
 		method: method,
@@ -61,7 +61,6 @@ const ajaxCall = ({ url, method, successFn, param = null, errorFn = defaultError
 
 /*스윗 알러트 공통*/
 const swalCall = (title, text, icon, thenFn, confirmButtonText = "확인", showCancelButton = false, cancelButtonText = "아니요") => {
-	
 	Swal.fire({
 		title: title,
 		html: text,

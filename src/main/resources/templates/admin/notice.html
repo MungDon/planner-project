@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>게시판</title>
+    <link rel="stylesheet" type="text/css" href="/css/admin_main.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+<aside th:replace="~{/fragments/adminAside :: adminAside}"></aside>
+<main id="main">
+ <span style="font-size:30px;cursor:pointer" onclick="toggleNav()">&#9776; ADMIN</span>
     <p>
         총 게시글 : <span th:text="${noticeListCount}"></span>
     </p>
@@ -37,5 +42,7 @@
     </div>
 
     <button type="button" onclick="location.href='/admin/noticeWrite'">글 작성</button>
+    </main>
+<script src="/js/notice/admin_main.js"></script>
 </body>
 </html>

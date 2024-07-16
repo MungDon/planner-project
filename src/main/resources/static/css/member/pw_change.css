@@ -1,6 +1,6 @@
 @charset "UTF-8";
 .pwChangeMain {
-	margin-top: 100px;
+	margin-top: 50px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -16,7 +16,7 @@
 	padding: 50px;
 	display: flex;
 	flex-direction: column;
-	box-shadow: 0px 0px 10px 1px #a8c9ff;
+	box-shadow: 5px 5px 3px #ddd;
 }
 
 .pwChangeBox>input {
