@@ -5,6 +5,9 @@ $(".saveBtn").click(() => {
 	validateNoticeForm(noticeForm);
 });
 
+$(".cancelBtn").click(() =>{
+	location.href=PAGE_LIST.NOTICE_LIST;
+});
 const validateNoticeForm = (noticeForm) => {
 	const title = $('#notice_title').val();
 	const content = $('textarea[name="notice_content"]').val();

@@ -86,12 +86,26 @@ $(".noticeTitle").click((event) => {
 	};
 	ajaxCall(ajaxObj);
 });
+
+const formatDateToYYYYDDMM = (date) => {
+    let year = date.getFullYear();
+    let day = String(date.getDate()).padStart(2, '0');
+    let month = String(date.getMonth() + 1).padStart(2, '0');
+    return year+'/'+month+'/'+day;
+}
+
+
 const renderNoticeDetail = (details) => {
 	const noticeDetailContainer = document.querySelector('.noticeDetail');
+	let notice_reg = new Date(details.notice_reg);
+	let formetNoticeReg = formatDateToYYYYDDMM(notice_reg);
 	noticeDetailContainer.innerHTML = ''; // 기존 내용을 지웁니다.
 
 	noticeDetailContainer.innerHTML = `
-        	    <div class='notice_title'>${details.notice_title}</div>
+				<div class='notice_top'>
+    	    	    <div class='notice_title'>${details.notice_title}</div>
+        		    <div class='notice_reg'>${formetNoticeReg}</div>
+        		</div>
         `;
 	let con = document.createElement("div");
 	con.classList.add("notice_content")

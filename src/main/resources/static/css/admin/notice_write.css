@@ -17,11 +17,11 @@
 	font-size: 20px;
 }
 
-.saveBtn {
+.saveBtn,.cancelBtn {
 	font-size : 15px;
 	font-weight : bold;
 	margin-top: 10px;
-	color: #1A1C20;
+	color: gray;
 	width: 15%;
 	height: 40px;
 	border-radius: 3px;
@@ -29,7 +29,7 @@
 	border: 2px solid rgba(0, 0, 0, .2);
 	cursor: pointer;
 }
-.saveBtn:hover {
+.saveBtn:hover,.cancelBtn:hover {
 	color: white;
 	background-color : rgba(0, 0, 0, .2);
 }

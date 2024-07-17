@@ -22,7 +22,7 @@
         height: 200px; /* td 요소의 높이를 200px로 설정 */
     }
 </style>
-<link rel="stylesheet" type="text/css" href="/css/admin_aside.css">
+<link rel="stylesheet" type="text/css" href="/css/admin/admin_aside.css">
 </head>
 <body>
 <aside th:replace="~{/fragments/adminAside :: adminAside}"></aside>
@@ -41,6 +41,6 @@
     <a th:href="@{|/admin/noticeDelete/${noticeDTO.notice_id}|}"><button type="button">글삭제</button></a>
 </main>
     <script th:src="@{/js/admin/notice.js}"></script>
-    <script src="/js/notice/admin_aside.js"></script>
+    <script src="/js/admin/admin_aside.js"></script>
 </body>
 </html>

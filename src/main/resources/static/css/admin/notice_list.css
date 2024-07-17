@@ -9,15 +9,33 @@
 	width: 50%;
 }
 .noticeTable{
-	margin-top : 20px;
+	margin : 20px 0;
 	border-top : 2px solid black;
 	text-align :center;
 	width: 50%;
+	border-collapse: collapse;
 }
-.countText{
+.no_tr{
+	height : 50px;
+	border-bottom : 1px solid #ddd;
+}
+.countText,.selectViewCountText{
 	font-weight: bold;
 	color:rgb(100,100,100);
 }
-.writeBtn{
-	
+.writeBtn {
+	font-size : 15px;
+	font-weight : bold;
+	margin-top: 10px;
+	color: gray;
+	width: 15%;
+	height: 30px;
+	border-radius: 3px;
+	background-color : white;
+	border: 2px solid rgba(0, 0, 0, .2);
+	cursor: pointer;
+}
+.writeBtn:hover {
+	color: white;
+	background-color : rgba(0, 0, 0, .2);
 }

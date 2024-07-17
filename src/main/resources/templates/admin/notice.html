@@ -29,10 +29,15 @@
 			<button type="button" class="writeBtn" onclick="location.href='/admin/noticeWrite'">글 작성</button>
 		</div>
 	    <table class="noticeTable">
+	    	<tr class="no_tr" style=" border-bottom : 2px solid black;">
+	    		<th  class="no_th">제목</th>
+	    		<th  class="no_th">등록일</th>
+	    	</tr>
 	        <tr class="no_tr" th:each="noticeDTO : ${noticeList}">
 	            <td class="no_td"> 
 	            	<a th:href="@{|/admin/noticeContent/${noticeDTO.notice_id}|}"><span th:text="${noticeDTO.notice_title}"></span></a>
 	            </td>
+	            <td th:text="${#temporals.format(noticeDTO.notice_reg, 'yyyy/MM/dd')}"></td>
 	        </tr>
 	    </table>
 	    <div id="pageBox" th:if="${noticeListCount > 0}">
