@@ -153,7 +153,7 @@ public class MemberController {
 			HttpServletResponse response) {
 		memberService.memberStatusChk(detail.getMember_status(), request, response);
 		if (MemberRole.SUPER_ADMIN.getType().equals(detail.getMember_role())) {
-			return "redirect:/admin/main";
+			return "redirect:/admin/notice";
 		}
 		return "redirect:/planner/main";
 	}

@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="/css/friend/friendBar.css"	/>
 	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
 	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+	<script type="text/javascript" src="/js/member/memberSearch.js"></script>
 	<meta name="_csrf" th:content="${_csrf.token}"/>
 	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,11 +43,10 @@
 							</a>
 						</div>
 						<div th:if="${memberDTO.friend_request_status == 'F'}">
-							<form action="/friend/info" method="get" name="friendInfo">
-								<a th:text="${memberDTO.member_email}" onclick="friendInfo.submit()" href="javascript:void(0);"></a>
-								<input type="hidden" name="member_id" th:value="${memberDTO.member_id}"	/>	<!-- 친구신청 보낸사람이 friend_id 위치로 데이터가 들어감 / "C"로 바뀐상태 알림 -->
-								<input type="hidden" name="friend_status" value="C"	/>	<!-- 친구신청 보낸사람이 friend_id 위치로 데이터가 들어감 / "C"로 바뀐상태 알림 -->
-							</form>
+							<form action="/friend/info" method="get">
+						        <a class="submit-link" th:text="${memberDTO.member_email}" href="javascript:void(0);">Submit Form</a>
+						        <input type="hidden" name="member_id" th:value="${memberDTO.member_id}" />
+						    </form>
 						</div>
 					</td>
 					<td class="search_td2" th:text="${@friendRoleUtils.getMemberMaskingName(memberDTO.member_name, NAME)}"></td>
@@ -64,8 +64,6 @@
 						<div th:if="${memberDTO.friend_request_status == 'F'}" class="status_box">
 							<span class="fr-status" th:text="${@friendRoleUtils.getFriendRoleName(memberDTO.friend_request_status)}"></span>
 						</div>
-<!-- 					</td> -->
-<!-- 					<td> [[${memberDTO.member_id}]] [[${memberDTO.friend_request_status}]] </td> -->
 				</tr>
 				<tr class="search_tr">
 					<td colspan="4">
@@ -91,7 +89,6 @@
 		</div>
 		<input type="hidden" th:value="${receive_count}" id="re_count"	/>
 	</main>
-	<script type="text/javascript" src="/js/member/memberSearch.js"></script>
 	<script type="text/javascript" src="/js/header.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 </body>

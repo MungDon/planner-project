@@ -39,7 +39,7 @@ $('.header > .header-inner > .top-menu-bar > ul > .menu-4').mouseleave(function(
 });
 
 $('.header > .header-inner > .top-menu-bar > ul > .menu-5').mouseenter(function(){
-    $('.sub-menu-bg').css('height','0px');
+    $('.sub-menu-bg').css('height','94px');
 });
 $('.header > .header-inner > .top-menu-bar > ul > .menu-5').mouseleave(function(){
     $('.sub-menu-bg').css('height','');

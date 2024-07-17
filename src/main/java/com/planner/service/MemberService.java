@@ -245,4 +245,33 @@ public class MemberService {
 		
 		return count;
 	}
+	// 멤버 회원상태 보기 
+		public List<MemberDTO> memberStatus(int pageNum, int pageSize,String member_status) {
+			int start = (pageNum -1)*pageSize +1;
+			int end = pageSize * pageNum;
+			List<MemberDTO> statusList = memberMapper.memberStatus(start,end,member_status);
+			return statusList;
+		}
+		// 멤버 회원 카운터 
+		public int memberStatusCount(String member_status) {
+			int statusCount = memberMapper.memberStatusCount(member_status);
+			return statusCount ;
+		}
+		// 전체 회원 보기 
+		public List<MemberDTO> memberAll(int pageNum , int pageSize){
+			int start = (pageNum -1)*pageSize +1;
+			int end = pageSize * pageNum;
+			List<MemberDTO> allList = memberMapper.memberAll(start, end);
+			return allList;
+		}
+		// 전체 회원 카운터 
+		public int memberAllCount() {
+			int allCount = memberMapper.memberAllCount();
+			return allCount;
+		}
+		// 회원 상태 변경 
+		public void memberStatusUpdate(Long member_id ,String member_status) {
+			memberMapper.memberStatusUpdate(member_id,member_status);
+		}
+	
 }

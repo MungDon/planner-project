@@ -6,6 +6,7 @@
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <title>Insert title here</title>
 	<link rel="stylesheet" type="text/css" href="/css/team/board/summernote-lite.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/admin/admin_aside.css">
 	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/js/team/board/summernote-lite.min.js"></script>
 	<script type="text/javascript" src="/js/team/board/summernote-ko-KR.min.js"></script>
@@ -13,6 +14,9 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
 </head>
 <body>
+<aside th:replace="~{/fragments/adminAside :: adminAside}"></aside>
+<main id="main">
+ <span style="font-size:30px;cursor:pointer" onclick="toggleNav()">&#9776; ADMIN</span>
 	<form th:action="@{/admin/notice}" method="post" id="noticeForm"> 
 		공지사항 제목:<input type="text" name="notice_title" id="notice_title" required><br/>
 		<div class="post-form">
@@ -20,8 +24,10 @@
 		</div>  
 		<button type="button" class="saveBtn">글 작성</button>
 	</form>
+</main>
 	<script src="/js/common.js"></script>
-	<script src="/js/notice/notice_write.js"></script>
-	<script src="/js/notice/editor.js"></script>
+	<script src="/js/admin/notice_write.js"></script>
+	<script src="/js/admin/editor.js"></script>
+	<script src="/js/admin/admin_aside.js"></script>
 </body>
 </html>

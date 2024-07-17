@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>멤버 상태 관리</title>
+<link rel="stylesheet" type="text/css" href="/css/admin/admin_aside.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<aside th:replace="~{/fragments/adminAside :: adminAside}"></aside>
+<main id="main">
+		<div class="adminText">
+	 		<span style="font-size:30px;cursor:pointer" onclick="toggleNav()">&#9776; ADMIN</span>
+	 	</div>
+    <p>
+        총 게시글 : <span th:text="${statusCount}"></span>
+    </p>
+    <div>
+        회원 상태:
+        <select id="member_status" name="member_status" onchange="updateMemberStatus()">
+            <option value="A" th:selected="${member_status eq 'A'}">전체</option>
+            <option value="D" th:selected="${member_status eq 'D'}">탈퇴</option>
+            <option value="R" th:selected="${member_status eq 'R'}">복구신청</option>
+            <option value="B" th:selected="${member_status eq 'B'}">기본</option>
+        </select>
+    </div>
+    <table border="1" width="200">
+        <tr th:each="MemberDTO : ${MemberALL}">
+            <td>
+                <span th:text="${MemberDTO.member_name}"></span>
+            </td>
+            <td>
+                <span th:text="${MemberDTO.member_status}"></span>
+            </td>
+            <td>
+                <button type="button" class="updateStatus" th:value="눌림">회원상태 변경</button>
+                <div class="status_option" style="display: none;">
+                    <select class="member_update_status">
+                        <option value="D" th:selected="${member_status eq 'D'}">탈퇴</option>
+                        <option value="R" th:selected="${member_status eq 'R'}">복구신청</option>
+                        <option value="B" th:selected="${member_status eq 'B'}">기본</option>
+                    </select>
+                </div>
+            </td>
+            <td class="confirmButton" style="display: none;">
+                <button type="button" class="changeStatusBtn" th:value="${MemberDTO.member_id}" onclick="update(this)">확인</button>
+            </td>
+        </tr>
+    </table>
+    <div>
+    </div>
+    <div id="pageBox" th:if="${statusCount > 0}">
+        <a th:if="${pageNum > 1}" th:href="@{|/admin/memberAllStatus?ps=${ps}&pageNum=${pageNum - 1}|}">이전</a>
+        <th:block th:each="pnum : ${#numbers.sequence(startPage, endPage)}">
+            <a th:if="${pnum != pageNum}" th:href="@{|/admin/memberAllStatus?ps=${ps}&pageNum=${pnum}|}" th:text="${pnum}"></a>
+            <b th:if="${pnum == pageNum}" th:text="${pageNum}"></b>
+        </th:block>
+        <a th:if="${endPage < totalPage}" th:href="@{|/admin/memberAllStatus?ps=${ps}&pageNum=${pageNum + 1}|}">다음</a>
+    </div>
+    </main>
+    <script src="/js/admin/admin_aside.js"></script>
+    <script src="/js/admin/change_status.js"></script>
+</body>
+</html>

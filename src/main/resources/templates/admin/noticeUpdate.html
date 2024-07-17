@@ -55,8 +55,12 @@ input[name="notice_title"] {
 	rel="stylesheet">
 <script
 	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/admin_aside.css">
 </head>
 <body>
+<aside th:replace="~{/fragments/adminAside :: adminAside}"></aside>
+<main id="main">
+ <span style="font-size:30px;cursor:pointer" onclick="toggleNav()">&#9776; ADMIN</span>
 	<form th:action="@{/admin/noticeUpdatePro}" method="post"
 		id="noticeForm">
 
@@ -68,7 +72,9 @@ input[name="notice_title"] {
 		</div>
 		<button type="button" class="saveBtn">수정 완료</button>
 	</form>
+</main>
 	<script src="/js/common.js"></script>
 	<script src="/js/notice/editor.js"></script>
+	<script src="/js/notice/admin_aside.js"></script>
 </body>
 </html>

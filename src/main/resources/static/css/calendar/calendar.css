@@ -14,8 +14,7 @@
 .calendar {
 	display: grid;
 	gap: 5px; /* 셀 사이의 간격 설정 */
-	border: 1px solid black;
-	border-radius: 10px;
+	border-radius: 20px;
 	width: 700px;
 	min-height: 190px;
 	height: 450px;
@@ -24,6 +23,8 @@
 	-moz-user-select: none;
 	-ms-use-select: none;
 	user-select: none;
+    border: 2px solid #ddd;
+   	box-shadow: 5px 5px 3px #ddd;
 }
 
 /* 달 이름을 가운데 정렬 */
@@ -120,8 +121,10 @@
 .schedule-content {
 	border: 1px ridge black;
 	border-collapse: collapse;
-	border-radius: 5px;
-	padding: 0px;
+	border-radius: 20px;
+	padding: 3px;
+   	border: 2px solid #ddd;
+   	box-shadow: 5px 5px 3px #ddd;
 }
 
 .my-div {

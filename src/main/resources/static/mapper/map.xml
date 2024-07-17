@@ -6,7 +6,7 @@
 
 	<insert id="MapInsert" parameterType="MapDTO">
 		insert into map values(
-			NEXTVAL('map_seq'),
+			map_seq.nextval,
 			#{schedule_id},
 			#{place},
 			#{address}

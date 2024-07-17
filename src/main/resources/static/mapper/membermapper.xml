@@ -18,7 +18,7 @@
 			member_role,
 			member_reg
 		)	VALUES	(
-			nextval('member_seq'),
+			member_seq.nextval,
 			'2020-02-01',
 			'none',
 			'none',
@@ -29,7 +29,7 @@
 			#{member_status},
 			#{oauth_type},
 			#{member_role},
-			now()
+			sysdate
 		)
 	</insert>
 		<!--member_seq.NEXTVAL ,nextval('member_seq'),now(), sysdate -->
@@ -48,14 +48,14 @@
 				member_role,
 				oauth_id
 				) values (
-				nextval('member_seq'),
+				member_seq.nextval,
 				#{member_password},
 				#{member_name},
 				#{member_birth},
 				#{member_email},
 				#{member_phone},
 				#{member_gender},
-				now(),
+				sysdate,
 				'B',
 				#{member_role},
 				'none'
@@ -248,4 +248,39 @@
 		and m.member_status='B'
 		and substr (member_email, 1, instr(member_email, '@') - 1) like '%' || #{keyword} || '%'
 	</select>
+	
+	<!-- ==============================주완-->
+		<!-- 멤버 회원상태  -->
+	<select id="memberStatus" resultType="MemberDTO">
+			select b.*
+			from (select m.*, rownum as rn
+			      from member m
+			      where m.member_status = #{member_status}
+			      order by m.member_id desc
+			     ) b
+			where b.rn between #{start} and #{end}
+			order by b.rn desc
+	</select>
+	
+		<!-- 멤버 회원 카운터 -->
+		<select id ="memberStatusCount" resultType="int">
+			select count(*) from member where member_status = #{member_status}
+		</select>
+	<!-- 전체 회원보기  -->
+	<select id="memberAll" resultType="MemberDTO">
+		select b.* from 
+		(select m.*, rownum as rn from member m
+		 order by member_id desc)b 
+		 where rn between #{start} and #{end}
+		 order by rn desc
+	</select>
+	<!-- 전체 회원 카운터 -->
+	<select id="memberAllCount">
+		select count(*) from member
+	</select>
+	<update id="memberStatusUpdate" parameterType="MemberDTO">
+		update member 
+		set member_status =#{member_status}
+		where member_id =#{member_id}
+	</update>
 </mapper>

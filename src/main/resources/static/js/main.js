@@ -1,4 +1,11 @@
 $(function() {
+/*         	const result = $('#result').val();
+	if(!isNull(result)&&result == 1){
+		swalCall("성공","가입되었습니다.","success");
+	} else {
+		swalCall("에러","가입 실패!","error");
+	}*/
+	
 	let prevImgNum = 0; // 이전 이미지 번호
 	let prevScrollPos = 0;
 

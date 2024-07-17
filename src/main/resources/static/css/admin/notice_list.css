@@ -1,0 +1,23 @@
+@charset "UTF-8";
+.noticeBox{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.topInBox{
+	width: 50%;
+}
+.noticeTable{
+	margin-top : 20px;
+	border-top : 2px solid black;
+	text-align :center;
+	width: 50%;
+}
+.countText{
+	font-weight: bold;
+	color:rgb(100,100,100);
+}
+.writeBtn{
+	
+}

@@ -91,7 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 회원탈퇴관련 -->
 <delete id="deleteMember">
 	DELETE 
-	FROM	team_mamber
+	FROM	team_member
 	WHERE
 		member_id = #{member_id}
 </delete>

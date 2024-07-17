@@ -193,7 +193,7 @@ public class TeamMemberController {
 		int result = tmService.tmDelete(team_id, member_id);
 		if(result == 1) {
 			HttpHeaders headers = new HttpHeaders();
-			headers.setLocation(URI.create("/planner/main")); // redirect 시킬 경로 설정
+			headers.setLocation(URI.create("/team/main")); // redirect 시킬 경로 설정
 			return new ResponseEntity<Void>(headers, HttpStatus.SEE_OTHER);
 		}else {
 			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);

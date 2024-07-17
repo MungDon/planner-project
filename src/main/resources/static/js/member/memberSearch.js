@@ -57,12 +57,17 @@ const keywordCheck = () => {
 	return true;
 };
 
-/* 링크 클릭 시 직접 서밋 */
-const infoA = document.querySelectorAll('.infoA');
-infoA.forEach(button => {
-	button.addEventListener('click', () => {
-		const infoId = button.getAttribute('data-info');
-		const infoForm = document.getElementById(infoId);
-		infoForm.submit();
+/* 친구인 경우 */
+document.addEventListener('DOMContentLoaded', function() {
+	const links = document.querySelectorAll('.submit-link');
+	links.forEach(function(link) {
+		link.addEventListener('click', function(event) {
+			event.preventDefault();
+			// 부모 폼이 있으면 submit
+			const form = link.closest('form');
+			if (form) {
+				form.submit();
+			}
+		});
 	});
 });

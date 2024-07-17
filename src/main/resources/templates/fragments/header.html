@@ -43,7 +43,14 @@
 		  			<ul>
                         <li sec:authorize="isAuthenticated()"><a href="/member/auth/myInfo" class="delay-1">내정보</a></li>
                         <li sec:authorize="isAuthenticated()"><a href="/member/auth/signout" class="delay-2">로그아웃</a></li>
-                        <li sec:authorize="isAnonymous()"><a href="/member/anon/login" class="delay-3">로그인</a></li>
+                    </ul>
+                    <div class="sub-menu-height sub-menu-height-4"></div>
+		  		</li>
+		  		<li  sec:authorize="hasRole('SUPER_ADMIN')" class="cell menu-5"	>
+                    <a href="javascript:void(0);">관리자</a>
+		  			<ul>
+                        <li sec:authorize="isAuthenticated()"><a href="/admin/notice" class="delay-1">공지사항</a></li>
+                        <li sec:authorize="isAuthenticated()"><a href="/admin/memberAllStatus" class="delay-2">회원관리</a></li>
                     </ul>
                     <div class="sub-menu-height sub-menu-height-4"></div>
 		  		</li>
@@ -93,6 +100,13 @@
                     <li><a href="/friend/receiveList">받은 신청</a></li>
                     <li><a href="/friend/sendList">보낸 신청</a></li>
                     <li><a href="/friend/list">친구 목록</a></li>
+                </ul>
+            </li>
+            <li class="delay-4" sec:authorize="hasRole('SUPER_ADMIN')" >
+                <a href="javascript:void(0);">관리자<span class="cell-right"><i class="fas fa-chevron-down"></i></span></a>
+                <ul>
+                    <li><a href="/admin/notice">공지사항</a></li>
+                    <li><a href="/admin/memberAllStatus">회원관리</a></li>
                 </ul>
             </li>
         </ul>

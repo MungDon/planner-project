@@ -75,4 +75,16 @@ public interface MemberMapper {
 	
 //	친구신청 보낸 아이디 찾기
 	public List<MemberDTO> findBySendId(@Param("member_id") Long member_id, @Param("keyword") String keyword);
+	
+//=======================주완
+//  회원 상태보기 
+	public List<MemberDTO> memberStatus(@Param("start") int start,@Param("end") int end,@Param("member_status") String member_status);
+//  회원 상태 카운터 
+	public int memberStatusCount(@Param("member_status")String member_status);
+//  회원 전체보기 
+	public List<MemberDTO> memberAll(@Param("start") int start,@Param("end") int end);
+//  회원 전체 카운터 
+	public int memberAllCount();
+//  회원 상태 변경 
+	public void memberStatusUpdate(@Param("member_id")Long member_id,@Param("member_status")String member_status);
 }
