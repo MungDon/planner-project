@@ -61,10 +61,6 @@ $(function() { // $(document).ready(function(){}); 와 같음
 		const type = $("#type").val();
 		$(".emailChkBtn").prop("disabled", true);
 		$("#email").attr("readonly", true);
-		if(toEmail === 'susu_kkang@gmail.com'){
-			alert("그만보내라고");
-			return;
-		}
 		sendEmail(toEmail, type, "authCodeModal");
 	});
 

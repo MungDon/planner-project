@@ -70,6 +70,7 @@ const swalCall = (title, text, icon, thenFn, confirmButtonText = "확인", showC
 		cancelButtonText: cancelButtonText
 	}).then((result) => {
 		if (typeof thenFn == "function") {
+			console.log(thenFn);
 			thenFn(result);
 		}
 	});

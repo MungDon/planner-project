@@ -10,7 +10,7 @@ $(function() {
 	});
 
 	$(document).on("click", ".userDeleteBtn", () => {
-		const thenFn = () => {
+		const thenFn = (result) => {
 			if (result.isConfirmed) {
 				const ajaxObj = {
 					url: API_LIST.DELETE_MEMBER,

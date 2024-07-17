@@ -10,6 +10,7 @@ $(function() {
 		} else {					// 체크 해제 되었을 때
 			$("#oauthTypeBox").css("display", "none");
 			$("#currentPassword").css("display", "block");
+			$("#oauth_type").val("");
 		}
 	});
 

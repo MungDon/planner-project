@@ -87,7 +87,7 @@ public class MemberService {
 	public void isPasswordValid(String currnetPw, ResMemberDetail member) {
 		CommonUtils.throwRestCustomExceptionIf(CommonUtils.isEmpty(member), ErrorCode.NO_ACCOUNT);
 		CommonUtils.throwRestCustomExceptionIf(member.getOauth_id().equals("none") && CommonUtils.isEmpty(currnetPw), ErrorCode.NO_ACCOUNT);
-		CommonUtils.throwRestCustomExceptionIf(!passwordEncoder.matches(currnetPw, member.getMember_password()), ErrorCode.NO_ACCOUNT);
+		CommonUtils.throwRestCustomExceptionIf(member.getOauth_id().equals("none") &&!passwordEncoder.matches(currnetPw, member.getMember_password()), ErrorCode.NO_ACCOUNT);
 	}
 
 	/* 회원 탈퇴 */
@@ -125,13 +125,18 @@ public class MemberService {
 	public int memberRestore(ReqMemberRestore req) {
 		// 복구시 입력정보로 회원정보 가져오기
 		ResMemberDetail memberDetail = findMemberByLoginType(req.getOauth_type(), req.getCurrentEmail());
+		log.info("??"+memberDetail.getMember_email());
 		// 회원아니면 예외
 		CommonUtils.throwRestCustomExceptionIf(CommonUtils.isEmpty(memberDetail), ErrorCode.NO_ACCOUNT);
+		
 		// 비번확인(일반로그인이용할경우)
 		isPasswordValid(req.getCurrentPassword(), memberDetail);
+		
+	
 		// 회원상태에 따른 예외
 		throwForStatus(memberDetail.getMember_status());
 		// 성공하면 복구신청상태로변경
+	
 		return memberMapper.changeMemberStatus(memberDetail.getMember_id(), MemberStatus.RESTORE.getCode());
 	}
 

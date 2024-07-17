@@ -4,7 +4,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 <mapper namespace="com.planner.mapper.NoticeMapper">
 	<insert id="noticeInsert" parameterType="NoticeDTO" useGeneratedKeys="true" keyColumn="notice_id" keyProperty="notice_id">
 		insert into notice values (
-			notice_seq.nextval,
+<!-- 			notice_seq.nextval, -->
+			nextval('notice_seq'),
 			#{notice_title},
 			#{notice_content}
 		)
@@ -18,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 			save_name,
 			extension
 		)	VALUES	(
-			notice_img_seq.nextval,
+			nextval('notice_img_seq'),
 			#{originalName},
 			#{saveName},
 			#{extension}
@@ -42,21 +43,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 	
 	
 	<select id="noticeSelect" resultType="NoticeDTO">
-		select b.* from 
-		(select n.*, rownum as rn
-			from notice n
-			order by notice_id desc) b
-		where rn between #{start} and #{end}
-		order by rn desc 
+		SELECT b.*
+	FROM (
+	    SELECT n.*, ROW_NUMBER() OVER (ORDER BY notice_id DESC) AS rn
+	    FROM notice n
+	) b
+	WHERE b.rn BETWEEN #{start} AND #{end}
+	ORDER BY b.rn DESC;
+<!-- 		select b.* from  -->
+<!-- 		(select n.*, rownum as rn -->
+<!-- 			from notice n -->
+<!-- 			order by notice_id desc) b -->
+<!-- 		where rn between #{start} and #{end} -->
+<!-- 		order by rn desc  -->
 	</select>
 			<!-- 성민형 개인용 -->
-<!-- 	SELECT b.* -->
-<!-- 	FROM ( -->
-<!-- 	    SELECT n.*, ROW_NUMBER() OVER (ORDER BY notice_id DESC) AS rn -->
-<!-- 	    FROM notice n -->
-<!-- 	) b -->
-<!-- 	WHERE b.rn BETWEEN #{start} AND #{end} -->
-<!-- 	ORDER BY b.rn DESC; -->
+
 	<select id="noticeAllSelect" resultType="int">
 		select count(*) from notice 
 	</select>

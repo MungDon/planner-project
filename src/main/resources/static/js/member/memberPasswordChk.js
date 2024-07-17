@@ -23,13 +23,13 @@ $(function() {
 									method: "delete",
 									successFn: () => {
 										const thenFn = () => {
-											//location.href = PAGE_LIST.MAIN_PAGE;
+											location.href = PAGE_LIST.MAIN_PAGE;
 										};
 										swalCall("성공", "탈퇴되었습니다.", "success", thenFn);
 									},
 									errorFn: () => {
 										const thenFn = () => {
-											//location.href = PAGE_LIST.MAIN_PAGE;
+											location.href = PAGE_LIST.MAIN_PAGE;
 										};
 										swalCall("실패", "탈퇴실패.", "error", thenFn);
 									}

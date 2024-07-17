@@ -68,16 +68,16 @@ public class EmailService {
 	private MimeMessage createEmail(String toEmail, String authCode) throws MessagingException, UnsupportedEncodingException {
 		MimeMessage message = javaMailSender.createMimeMessage();
 		String msg = "";
-		msg += "<div><h1>Planner 회원가입 인증 코드입니다</h1>";
+		msg += "<div><h1>Plandas  인증 코드입니다</h1>";
 		msg += "<h2>아래의 인증코드를 페이지에 입력해주세요</h2>";
 		msg += "<h3>인증코드 : " + authCode + "</h3></div>";
 		message.addRecipients(MimeMessage.RecipientType.TO, toEmail);
-		message.setFrom(new InternetAddress(senderEmail, "PLANNER 운영자"));
-		message.setSubject("Planner 회원가입 인증코드입니다.");
+		message.setFrom(new InternetAddress(senderEmail, "PLANDAS 운영자"));
+		message.setSubject("Plandas 인증코드입니다.");
 		message.setText(msg, "UTF-8", "html");
 		return message;
 	}
-	
+	 
 	//인증 번호 검증
 	@Transactional
 	public void authCodeChk(String toEmail, String authCode) {

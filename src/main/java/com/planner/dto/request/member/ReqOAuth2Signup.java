@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class ReqOAuth2Signup {
 	
-	private String member_id;				// 회원ㄴ 고유번호
+	private Long member_id;				// 회원 고유번호
 	
 	private String member_email;			// 회원이메일
 	

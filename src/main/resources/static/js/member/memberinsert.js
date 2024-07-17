@@ -53,11 +53,15 @@ const validateInsert = () => {
 		swalCall("경고", "이메일 인증은 필수입니다.", "warning");
 		return false;
 	}
-	if (birthDate.value > getTodayDate()) {
-		swalCall("경고", "만 9세 이상만 가입 가능합니다.", "warning");
+	if(birthDate.value.split('-')[0] > new Date().getFullYear()){
+		swalCall("경고", "타임머신 탔음?", "warning");
 		return false;
 	}
-	if (birthDate.value < new Date('1900/01/01')) {
+	if (birthDate.value > getTodayDate()) {
+		swalCall("경고", "만 9세 이상만 이용가능합니다.", "warning");
+		return false;
+	}
+	if (parseInt(birthDate.value.split('-')[0])   < 1900) {
 		swalCall("경고", "너 캡틴아메리카임?", "warning");
 		return false;
 	}

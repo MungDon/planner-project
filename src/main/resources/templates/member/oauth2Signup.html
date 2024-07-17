@@ -22,11 +22,11 @@
 				<input type="hidden" id="type" value="insert">
 				
 				<span class="joinText">회원가입을 위해<br> 정보를 입력해주세요</span>
-				<div th:if="${member != null && member.oauth_id =='none'}" class="forKakaoUser">
+				<div th:if="${member != null && member.oauth_type =='kakao'}" class="forKakaoUser">
 					<div class="emailText">
 						<label for="email">이메일(아이디)</label><input type="checkbox" id="emailChkBox"><span class="authChkText">인증여부</span>
 					</div>
-					<input type="email" id="member_email" name="member_email">
+					<input type="email" id="email" name="member_email">
 									<!-- 이메일 인증 버튼 -->
 					<div class="emailChkBtnBox">
 						<button type="button" class="emailChkBtn" id="emailChkBtn">이메일 인증</button>

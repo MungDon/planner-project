@@ -1,19 +1,12 @@
 $(function() {
-/*         	const result = $('#result').val();
-	if(!isNull(result)&&result == 1){
-		swalCall("성공","가입되었습니다.","success");
-	} else {
-		swalCall("에러","가입 실패!","error");
-	}*/
-	
 	let prevImgNum = 0; // 이전 이미지 번호
 	let prevScrollPos = 0;
 
 	const updateImage = () => {
 		let imgNum = Math.floor((Math.random() * 12)) + 1;
 		if (imgNum === prevImgNum) {
-			imgNum = prevImgNum+1;
-			if(imgNum ==13){
+			imgNum = prevImgNum + 1;
+			if (imgNum == 13) {
 				imgNum = 1;
 			}
 		}
@@ -81,27 +74,27 @@ $(".deleteBtn").click((event) => {
 $(".noticeTitle").click((event) => {
 	const notice_id = $(event.target).data("id");
 	const ajaxObj = {
-		url : API_LIST.NOTICE_DETAIL + notice_id,
-		method : "get",
-		successFn : (result) => {
+		url: API_LIST.NOTICE_DETAIL + notice_id,
+		method: "get",
+		successFn: (result) => {
 			renderNoticeDetail(result);
 			openModal("noticeModal");
 		},
-		errorFn : () =>{
-			swalCall("경고","상세정보를 불러오지 못했습니다.","error");
+		errorFn: () => {
+			swalCall("경고", "상세정보를 불러오지 못했습니다.", "error");
 		}
 	};
 	ajaxCall(ajaxObj);
 });
 const renderNoticeDetail = (details) => {
-    const noticeDetailContainer = document.querySelector('.noticeDetail');
-    noticeDetailContainer.innerHTML = ''; // 기존 내용을 지웁니다.
+	const noticeDetailContainer = document.querySelector('.noticeDetail');
+	noticeDetailContainer.innerHTML = ''; // 기존 내용을 지웁니다.
 
-        noticeDetailContainer.innerHTML = `
+	noticeDetailContainer.innerHTML = `
         	    <div class='notice_title'>${details.notice_title}</div>
         `;
-        let con = document.createElement("div");
-        con.classList.add("notice_content")
-        con.innerHTML = details.notice_content;
-        noticeDetailContainer.append(con);
+	let con = document.createElement("div");
+	con.classList.add("notice_content")
+	con.innerHTML = details.notice_content;
+	noticeDetailContainer.append(con);
 }

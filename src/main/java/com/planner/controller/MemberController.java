@@ -64,7 +64,7 @@ public class MemberController {
 	public String memberInsert(@Valid MemberDTO memberDTO, RedirectAttributes rttr) {
 		int result = memberService.memberInsert(memberDTO);
 		rttr.addFlashAttribute("result", result);
-		return "redirect:/planner/main";
+		return "redirect:/member/anon/login";
 	}
 
 	/* 사용자 이메일로 인증코드 보내기 */

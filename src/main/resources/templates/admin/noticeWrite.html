@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 	<link rel="stylesheet" type="text/css" href="/css/team/board/summernote-lite.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/admin/admin_aside.css">
+	<link rel="stylesheet" type="text/css" href="/css/admin/notice_write.css">
 	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/js/team/board/summernote-lite.min.js"></script>
 	<script type="text/javascript" src="/js/team/board/summernote-ko-KR.min.js"></script>
@@ -18,7 +19,9 @@
 <main id="main">
  <span style="font-size:30px;cursor:pointer" onclick="toggleNav()">&#9776; ADMIN</span>
 	<form th:action="@{/admin/notice}" method="post" id="noticeForm"> 
-		공지사항 제목:<input type="text" name="notice_title" id="notice_title" required><br/>
+		<div class="titleBox">
+			<input type="text" name="notice_title" id="notice_title" placeholder="공지사항 제목을 입력하세요." required><br/>
+		</div>
 		<div class="post-form">
 			<textarea name="notice_content" id="summernote"></textarea>
 		</div>  

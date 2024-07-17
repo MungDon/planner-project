@@ -6,7 +6,7 @@ $(function() {
 
 	$('#summernote').summernote({
 		// 에디터 크기 설정
-		height: 800,
+		height: 500,
 		// 에디터 한글 설정
 		lang: 'ko-KR',
 		// 에디터에 커서 이동 (input창의 autofocus라고 생각하시면 됩니다.)
