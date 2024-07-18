@@ -25,4 +25,8 @@
 			#{map_number}
 		</foreach>
 	</delete>
+	<select id="mapLikeDuplicate" parameterType="MapLikeDTO">
+      select count(*) from mapLike where  member_id =#{member_id} and map_title =#{map_title} and map_address =#{map_address} 
+   </select>
+	
 </mapper>

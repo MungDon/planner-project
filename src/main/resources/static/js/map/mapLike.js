@@ -1,13 +1,21 @@
 function listDelete() {
-	var checkboxes = document.querySelectorAll("input[name='mapLikeListcheckbox']:checked");
-	if (checkboxes.length > 0) {
-		document.forms["deleteForm"].submit();
-		return true;
-	} else {
-		alert('체크된 항목이 없습니다');
-		return false;
+	const checkboxes = document.querySelectorAll("input[name='mapLikeListcheckbox']:checked");
+	const mapNumbers = Array.from(checkboxes).map(cb => cb.value);
+	const ajaxObj = {
+		url: "/mapLikeDelete",
+		method: "post",
+		param: {
+			mapLikeListcheckbox: mapNumbers
+		},
+		successFn: (data) => {
+			swalCall("성공", "삭제되었습니다!", "success")
+			closeMapLikeModal();	
+		}
 	}
-}
+	ajaxCall(ajaxObj);
+};
+
+
 
 document.addEventListener("DOMContentLoaded", function() {
 	var flashMessage = document.getElementById("flashMessage");
@@ -22,7 +30,6 @@ function listAdd(btn) {
 	const place = tr.querySelector("#mapLikePlace").textContent.trim();
 	const address = tr.querySelector("#mapLikeAddress").textContent.trim();
 	if (id == 0) {
-		console.log('id null');
 		var mapPlace = document.getElementById('mapPlace');
 		var mapAddress = document.getElementById('mapAddress');
 		mapPlace.value = place;
@@ -30,7 +37,6 @@ function listAdd(btn) {
 		closeMapLikeModal();
 		return true;
 	} else if (id != null) {
-		console.log('id 있음');
 		var form2 = document.getElementById(id);
 		form2.querySelector('.mapPlace').value = place;
 		form2.querySelector('.mapAddress').value = address;

@@ -46,7 +46,7 @@
 	            <a th:if="${pnum != pageNum}" th:href="@{|/admin/notice?ps=${ps}&pageNum=${pnum}|}" th:text="${pnum}"></a>
 	            <b th:if="${pnum == pageNum}" th:text="${pageNum}"></b>
 	        </th:block>
-	        <a th:if="${endPage < totalPage}" th:href="@{|/admin/notice?ps=${ps}&pageNum=${pageNum + 1}|}">다음</a>
+	        <a th:if="${endPage > pageNum}" th:href="@{|/admin/notice?ps=${ps}&pageNum=${pageNum + 1}|}">다음</a>
 	    </div>
     </div>
     </main>

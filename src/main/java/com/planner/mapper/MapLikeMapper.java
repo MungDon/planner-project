@@ -25,5 +25,8 @@ public interface MapLikeMapper {
 	
 	// 즐겨찾기 삭제
 	public int  MapLikeDelete(@Param("member_id")Long member_id ,@Param("map_numbers")List<Integer> mapLikeListcheckbox);
+	
+	// 중복값 검사 
+	public int mapLikeDuplicate(MapLikeDTO dto); 
 }
 	

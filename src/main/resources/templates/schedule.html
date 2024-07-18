@@ -5,64 +5,101 @@
 <title>스케쥴 상세보기</title>
 <link rel="stylesheet" type="text/css" href="/css/calendar/calendar.css">
 <link rel="stylesheet" type="text/css" href="/css/map/kakaomap.css">
-<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
 </head>
 <body>
-	<div class="schedule-container">	<!-- 원래 ddiv (schedule-content 라는 class 가 지정되었는데 없어도 될것 같아서 일단 없앰. -->
+	<div class="schedule-container">
+		<!-- 원래 ddiv (schedule-content 라는 class 가 지정되었는데 없어도 될것 같아서 일단 없앰. -->
 		<div class="schedule-content">
 			<h2 th:text=${date} class="click-date"></h2>
 		</div>
-		<div th:each="scheduleDTO : ${list}" class="schedule-list schedule-content">
+		<div th:each="scheduleDTO : ${list}"
+			class="schedule-list schedule-content">
 			<form onsubmit="return false" th:id="${scheduleDTO.schedule_id}">
 				<input th:if="${team_id}" type="hidden" th:value="${team_id}">
 				<div class="float-right">
-					<input type="datetime-local" th:value="${scheduleDTO.schedule_start}" name="schedule_start" id="edtScheduleStart" readonly="readonly" />
-					<input type="datetime-local" th:value="${scheduleDTO.schedule_end}" name="schedule_end" id="edtScheduleEnd" readonly="readonly">				<br />
+					<input type="datetime-local"
+						th:value="${scheduleDTO.schedule_start}" name="schedule_start"
+						id="edtScheduleStart" readonly="readonly" /> <input
+						type="datetime-local" th:value="${scheduleDTO.schedule_end}"
+						name="schedule_end" id="edtScheduleEnd" readonly="readonly">
+					<br />
 				</div>
-				<input type="hidden" th:value="${scheduleDTO.schedule_id}" name="schedule_id" class="schedule_id" />
-				<input type="text"	th:value="${scheduleDTO.schedule_title}" name="schedule_title"	class="schedule_title" maxlength="16" readonly="readonly"  />				<br />
-				<textarea th:value="${scheduleDTO.schedule_content}" th:utext="${scheduleDTO.schedule_content}" name="schedule_content" class="text-con schedule_content" maxlength="166" readonly="readonly"></textarea>	<br />
-					<input type="text" th:value="${scheduleDTO.place}" name="place" class="mapPlace map-wid" readOnly="readOnly" />		<br />
-					<input type="text" th:value="${scheduleDTO.address}" name="address" class="mapAddress map-wid" readOnly="readOnly" />
-				<th:block  th:if="${tm_grade} == null  OR ${#strings.contains(tm_grade, 'MASTER')}">
-				<button type="button" th:data-schedule_id="${scheduleDTO.schedule_id}" class="edt_place" onclick="openModal(this)" style="display: none">장소수정</button>
-				<button type="button" th:if="${scheduleDTO.place == null}" th:data-schedule_id="${scheduleDTO.schedule_id}" class="add_place" onclick="openModal(this)" style="display: none">장소추가</button>
-				<br />
-				<button type="button" th:text="수정하기" class="edit_btn" onClick="enableInputs(this)" style="display: inline-block; margin-left:15px;"></button>
-				<button type="button" th:value="${scheduleDTO.schedule_id}"	class="submit_btn" onClick="editSchedule(this)"	style="display: none; margin-left:15px;">수정하기</button>
-				<button type="reset" th:text="수정취소" class="none_btn"	onclick="resetForm(this)" style="display: none;"></button>
-				<button type="button" th:value="${scheduleDTO.schedule_id}"	class="delete_btn" onClick="deleteSchedule(this)">삭제하기</button>
+				<input type="hidden" th:value="${scheduleDTO.schedule_id}"
+					name="schedule_id" class="schedule_id" /> <input type="text"
+					th:value="${scheduleDTO.schedule_title}" name="schedule_title"
+					class="schedule_title" maxlength="16" readonly="readonly" /> <br />
+				<textarea th:value="${scheduleDTO.schedule_content}"
+					th:utext="${scheduleDTO.schedule_content}" name="schedule_content"
+					class="text-con schedule_content" maxlength="166"
+					readonly="readonly"></textarea>
+				<br /> <input type="text" th:value="${scheduleDTO.place}"
+					name="place" class="mapPlace map-wid" readOnly="readOnly" /> <br />
+				<input type="text" th:value="${scheduleDTO.address}" name="address"
+					class="mapAddress map-wid" readOnly="readOnly" />
+				<th:block
+					th:if="${tm_grade} == null  OR ${#strings.contains(tm_grade, 'MASTER')}">
+					<button type="button"
+						th:data-schedule_id="${scheduleDTO.schedule_id}" class="edt_place"
+						onclick="openModal(this)" style="display: none">장소수정</button>
+					<button type="button" th:if="${scheduleDTO.place == null}"
+						th:data-schedule_id="${scheduleDTO.schedule_id}" class="add_place"
+						onclick="openModal(this)" style="display: none">장소추가</button>
+					<br />
+					<button type="button" th:text="수정하기" class="edit_btn"
+						onClick="enableInputs(this)"
+						style="display: inline-block; margin-left: 15px;"></button>
+					<button type="button" th:value="${scheduleDTO.schedule_id}"
+						class="submit_btn" onClick="editSchedule(this)"
+						style="display: none; margin-left: 15px;">수정하기</button>
+					<button type="reset" th:text="수정취소" class="none_btn"
+						onclick="resetForm(this)" style="display: none;"></button>
+					<button type="button" th:value="${scheduleDTO.schedule_id}"
+						class="delete_btn" onClick="deleteSchedule(this)">삭제하기</button>
 				</th:block>
 			</form>
 		</div>
 		<!-- 반복 끝 -->
 
 
-		<div class="schedule-content" th:if="${tm_grade} == null  OR ${#strings.contains(tm_grade, 'MASTER')}">
+		<div class="schedule-content"
+			th:if="${tm_grade} == null  OR ${#strings.contains(tm_grade, 'MASTER')}">
 			<!-- 여기서부터 글작성 파트 !-->
 			<button onclick="btnClick()" id="write-btn">글작성</button>
 			<!-- 이 버튼을 누르면 div 창이 열려서 글작성 가능  -->
 			<div id="my-div" class="my-div">
 				<form id="form" method="post" onsubmit="return false">
-					<input th:if="${team_id}" type="hidden" name="team_id" th:value="${team_id}">
-					<input type="text" placeholder="title" name="schedule_title" id="schedule_title" class="schedule_title" maxlength="16"/>
-					<input type="hidden" th:value="${date}" name="date" id="date" />
+					<input th:if="${team_id}" type="hidden" name="team_id"
+						th:value="${team_id}"> <input type="text"
+						placeholder="title" name="schedule_title" id="schedule_title"
+						class="schedule_title" maxlength="16" /> <input type="hidden"
+						th:value="${date}" name="date" id="date" />
 					<div class="float-right">
-						<input type="datetime-local" name="schedule_start" class="dateTimeLocal">
-						<input type="datetime-local" name="schedule_end" class="secondDateTimeLocal"> <br />
+						<input type="datetime-local" name="schedule_start"
+							class="dateTimeLocal"> <input type="datetime-local"
+							name="schedule_end" class="secondDateTimeLocal"> <br />
 					</div>
-					<textarea rows="10" cols="20" placeholder="content" name="schedule_content" id="schedule_content" maxlength="166" class="text-con"></textarea> <br />
-					<input type="text" th:value="${place}" name="place" id="mapPlace" readOnly="readOnly" /> <br/>
-					<input type="text" th:value="${address}" name="address" id="mapAddress" readOnly="readOnly" />
+					<textarea rows="10" cols="20" placeholder="content"
+						name="schedule_content" id="schedule_content" maxlength="166"
+						class="text-con"></textarea>
+					<br /> <input type="text" th:value="${place}" name="place"
+						id="mapPlace" readOnly="readOnly" /> <br /> <input type="text"
+						th:value="${address}" name="address" id="mapAddress"
+						readOnly="readOnly" />
 					<button type="button" onclick="openModal(this)">장소추가</button>
-					<br /> <button type="button" id="sub-btn" onClick="writeSchedule()" >입력</button>
+					<br />
+					<button type="button" id="sub-btn" onClick="writeSchedule()">입력</button>
 				</form>
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="signChkModal" id="signModal">
 		<div class="modalBody">
 			<div class="Modaltop">
@@ -93,48 +130,41 @@
 				<div id="addressDisplay">
 					주소: <span id="addressValue"></span>
 				</div>
-
-                     <form id="Favorites" th:action="@{/list}" method="post">
-						<button type="button" onclick="add_items()" id="insert_place" style="display: inline-block;">장소 추가</button>
-						<button type="button" onclick="edt_items()" id="update_place"	style="display: none;">장소 수정</button>
-	
-	  					<button type="button" onclick="openMapLikeModal()" >즐겨찾기 보기</button>
-                        <input type ="hidden" name="map_title" id="map_title" readOnly="readOnly" />
-                        <input type ="hidden" name="map_address" id="map_address" readOnly="readOnly"/>
-                        <button type="button" onclick="favorites()">즐겨찾기 추가</button>
-					</form>
+				<button type="button" onclick="add_items()" id="insert_place"
+					style="display: inline-block;">장소 추가</button>
+				<button type="button" onclick="edt_items()" id="update_place"
+					style="display: none;">장소 수정</button>
+				<button type="button" onclick="openMapLikeModal()">즐겨찾기 보기</button>
+				<input type="hidden" name="map_title" id="map_title"
+					readOnly="readOnly" /> <input type="hidden" name="map_address"
+					id="map_address" readOnly="readOnly" />
+				<button type="button" onclick="favoritess()">즐겨찾기 추가</button>
 			</div>
 		</div>
 	</div>
-	
-	   <div class="MpaLikeChkModal" id="MpaLikeModal">
-         <div class="MaplikeModal_body">
-            <div class="MapLikeModaltop">
-               <button type="button" class="Xbtn" onclick="closeMapLikeModal()">X</button>
-            </div>
-            <div class="MapLikeModal_Main">
-            <h2>즐겨찾기 목록</h2>
-               <div th:if="${msg}" th:text="${msg}" id="flashMessage" ></div>
-               <form name="deleteForm" th:action="@{/mapLikeDelete}"  method="post">
-                  <table id="mapLikeTable">
-                       <tr  id="mapLikeTr"  th:each="MapLikeDTO : ${mapLikeList}">
-                          <td class="mapLikeBtn" ><button  type="button" onclick="listAdd(this,id)">일정추가</button>   </td>
-                              <td class="mapLikeTd">                                         
-                                  <input type="checkbox" name="mapLikeListcheckbox" th:value="${MapLikeDTO.map_number}" class="nums">
-                              </td>
-                           <td th:id="mapLikePlace"  th:text="${MapLikeDTO.map_title}"></td>
-                            <td th:id="mapLikeAddress"  th:text="${MapLikeDTO.map_address}"></td>
-                       </tr>
-                      </table>
-               <div id="mapLikeDiv" ><button type="button" onclick ="listDelete()">즐겨찾기 삭제</button>
-               </div>
-               </form>
-            </div>
-      </div>   
-   </div>
-   	<script type="text/javascript" src="/js/header.js"></script>
-	<script th:src="@{/js/map/mapScript.js}"></script>
-	<script th:src="@{/js/map/mapLike.js}"></script>
-	<script th:src="@{/js/map/kakaomap.js}"></script>
+
+	<div class="MpaLikeChkModal" id="MpaLikeModal">
+		<div class="MaplikeModal_body">
+			<div class="MapLikeModaltop">
+				<button type="button" class="Xbtn" onclick="closeMapLikeModal()">X</button>
+			</div>
+			<div class="MapLikeModal_Main">
+				<h2>즐겨찾기 목록</h2>
+				<div th:if="${msg}" th:text="${msg}" id="flashMessage"></div>
+				<form name="deleteForm" th:action="@{/mapLikeDelete}" method="post">
+					<table id="mapLikeTable">
+					</table>
+					<div id="mapLikeDiv">
+						<button type="button" onclick="listDelete()">즐겨찾기 삭제</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="/js/header.js"></script>
+	<script src="/js/map/mapScript.js"></script>
+	<script src="/js/common.js"></script>
+	<script src="/js/map/mapLike.js"></script>
+	<script src="/js/map/kakaomap.js"></script>
 </body>
 </html>

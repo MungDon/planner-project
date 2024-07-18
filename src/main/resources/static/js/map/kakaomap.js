@@ -134,7 +134,7 @@ function getListItem(index, places) {
 			'<div class="info">' +
 			'<div class="place"onclick="get_items()">' + places.place_name + '</div>';
 	if (places.road_address_name) {
-		itemStr += '<span class="address">' + places.road_address_name +'</span>'+
+		itemStr += '<span class="address">' + places.road_address_name + '</span>' +
 			'<span class="jibun gray">' + places.address_name + '</span>';
 	} else {
 		itemStr += '<span class="address">' + places.address_name + '</span>';
@@ -143,29 +143,29 @@ function getListItem(index, places) {
 		'</div>';
 	el.innerHTML = itemStr;
 	el.className = 'item';
-	
+
 	return el;
 }
 //HTML 태그를 제거하는 함수 (정규 표현식 사용)
 // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
 function addMarker(position, idx, title) {
-    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-        imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
-        imgOptions =  {
-            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
-            spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
-        },
-        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
-            marker = new kakao.maps.Marker({
-            position: position, // 마커의 위치
-            image: markerImage 
-        });
+	var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+		imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+		imgOptions = {
+			spriteSize: new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+			spriteOrigin: new kakao.maps.Point(0, (idx * 46) + 10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+			offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+		},
+		markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+		marker = new kakao.maps.Marker({
+			position: position, // 마커의 위치
+			image: markerImage
+		});
 
-    marker.setMap(map); // 지도 위에 마커를 표출합니다
-    markers.push(marker);  // 배열에 생성된 마커를 추가합니다
+	marker.setMap(map); // 지도 위에 마커를 표출합니다
+	markers.push(marker);  // 배열에 생성된 마커를 추가합니다
 
-    return marker;
+	return marker;
 }
 
 // 지도 위에 표시되고 있는 마커를 모두 제거합니다
@@ -229,39 +229,41 @@ var address;
 
 function get_items() {
 	let Items = document.getElementById("placesList").querySelectorAll(".item");
-	Items.forEach( item => {
-		item.addEventListener("click", function(){
+	Items.forEach(item => {
+		item.addEventListener("click", function() {
 			place = item.querySelector(".place").innerText;
 			address = item.querySelector(".address").innerText;
-		   document.getElementById("placeValue").textContent = place;
-		   document.getElementById("addressDisplay").textContent = address;
+			document.getElementById("placeValue").textContent = place;
+			document.getElementById("addressDisplay").textContent = address;
 		});
 	});
-   return { place, address };
+	return { place, address };
 }
-
-function favorites() {
-   if (place == null) {
-      alert('검색하신 제목을 클릭해주세요!');
-      return false
-   } else {
-      document.getElementById('map_address').value = address;
-      document.getElementById('map_title').value = place;
-      document.getElementById('Favorites').submit();   //즐겨찾기 추가 
-      return true;
-   }
+/*const favoritess = () =>*/
+function favoritess() {
+	const ajaxObj = {
+		url: "/list",
+		method: "post",
+		param: {
+			map_title: place,
+			map_address: address
+		},
+		successFn: () => {
+			swalCall("성공", "즐겨찾기가 추가되었습니다", "success");
+		}
+	};
+	ajaxCall(ajaxObj);
 }
-
+//$('#addFavoriteBtn').click(favorites);
 function add_items() {
 	// 여기서 특정 조건을 확인하고, 조건을 만족할 때만 true 반환하여 폼 제출을 허용할 수 있습니다.
 	if (place == null) {
 		console.log(place);
-		alert('검색하신 제목을 클릭해주세요!');
+		alert('지역을 선택 후 추가해주세요!');
 		return false;
 	} else {
 		document.querySelector('.place').value = place;
 		document.querySelector('.address').value = address;
-
 		document.getElementById('mapPlace').value = place;
 		document.getElementById('mapAddress').value = address;
 		const signModal = document.getElementById("signModal");
@@ -271,26 +273,25 @@ function add_items() {
 }// share 끝;
 
 function edt_items() {
-	var mapPlace = place; 
-	var mapAddres = address; 
-	
+	var mapPlace = place;
+	var mapAddres = address;
+
 	if (place == null) {
 		cosole.log("실패");
-		alert('검색하신 제목을 클릭해주세요!');
+		alert('지역을 선택 후 추가해주세요!');
 		return false;
 	} else {
 		var form = document.getElementById(id);
 		form.querySelector('.mapPlace').value = mapPlace;
 		form.querySelector('.mapAddress').value = mapAddres;
-		
+
 		console.log(document.querySelector('.mapPlace').value);
 		console.log(document.querySelector('.mapAddress').value);
-		
+
 		const signModal = document.getElementById("signModal");
 		signModal.style.display = "none";
 		return true;
 	} // else 끝
-	
 }// upDate 끝
 
 
