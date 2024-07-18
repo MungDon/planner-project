@@ -11,13 +11,16 @@
 	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/member/tminfo.css">
-	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 	<script type="text/javascript" src="/js/team/member/tminfo.js" defer></script>
 	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
 <body>
 <header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
+<div class="sbox oi-btn">
 <form th:action="update" th:method="put" id="info_update">
 <input type="hidden" name="team_id" id="team_id" th:value="${dto.team_id}">
 <table>
@@ -27,8 +30,8 @@
 	<tr>
 		<td><label for="tm_nickname">별명</label>
 			<!--/* 한 페이지에서 정보 출력, 수정 전환 */-->
-		<td><input th:field="${dto.tm_nickname}" placeholder="그룹내 별명 중복 금지" maxlength="16" disabled>
-		<td><button id="nick_check" type="button" class="dpn">중복검사</button>
+		<td><input th:field="${dto.tm_nickname}" class="ul-input" placeholder="그룹내 별명 중복 금지" maxlength="16" disabled>
+			<button id="nick_check" type="button" class="dpn float-right">중복검사</button>
 	<tr class="dpn">
 		<td colspan="2">
 			<span id="check_msg" class="text-center" style="color:red;">중복검사가 필요합니다.</span>
@@ -53,6 +56,7 @@
 			</th:block>
 </table>
 </form>
+</div>
 </div> <!-- main-container 끝 -->
 </body>
 </html>

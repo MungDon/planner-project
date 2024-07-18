@@ -6,7 +6,9 @@
 	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamSearch.css">
-	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 	<script type="text/javascript" src="/js/team/teamSearch.js" defer></script>
 	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
@@ -16,20 +18,20 @@
 <!--/* 그룹 검색 */-->
 <div class="text-center" id="team-search">
 	<p>검색된 그룹 개수 : <span th:text="${count}"></span></p>
-	<form method="get" id="searchForm" onsubmit="return submitCheck()"><!-- 글자수 2글자 이상으로 검사 -->
+	<form method="get" id="searchForm" class="oi-btn" onsubmit="return submitCheck()"><!-- 글자수 2글자 이상으로 검사 -->
 		<input type="hidden" name="page" value="1">
 		<select name="so">
 			<option value="team_name" th:selected="${so} == 'team_name'">그룹 이름
 			<option value="team_explain" th:selected="${so} == 'team_explain'">그룹 설명
 			<option value="master_email" th:selected="${so} == 'master_email'">그룹장 이메일
 		</select>
-		<input type="text" name="search" id="search" th:value="${search}" placeholder="검색어를 입력해주세요">
+		<input type="text" name="search" id="search" class="ul-input" th:value="${search}" placeholder="검색어를 입력해주세요">
 		<button type="submit">검색</button>
 	</form>
 </div>
 <div th:if="${count > 0}" class="float-clear">
 	<!--/* 검색된 그룹 있으면 출력 */-->
-	<div th:each="dto : ${list}" class="float-left team" th:data-team_id="${dto.team_id}">
+	<div th:each="dto : ${list}" class="float-left team sbox" th:data-team_id="${dto.team_id}">
 		<img th:if="${dto.team_image} != null" th:src="'/team/img?img='+${dto.team_image}" th:alt="${dto.team_name}+' 그룹의 이미지'">
 		<img th:if="${dto.team_image} == null" src="/images/team_default.png" alt="기본이미지"></img>
 		<table class="float-right">
@@ -46,7 +48,7 @@
 		</table>
 	</div>
 </div>
-<div th:if="${count == 0}">
+<div th:if="${count == 0}" style="text-align: center;">
 	<h1>검색된 그룹이 없습니다.</h1>
 </div>
 <nav th:if="${pageCount > 0}" id="pagebar">

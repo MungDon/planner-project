@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum MemberRole {
 
 	SUPER_ADMIN("ROLE_SUPER_ADMIN","최고관리자"),
-	USER("ROLE_USER","일반회원");
+	USER("ROLE_USER","일반회원"),
+	ANON("ANON_MEMBER","가입미완");
 	
 	private final String type;
 	private final String name;

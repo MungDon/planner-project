@@ -64,8 +64,8 @@
 				<a class="more" href="/planner/calendar"
 					th:if="${todaySchedule.size() > 2}">..더보기</a>
 			</div>
+			<p th:text="${#authentication.authorities}"></p>
 		</div>
-		
 		<!-- 공지사항 모달 -->
 		<div id="noticeModal">
 			<div class="noticeModalBody">

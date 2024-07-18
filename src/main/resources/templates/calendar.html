@@ -20,6 +20,10 @@
 	<div id="alldiv" th:fragment="calendar">
 		<div class="calendar">
 		<div id="schedule_count_div"><span id="schedule_count">0</span> 개의 일정이 있습니다.</div>
+		<div id="go-date-div">
+			<input type="date" id="go_date_input" max="9999-12-31">
+			<button type="button" id="go_date_btn">이동</button>
+		</div>
 			<div style="margin: auto;">
 				<button onclick="previousMonth()" class="btn-calendar">&lt;&lt;</button>
 				<span class="month-name"></span>

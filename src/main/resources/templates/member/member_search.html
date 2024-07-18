@@ -1,17 +1,15 @@
-     <!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<title>회원 검색</title>
-	<link rel="stylesheet" type="text/css" href="/css/friend/button.css"	/>
-	<link rel="stylesheet" type="text/css" href="/css/member/search.css"	/>
-	<link rel="stylesheet" type="text/css" href="/css/friend/friendBar.css"	/>
-	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
-	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-	<script type="text/javascript" src="/js/member/memberSearch.js"></script>
-	<meta name="_csrf" th:content="${_csrf.token}"/>
-	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="/css/friend/button.css">
+	<link rel="stylesheet" type="text/css" href="/css/member/search.css">
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
+	<link rel="stylesheet" type="text/css" href="/css/friend/friendBar.css">
 </head>
 <body>
 	<header th:replace="~{/fragments/header :: header}"></header>
@@ -19,16 +17,16 @@
 	<main class="searchMain">
 		<input type="hidden" id="status" th:value="${status}"	/>
 		<div class="search_title">
-			<span class="title_text">Search</span>
+			<img src="/images/search.png" width="20px" height="20px" alt="planner" class="search_img" />
 			<form action="/member/auth/search" method="get" id="keywordForm" onsubmit="return keywordCheck()">	<!-- Enter Key 로 서밋 방지 -->
 				<input type="text" name="keyword" id="keywordInput" maxlength="20" style="font-size: 18px; color: gray; font-style: oblique;"	/>
 				<button type="submit" id="keywordBtn" class="custom-btn btn-kw"><span>검색</span></button>
 			</form>
 		</div>
-			<div th:if="${#lists.isEmpty(list) && keyword != '!@#$%^&*()'}" align="center">
-				<h2>검색 결과가 없습니다.</h2>
+			<div class="notsearch" th:if="${#lists.isEmpty(list) && keyword != '!@#$%^&*()'}" align="center">
+				<span>검색 결과가 없습니다.</span>	<!-- 기본값이 '!@#$%^&*()' 이므로, 초기값이 아니면서(검색하고난 뒤) 검색 리스트가 비어있는 경우  -->
 			</div>
-		<div th:if="${count != 0}" class="searchTable">
+		<div th:if="${count != 0}" class="searchTable">	<!-- 검색 결과 있는 경우 -->
 			<table>
 				<tr class="search_sub_tr">
 					<th class="search_td1">이메일</th>
@@ -37,33 +35,38 @@
 				</tr>
 				<tr th:each="memberDTO : ${list}" class="search_tr">
 					<td class="search_td1">
-						<div th:if="${memberDTO.friend_request_status != 'F'}">
-							<a class="search_a" th:href="@{|/member/auth/info/${memberDTO.member_id}|}">
+						<div th:if="${memberDTO.friend_request_status != 'F'}">	<!-- 친구가 아닌 경우 -->
+							<a class="search_a" th:href="@{|/member/auth/info/${memberDTO.member_id}|}">	<!-- 주소창으로 시퀀스 보냄 -->
 								[[${memberDTO.member_email}]]
 							</a>
 						</div>
-						<div th:if="${memberDTO.friend_request_status == 'F'}">
-							<form action="/friend/info" method="get">
-						        <a class="submit-link" th:text="${memberDTO.member_email}" href="javascript:void(0);">Submit Form</a>
+						<div th:if="${memberDTO.friend_request_status == 'F'}">	<!-- 친구인 경우 -->
+							<form action="/friend/info" method="get">	<!-- 친구정보 페이지로 보냄 -->
+						        <a class="submit-link" th:text="${memberDTO.member_email}" href="javascript:void(0);">Submit Form</a>	<!-- a태그 submit -->
 						        <input type="hidden" name="member_id" th:value="${memberDTO.member_id}" />
 						    </form>
 						</div>
 					</td>
-					<td class="search_td2" th:text="${@friendRoleUtils.getMemberMaskingName(memberDTO.member_name, NAME)}"></td>
+					<td class="search_td2" th:text="${@friendRoleUtils.getMemberMaskingName(memberDTO.member_name, NAME)}"></td>	<!-- 마스킹 처리 -->
 					<td class="search_td3" th:text="${@friendRoleUtils.getMemberGender(memberDTO.member_gender)}"></td>
-					<td class="search_td4">
-						<div th:if="${friendB == null && friendC == null && memberDTO.friend_request_status == null && memberDTO.friend_request_status != 'F'}" class="status_box">	<!-- 친구 요청상태 이거나 친구 이거나 -->
+					<td class="search_td4">	<!-- 버튼/상태를 나타내는 영역 -->
+						<!-- 친구요청을 보내거나 받은 상태가 아니고 친구가 아닌 상태인 경우 -->
+						<div th:if="${memberDTO.friend_request_status == null && memberDTO.friend_request_status != 'F'}" class="status_box">	<!-- 친구 요청상태 이거나 친구 이거나 -->
 							<button type="button" th:value="${memberDTO.member_id}" class="custom-btn btn-add"><span>친구추가</span></button>
 						</div>
+						<!-- 친구요청을 받은 상태이고 친구가 아닌 상태인 경우 -->
 						<div th:if="${memberDTO.friend_request_status == 'R' and memberDTO.friend_request_status != 'F'}" class="status_box">
 							<button type="button" th:value="${memberDTO.member_id}" class="custom-btn btn-access"><span>요청수락</span></button>
 						</div>
+						<!-- 친구요청을 보낸 상태이고 친구가 아닌 상태인 경우 -->
 						<div th:if="${memberDTO.friend_request_status == 'S' and memberDTO.friend_request_status != 'F'}" class="status_box">
 							<span class="fr-status" th:text="${@friendRoleUtils.getFriendRoleName(memberDTO.friend_request_status)}"></span>
 						</div>
+						<!-- 친구상태인 경우 -->
 						<div th:if="${memberDTO.friend_request_status == 'F'}" class="status_box">
 							<span class="fr-status" th:text="${@friendRoleUtils.getFriendRoleName(memberDTO.friend_request_status)}"></span>
 						</div>
+					</td>
 				</tr>
 				<tr class="search_tr">
 					<td colspan="4">
@@ -89,7 +92,9 @@
 		</div>
 		<input type="hidden" th:value="${receive_count}" id="re_count"	/>
 	</main>
-	<script type="text/javascript" src="/js/header.js"></script>
+	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+	<script type="text/javascript" src="/js/header.js"></script>
+	<script type="text/javascript" src="/js/member/memberSearch.js"></script>
 </body>
 </html>

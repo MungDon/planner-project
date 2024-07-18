@@ -1,7 +1,6 @@
 package com.planner.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -165,8 +164,7 @@ public class MemberController {
 	}
 
 	/* 소셜로그인에서 생긴 쿠키 제거 후 로그아웃 */
-	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/auth/signout")
+	@GetMapping("/anon/signout")
 	public String signout(HttpServletRequest request, HttpServletResponse response) {
 		CommonUtils.removeCookiesAndSession(request, response);
 		return "redirect:/member/logout";
@@ -251,15 +249,13 @@ public class MemberController {
 		return ResponseEntity.ok(result);
 	}
 
-	/*
-	 * 쭈썽이햄-------------------------------------------------------------------------
-	 * -------------------------------------------------------------->
-	 */
+	/* -----------------universe----------------- */
+	
 //	회원찾기
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/auth/search")
 	public String search(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
-				   	     @RequestParam(name = "keyword", defaultValue = "!@#$%^&*()") String keyword,		// 키워드 기본값 특수문자로 초기 화면 없애기
+				   	     @RequestParam(name = "keyword", defaultValue = "!@#$%^&*()") String keyword,	// 키워드 기본값 특수문자로 초기 화면 없애기
 				   	     @UserData ResMemberDetail detail, Model model) {
 //		페이징 처리
 		int pageSize = 10;
@@ -268,37 +264,37 @@ public class MemberController {
 		int end = currentPage * pageSize;
 		int count = 0;
 		
-		List<MemberDTO> list = memberService.search(detail.getMember_id(), keyword, start, end);
+		List<MemberDTO> list = memberService.search(detail.getMember_id(), keyword, start, end);	// 키워드를 넣고 검색한 리스트 불러오기
 		for (MemberDTO memberDTO : list) {
-			String statusB = "";
-			String statusC = "";
+			/* 친구신청 S:내가 보낸 경우 / R:내가 받은 경우 */
+			String statusS = "";
+			String statusR = "";
+			String friendStatusS = "";
+			String friendStatusR = "";
 			
-			/* 친구 신청 상태 */
-			if (friendService.friendRequestStatus(memberDTO.getMember_id(), detail.getMember_id()) != null) {
-				statusB = friendService.friendRequestStatus(memberDTO.getMember_id(), detail.getMember_id());
-			}else if (friendService.friendRequestStatus(detail.getMember_id(), memberDTO.getMember_id()) != null) {
-				statusC = friendService.friendRequestStatus(detail.getMember_id(), memberDTO.getMember_id());
-			}
-			if (statusB.equals("S") && statusC.equals("S")) {
-				memberDTO.setFriend_request_status("");
-			}else if (statusB.equals("S")) {
-				memberDTO.setFriend_request_status("S");
-			}else if (statusC.equals("S")){
+			/* 친구신청 상태 */
+			statusS = friendService.friendRequestStatus(memberDTO.getMember_id(), detail.getMember_id());	// 친구신청 상태 찾는 메서드 (받는사람, 보낸사람)
+			statusR = friendService.friendRequestStatus(detail.getMember_id(), memberDTO.getMember_id());
+			
+			if (!CommonUtils.isEmpty(statusS) && statusS.equals("S")) {			// 내가 보낸 경우
+				memberDTO.setFriend_request_status(statusS);		
+			}else if (!CommonUtils.isEmpty(statusR) && statusR.equals("S")) {	// 내가 받은 경우
 				memberDTO.setFriend_request_status("R");
-			}
-			
+			}	
+			// 친구신청을 보내거나 받으면 한줄의 레코드에 "S"로 저장됨 / 친구신청을 받았을 경우 "R"을 하드로 넣어줌
 			/* 친구 상태 */
-			if (friendService.friendStatus(detail.getMember_id(), memberDTO.getMember_id()) != null &&
-				friendService.friendStatus(detail.getMember_id(), memberDTO.getMember_id()).equals("F")) {			// 내가 보낸 경우
-				memberDTO.setFriend_request_status("F");
-			}else if (friendService.friendStatus(memberDTO.getMember_id(), detail.getMember_id()) != null &&
-					  friendService.friendStatus(memberDTO.getMember_id(), detail.getMember_id()).equals("F")) {	// 내가 받은 경우
-				memberDTO.setFriend_request_status("F");
+			friendStatusS = friendService.friendStatus(memberDTO.getMember_id(), detail.getMember_id());	// 내가 보낸 경우
+			friendStatusR = friendService.friendStatus(detail.getMember_id(), memberDTO.getMember_id());	// 내가 받은 경우
+			
+			if (!CommonUtils.isEmpty(friendStatusS) && friendStatusS.equals("F")) {			// 내가 보낸 경우
+				memberDTO.setFriend_request_status(friendStatusS);
+			}else if (!CommonUtils.isEmpty(friendStatusR) && friendStatusR.equals("F")) {	// 내가 받은 경우
+				memberDTO.setFriend_request_status(friendStatusR);
 			}
 		}
 		
 		if (list.size() > 0) {
-			count = memberService.searchCount(detail.getMember_id(), keyword);
+			count = memberService.searchCount(detail.getMember_id(), keyword);	// 키워드로 검색해서 나온 리스트의 개수
 		}
 		
 		int pageCount = count / pageSize + (count % pageSize == 0 ? 0 : 1);
@@ -310,7 +306,7 @@ public class MemberController {
 			endPage = pageCount;
 		}
 		
-		if (keyword.length() < 3) {
+		if (keyword.length() < 3) {		// 주소창에서 3글자 이하 검색할 경우 페이지로 redirect
 			return "redirect:/member/auth/search";
 		}
 		
@@ -320,9 +316,9 @@ public class MemberController {
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("pageNum", pageNum);
 		
-		model.addAttribute("keyword", keyword);					// 키워드
+		model.addAttribute("keyword", keyword);		// 키워드
 		
-		model.addAttribute("list", list);						// 친구신청 리스트 (친구신청 상태 담겨있음)
+		model.addAttribute("list", list);			// 친구신청 리스트 (친구신청 상태 담겨있음)
 		model.addAttribute("friendRoles", FriendRole.values());	// FriendRole 상태 권한설정
 		
 		model.addAttribute("status", detail.getMember_status());
@@ -330,7 +326,7 @@ public class MemberController {
 		int receive_count = friendService.receiveRequestCount(detail.getMember_id());	// 받은 친구신청 수
 		model.addAttribute("receive_count", receive_count);
 		
-		model.addAttribute("NAME", Masking.NAME);		// 타임리프로 마스킹 처리를 하기위해 넘겨줌
+		model.addAttribute("NAME", Masking.NAME);	// 타임리프로 마스킹 처리를 하기위해 넘겨줌
 		
 		model.addAttribute("detail", detail);
 		

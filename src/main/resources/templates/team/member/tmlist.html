@@ -9,8 +9,8 @@
 	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/member/tmlist.css">
-	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+	<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
 	<script type="text/javascript" src="/js/team/member/tmlist.js" defer></script>
 	<script type="text/javascript" src="/js/header.js" defer></script>
@@ -39,14 +39,17 @@
 	<label for="WAIT">가입대기</label>
 	<input type="checkbox" id="WAIT" checked>
 </div>
-<table id="tm-table" class="text-center">
+<table id="tm-table" class="text-center oi-btn">
+<thead>
 	<tr>
 		<th style="width:70px;">회원번호</th>
 		<th style="width:120px;">별명</th>
 		<th style="width:165px;">등급</th>
 		<th style="width:105px;">가입일자</th>
-		<th style="width:130px;"></th>
+		<th style="width:145px;"></th>
 	</tr>
+</thead>
+<tbody>
 	<tr th:each="dto : ${tmlist}" th:id="${dto.member_id}" th:class="${dto.tm_grade}">
 		<td th:text="${dto.member_id}"></td>
 		<!--/* 그룹에서 회원의 별명 출력. 클릭시 팀에서 해당 회원의 정보 페이지로 이동 */-->
@@ -73,12 +76,13 @@
 				<button type="button" class="modify_cancel">취소</button>
 			</div>
 		</td>
-		<td th:if="${#strings.contains(tm_grade, 'MASTER')} and ${dto.tm_grade} == 'WAIT'">
+		<td class="btn-td" th:if="${#strings.contains(tm_grade, 'MASTER')} and ${dto.tm_grade} == 'WAIT'">
 			<!--/* 그룹장, 부그룹장은 가입 신청에 대해 승인, 거절 가능함 */-->
 			<button type="button" class="accept">가입승인</button>
 			<button type="button" class="kick wait">가입거절</button>
 		</td>
 	</tr>
+	</tbody>
 </table>
 </div> <!-- main-container 끝 -->
 </body>

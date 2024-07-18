@@ -35,9 +35,19 @@ document.getElementById('btn_save').onclick = function(){
 	let title = document.getElementById('tb_title').value;
 	let content = document.querySelector('.note-editable').innerHTML
 	if(title.trim().length < 2){
-		alert('2글자 이상 제목을 입력해 주세요');
+		Swal.fire({
+			title: "제목 길이 제한",
+			text: "2글자 이상의 제목을 입력해주세요.",
+			icon: "warning",
+			confirmButtonText: "닫기"
+		});
 	}else if(isEmpty(content).length == 0){
-		alert('내용을 입력해 주세요');
+		Swal.fire({
+			title: "내용 작성 필요",
+			text: "게시글 내용을 입력해주세요.",
+			icon: "warning",
+			confirmButtonText: "닫기"
+		});
 	}else{
 		boardform.tb_content.value = content;
 		boardform.submit();

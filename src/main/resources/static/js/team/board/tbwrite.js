@@ -5,11 +5,11 @@ const so = document.getElementById('so');
 const cal_title = document.querySelector('input[name="cal_title"]');
 const cal_date = document.querySelector('input[name="cal_date"]');
 const cal_search = document.getElementById('cal_search');
-// 글삭제 modal창 on
+// 일정 modal창 on
 function calendar_btn(){
 	modal.style.display = 'block';
 }
-// 글삭제 modal창 off
+// 일정 modal창 off
 modal_close.addEventListener('click', function(){
 	modal.style.display = 'none';
 })
@@ -44,7 +44,12 @@ function cal_search_function(){
 	let data = {};
 	if(so.value == 'T'){ // 제목 검색일 때
 		if(cal_title.value.trim().length < 2){
-			alert('검색은 최소 2글자 이상입니다.');
+			Swal.fire({
+				title: "검색어 길이 제한",
+				text: "검색어는 2글자 이상 입력해주세요.",
+				icon: "warning",
+				confirmButtonText: "닫기"
+			});
 			return;
 		}
 		data = {
@@ -52,9 +57,14 @@ function cal_search_function(){
 			so:so.value,
 			cal_title:cal_title.value
 		}
-	}else{ // 시작, 종료 날짜 검색일 때
+	}else{ // 날짜 검색일 때
 		if(cal_date.value.length == 0){
-			alert('날짜를 입력 해주세요.');
+			Swal.fire({
+				title: "검색 날짜 오류",
+				text: "날짜를 입력 해주세요.",
+				icon: "warning",
+				confirmButtonText: "닫기"
+			});
 			return;
 		}
 		data = {
@@ -126,7 +136,12 @@ $("#new_item").on("click", function(){
 	if($(".vote_item").length < 10){ // 항목 개수 제한
 		$("#item").append('<input type="text" name="vote_item_name" class="vote_text vote_item new_item" placeholder="항목을 입력해주세요"><button type="button" class="btn del_item">제거</button>');
 	}else{
-		alert("투표 항목은 최대 10개 입니다.");
+		Swal.fire({
+			title: "투표 항목 개수 제한",
+			text: "투표 항목은 최대 10개 입니다.",
+			icon: "warning",
+			confirmButtonText: "닫기"
+		});
 	}
 });
 /* 
@@ -195,11 +210,21 @@ function timecheck(){
 	let min = new Date(Date.now() + 35700000); // 현재시간 + 9시간(UTC+9) + 55분
 	let max = new Date(Date.now() + 637500000); // 현재시간 + 9시간(UTC+9) + 7일 5분 
 	if(vote_end.val() < min.toISOString()){
-		alert("투표 종료 시간은 최소 1시간 이후입니다.");
+		Swal.fire({
+			title: "투표 시간 오류",
+			text: "투표 종료 시각은 최소 1시간 이후입니다.",
+			icon: "warning",
+			confirmButtonText: "닫기"
+		});
 		vote_end.val(min.toISOString().substring(0, 17)+'00');
 		return false;
 	}else if(vote_end.val() > max.toISOString()){
-		alert("투표 종료 시간은 최대 7일 이전입니다.");
+		Swal.fire({
+			title: "투표 시간 오류",
+			text: "투표 종료 시각은 최대 7일 후입니다.",
+			icon: "warning",
+			confirmButtonText: "닫기"
+		});
 		vote_end.val(max.toISOString().substring(0, 17)+'00');
 		return false;
 	}
@@ -214,9 +239,19 @@ document.getElementById('btn_save').onclick = function(){
 	let title = document.getElementById('tb_title').value;
 	let content = document.querySelector('.note-editable').innerHTML
 	if(title.trim().length < 2){
-		alert('2글자 이상 제목을 입력해 주세요');
+		Swal.fire({
+			title: "제목 길이 제한",
+			text: "2글자 이상 제목을 입력해 주세요",
+			icon: "warning",
+			confirmButtonText: "닫기"
+		});
 	}else if(isEmpty(content).length == 0){
-		alert('내용을 입력해 주세요');
+		Swal.fire({
+			title: "내용 작성 필요",
+			text: "게시글 내용을 입력해주세요.",
+			icon: "warning",
+			confirmButtonText: "닫기"
+		});
 	}else{
 		let vote_check = true;
 		// 투표 유효성 검사
@@ -224,7 +259,12 @@ document.getElementById('btn_save').onclick = function(){
 			vote_check = timecheck();
 			$("#vote input").each(function(){ // 제목, 항목 비어있으면 안됨
 				if($.trim($(this).val()) == 0){
-					alert('투표 제목 또는 항목을 입력해 주세요.');
+					Swal.fire({
+						title: "투표 입력값 필요",
+						text: "투표 제목 또는 항목을 입력해 주세요.",
+						icon: "warning",
+						confirmButtonText: "닫기"
+					});
 					vote_check = false;
 					return false; // each 탈출. 함수 전체를 탈출하는거 아님.
 				} 
@@ -239,7 +279,12 @@ document.getElementById('btn_save').onclick = function(){
 
 $(document).on("change", 'input[name="vote_item_name"]', function(){
 	if($(this).val().length > 50){
-		alert("투표 항목은 최대 50글자입니다.");
+		Swal.fire({
+			title: "투표 항목 길이 제한",
+			text: "투표 항목은 최대 50글자입니다.",
+			icon: "warning",
+			confirmButtonText: "닫기"
+		});
 		$(this).val($(this).val().substring(0, 50));
 	}
 });

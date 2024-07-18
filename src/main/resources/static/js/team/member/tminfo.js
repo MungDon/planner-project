@@ -61,10 +61,21 @@ if(show != null){
 					check_msg.closest("tr").style.display = 'none'
 					update_btn.disabled = true;
 				}else{
-					alert('중복된 별명입니다.');
+					Swal.fire({
+						title: "중복된 별명입니다.",
+						text: "다른 별명을 사용해 주세요.",
+						icon: "warning",
+						confirmButtonText: "닫기"
+					});
 				}
 			})
-			.catch(() => alert('서버 응답 실패'));
+			.catch(() =>
+				Swal.fire({
+					title: "서버 응답 실패",
+					icon: "error",
+					confirmButtonText: "닫기"
+				})
+			);
 	});
 	
 	// 별명 중복 검사
@@ -104,7 +115,11 @@ if(delete_btn != null){
 					// 그룹 탈퇴 요청 성공시 redirect
 					window.location.href = response.url;
 				}else{
-					alert("탈퇴 요청 실패");
+					Swal.fire({
+						title: "탈퇴 요청 실패",
+						icon: "error",
+						confirmButtonText: "닫기"
+					});
 				}
 			})
 		;

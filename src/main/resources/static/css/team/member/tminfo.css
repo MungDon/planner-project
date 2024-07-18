@@ -1,3 +1,7 @@
+.sbox{
+	width:500px;
+	margin:0 auto;
+}
 #tm_nickname:disabled{
 	border:none;
 	background: none;
@@ -6,24 +10,30 @@
 	margin:0;
 }
 #tm_nickname{
+	width:200px;
 	padding:1px;
 	font-size:1em;
 	margin:-2px;
 }
 #info_update{
 	width:400px;
-	transform:translateX(80px);
+	/* transform:translateX(80px); */
 	margin:0 auto;
 }
-#info_update > tr, td{
+#info_update > tr, td:not(:nth-child(3)){
 	height:30px;
+	padding:10px 5px;
 }
 #info_update td:first-child{
 	width:120px;
+}
+#info_update td:nth-child(2){
+	width:280px;
 }
 #info_update button{
 	padding:2px 5px;
 }
 #nick_check{
 	margin-left:5px;
+	margin-top:-3px;
 }

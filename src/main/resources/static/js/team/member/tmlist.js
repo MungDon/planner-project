@@ -82,7 +82,11 @@ modify_grade.forEach(e => {
 					location.reload(true);
 				}
 			}else{
-				alert("요청이 실패했습니다.");
+				Swal.fire({
+					title: "요청이 실패했습니다.",
+					icon: "error",
+					confirmButtonText: "닫기"
+				});
 			}
 		})
 		;
@@ -118,8 +122,8 @@ kick.forEach(e => {
 			title: nick + alert_text,
 			icon: "warning",
 			showCancelButton: true,
-			confirmButtonColor: "#3085d6",
-			cancelButtonColor: "#d33",
+			confirmButtonColor: "#d33",
+			cancelButtonColor: "#3085d6",
 			confirmButtonText: "예",
 			cancelButtonText:"아니오"
 		}).then((result) => {
@@ -157,7 +161,11 @@ kick.forEach(e => {
 					}
 				})
 				.catch(() => {
-					alert("오류 발생");
+					Swal.fire({
+						title: "오류가 발생하였습니다.",
+						icon: "error",
+						confirmButtonText: "닫기"
+					});
 				})
 				;
 			}
@@ -189,11 +197,19 @@ accept.forEach(e => {
 				wait_count.innerText = parseInt(wait_count.innerText) - 1;
 				member_count.innerText = parseInt(member_count.innerText) + 1;
 			}else{
-				alert("오류 발생");
+				Swal.fire({
+					title: "오류가 발생하였습니다.",
+					icon: "error",
+					confirmButtonText: "닫기"
+				});
 			}
 		})
 		.catch(() => {
-			alert("오류 발생");
+			Swal.fire({
+				title: "오류가 발생하였습니다.",
+				icon: "error",
+				confirmButtonText: "닫기"
+			});
 		})
 		;
 	});

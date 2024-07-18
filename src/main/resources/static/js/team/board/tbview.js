@@ -1,6 +1,4 @@
-const modal = document.getElementById('modal');
 const check_delete = document.getElementById('check_delete');
-const modal_close = document.getElementById('modal_close');
 const team_id = document.querySelector('meta[name="team_id"]').getAttribute('content');
 const team_member_id = document.querySelector('meta[name="team_member_id"]').getAttribute('content');
 const team_board_id = document.querySelector('meta[name="team_board_id"]').getAttribute('content');
@@ -12,17 +10,6 @@ $(document).on("click", ".team_member", function(){
 	location.href = '/team/member/info?team_id='+team_id+'&team_member_id='+$(this).data("team_member_id");
 })
 
-if(check_delete !== null){
-	// 글삭제 modal창 on
-	check_delete.addEventListener('click', function(){
-		modal.style.display = 'block';
-	})
-	// 글삭제 modal창 off
-	modal_close.addEventListener('click', function(){
-		modal.style.display = 'none';
-	})
-}
-
 /*
 	$("선택자").on("click", function(){});
 	$(document).on("click", "선택자", function);
@@ -32,16 +19,38 @@ if(check_delete !== null){
 	document로 시작한 것은 똑같이 적용됨.
 */
 // 글 삭제
-$("#board_delete").on("click", function(){
-	let data = $(this).data();
-	data._csrf = token;
-	$.ajax({
-		type:"post",
-		url:"/team/board/delete",
-		data: data,
-		success: function(result){
-			window.location = result;
-		},
+$("#check_delete").on("click", function(){
+	Swal.fire({
+		title: "게시글을 삭제하시겠습니까?",
+		text: "삭제 후 되돌릴 수 없습니다.",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#d33",
+		cancelButtonColor: "#3085d6",
+		confirmButtonText: "삭제",
+		cancelButtonText: "취소"
+	})
+	.then((result) => {
+		if (result.isConfirmed) {
+			let data = $(this).data();
+			data._csrf = token;
+			$.ajax({
+				type:"post",
+				url:"/team/board/delete",
+				data: data,
+				success: function(result){
+					window.location = result;
+				},
+				error:() => {
+					Swal.fire({
+						title: "게시글 삭제 실패",
+						text: "로그인 상태 확인 후 시도해 주세요.",
+						icon: "error",
+						confirmButtonText: "닫기"
+					});
+				}
+			});
+		}
 	});
 });
 // 댓글 불러오기
@@ -54,27 +63,49 @@ function getReply(){
 			team_board_id:team_board_id
 		},
 		success:function(result){
+			is_redirected(result);
 			$("#reply_list").html(result);
 		}
 	})
 }
+
 // 댓글 삭제 버튼
 $(document).on("click",".re-del-btn", function(){
 	let data = $(this).data();
-	if(confirm("댓글을 삭제하시겠습니까?")){
-		$.ajax({
-			type:"delete",
-			url:"/reply/delete",
-			data:data,
-			beforeSend:function(xhr){
-				xhr.setRequestHeader(header, token);
-			},
-			success:function(){
-				$("#"+data.reply_id).remove();
-				$("#reply_count").text($("#reply_count").text()-1);
-			}
-		});
-	}
+	Swal.fire({
+		title: "댓글을 삭제하시겠습니까?",
+		text: "삭제 후 되돌릴 수 없습니다.",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#d33",
+		cancelButtonColor: "#3085d6",
+		confirmButtonText: "삭제",
+		cancelButtonText: "취소"
+	})
+	.then((result) => {
+		if (result.isConfirmed) {
+			$.ajax({
+				type:"delete",
+				url:"/reply/delete",
+				data:data,
+				beforeSend:function(xhr){
+					xhr.setRequestHeader(header, token);
+				},
+				success:function(result){
+					$("#"+data.reply_id).remove();
+					$("#reply_count").text($("#reply_count").text()-1);
+				},
+				error:() => {
+					Swal.fire({
+						title: "댓글 삭제 실패",
+						text: "로그인 상태 확인 후 시도해 주세요.",
+						icon: "error",
+						confirmButtonText: "닫기"
+					});
+				}
+			});
+		};
+	});
 });
 // 댓글 수정 버튼
 $(document).on("click", ".re-mod-btn", function(){
@@ -99,7 +130,12 @@ $(document).on("click", ".re-mod-btn", function(){
 		let modify_area = $("#"+reply_id+"+.modify textarea");
 		let data = {reply_id:reply_id, reply_content:modify_area.val()};
 		if(data.reply_content.trim().length == 0){
-			alert("댓글 내용을 입력해 주세요.");
+			Swal.fire({
+				title: "댓글 작성 실패",
+				text: "댓글 내용을 입력해 주세요.",
+				icon: "warning",
+				confirmButtonText: "닫기"
+			});
 		}else{
 			$.ajax({
 				type:"patch",
@@ -108,13 +144,18 @@ $(document).on("click", ".re-mod-btn", function(){
 				beforeSend:function(xhr){
 					xhr.setRequestHeader(header, token);
 				},
-				success:function(){
+				success:function(result){
 					$("#"+reply_id).css('display', 'block');
 					$("#"+reply_id+" .reply_content").text(data.reply_content);
 					modify_div.remove();
 				},
 				error:function(){
-					alert("댓글 수정 실패");
+					Swal.fire({
+						title: "댓글 수정 실패",
+						text: "로그인 상태 확인 후 시도해 주세요.",
+						icon: "error",
+						confirmButtonText: "닫기"
+					});
 				}
 			});
 		}
@@ -152,12 +193,18 @@ $(document).on("click", ".rereply-insert", function(){
 		beforeSend:function(xhr){
 			xhr.setRequestHeader(header, token);
 		},
-		success:function(){
+		success:function(result){
+			is_redirected(result);
 			getReply();
 			$(".rereply").remove();
 		},
 		error:function(){
-			alert("댓글 등록을 실패했습니다.");
+			Swal.fire({
+				title: "댓글 등록 실패",
+				text: "다시 시도해 주세요.",
+				icon: "error",
+				confirmButtonText: "닫기"
+			});
 		}
 	});
 });
@@ -172,7 +219,12 @@ $("#reply_refresh").on("click", function(){
 // 댓글 등록
 $("#reply_btn").on("click", function(){
 	if($("#reply_content").val().trim().length == 0){
-		alert("댓글 내용을 입력해 주세요");
+		Swal.fire({
+			title: "댓글 작성 실패",
+			text: "댓글 내용을 입력해 주세요.",
+			icon: "warning",
+			confirmButtonText: "닫기"
+		});
 	}else{
 		let data = $("#reply_form").serializeArray();
 		$.ajax({
@@ -182,12 +234,18 @@ $("#reply_btn").on("click", function(){
 			beforeSend:function(xhr){
 				xhr.setRequestHeader(header, token);
 			},
-			success:function(){
+			success:function(result){
+				is_redirected(result);
 				getReply();
 				$("#reply_form").each(function(){this.reset();})
 			},
 			error:function(){
-				alert("댓글 등록을 실패했습니다.");
+				Swal.fire({
+					title: "댓글 작성 실패",
+					text: "다시 시도해 주세요.",
+					icon: "error",
+					confirmButtonText: "닫기"
+				});
 			}
 		})
 	};
@@ -228,13 +286,25 @@ $(document).on("click", "#do_vote", function(){
 			xhr.setRequestHeader(header, token);
 		},
 		success:function(result){
+			is_redirected(result);
 			if(result == -1){
-				alert('투표가 마감되었습니다.');
+				Swal.fire({
+					title: "투표 실패",
+					text: "투표가 마감되었습니다.",
+					icon: "warning",
+					confirmButtonText: "닫기"
+				});
 			}else if(result == -2){
-				alert('중복 투표는 불가능합니다.');
+				Swal.fire({
+					title: "투표 실패",
+					text: "중복 투표는 불가능합니다.",
+					icon: "error",
+					confirmButtonText: "닫기"
+				});
 			}
 			getVote();
-		}
+		},
+		error: () => { location.href="/member/anon/login" }
 	});
 });
 // 투표하기, 투표결과 토글
@@ -242,3 +312,10 @@ $(document).on("click", ".toggle_result", function(){
 	$("#vote_items").toggle();
 	$("#vote_result").toggle();
 });
+
+// 로그아웃 되서 요청이 로그인 페이지로 redirect된 경우 확인
+function is_redirected(result){
+	if(result.includes("<title>로그인</title>")){
+		location.href="/member/anon/login";
+	}
+}

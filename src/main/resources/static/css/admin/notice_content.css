@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+.noticeDetail {
+	margin-top: 20px;
+}
+
+.noticeTitle {
+	font-size: 35px;
+	color: #495057;
+}
+
+.noticeDetailBtns>a>button {
+	font-size: 15px;
+	font-weight: bold;
+	margin-top: 10px;
+	color: gray;
+	width: 15%;
+	height: 40px;
+	border-radius: 3px;
+	background-color: white;
+	border: 2px solid rgba(0, 0, 0, .2);
+	cursor: pointer;
+}
+
+.noticeDetailBtns>a>button:hover {
+	color: white;
+	background-color: rgba(0, 0, 0, .2);
+}

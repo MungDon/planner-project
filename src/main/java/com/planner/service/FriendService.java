@@ -26,12 +26,6 @@ public class FriendService {
 	private final FriendMapper friendMapper;
 	private final MemberMapper memberMapper;
 	
-//	시퀀스 받아서 객체 찾기
-	@Transactional(readOnly = true)
-	public FriendRequestDTO findByFriendRequest(Long member_id) {
-		return friendMapper.findByFriendRequest(member_id);
-	}
-	
 //	회원 시퀀스로 친구 시퀀스 찾기
 	@Transactional(readOnly = true)
 	public Long findByFriendSeq(Long member_my_id , Long member_friend_id) {

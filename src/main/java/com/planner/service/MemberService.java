@@ -41,6 +41,7 @@ public class MemberService {
 	private final FriendMapper friendMapper;
 	private final PasswordEncoder passwordEncoder;
 	private final TeamMemberMapper teamMemberMapper;
+	
 	private static final boolean MEMBER = true;
 	private static final boolean NON_MEMBER = false;
 	
@@ -142,7 +143,7 @@ public class MemberService {
 
 	/* 회원정보. */
 	@Transactional(readOnly = true)
-	private ResMemberDetail findSocialOrFormMember(String email) {
+	public ResMemberDetail findSocialOrFormMember(String email) {
 		ResMemberDetail user = memberMapper.socialMember(email);
 		if (CommonUtils.isEmpty(user)) {
 			user = memberMapper.formMember(email);
@@ -191,10 +192,8 @@ public class MemberService {
 		CommonUtils.throwRestCustomExceptionIf(result != 1, ErrorCode.FAIL_CHANGE_PASSWORD);
 	}
 
-	/*
-	 * 주써잉행=========================================================================
-	 * =>
-	 */
+	/* -----------------universe----------------- */
+	
 //	회원정보
 	@Transactional(readOnly = true)
 	public MemberDTO info(Long member_id, @UserData ResMemberDetail detail) {
@@ -238,8 +237,8 @@ public class MemberService {
 		if (CommonUtils.isEmpty(member_id)) {
 			throw new CustomException(ErrorCode.NO_ACCOUNT);
 		}
-		
 		List<MemberDTO> list = memberMapper.search(member_id, keyword, start, end);
+		
 		return list;
 	}
 	
@@ -250,6 +249,8 @@ public class MemberService {
 		
 		return count;
 	}
+	
+	//======================>주완
 	// 멤버 회원상태 보기 
 		public List<MemberDTO> memberStatus(int pageNum, int pageSize,String member_status) {
 			int start = (pageNum -1)*pageSize +1;

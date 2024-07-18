@@ -12,8 +12,9 @@ public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
 	private final String id;
 	private final String email;
 	private final String name;
+	private final String user_role;
 	
-	public KakaoOAuth2UserInfo(String accessToken, Map<String, Object>attributes) {
+	public KakaoOAuth2UserInfo(String accessToken, Map<String, Object>attributes,String user_role) {
 		this.accessToken = accessToken;
 		Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
 		Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
@@ -24,6 +25,8 @@ public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
         this.name = (String) this.attributes.get("nickname");
         this.attributes.put("id", this.id);
         this.attributes.put("email", this.email);
+        this.user_role = user_role;
+        		
 	}
 	@Override
 	public OAuth2Provider getProdriver() {
@@ -59,9 +62,8 @@ public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
 	public String getType() {
 		return OAuthType.KAKAO.getOAuthType();
 	}
-	@Override
 	public String getRole() {
-		return MemberRole.USER.getType();
+		return user_role;
 	}
 
 }

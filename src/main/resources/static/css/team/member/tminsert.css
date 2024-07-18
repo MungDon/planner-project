@@ -1,6 +1,13 @@
+#tminsert_form{
+	width:400px;
+	margin:0 auto;
+}
 #tmi-table{
 	margin:0 auto;
 	line-height:1.6;
+}
+#tmi-table td:not(:has(#check_msg)){
+	padding:8px 5px;
 }
 #tmi-table td:first-child{
 	width:80px;
@@ -8,11 +15,12 @@
 #tmi-table tr:last-child{
 	height:35px;
 }
-#tmi-table button{
-	padding:2px 5px;
-	vertical-align:bottom;
+#tm_nickname{
+	width:160px;
 }
-#tmi-table input{
-	height:26px;
-	padding:1px;
+#submit_btn{
+	margin-top:10px;
+	padding:8px 80px;
+	border-radius:10px;
+	font-size:25px;
 }

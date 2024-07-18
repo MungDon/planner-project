@@ -43,7 +43,12 @@ function searchCheck(){
 		listForm.pageNum.value = 1;
 		return true;
 	}else{
-		alert("검색어는 2글자 이상 입력해주세요.");
+		Swal.fire({
+			title: "검색어 길이 제한",
+			text: "검색어는 2글자 이상 입력해주세요.",
+			icon: "warning",
+			confirmButtonText: "닫기"
+		});
 		return false;
 	}
 }

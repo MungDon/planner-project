@@ -12,7 +12,7 @@
         <nav class="top-menu-bar row line-height-0">
             <ul class="row">
 		  		<li class="cell menu-1" sec:authorize="isAuthenticated()">
-                    <a href="/planner/calendar">일정</a>
+                    <a href="javascript:void(0);">일정</a>
                     <ul>
                         <li><a href="/planner/calendar" class="delay-1">달력</a></li>
                     </ul>
@@ -32,8 +32,8 @@
 		  		<li class="cell menu-3" sec:authorize="isAuthenticated()"><a href="javascript:void(0);">친구</a>
 		  			<ul class="sub">
 		  				<li><a href="/member/auth/search" class="delay-1">회원 검색</a></li>
-		  				<li><a href="/friend/receiveList" class="delay-2">받은 신청</a></li>
-		  				<li><a href="/friend/sendList" class="delay-3">보낸 신청</a></li>
+		  				<li><a href="/friend/receiveList" class="delay-2">받은 요청</a></li>
+		  				<li><a href="/friend/sendList" class="delay-3">보낸 요청</a></li>
 		  				<li><a href="/friend/list" class="delay-4">친구 목록</a></li>
 		  			</ul>
                     <div class="sub-menu-height sub-menu-height-3"></div>
@@ -42,17 +42,17 @@
                     <a href="javascript:void(0);">회원</a>
 		  			<ul>
                         <li sec:authorize="isAuthenticated()"><a href="/member/auth/myInfo" class="delay-1">내정보</a></li>
-                        <li sec:authorize="isAuthenticated()"><a href="/member/auth/signout" class="delay-2">로그아웃</a></li>
+                        <li sec:authorize="isAuthenticated()"><a href="/member/anon/signout" class="delay-2">로그아웃</a></li>
                     </ul>
                     <div class="sub-menu-height sub-menu-height-4"></div>
 		  		</li>
-		  		<li  sec:authorize="hasRole('SUPER_ADMIN')" class="cell menu-5"	>
+		  		<li class="cell menu-5" sec:authorize="hasRole('SUPER_ADMIN')">
                     <a href="javascript:void(0);">관리자</a>
 		  			<ul>
                         <li sec:authorize="isAuthenticated()"><a href="/admin/notice" class="delay-1">공지사항</a></li>
                         <li sec:authorize="isAuthenticated()"><a href="/admin/memberAllStatus" class="delay-2">회원관리</a></li>
                     </ul>
-                    <div class="sub-menu-height sub-menu-height-4"></div>
+                    <div class="sub-menu-height sub-menu-height-5"></div>
 		  		</li>
 		  	</ul>
             <div class="sub-menu-bg"></div>
@@ -68,7 +68,7 @@
 	<a href="/member/auth/myInfo" sec:authorize="isAuthenticated()" class="search img-box block myinfo">
 		<img sec:authorize="isAuthenticated()" src="/images/myinfo.svg" width="20px" height="30px" alt="myinfo">
 	</a>
-	<a href="/member/auth/signout" sec:authorize="isAuthenticated()" class="search img-box block">
+	<a href="/member/anon/signout" sec:authorize="isAuthenticated()" class="search img-box block">
 		<img sec:authorize="isAuthenticated()" src="/images/logout.svg" width="30px" height="30px" alt="logout">
 	</a>
 	<div class="m-menu-btn">
@@ -97,16 +97,16 @@
                 <a href="javascript:void(0);">친구<span class="cell-right"><i class="fas fa-chevron-down"></i></span></a>
                 <ul>
                     <li><a href="/member/auth/search">회원 검색</a></li>
-                    <li><a href="/friend/receiveList">받은 신청</a></li>
-                    <li><a href="/friend/sendList">보낸 신청</a></li>
+                    <li><a href="/friend/receiveList">받은 요청</a></li>
+                    <li><a href="/friend/sendList">보낸 요청</a></li>
                     <li><a href="/friend/list">친구 목록</a></li>
                 </ul>
             </li>
-            <li class="delay-4" sec:authorize="hasRole('SUPER_ADMIN')" >
+            <li class="delay-4" sec:authorize="hasRole('SUPER_ADMIN')">
                 <a href="javascript:void(0);">관리자<span class="cell-right"><i class="fas fa-chevron-down"></i></span></a>
                 <ul>
-                    <li><a href="/admin/notice">공지사항</a></li>
-                    <li><a href="/admin/memberAllStatus">회원관리</a></li>
+					<li><a href="/admin/notice">공지사항</a></li>
+					<li><a href="/admin/memberAllStatus">회원관리</a></li>
                 </ul>
             </li>
         </ul>

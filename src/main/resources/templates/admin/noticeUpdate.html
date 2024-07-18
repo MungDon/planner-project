@@ -5,57 +5,13 @@
 <meta name="_csrf" th:content="${_csrf.token}" />
 <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 <title>Insert title here</title>
-<style>
-table {
-	border: 1px solid black;
-	width: 500px;
-	border-collapse: collapse;
-	margin: 0 auto;
-}
-
-td {
-	border: 1px solid black;
-	padding: 12px;
-	text-align: center;
-	width: 80%; /* td 요소의 너비를 80%로 설정 */
-	font-size: 14px; /* 기본 폰트 사이즈 설정 */
-}
-
-td.content {
-	height: 200px; /* td 요소의 높이를 200px로 설정 */
-}
-
-td.title {
-	font-size: 12px; /* 타이틀 폰트 사이즈를 작게 설정 */
-}
-
-textarea[name="notice_content"] {
-	width: calc(100% - 24px); /* textarea의 너비를 계산하여 설정 */
-	height: 180px; /* textarea의 높이를 직접 설정 */
-	resize: none; /* textarea 크기 조정 비활성화 */
-}
-
-input[name="notice_title"] {
-	width: calc(100% - 24px); /* input의 너비를 계산하여 설정 */
-	height: 80px; /* input의 높이를 직접 설정 */
-	padding: 6px; /* 내용의 패딩을 조정 */
-	box-sizing: border-box; /* 패딩을 포함한 전체 너비/높이 설정 */
-}
-</style>
-<link rel="stylesheet" type="text/css"
-	href="/css/team/board/summernote-lite.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript"
-	src="/js/team/board/summernote-lite.min.js"></script>
-<script type="text/javascript"
-	src="/js/team/board/summernote-ko-KR.min.js"></script>
-<link
-	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css"
-	rel="stylesheet">
-<script
-	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="/css/admin_aside.css">
+<link rel="stylesheet" type="text/css"	href="/css/team/board/summernote-lite.min.css">
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript"	src="/js/team/board/summernote-lite.min.js"></script>
+<script type="text/javascript"	src="/js/team/board/summernote-ko-KR.min.js"></script>
+<link	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css"	rel="stylesheet">
+<script	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/admin/admin_aside.css">
 </head>
 <body>
 <aside th:replace="~{/fragments/adminAside :: adminAside}"></aside>
@@ -64,7 +20,7 @@ input[name="notice_title"] {
 	<form th:action="@{/admin/noticeUpdatePro}" method="post"
 		id="noticeForm">
 
-		<input type="text" name="notice_title"th:value="${noticeDTO.notice_title}" required="required"/> 
+		<input type="text" id="notice_title" name="notice_title"th:value="${noticeDTO.notice_title}" required="required"/> 
 		<input type="hidden" name="notice_id" th:value="${noticeDTO.notice_id}" />
 		<div class="post-form">
 			<textarea name="notice_content" id="summernote"
@@ -74,7 +30,8 @@ input[name="notice_title"] {
 	</form>
 </main>
 	<script src="/js/common.js"></script>
-	<script src="/js/notice/editor.js"></script>
-	<script src="/js/notice/admin_aside.js"></script>
+	<script src="/js/admin/editor.js"></script>
+	<script src="/js/admin/admin_aside.js"></script>
+	<script src="/js/admin/notice_write.js"></script>
 </body>
 </html>

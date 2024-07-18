@@ -36,6 +36,7 @@ public class NoticeCotroller {
 			@RequestParam(name = "ps", defaultValue = "10") int pageSize,
 			@RequestParam(name = "pageNum", defaultValue = "1") int pageNum) {
 		int noticeListCount = noticeService.noticeAllSelect();
+		log.info(pageNum+":"+pageSize);
 		List<NoticeDTO>noticeList =  noticeService.noticeSelect(pageNum, pageSize);
 		int pageBlock = 10;
 		int startPage = ((pageNum - 1) / pageBlock) * pageBlock + 1;
@@ -108,13 +109,15 @@ public class NoticeCotroller {
 		noticeService.deleteImg(imgName);
 		return ResponseEntity.ok("ok");
 	}
+	
+	
+	
 	@GetMapping("/memberAllStatus")
 	public String memberAllStatus(@RequestParam(name ="member_status", defaultValue = "A") String member_status,
 	                              @RequestParam(name = "ps", defaultValue = "10") int pageSize,
 	                              @RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
 	                              Model model) {
 		
-		log.info(member_status);
 	    List<MemberDTO> memberList;
 	    int statusCount;
 	    int pageBlock = 10;

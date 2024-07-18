@@ -44,6 +44,8 @@ public class TeamService {
 	private final String uploadPath = new File("").getAbsolutePath() +"\\src\\main\\resources\\static\\upload\\";
 	// 지원하는 이미지 확장자 리스트
 	private final List<String> exts = Arrays.asList(ImageIO.getReaderFormatNames()); 
+	// 한글, 숫자, 영어 제외한 정규식
+	private final String noSpecial = "[^\uAC00-\uD7A30-9a-zA-Z]";
 
 	/** 그룹 이름 중복 검사. 중복이면 true */
 	public boolean teamNameOverlap(String team_name) {
@@ -53,6 +55,7 @@ public class TeamService {
 	// 그룹 이미지 리사이즈 후 저장
 	public boolean setImg(TeamDTO dto, MultipartFile team_image) {
 		String team_name = dto.getTeam_name();
+		team_name = team_name.replaceAll(noSpecial, "" );
 		if(!team_image.isEmpty()) { // 업로드한 파일이 있고
 			if(team_image.getContentType().startsWith("image")) { // 그게 이미지라면
 				String imgName = team_image.getOriginalFilename();

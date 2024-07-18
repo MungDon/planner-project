@@ -6,24 +6,31 @@
 	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamMain.css">
-	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 	<script type="text/javascript" src="/js/team/teamMain.js" defer></script>
 	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
 <body>
 <header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
-<h1>그룹 목록</h1>
+<h2 id="page-title" th:unless="${#lists.size(teamList)} == 0">그룹 목록</h2>
 <div class="float-clear">
+	<!--/* 그룹 없는 상황 */-->
+	<div th:if="${#lists.size(teamList)} == 0" id="noteam" class="text-center sbox" style="width:500px;">
+		<h2>그룹에 생성, 참가해 보세요</h2>
+		<br>
+		<a href="/team/create">그룹 생성</a> &nbsp;&nbsp;
+		<a href="/team/search">그룹 검색</a>
+	</div>
 	<!--/* 가입 대기중이거나 가입한 그룹 출력 */-->
-	<div class="float-left team-item " th:each="dto : ${teamList}">
+	<div class="float-left sbox team-item" th:each="dto : ${teamList}">
 		<p th:text="${dto.team_name}" class="font-big text-center team-name"></p>
 		<div class="float-left text-center">
 			<img th:if="${dto.team_image} != null" th:src="'/team/img?img='+${dto.team_image}" th:alt="${dto.team_name}+' 그룹의 이미지'">
 			<img th:if="${dto.team_image} == null" src="/images/team_default.png" alt="기본이미지"></img>
 		</div>
 		<div class="float-right" th:data-team_id="${dto.team_id}">
-			<p th:if="${dto.tm_grade} == 'WAIT'" class="font-gray">가입대기중</p>
+			<span th:if="${dto.tm_grade} == 'WAIT'" class="font-gray">가입대기중</span>
 			<span class="font-blue pointer" data-link="member/info">내 정보</span>
 			<span class="font-blue pointer" data-link="info">그룹 정보</span>
 			<th:block th:if="${dto.tm_grade} != 'WAIT'">

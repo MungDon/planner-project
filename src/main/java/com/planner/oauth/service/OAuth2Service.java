@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.planner.dto.request.member.ReqOAuth2MemberAdd;
 import com.planner.dto.request.member.ReqOAuth2Signup;
 import com.planner.dto.response.member.ResMemberDetail;
+import com.planner.enums.MemberRole;
 import com.planner.enums.MemberStatus;
 import com.planner.exception.CustomException;
 import com.planner.exception.ErrorCode;
@@ -34,7 +35,7 @@ public class OAuth2Service {
 				.member_status(MemberStatus.NOT_DONE.getCode())
 				.oauth_id(principal.getOAuthId())
 				.oauth_type(principal.getType())
-				.member_role(principal.getRole())
+				.member_role(MemberRole.ANON.getType())
 				.build();
  		memberMapper.createMember(req);
 	}
@@ -48,7 +49,7 @@ public class OAuth2Service {
 	/*소셜로 받아오지못한 회원정보 저장*/
 	@Transactional
 	public void fetchAdditionalUserInfo(ReqOAuth2Signup req) {
-		req.setMember_status(MemberStatus.BASIC.getCode());
+		req.setUserRoles();
 		memberMapper.fetchAdditionalUserInfo(req);
 	}
 }

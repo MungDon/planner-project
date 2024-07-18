@@ -1,5 +1,5 @@
 @charset "UTF-8";
-
+/* 스크롤바 막대 꾸미기 */
 .mainCon {
 	display: flex;
 	flex-direction: column;
@@ -157,7 +157,7 @@
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.4);
-	z-index : 999;
+	z-index: 999;
 }
 
 .noticeModalBody {
@@ -169,7 +169,11 @@
 	padding: 20px;
 	background: #ffffff;
 	border-radius: 20px;
-	height: 600PX;
+	height: 800px;
+	overflow: auto;
+	scrollbar-color: #ddd rgb(255, 255, 255);
+	scrollbar-width : none;
+	
 }
 
 .modalMain {
@@ -198,28 +202,32 @@
 }
 
 .notice_top {
-	display : flex;
-	flex-direction : row;
-	align-items : flex-end;
-	justify-content : space-between;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
+	justify-content: space-between;
 	border-bottom: 2px solid black;
 	font-weight: 600;
 	color: #495057;
 	font-size: 35px;
-	padding:5px 10px;
+	padding: 5px 10px;
 }
-.notice_reg{
+
+.notice_reg {
 	font-size: 20px;
 }
+
 .notice_content {
-	padding: 10px 15px;	
+	padding: 10px 15px;
 }
-.notice_content img{
+
+.notice_content img, .notice_top, .Xbtn {
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-use-select: none;
 	user-select: none;
 }
+
 .Xbtn:hover, .closeBtn:hover {
 	color: red;
 }

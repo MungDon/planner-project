@@ -12,6 +12,8 @@
 	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/board/tbview.css">
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="/js/team/board/tbview.js" defer></script>
 	<script type="text/javascript" src="/js/header.js" defer></script>
@@ -59,7 +61,8 @@
 		<a id="reply_refresh" href="javascript:void(0);">댓글 새로고침</a>
 	</span>
 	<span class="linkbox float-right"> <!--/* float:right 때문에 순서 반대 */-->
-		<a th:if="${dto.team_member_id == team_member_id} or ${#strings.contains(tm_grade, 'MASTER')}" id="check_delete" href="javascript:void(0);">삭제</a> <!-- 모달 띄우고 예, 아니오, 예 누르면 요청 post로 처리 -->
+		<a th:if="${dto.team_member_id == team_member_id} or ${#strings.contains(tm_grade, 'MASTER')}" id="check_delete" href="javascript:void(0);"
+			th:data-tb_id="${dto.team_board_id}" th:data-team_id="${dto.team_id}">삭제</a>
 		<a th:if="${dto.team_member_id == team_member_id}" th:href="@{|modify?team_id=${dto.team_id}&tb_id=${dto.team_board_id}&team_member_id=${dto.team_member_id}|}">수정</a>
 		<a href="#title">본문으로</a>
 		<a th:href="@{|list?team_id=${dto.team_id}&ca=${ca}&ps=${ps}&so=${so}&search=${search}&pageNum=${pageNum}|}">목록</a>
@@ -78,17 +81,6 @@
 	</form>
 </div>
 
-<!--/* 게시글 삭제 modal */-->
-<div th:if="${dto.team_member_id == team_member_id} or ${#strings.contains(tm_grade, 'MASTER')}" id="modal">
-	<div id="modal_body">
-		<h2>게시글을 삭제하시겠습니까?</h2>
-		<div id="modal_btns">
-			<button type="button" id="board_delete" th:data-tb_id="${dto.team_board_id}" 
-				th:data-team_id="${dto.team_id}">삭제</button>
-			<button type="button" id="modal_close">취소</button>
-		</div>
-	</div>
-</div>
 </div> <!-- main-container 끝 -->
 </body>
 </html>

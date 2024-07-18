@@ -37,7 +37,7 @@
 	            <td class="no_td"> 
 	            	<a th:href="@{|/admin/noticeContent/${noticeDTO.notice_id}|}"><span th:text="${noticeDTO.notice_title}"></span></a>
 	            </td>
-	            <td th:text="${#temporals.format(noticeDTO.notice_reg, 'yyyy/MM/dd')}"></td>
+	            <td  class="no_td" th:text="${#temporals.format(noticeDTO.notice_reg, 'yyyy/MM/dd')}"></td>
 	        </tr>
 	    </table>
 	    <div id="pageBox" th:if="${noticeListCount > 0}">

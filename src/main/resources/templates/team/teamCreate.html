@@ -3,10 +3,12 @@
 <head>
 	<meta charset="UTF-8"/>
 	<title>그룹 생성</title>
+	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCreate.css">
-	<link rel="stylesheet" type="text/css" href="/css/header.css">
-	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 	<script type="text/javascript" src="/js/team/teamCreate.js" defer></script>
 	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
@@ -14,14 +16,18 @@
 <header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
 <!-- th:action으로 해야 csrf 자동생성됨. 그냥 action쓰면 자동생성 안됨. -->
+<form th:action="@{/team/create}" method="post" id="team_form" class="sbox" enctype="multipart/form-data" onsubmit="return false">
 <h2 class="text-center">그룹 생성</h2>
-<form th:action="@{/team/create}" method="post" id="team_form" enctype="multipart/form-data" onsubmit="return false">
-<table>
+<table class="oi-btn">
 	<tr>
 		<td><label for="team_name">그룹 이름</label></td>
 		<td>
-			<input type="text" name="team_name" id="team_name" maxlength="50" placeholder="2글자 이상 50글자 이하" required>
+			<input type="text" name="team_name" id="team_name" class="ul-input" maxlength="50" placeholder="2글자 이상 50글자 이하" required>
 			<button type="button" id="overlap_btn">중복검사</button>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="text-center">
 			<p id="overlap" style="display:none;"></p>
 		</td>
 	</tr>
@@ -49,11 +55,6 @@
 </form>
 </div> <!-- main-container 끝 -->
 
-<th:block th:if="${msg}">
-<input type="hidden" id="msg" th:value="${msg}">
-<script>
-	alert(document.getElementById("msg").value);
-</script>
-</th:block>
+<input th:if="${msg}" type="hidden" id="msg" th:value="${msg}">
 </body>
 </html>

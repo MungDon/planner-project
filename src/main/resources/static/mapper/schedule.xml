@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.planner.mapper.ScheduleMapper">
 
 	<insert id="schedule_insert" parameterType="ScheduleDTO" useGeneratedKeys="true" keyProperty="schedule_id"  keyColumn="schedule_id">
 		insert into schedule (schedule_id, member_id,team_id, schedule_title, schedule_content, schedule_start, schedule_end)
-		values(<!-- schedule_seq.nextval, -->nextval('schedule_seq'),#{member_id} ,#{team_id, jdbcType=BIGINT}, #{schedule_title}, #{schedule_content}, #{schedule_start, jdbcType=TIMESTAMP}, #{schedule_end, jdbcType=TIMESTAMP})
+		values(schedule_seq.nextVal,#{member_id} ,#{team_id, jdbcType=BIGINT}, #{schedule_title}, #{schedule_content}, #{schedule_start, jdbcType=TIMESTAMP}, #{schedule_end, jdbcType=TIMESTAMP})
 	</insert>
 	
 	<select id="schedule_select" resultType="ScheduleDTO">
 	SELECT S.*, M.place, M.address
-		FROM schedule as S
-		left outer join map as M
+		FROM schedule S
+		left outer join map M
 		on S.schedule_id = M.schedule_id
 		WHERE
 		<if test="team_id == -1">
@@ -63,8 +63,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="calendarPrint" parameterType="CalendarDTO" resultType="CalendarPrintDTO">
 		select schedule_id,
 			schedule_title,
-		    to_char(schedule_start, 'mmdd') as schedule_start,
-		    to_char(schedule_end, 'mmdd') as schedule_end
+		    to_char(schedule_start, 'yyyymmdd') as schedule_start,
+		    to_char(schedule_end, 'yyyymmdd') as schedule_end
 		from schedule
 		where
 		<if test='team_id eq null'>
@@ -75,7 +75,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			team_id = #{team_id}
 		</if>
 		    and (schedule_start between #{start_date} and #{end_date}+1
-		        or schedule_end between #{start_date} and #{end_date}+1)
+		        or schedule_end between #{start_date} and #{end_date}+1
+		        or <![CDATA[(schedule_start < #{start_date}
+		        	and schedule_end > #{end_date})]]>
+		        )
 		order by schedule_start asc, schedule_end asc, schedule_id asc
 	</select>
 

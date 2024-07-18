@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.planner.dto.request.member.ReqOAuth2Signup;
 import com.planner.dto.response.member.ResMemberDetail;
 import com.planner.oauth.service.OAuth2Service;
+import com.planner.util.CommonUtils;
 import com.planner.util.UserData;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -29,8 +32,9 @@ public class OAuth2Controller {
 
 	/* 소셜로그인에서 못받은 정보 저장 */
 	@PostMapping("/auth/signup")
-	public String oAuth2Signup(ReqOAuth2Signup req) {
+	public String oAuth2Signup(ReqOAuth2Signup req,HttpServletResponse response ,HttpServletRequest request) {
 		oAuth2Service.fetchAdditionalUserInfo(req);
+		CommonUtils.removeCookiesAndSession(request, response);
 		return "redirect:/planner/main";
 	}
 }

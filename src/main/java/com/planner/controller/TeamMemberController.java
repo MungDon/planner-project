@@ -72,10 +72,7 @@ public class TeamMemberController {
 	// 가입 신청
 	@PostMapping("/insert")
 	public String tmInsert(Model model, @RequestParam(name = "team_id", defaultValue = "-1") Long team_id,
-							@UserData ResMemberDetail detail, @RequestParam("tm_nickname") String tm_nickname) { 
-		if(team_id == -1) {
-			return "redirect:/team/main";
-		}
+							@UserData ResMemberDetail detail, @RequestParam("tm_nickname") String tm_nickname) {
 		int result = tmService.tmInsert(team_id, detail.getMember_id(), tm_nickname);
 		if(result == 1) {
 			// 가입 신청 성공

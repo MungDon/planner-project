@@ -6,12 +6,15 @@
 	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamCommon.css">
 	<link rel="stylesheet" type="text/css" href="/css/team/teamInfo.css">
-	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
 	<script type="text/javascript" src="/js/header.js" defer></script>
 </head>
 <body>
 <header th:replace="~{/fragments/header :: header}"></header>
 <div id="main-container"> <!-- main-container 시작 -->
+<div class="sbox">
 <h2 th:if="${dto} == null" th:text="${msg}"></h2>
 <table th:if="${dto} != null" th:object="${dto}" id="info">
 	<tr>
@@ -33,7 +36,7 @@
 			<img th:if="*{team_image} == null" src="/images/team_default.png" alt="기본이미지"></img>
 		</td>
 	</tr>
-	<tr>
+	<tr class="oi-btn">
 		<td colspan="2" align="right">
 			<button th:if="${tm_grade} != null AND ${tm_grade} != 'WAIT'" type="button" th:onclick="|window.location='/team/member/tmlist?team_id=*{team_id}'|">구성원 목록</button>
 			<th:block th:if="${tm_grade == 'TEAM_MASTER'}">
@@ -42,36 +45,19 @@
 				<button type="button" id="check_delete">그룹삭제</button>
 			</th:block>
 			<button th:if="${#strings.isEmpty(tm_grade)}" type="button" th:onclick="|window.location='/team/member/insert?team_id=*{team_id}'|">가입신청</button>
+			<span th:if="${tm_grade == 'WAIT'}" class="font-gray">가입 승인 대기중인 그룹입니다.</span>
 		</td>
 	</tr>
 </table>
+</div>
 </div> <!-- main-container 끝 -->
 
+<!--/* 그룹 삭제 */-->
 <th:block th:if="${tm_grade == 'TEAM_MASTER'}">
-<div id="modal">
-	<div id="modal_body">
-		<h2>그룹을 삭제하시겠습니까?</h2>
-		<div id="modal_btns">
-			<form th:action="@{/team/delete}" th:method="DELETE">
-				<input type="hidden" name="team_id" th:value="${dto.team_id}">
-				<button type="submit" id="team_delete">삭제</button>
-				<button type="button" id="modal_close">취소</button>
-			</form>
-		</div>
-	</div>
-</div>
-<script>
-const check_delete = document.getElementById('check_delete');
-const modal_close = document.getElementById('modal_close');
-// 그룹 삭제 modal창 on
-check_delete.addEventListener('click', function(){
-	modal.style.display = 'block';
-})
-// 그룹 삭제 modal창 off
-modal_close.addEventListener('click', function(){
-	modal.style.display = 'none';
-})
-</script>
+<form th:action="@{/team/delete}" th:method="DELETE" id="del_form">
+	<input type="hidden" name="team_id" th:value="${dto.team_id}">
+</form>
+<script type="text/javascript" src="/js/team/teamInfo.js"></script>
 </th:block>
 </body>
 </html>

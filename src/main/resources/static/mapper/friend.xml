@@ -17,47 +17,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-m
 		and member_friend_id = #{member_friend_id}
 	</select>
 	
-	<!-- 친구요청 객체 찾기 -->
-	<select id="findByFriendRequest" resultType="FriendRequestDTO">
-		select *
-		from friend_request
-		where member_send_id=#{member_send_id}
-	</select>
-	
-		
-	<!-- 친구요청 상태 찾기 -->
-	<select id="findRequestListById" resultType="FriendRequestDTO">
-		select m.member_id, fr.*
-		from member m
-		left outer join friend_request fr
-		on m.member_id = fr.member_receive_id
-		where m.member_status = 'B'
-		and fr.member_receive_id = #{member_id}
-		or fr.member_send_id = #{member_id}
-	</select>
-	
-	<!-- 받은 친구요청 / 상대 찾기 -->
-	<select id="findReceiveListById" resultType="FriendRequestDTO">
-		select m.member_id, fr.*
-		from member m
-		left outer join friend_request fr
-		on m.member_id = fr.member_receive_id
-		where fr.member_receive_id = #{member_id}
-		and fr.friend_request_status != 'F'
-		and m.member_status = 'B'
-	</select>
-	
-	<!-- 보낸 친구요청 / 상대 찾기 -->
-	<select id="findSendListById" resultType="FriendRequestDTO">
-		select m.member_id, fr.*
-		from member m
-		left outer join friend_request fr
-		on m.member_id = fr.member_send_id
-		where fr.member_send_id = #{member_id}
-		and fr.friend_request_status != 'F'
-		and m.member_status = 'B'
-	</select>
-	
 	<!-- 친구신청 (보낼 때) -->
 	<insert id="friendRequest" parameterType="FriendRequestDTO">
 		insert into friend_request values(

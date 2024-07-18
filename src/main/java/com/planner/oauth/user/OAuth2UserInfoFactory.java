@@ -6,13 +6,13 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 
 public class OAuth2UserInfoFactory {
 	
-	public static OAuth2UserInfo getOAuth2UserInfo(String registrationId, String accessToken, Map<String,Object> attribute ) {
+	public static OAuth2UserInfo getOAuth2UserInfo(String registrationId, String accessToken, Map<String,Object> attribute,String user_role ) {
 		
 		if(OAuth2Provider.GOOGLE.getRegistrationId().equals(registrationId)) {
-			return new GoogleOAuth2UserInfo(accessToken,attribute);
+			return new GoogleOAuth2UserInfo(accessToken,attribute,user_role);
 			
 		}else if(OAuth2Provider.KAKAO.getRegistrationId().equals(registrationId)){
-			return new KakaoOAuth2UserInfo(accessToken,attribute);
+			return new KakaoOAuth2UserInfo(accessToken,attribute,user_role);
 			
 		} else {
 			throw new OAuth2AuthenticationException("지원하지않는 로그인방식입니다."); 

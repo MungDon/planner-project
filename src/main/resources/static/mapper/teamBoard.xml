@@ -59,58 +59,57 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 
 <select id="teamBoardList" resultType="TeamBoardListDTO">
-	select stb.*, re.reply_count from 
-		(select tbs.*, rownum as rn from 
-			(select
-			    tb.team_board_id,
-			    tb.team_member_id,
-			    tb.schedule_id,
-			    tb.tb_category,
-			    tb.tb_title,
-			    tb.tb_reg,
-			    v.vote_id,
-			    tm.tm_nickname
-			    from team_board tb
-			    join team_member tm
-			    	on tb.team_member_id = tm.team_member_id
-			    left outer join vote v
-			    	on tb.team_board_id = v.team_board_id
-			    where tb.team_id=#{team_id}
-    			<if test='category!="전체"'>
-				and tb.tb_category = #{category}
-				</if>
-				<if test='searchOption != null and !"".equals(searchOption) and searchOption neq "NO"'>
-					<if test='searchOption.equals("TC")'>
-					and (tb_title like '%'||#{search}||'%'
-						or team_board_id in 
-					        (select team_board_id from
-					            (select team_board_id,<![CDATA[REGEXP_REPLACE(tb_content,'<[^>]*>','')]]> as tbc from team_board)
-					                where DBMS_LOB.instr(tbc, #{search}) > 0))
-					</if>
-					<if test='searchOption eq "T"'>
-					and tb_title like '%'||#{search}||'%'
-					</if>
-					<if test="searchOption=='C'.toString()">
-					and team_board_id in 
-					        (select team_board_id from
-					            (select team_board_id,<![CDATA[REGEXP_REPLACE(tb_content,'<[^>]*>','')]]> as tbc from team_board)
-					                where DBMS_LOB.instr(tbc, #{search}) > 0)
-					</if>
-					<if test='searchOption eq "W"'>
-					and tm.tm_nickname like '%'||#{search}||'%'
-					</if>
-				</if>
-		    order by team_board_id desc) tbs
-	    ) stb
-	left join(
-		select team_board_id, count(*) as reply_count
-		from reply
-		group by team_board_id
-	) re on stb.team_board_id = re.team_board_id
-	where stb.rn between #{start} and #{end}
-	order by stb.team_board_id desc
+   select stb.*, re.reply_count from 
+      (select tbs.*, rownum as rn from 
+         (select
+             tb.team_board_id,
+             tb.team_member_id,
+             tb.schedule_id,
+             tb.tb_category,
+             tb.tb_title,
+             tb.tb_reg,
+             v.vote_id,
+             tm.tm_nickname
+             from team_board tb
+             join team_member tm
+                on tb.team_member_id = tm.team_member_id
+             left outer join vote v
+                on tb.team_board_id = v.team_board_id
+             where tb.team_id=#{team_id}
+             <if test='category!="전체"'>
+            and tb.tb_category = #{category}
+            </if>
+            <if test='searchOption != null and !"".equals(searchOption) and searchOption neq "NO"'>
+               <if test='searchOption.equals("TC")'>
+               and (tb_title like '%'||#{search}||'%'
+                  or tb.team_board_id in 
+                       (select team_board_id from
+                           (select team_board_id,<![CDATA[REGEXP_REPLACE(tb_content,'<[^>]*>','')]]> as tbc from team_board)
+                               where DBMS_LOB.instr(tbc, #{search}) > 0))
+               </if>
+               <if test='searchOption eq "T"'>
+               and tb_title like '%'||#{search}||'%'
+               </if>
+               <if test="searchOption=='C'.toString()">
+               and tb.team_board_id in 
+                       (select team_board_id from
+                           (select team_board_id,<![CDATA[REGEXP_REPLACE(tb_content,'<[^>]*>','')]]> as tbc from team_board)
+                               where DBMS_LOB.instr(tbc, #{search}) > 0)
+               </if>
+               <if test='searchOption eq "W"'>
+               and tm.tm_nickname like '%'||#{search}||'%'
+               </if>
+            </if>
+          order by tb.team_board_id desc) tbs
+       ) stb
+   left join(
+      select team_board_id, count(*) as reply_count
+      from reply
+      group by team_board_id
+   ) re on stb.team_board_id = re.team_board_id
+   where stb.rn between #{start} and #{end}
+   order by stb.team_board_id desc
 </select>
-
 <insert id="teamBoardInsert" parameterType="TeamBoardDTO">
 	<selectKey keyProperty="team_board_id" resultType="long" order="BEFORE">
 		select team_board_seq.nextval from dual

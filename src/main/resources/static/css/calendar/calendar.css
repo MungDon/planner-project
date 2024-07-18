@@ -10,11 +10,21 @@
 	height:0;
 	transform:translateY(-40px);
 }
+#go-date-div{
+	text-align:right;
+	height:0;
+	transform:translateY(-50px);
+}
+#go_date_btn{
+	padding: 2px 8px;
+	vertical-align: bottom;
+}
 /* /planner/calendar 의 달력 css. */
 .calendar {
 	display: grid;
 	gap: 5px; /* 셀 사이의 간격 설정 */
-	border-radius: 20px;
+	border: 1px solid black;
+	border-radius: 10px;
 	width: 700px;
 	min-height: 190px;
 	height: 450px;
@@ -23,10 +33,15 @@
 	-moz-user-select: none;
 	-ms-use-select: none;
 	user-select: none;
-    border: 2px solid #ddd;
-   	box-shadow: 5px 5px 3px #ddd;
 }
-
+/* 달력이 6줄일 때 */
+.calendar:has(.day:nth-child(36)){
+	height:515px;
+}
+/* 달력이 4줄일 때 */
+.calendar:not(:has(.day:nth-child(29))){
+   height:400px;
+}
 /* 달 이름을 가운데 정렬 */
 .month-name {
 	text-align: center;
@@ -121,10 +136,8 @@
 .schedule-content {
 	border: 1px ridge black;
 	border-collapse: collapse;
-	border-radius: 20px;
-	padding: 3px;
-   	border: 2px solid #ddd;
-   	box-shadow: 5px 5px 3px #ddd;
+	border-radius: 5px;
+	padding: 0px;
 }
 
 .my-div {

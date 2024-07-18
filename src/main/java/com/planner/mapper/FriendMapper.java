@@ -20,17 +20,8 @@ public interface FriendMapper {
 	public Long findByFriendSeq(@Param(value = "member_my_id") Long member_my_id,
 								@Param(value = "member_friend_id") Long member_friend_id);
 	
-//	아이디 받아서 객체 찾기
-	public FriendRequestDTO findByFriendRequest(Long member_id);
-	
-//	친구요청 상태 찾기
-	public List<FriendRequestDTO> findRequestListById(@Param("member_id") Long member_id);
-	
 //	친구신청 (보냄)
 	public void friendRequest(FriendRequestDTO friendRequestDTO);
-	
-//	친구신청 전 중복검사
-	public String friendCheck(FriendRequestDTO friendRequestDTO);
 	
 //	친구신청 상태 찾기
 	public String friendRequestStatus(@Param("member_receive_id") Long member_receive_id,

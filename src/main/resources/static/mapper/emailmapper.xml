@@ -11,11 +11,11 @@
 			chk_status,
 			code_reg
 		) VALUES (
-			nextval('email_seq'),
+			email_seq.nextval,
 			#{toEmail},
 			#{authCode},
 			#{codeStatus},
-			now()
+			sysdate
 		)
 	</insert>
 	

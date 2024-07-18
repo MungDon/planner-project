@@ -1,20 +1,6 @@
-  $(function(){ 
-        document.querySelectorAll(".updateStatus").forEach(function(button) {
-            button.addEventListener("click", function() {
-                let option = this.nextElementSibling;
-                let confirmButton = this.parentElement.nextElementSibling;
-                if (option.style.display === "none" || option.style.display === "") {
-                    option.style.display = "block";
-                    confirmButton.style.display = "block";
-                } else {
-                    option.style.display = "none";
-                    confirmButton.style.display = "none";
-                }
-            });
-        });
-});
   function updateMemberStatus() {
             const member_status = document.getElementById("member_status").value;
+            console.log(member_status);
             location.href = '/admin/memberAllStatus?member_status=' + member_status;
         }
 

@@ -1,4 +1,9 @@
-h2{
+#team_form{
+	width:586px;
+	padding:20px 5px;
+	margin:10px auto;
+}
+#team_form > h2[class="text-center"]{
 	margin-bottom:10px;
 }
 #team_form table{
@@ -8,14 +13,15 @@ h2{
 	padding:2px;
 }
 #team_form td:first-child{
-	width:90px;
+	width:100px;
+	padding:1px 2px;
+	font-size:18x;
 }
 #team_form td:nth-child(2){
 	width:430px;
 }
-#team_form td button{
-	padding:2px 5px;
-	vertical-align: bottom;
+#team_form tr:last-child button{
+	margin:10px 3px 2px;
 }
 #team_name{
 	width:350px;
@@ -24,7 +30,16 @@ h2{
 }
 #team_explain{
 	width:350px;
-	height:150px;
+	height:200px;
+	font-size:16px;
+	margin:10px 0;
 	padding:5px;
 	resize:none;
+	border: 2px solid #ddd;
+	border-radius: 8px;
+	transition:0.12s ease;
+}
+#team_explain:focus {
+	outline:none;
+	border: 2px solid skyblue;
 }

@@ -14,9 +14,13 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
+.friend_menu li {
+	font-weight: bold;
+	color: darkslategray;
+	font-size: 14px;
+}
 
 .fr-container {
-	max-width: 1220px;
 	width: calc(90% - 40px);
 	margin: auto;
 }

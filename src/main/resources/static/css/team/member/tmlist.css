@@ -3,16 +3,22 @@
 }
 #tm-table{
 	margin:0 auto;
-	transform:translateX(65px);
+	transform:translateX(72px);
 }
 #tm-table tr{
-	height: 28px;
+	height:32px;
 }
 #tm-table th:not(:last-child){
 	border-bottom:3px double darkgray;
 }
+#tm-table tbody tr:nth-child(5n) td:not(:nth-child(5)){
+	border-bottom:1px dashed darkgray;
+}
+.btn-td {
+	text-align:left;
+}
 .btn-td button{
-	padding:1px 4px;
+	padding:2px 5px;
 }
 .tmlink:hover {
 	color:blue;

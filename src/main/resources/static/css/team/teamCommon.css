@@ -1,22 +1,45 @@
-*{
-	margin:0;
-	padding:0;
-}
 #main-container{
-	width:1200px;
+	max-width:1200px;
 	margin:0 auto;
 	padding:20px 0px;
 }
 #main-container table{
 	border-collapse: collapse;
 }
-/* 드래그 방지 */
-.nodrag{
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-use-select: none;
-	user-select: none;
+.sbox{
+	border: 2px solid #ccc;
+	border-radius: 20px;
+	padding: 20px;
+	box-shadow: 5px 5px 3px lightgray;
 }
+/* input 밑줄 */
+.ul-input{
+    font-size: 16px;
+    width: 100%;
+    margin: 15px 0;
+    border: none;
+    border-bottom: 2px solid #ddd;
+    transition:0.12s ease;
+}
+.ul-input:focus{
+	outline:none;
+	border-bottom: 2px solid skyblue;
+}
+/* 버튼 */
+.oi-btn button, .oi-btn input::file-selector-button{
+	padding:3px 7px;
+	border-radius:8px;
+	border:2px outset #888;
+	background-color:#eee;
+}
+.oi-btn button:hover, .oi-btn input::file-selector-button:hover{
+	background-color:#ddd;
+}
+.oi-btn button:active, .oi-btn input::file-selector-button:active{
+	background-color:#ccc;
+	border-style:inset;
+}
+/* float */
 .float-right{
 	float:right;
 }
@@ -28,12 +51,14 @@
 	display:block;
 	clear:both;
 }
+/* text-align */
 .text-center{
 	text-align:center;
 }
 .text-right{
 	text-align:right;
 }
+/* font */
 .font-big{
 	font-size:1.3em;
 }

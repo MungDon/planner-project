@@ -3,42 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<style>
-    table {
-        border: 1px solid black;
-        width: 500px;
-        border-collapse: collapse;
-        margin: 0 auto;
-    }
-    .noticeTitle{
-        padding: 8px;
-        text-align: center;
-    }
-    .noticeContent {
-        border: 1px solid black;
-        padding: 12px;
-        text-align: center;
-        width: 80%; /* td 요소의 너비를 80%로 설정 */
-        height: 200px; /* td 요소의 높이를 200px로 설정 */
-    }
-</style>
 <link rel="stylesheet" type="text/css" href="/css/admin/admin_aside.css">
+<link rel="stylesheet" type="text/css" href="/css/admin/notice_content.css">
 </head>
 <body>
 <aside th:replace="~{/fragments/adminAside :: adminAside}"></aside>
 <main id="main">
  <span style="font-size:30px;cursor:pointer" onclick="toggleNav()">&#9776; ADMIN</span>
-    <table>
-        <tr>
-            <td class="noticeTitle" th:text="${noticeDTO.notice_title}" id="noticeTitel"></td>
-        </tr>
-        <tr>
-            <td class="noticeContent"th:utext="${noticeDTO.notice_content}" id="noticeContent"></td>
-        </tr>
-    </table>
+ 	<div class="noticeDetail">
+ 		<span class="noticeTitle" th:text="${noticeDTO.notice_title}"></span>
+ 		<div class="noticeContent" th:utext="${noticeDTO.notice_content}"></div>
+ 	</div>
     <input type="hidden" th:value="${noticeDTO.notice_id}" id="noticeNumber"/>
-    <a th:href="@{|/admin/noticeUpdateForm/${noticeDTO.notice_id}|}"><button type="button">글 수정</button></a>
-    <a th:href="@{|/admin/noticeDelete/${noticeDTO.notice_id}|}"><button type="button">글삭제</button></a>
+    <div class="noticeDetailBtns">
+    	<a th:href="@{|/admin/noticeUpdateForm/${noticeDTO.notice_id}|}"><button type="button">글 수정</button></a>
+    	<a th:href="@{|/admin/noticeDelete/${noticeDTO.notice_id}|}"><button type="button">글삭제</button></a>
+	</div>
 </main>
     <script th:src="@{/js/admin/notice.js}"></script>
     <script src="/js/admin/admin_aside.js"></script>
