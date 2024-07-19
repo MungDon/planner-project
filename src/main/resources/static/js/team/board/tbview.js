@@ -315,7 +315,8 @@ $(document).on("click", ".toggle_result", function(){
 
 // 로그아웃 되서 요청이 로그인 페이지로 redirect된 경우 확인
 function is_redirected(result){
-	if(result.includes("<title>로그인</title>")){
+	if(typeof result === 'string' && result.includes("<title>로그인</title>")){
 		location.href="/member/anon/login";
 	}
+	
 }

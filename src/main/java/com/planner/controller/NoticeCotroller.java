@@ -36,7 +36,6 @@ public class NoticeCotroller {
 			@RequestParam(name = "ps", defaultValue = "10") int pageSize,
 			@RequestParam(name = "pageNum", defaultValue = "1") int pageNum) {
 		int noticeListCount = noticeService.noticeAllSelect();
-		log.info(pageNum+":"+pageSize);
 		List<NoticeDTO>noticeList =  noticeService.noticeSelect(pageNum, pageSize);
 		int pageBlock = 10;
 		int startPage = ((pageNum - 1) / pageBlock) * pageBlock + 1;

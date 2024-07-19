@@ -57,12 +57,12 @@
 	    <div>
 	    </div>
 	    <div id="pageBox" th:if="${statusCount > 0}">
-	        <a th:if="${pageNum > 1}" th:href="@{|/admin/memberAllStatus?pageNum=${pageNum - 1}|}">이전</a>
+	        <a th:if="${pageNum > 1}" th:href="@{|/admin/memberAllStatus?member_status=${member_status}&pageNum=${pageNum - 1}|}">이전</a>
 	        <th:block th:each="pnum : ${#numbers.sequence(startPage, endPage)}">
 	            <a th:if="${pnum != pageNum}" th:href="@{|/admin/memberAllStatus?member_status=${member_status}&pageNum=${pnum}|}" th:text="${pnum}"></a>
 	            <b th:if="${pnum == pageNum}" th:text="${pageNum}"></b>
 	        </th:block>
-	        <a th:if="${endPage > pageNum}" th:href="@{|/admin/memberAllStatus?pageNum=${pageNum + 1}|}">다음</a>
+	        <a th:if="${endPage > pageNum}" th:href="@{|/admin/memberAllStatus?member_status=${member_status}&pageNum=${pageNum + 1}|}">다음</a>
 	    </div>
 	   </div>	
     </main>

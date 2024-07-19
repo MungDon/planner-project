@@ -12,7 +12,7 @@ if(overlap !== null){
 		icon: "error",
 		confirmButtonText: "닫기"
 	}).then(() => {
-		location.replace="/team/main";		
+		location.replace("/team/main");		
 	});
 }
 
