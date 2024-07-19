@@ -8,16 +8,19 @@
 	<link rel="stylesheet" href="/css/header.css" type="text/css"	/>
 	<link rel="stylesheet" href="/css/friend/friendBar.css" type="text/css"	/>
 	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 <body>
 	<header th:replace="~{/fragments/header :: header}"></header>
 	<div th:replace="~{fragments/friendBar :: friendHeader}"></div>
 	<main class="receiveMain">
+		<input type="hidden" id="status" th:value="${status}"	/>
 		<div class="receive_table">
 			<table>
 				<tr>
 					<th class="receive_title" colspan="3">
-						<span>보낸요청</span>
+						<span>보낸요청[[${status}]]</span>
 					</th>
 				</tr>
 				<tr class="receive_sub_tr">
@@ -48,5 +51,6 @@
 	</main>
 	<script type="text/javascript" src="/js/friend/friendRequest.js"></script>
 	<script type="text/javascript" src="/js/header.js"></script>
+	<script type="text/javascript" src="/js/common.js"></script>
 </body>
 </html>

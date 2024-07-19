@@ -10,6 +10,9 @@
 	<link rel="stylesheet" type="text/css" href="/css/member/search.css">
 	<link rel="stylesheet" type="text/css" href="/css/header.css">
 	<link rel="stylesheet" type="text/css" href="/css/friend/friendBar.css">
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 <body>
 	<header th:replace="~{/fragments/header :: header}"></header>
@@ -92,9 +95,8 @@
 		</div>
 		<input type="hidden" th:value="${receive_count}" id="re_count"	/>
 	</main>
-	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 	<script type="text/javascript" src="/js/header.js"></script>
 	<script type="text/javascript" src="/js/member/memberSearch.js"></script>
+	<script type="text/javascript" src="/js/common.js"></script>
 </body>
 </html>

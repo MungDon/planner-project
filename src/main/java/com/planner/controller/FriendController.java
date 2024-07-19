@@ -38,10 +38,10 @@ public class FriendController {
 	@ResponseBody
 	public String friendRequest(@RequestParam("member_id") Long member_id,
 								@UserData ResMemberDetail detail) {
-		friendService.friendRequest(member_id, detail.getMember_id());			// 친구신청 void 메서드
+		friendService.friendRequest(member_id, detail);			// 친구신청 void 메서드
 		String friendStatus = friendService.friendRequestStatus(member_id, detail.getMember_id());	// 친구신청 상태 찾는 메서드 / (받는 아이디, 보낸 아이디)
 		
-		return friendStatus;
+		return friendStatus;	// ajax 비동기로 상태를 리턴
 	}
 	
 //	친구추가 Post / 회원정보 에서 submit 한 경우
@@ -53,9 +53,9 @@ public class FriendController {
 								@UserData ResMemberDetail detail, Model model) {
 		Long friend_id;
 		
-		if (friend_request_status.equals("search")) {
-			friendService.friendRequest(member_id, detail.getMember_id());		// 친구신청 void 메서드
-		}else if (friend_request_status.equals("receive")) {
+		if (friend_request_status.equals("search")) {			// 회원찾기 페이지에서 submit
+			friendService.friendRequest(member_id, detail);		// 친구신청 void 메서드
+		}else if (friend_request_status.equals("receive")) {	// 보낸 신청목록 페이지에서 submit
 			if (delete_who.equals("receive")) {									// 보낸 신청목록에서 온 경우
 				friendService.requestDelete(member_id, detail.getMember_id());	// 취소 메서드
 				return String.format("redirect:/member/auth/info/%d", member_id);
@@ -76,14 +76,15 @@ public class FriendController {
 //	(받은)친구신청 리스트 Get
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/receiveList")
-	public String receiveList(@UserData ResMemberDetail dtail, Model model) {
-		List<FriendRequestDTO> receiveList = friendService.receiveRequestList(dtail.getMember_id());
-		int receive_count = friendService.receiveRequestCount(dtail.getMember_id());	// 받은 친구신청 수
+	public String receiveList(@UserData ResMemberDetail detail, Model model) {
+		List<FriendRequestDTO> receiveList = friendService.receiveRequestList(detail.getMember_id());
+		int receive_count = friendService.receiveRequestCount(detail.getMember_id());	// 받은 친구신청 수
 		
 		model.addAttribute("receive_count", receive_count);
 		model.addAttribute("receiveList", receiveList);
 		
 		model.addAttribute("NAME", Masking.NAME);		// 타임리프로 마스킹 처리를 하기위해 넘겨줌
+		model.addAttribute("status", detail.getMember_status());
 		
 		return "friend/friend_receive";
 	}
@@ -91,13 +92,14 @@ public class FriendController {
 //	(보낸)친구신청 리스트 Get
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/sendList")
-	public String sendList(@UserData ResMemberDetail dtail, Model model) {
-		List<FriendRequestDTO> sendList = friendService.sendRequestList(dtail.getMember_id());
-		int receive_count = friendService.receiveRequestCount(dtail.getMember_id());	// 받은 친구신청 수
+	public String sendList(@UserData ResMemberDetail detail, Model model) {
+		List<FriendRequestDTO> sendList = friendService.sendRequestList(detail.getMember_id());
+		int receive_count = friendService.receiveRequestCount(detail.getMember_id());	// 받은 친구신청 수
 		model.addAttribute("receive_count", receive_count);
 		model.addAttribute("sendList", sendList);
 		
 		model.addAttribute("NAME", Masking.NAME);		// 타임리프로 마스킹 처리를 하기위해 넘겨줌
+		model.addAttribute("status", detail.getMember_status());
 		
 		return "friend/friend_send";
 	}
@@ -148,6 +150,7 @@ public class FriendController {
 		
 		model.addAttribute("receive_count", receive_count);
 		model.addAttribute("friendList", friendList);
+		model.addAttribute("status", detail.getMember_status());
 		
 		return "friend/friend_list";
 	}

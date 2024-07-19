@@ -7,11 +7,14 @@
 	<link rel="stylesheet" type="text/css" href="/css/header.css"	/>
 	<link rel="stylesheet" type="text/css" href="/css/friend/friendBar.css"	/>
 	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.all.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.1/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 <body>
 	<header th:replace="~{/fragments/header :: header}"></header>
 	<div th:replace="~{fragments/friendBar :: friendHeader}"></div>
 	<main class="listMain">
+		<input type="hidden" id="status" th:value="${status}"	/>
 		<div class="list_table">
 			<table>	<!-- 이 페이지에서는 정/역 방향 설정 완료 my_id=나, friend_id=친구 -->
 				<tr>
@@ -105,5 +108,6 @@
 	<!-- 반복문으로 꺼낸 숨김버튼에 속성을 부여함 / 이메일 클릭 시 친구정보로 직접 서밋 -->
 	<script type="text/javascript" src="/js/friend/friendList.js"></script>
 	<script type="text/javascript" src="/js/header.js"></script>
+	<script type="text/javascript" src="/js/common.js"></script>
 </body>
 </html>
