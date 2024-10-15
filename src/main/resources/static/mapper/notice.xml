@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 <mapper namespace="com.planner.mapper.NoticeMapper">
 	<insert id="noticeInsert" parameterType="NoticeDTO" useGeneratedKeys="true" keyColumn="notice_id" keyProperty="notice_id">
 		insert into notice values (
-			notice_seq.nextval,
+			nextval('notice_seq'),
 			#{notice_title},
 			#{notice_content},
 			sysdate
@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
 			save_name,
 			extension
 		)	VALUES	(
-			notice_img_seq.nextval,
+			nextval('notice_img_seq'),
 			#{originalName},
 			#{saveName},
 			#{extension}

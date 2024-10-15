@@ -12,7 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<result column="schedule_id"	property="schedule_id"		jdbcType="BIGINT"	javaType="Long"/>
 	<result column="tb_category"	property="tb_category"		jdbcType="VARCHAR"	javaType="String"/>
 	<result column="tb_title"		property="tb_title"			jdbcType="VARCHAR"	javaType="String"/>
-	<result column="tb_content"		property="tb_content"		jdbcType="CLOB"		javaType="String"/>
+	<result column="tb_content"		property="tb_content"		jdbcType="VARCHAR"	javaType="String"/>
 	<result column="tb_reg"			property="tb_reg"			jdbcType="DATE"		javaType="java.time.LocalDateTime"/>
 	<result column="tm_nickname"	property="tm_nickname"		jdbcType="VARCHAR"	javaType="String"/>
 </resultMap>
@@ -112,7 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 <insert id="teamBoardInsert" parameterType="TeamBoardDTO">
 	<selectKey keyProperty="team_board_id" resultType="long" order="BEFORE">
-		select team_board_seq.nextval from dual
+		select nextval('team_board_seq') from dual
 	</selectKey>
 	insert into team_board values(
 		#{team_board_id}, #{team_id}, #{team_member_id}, 

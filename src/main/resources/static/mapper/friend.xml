@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-m
 	<!-- 친구신청 (보낼 때) -->
 	<insert id="friendRequest" parameterType="FriendRequestDTO">
 		insert into friend_request values(
-			friend_request_seq.NEXTVAL,
+			NEXTVAL('friend_request_seq'),
 			#{member_receive_id},
 			#{member_send_id},
 			'S'

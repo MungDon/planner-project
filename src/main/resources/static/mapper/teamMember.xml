@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <insert id="insertTeamMember" parameterType="TeamMemberDTO">
 	insert into team_member values(
-		team_member_seq.nextval,
+		nextval('team_member_seq'),
 		#{member_id},
 		#{team_id},
 		#{tm_grade},

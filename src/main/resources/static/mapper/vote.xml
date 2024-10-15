@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <insert id="voteInsert" parameterType="VoteDTO">
 	<selectKey keyProperty="vote_id" resultType="long" order="BEFORE">
-		select vote_seq.nextval from dual
+		select nextval('vote_seq') from dual
 	</selectKey>
 	insert into vote values(
 		#{vote_id},
@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <insert id="voteItemInsert">
 	<foreach collection="vote_item_names" item="vote_item_name" separator=";" open="BEGIN" close="; END;">
 		insert into vote_item values(
-			vote_item_seq.nextval,
+			nextval('vote_item_seq'),
 			#{vote_id},
 			#{vote_item_name}
 		)

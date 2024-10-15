@@ -5,8 +5,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.planner.mapper.ScheduleMapper">
 
 	<insert id="schedule_insert" parameterType="ScheduleDTO" useGeneratedKeys="true" keyProperty="schedule_id"  keyColumn="schedule_id">
-		insert into schedule (schedule_id, member_id,team_id, schedule_title, schedule_content, schedule_start, schedule_end)
-		values(schedule_seq.nextVal,#{member_id} ,#{team_id, jdbcType=BIGINT}, #{schedule_title}, #{schedule_content}, #{schedule_start, jdbcType=TIMESTAMP}, #{schedule_end, jdbcType=TIMESTAMP})
+		insert into schedule (
+			schedule_id,
+			member_id,
+			team_id,
+			schedule_title,
+			schedule_content,
+			schedule_start,
+			schedule_end
+		)	values 	(
+			nextVal('schedule_seq'),
+			#{member_id},
+			#{team_id, jdbcType=BIGINT},
+			#{schedule_title},
+			#{schedule_content},
+			#{schedule_start, jdbcType=TIMESTAMP},
+			#{schedule_end, jdbcType=TIMESTAMP})
 	</insert>
 	
 	<select id="schedule_select" resultType="ScheduleDTO">

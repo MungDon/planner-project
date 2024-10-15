@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <insert id="replyInsert" parameterType="ReplyDTO">
 	<selectKey keyProperty="reply_id" resultType="Long" order="BEFORE">
-		select reply_seq.nextval from dual
+		select nextval('reply_seq') from dual
 	</selectKey>
 	insert into reply values(
 		#{reply_id}, #{team_board_id}, #{team_member_id},

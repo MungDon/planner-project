@@ -3,6 +3,7 @@ package com.planner.service;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -42,7 +44,7 @@ public class EmailService {
 	//현재 이메일로 인증받았던 이전 인증코드들 삭제
 	// 해당이메일의 기존 인증기록이 남아있으면 이전 코드도 인증이 되어버리기때문에 인증코드 생성전에 삭제
 	@Transactional
-	private void deletePrevEmailAuthCode(String toEmail) {
+	public void deletePrevEmailAuthCode(String toEmail) {
 		int isExists = emailMapper.isExists(toEmail);
 		if(isExists >=1) {
 			emailMapper.deleteEmailAuthCode(toEmail);
@@ -51,7 +53,7 @@ public class EmailService {
 	
 	// 이메일 인증 코드 생성
 	@Transactional
-	private String createAuthCode(String toEmail) {
+	public String createAuthCode(String toEmail) {
 		StringBuilder authCode = new StringBuilder();
 		Random ramdom = new Random();
 		for(int i  = 0; i<7; i++) {
