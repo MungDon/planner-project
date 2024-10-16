@@ -230,15 +230,15 @@
 	<!-- ==============================주완-->
 		<!-- 멤버 회원상태  -->
 	<select id="memberStatus" resultType="MemberDTO">
-			select b.*
-			from (select m.*, rownum as rn
-			      from member m
-			      where m.member_status = #{member_status}
-			      and m.member_role = 'ROLE_USER'
-			      order by m.member_id desc
-			     ) b
-			where b.rn between #{start} and #{end}
-			order by b.rn desc
+		SELECT *
+		FROM (
+				 SELECT m.*, ROW_NUMBER() OVER (ORDER BY m.member_id DESC) as rn
+				 FROM member m
+				 WHERE m.member_status = #{member_status}
+				   AND m.member_role = 'ROLE_USER'
+			 ) b
+		WHERE b.rn BETWEEN #{start} AND #{end}
+		ORDER BY b.rn DESC;
 	</select>
 	
 		<!-- 멤버 회원 카운터 -->
@@ -247,13 +247,13 @@
 		</select>
 	<!-- 전체 회원보기  -->
 	<select id="memberAll" resultType="MemberDTO">
-		select b.* from 
-		(select m.*, rownum as rn from member m
-		 where m.member_role = 'ROLE_USER'
-		 order by member_id desc)b 
-		 where rn between #{start} and #{end}
-		 order by rn desc
-	</select>
+        SELECT *
+        FROM member m
+        WHERE m.member_role = 'ROLE_USER'
+        ORDER BY m.member_id DESC
+        LIMIT #{end} - #{start} + 1
+        OFFSET #{start} - 1;
+    </select>
 	<!-- 전체 회원 카운터 -->
 	<select id="memberAllCount">
 		select count(*) from member  where member_role = 'ROLE_USER'

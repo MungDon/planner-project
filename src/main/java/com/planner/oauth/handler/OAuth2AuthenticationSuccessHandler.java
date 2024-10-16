@@ -41,8 +41,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	}
 
 	@Transactional
-	protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
-			Authentication authentication) {
+	public String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
+									 Authentication authentication) {
 
 		OAuth2UserPrincipal principal = getOAuth2UserPrincipal(authentication);
         if (principal == null) {

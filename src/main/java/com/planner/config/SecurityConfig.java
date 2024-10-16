@@ -44,7 +44,6 @@ public class SecurityConfig {
 					.ignoringRequestMatchers(new AntPathRequestMatcher
 							("/n")))												// 특정요청에대한 보호를 비활성화
           .httpBasic(AbstractHttpConfigurer::disable)			// http 기본인증 비활성화
-          
           .headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2 DB 기능 비활성화
           .authorizeHttpRequests((requests) -> requests
         		  .requestMatchers(new AntPathRequestMatcher("/intro/**")).permitAll()					// "/planner/main" 은 모든권한의 접속을 허용함
@@ -66,7 +65,7 @@ public class SecurityConfig {
                   .userInfoEndpoint(config -> config.userService(customOAuth2UserService)) /// OAuth2 사용자 정보 엔드포인트 설정
                   .successHandler(oAuth2AuthenticationSuccessHandler)		// OAuth2 로그인 성공 핸들러 설정
                   .failureHandler(oAuth2AuthenticationFailureHandler)			// OAuth2 로그인 실패 핸들러 설정
-  )	
+  )
           .formLogin((formLogin) -> formLogin											// 폼(일반) 로그인 정의
 					.loginPage("/member/anon/login")									// 로그인페이지 설정
 					.usernameParameter("member_email")							// 시큐리티 Username 사용자정의

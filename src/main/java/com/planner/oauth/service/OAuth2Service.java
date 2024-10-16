@@ -22,8 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class OAuth2Service {
 
 	private final MemberMapper memberMapper;
-	private final MemberService memberService;
-	
+
 	/*소셜 회원가입*/
 	@Transactional
 	public void createMember(OAuth2UserPrincipal principal) {

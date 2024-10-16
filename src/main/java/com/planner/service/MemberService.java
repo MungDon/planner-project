@@ -1,5 +1,6 @@
 package com.planner.service;
 
+import java.lang.reflect.Member;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -166,7 +167,7 @@ public class MemberService {
 
 	/*비번 찾기시 소셜로그인 회원이면 되돌리기*/
 	@Transactional(readOnly = true)
-	private void isSocialMember(String member_email) {
+	public void isSocialMember(String member_email) {
 		ResMemberDetail socialMember = memberMapper.socialMember(member_email);
 		ResMemberDetail formMember = memberMapper.formMember(member_email);
 		CommonUtils.throwRestCustomExceptionIf(!CommonUtils.isEmpty(socialMember)&&CommonUtils.isEmpty(formMember), ErrorCode.SOCIAL_LOGIN_USER);
@@ -256,6 +257,10 @@ public class MemberService {
 			int start = (pageNum -1)*pageSize +1;
 			int end = pageSize * pageNum;
 			List<MemberDTO> statusList = memberMapper.memberStatus(start,end,member_status);
+			for(MemberDTO dto : statusList){
+				String statusName = MemberStatus.codeToStatus(dto.getMember_status());
+				dto.setMember_status(statusName);
+			}
 			return statusList;
 		}
 		// 멤버 회원 카운터 
@@ -268,6 +273,10 @@ public class MemberService {
 			int start = (pageNum -1)*pageSize +1;
 			int end = pageSize * pageNum;
 			List<MemberDTO> allList = memberMapper.memberAll(start, end);
+			for(MemberDTO dto : allList){
+				String statusName = MemberStatus.codeToStatus(dto.getMember_status());
+				dto.setMember_status(statusName);
+			}
 			return allList;
 		}
 		// 전체 회원 카운터 
